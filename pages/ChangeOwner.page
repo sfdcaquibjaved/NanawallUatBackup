@@ -1,0 +1,213 @@
+<apex:page controller="territory_owner_change_controller" id="thePage" tabStyle="Zip_Codes_Master__c" >
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+<script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){ 
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+
+<style> 
+
+    .LoadingMessage {
+        font-size: 16px;
+        background-color:green;
+        color: white;
+        font-weight: bold;
+    }
+    
+     .LoadingMessageNew {
+        font-size: 18px;
+        background-color:white;
+        color: Red;
+        font-weight: bold;
+    }
+</style>
+<apex:form id="theForm">
+      <apex:pageBlock title="Search Territory Assignment" mode="detail">  
+            <table align="center" cellspacing="0" cellpadding="3" width="100%">
+                 <tr>
+                 <td>
+                  <h3>Sales Territory Owner:</h3> 
+                 </td>
+                 <td align="left">
+                 <apex:inputField value="{!zipCode.User__c}" required="false"/>      <!--> !acc.OwnerId <!-->
+                 </td>
+                 <td>
+                  <h3>City:</h3> 
+                 </td>
+                 <td align="left">
+                 <apex:inputText value="{!SearchFields.tCity}"/>
+                 </td>
+                 </tr>
+                 <tr>
+                 <td>
+                  <h3>Zip Code:</h3> 
+                 </td>
+                 <td align="left">
+                 <apex:inputText value="{!SearchFields.tZipLow}" maxlength="100"/>
+                 </td>
+                 <td>
+                 <h3>State:</h3>
+                 </td>
+                 <td align="left">
+                 <apex:inputField value="{!zipCode.State__c}" />
+                 </td>
+                 </tr>
+                 <tr>
+                 <td>
+                  <h3></h3>
+                 </td>
+                 <td align="left">
+                 
+                 </td>
+                 <td>
+                 <h3>Country:</h3>
+                 </td>
+                 <td align="left">
+                 <apex:inputField value="{!zipCode.Country__c}"/>
+                 </td>
+                 </tr>
+            </table>
+<apex:pageBlockButtons location="bottom">
+                        <apex:commandButton value="Search" status="loadingstatus" action="{!searchobjects}" reRender="opPan1,loadingStatus" />
+</apex:pageBlockButtons>            
+ </apex:pageBlock>
+ <apex:outputPanel id="opPan1">
+       <apex:pageBlock rendered="{!IF(searchResults.size>0,true,false)}">
+       <apex:pageBlockButtons location="top">
+       <apex:commandButton action="{!showPopup}" rerender="loadingstatus,tstpopup" value="Change Sales Territory Owner" status="loadingstatus"/>
+       </apex:pageBlockButtons>                                      
+                <apex:outputpanel id="op" >
+                    <apex:pageBlockSection id="pbs" columns="1"  >
+                        <apex:pageBlockTable id="pbtSearchResults" var="sqr" value="{!searchResults}" width="100%"  >
+                            <apex:column >
+                    <apex:facet name="header">
+                        <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')" id="parentCheck"/>
+                    </apex:facet>
+                     <apex:inputCheckbox value="{!sqr.isSelected}" id="inputId"/>
+                </apex:column>
+                            <apex:column headerValue="Territory name"  width="250px">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Territory name" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="tZip" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.zCode.name} 
+                           </apex:column>
+                           <apex:column headerValue="Country" width="250px">
+                                <apex:facet name="header"> 
+                                    <apex:commandlink value="Country" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="tState" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.zCode.Country__c}
+                           </apex:column>
+                            <apex:column headerValue="City" width="250px">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="City" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="tCity" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.zCode.City__c}
+                           </apex:column> 
+
+                            <apex:column headerValue="State" width="250px">
+                                <apex:facet name="header"> 
+                                    <apex:commandlink value="State" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="tState" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.zCode.State__c}
+                           </apex:column>
+
+                            <apex:column headerValue="Zip" width="250px">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Zip" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="tZip" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.zCode.Zip_Code__c} 
+                           </apex:column>
+                           
+                           <apex:column headerValue="Sales Territory Owner" width="250px">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Owner" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="tZip" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.zCode.User__r.Name} 
+                           </apex:column>
+
+                        </apex:pageBlockTable>          
+                    </apex:pageBlockSection>        
+                    
+                </apex:outputpanel>
+   </apex:pageBlock>
+    <apex:actionstatus layout="block" startStyleClass="LoadingMessage" stopStyleClass="LoadingMessageNew" id="loadingstatus" starttext="Loading..." stoptext="{!resulttext}" />
+   </apex:outputPanel>
+       <apex:outputPanel id="tstpopup">
+        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
+            <apex:pageMessages />
+            <div align="center"  >
+               <br> <apex:inputField value="{!zipCode.User__c}"/></br>
+               </div>
+               <div align="center"  >
+                <apex:commandButton value="Update Owner" status="UpdateButtonStatus" action="{!updateZipOwner}" rerender="tstpopup,opPan1" style="float:centre"/>
+                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="tstpopup" style="float:centre"/>
+              <apex:actionStatus id="UpdateButtonStatus">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.1;"></div>
+                    <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                        <div class="waitingHolder" style="top: 150px; width: 110px;">
+                            <img class="waitingImage" src="/img/loading.gif" />
+                            <span class="waitingDescription" style="font-weight:bold; font-size:18px; color:Red;">Updating Owner....</span>
+                        </div>
+                    </div>
+                </apex:facet>
+                <apex:facet name="stop" />
+            </apex:actionStatus>      
+              </div>
+           </apex:outputPanel>
+        </apex:outputPanel> 
+        </apex:form>
+        
+        <style type="text/css">
+        .custPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:30px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup 
+            displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can add 
+            the height property for a fixed size pop up if you want.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.10;
+            filter: alpha(opacity = 10);
+            position: absolute;
+            width: 100%;
+            height: 200%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+
+    </style>
+</apex:page>

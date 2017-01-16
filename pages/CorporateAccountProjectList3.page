@@ -1,0 +1,25 @@
+<apex:page id="thePage" standardController="Account" extensions="CorporateAccountProjectListController3" readOnly="true" >
+    
+    <apex:form id="theForm">
+        <apex:pageBlock >
+            
+            <apex:pageBlockTable value="{!lstProject}" var="p" >
+              
+                 <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Architect_Account__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Architect_Account__c}"></apex:outputField>
+                </apex:column>
+                    
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Name.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Name}"></apex:outputField> 
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"> Contractor </apex:facet>
+                    <apex:outputField value="{!p.proj.Purchaser_Account__c}"></apex:outputField> 
+                </apex:column>
+                
+                </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,129 @@
+<apex:page controller="Task_CreateFedexLabelsController">
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+
+<apex:form >
+ 
+<apex:pagemessages escape="false" />  
+  
+<apex:Pageblock id="fieldselecter" rendered="{!showtasklist}">
+	<apex:dataTable value="{!taskwrappers}" var="taskwrapper" id="tasktable" rowClasses="odd,even" styleClass="tableClass" width="100%">
+		<apex:column >
+			<apex:inputCheckbox value="{!taskwrapper.usetask}" styleclass="task_chk"  />
+
+		</apex:column>	
+		<apex:Column >
+			<apex:facet name="header">CreatedDate</apex:facet>
+				{!taskwrapper.CreatedDate} 
+		</apex:Column>
+		<apex:Column >
+			<apex:facet name="header">Recipient</apex:facet>
+				<a href='/{!taskwrapper.recipientid}' target='_blank'>{!taskwrapper.recipientname}</a>
+		</apex:Column>
+
+		<apex:Column >
+			<apex:facet name="header">Type</apex:facet>
+				{!taskwrapper.tasksubject}
+		</apex:Column>
+
+		<apex:Column > 
+			<apex:facet name="header">City</apex:facet>
+				{!taskwrapper.recipientCity}
+		</apex:Column>
+
+		<apex:Column >
+			<apex:facet name="header">State</apex:facet>
+				{!taskwrapper.recipientstate}
+		</apex:Column>
+		<apex:Column >
+			<apex:facet name="header">Country</apex:facet>
+				{!taskwrapper.recipientcountry}
+		</apex:Column>
+		<apex:column >
+			<div style='{!taskwrapper.displayerrorstyle}; background-color: pink; padding: 5px'>{!taskwrapper.errormessage}</div>
+		</apex:column>
+
+		<apex:facet name="footer">
+			<a href='#' onclick='$(".task_chk").attr("checked","checked");'>check all</a>
+			| <a href='#' onclick='$(".task_chk").removeAttr("checked");'>uncheck all</a>
+			
+		</apex:facet> 
+	</apex:datatable>
+	
+	<div>
+		<table>
+			<tr>
+				<td>Fedex Service</td>
+				<td>
+					<apex:selectList value="{!SelectedFedexService}" size="1"  id="FedexServiceSelector" >
+						<apex:selectOptions value="{!FedexServiceOptions}"/>
+					</apex:selectList>	<br />	
+				</td>
+			</tr>
+			<tr>
+				<td>Packaging Type</td>
+				<td>
+					<apex:selectList value="{!SelectedPackagingType}" size="1" id="SelectedPackagingTypeSelector" >
+						<apex:selectOptions value="{!PackagingTypes}"/>
+					</apex:selectList>	<br />	
+				</td>
+			</tr>
+			<tr>
+				<td>Packaging Dimensions</td>
+				<td>
+					<table>
+						<tr>
+							<td>Weight</td>
+							<td>Declared Value</td>
+						</tr>
+						<tr>
+							<td><apex:inputtext value="{!weight}" /></td>
+							<td><apex:inputtext value="{!declaredvalue}" /></td>
+						</tr>
+						<tr>
+							<td>Width</td>
+							<td>Length</td>
+							<td>Height</td>
+						</tr>
+						<tr>
+							<td><apex:inputtext value="{!width}" /></td>
+							<td><apex:inputtext value="{!length}" /></td>
+							<td><apex:inputtext value="{!height}" /></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Label Format</td>
+				<td>
+					<apex:selectList value="{!SelectedLabelFormat}" size="1" id="SelectedLabelFormatSelector" >
+						<apex:selectOptions value="{!LabelFormats}"/>
+					</apex:selectList>	<br />	
+				</td>
+			</tr>
+			
+		</table>
+	</div>
+
+<apex:pagemessages escape="false" />  
+	
+	<apex:commandbutton action="{!CreateLabels}" value="Create Labels"  />
+	
+</apex:Pageblock>
+
+
+<apex:Pageblock id="confirmation" rendered="{!NOT(showtasklist)}">
+	<h3>Labels being created</h3>
+	<br /><br />
+	<apex:outputtext value="{!confirmationText}" escape="false" />
+	<br /><br />
+		<a href='/apex/Task_FedexLabelManager'>view currently available labels</a>
+</apex:Pageblock>
+
+
+
+</apex:form>
+
+</apex:page>

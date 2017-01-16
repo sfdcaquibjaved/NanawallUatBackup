@@ -1,0 +1,18 @@
+<apex:page standardController="Quote__c" extensions="EditQuoteController">
+<apex:form >
+<head>
+<script type='text/javascript'>
+//  window.open('http://www.nanareps.com/login.aspx?sfq={!Quote__c.Name}&u={!UserID}','Nana');
+  window.open( ( /\/Community\//.test(window.location) ? '/Community' : "" )  + ( /\/reps\//.test(window.location) ? '/reps' : "" )  + '/apex/URLTokenizer?url=http%3A%2F%2Fwww.nanareps.com%2Flogin.aspx%3Fsfq%3D{!Quote__c.Name}%26u%3D{!UserID}','Nana');  
+  window.location.href = ( /\/Community\//.test(window.location) ? '/Community' : "" )  + ( /\/reps\//.test(window.location) ? '/reps' : "" )   + '/{!Quote__c.Id}';
+
+</script>
+</head>
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page
+  
+
+  <!-- End Default Content REMOVE THIS -->
+  </apex:form>
+</apex:page>

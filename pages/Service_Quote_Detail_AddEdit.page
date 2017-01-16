@@ -1,0 +1,136 @@
+<apex:page extensions="Service_Quote_Detail_AddEditController" standardcontroller="Service_Quote_Detail__c">
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+<apex:form >
+	<script type='text/javascript'>
+	
+//	console.log( jQuery);
+	
+		function escID(myid) {
+			return myid.replace(/(:|\.)/g,'\\\\$1');
+		}
+	
+		var partsData = {};
+		
+		function _getStockValues( partid ) {
+//		StockNotice
+			jQuery.ajax({
+			
+				url: "{!$Page.AjaxResponder}",
+				dataType: "json",
+				data: {
+		            "core.apexpages.devmode.url" :'1',
+		            "method": 'ServicePartItem',
+		            "lookupvalue": partid
+				},
+				success: function( data ) {
+					jQuery('#StockNotice').html("<h2>Quantity Notice</h2><br />In Stock: <b>" + data.ServicePartData.numberstocked + '</b>.  Promised to other positions: <b>' + data.ServicePartData.promisedquantity + '</b>.<br /><a href="/'+data.ServicePartData.id+'" target="_blank">view item</a> ' );
+				}
+			
+			});
+	
+		}
+		
+		var useVendorPrice = {!IF(useVendorPrice, 'true', 'false')};
+		
+		$(document).ready(function() {
+		    jQuery( ".lookupvalue" ).autocomplete({
+					minLength: 3,
+					max: 50,
+					select: function( event, ui ) {
+						$('#'+ escID('{!$Component.hidServicePartItem}') ).val(ui.item.id);
+						var checked = false;
+						$.each(partsData, function(key, val) {
+							if( val.id == ui.item.id )
+							{
+							//txtUnitPrice
+								if( useVendorPrice ) $('[id$=txtUnitPrice]' ).val( val.vendor_cost);
+								else $('[id$=txtUnitPrice]' ).val( val.retail_cost);
+
+								if( val.stocked ) 
+								{
+									$('[id$=chkShipFromStock]' ).attr('checked','checked');
+								} else  
+								{
+									$('[id$=chkShipFromStock]').removeAttr('checked');
+								}
+								
+								_getStockValues(val.id);
+							}
+						});
+					},
+					source: function(request, response) {
+						//ok
+						jQuery.ajax({
+						
+							url: "{!$Page.AjaxResponder}",
+							dataType: "json",
+							data: {
+					            "core.apexpages.devmode.url" :'1',
+					            "method": 'ServicePartItem_NameList',
+					            "lookupvalue": jQuery('.lookupvalue').val()
+							},
+							success: function( data ) {
+								partsData = data.servicepartitems;
+
+								response( jQuery.map( data.servicepartitems, function( item ) {
+									return {
+										label: item.name,
+										value: item.name,
+										id: item.id
+									}
+								}));
+							}
+						
+						});
+						
+					
+						//ok
+					}
+				});
+			});	
+
+	</script>
+ 	<apex:pagemessages />
+	<apex:sectionHeader title="Service Quote Detail" subtitle="Add/Edit Service Quote Detail"/>
+		<apex:pageBlock >
+			<apex:pageBlockSection columns="2"  id="sqdBlock" >
+				<apex:inputField value="{!serviceQuoteDetail.Service_Quote__c}" />
+				<apex:inputField value="{!serviceQuoteDetail.Position__c}" />
+				<apex:inputField value="{!serviceQuoteDetail.Unit_Price__c}" id="txtUnitPrice"/>
+				
+				  
+				<apex:inputText value="{!ServicePartName}" styleClass="lookupvalue"  label="Service Part" required="true"/>
+
+				
+				<apex:inputField value="{!serviceQuoteDetail.Discount__c}" />
+				<apex:inputField value="{!serviceQuoteDetail.Freight__c}" />
+				<apex:inputField value="{!serviceQuoteDetail.Notes__c}" />
+				<apex:inputField value="{!serviceQuoteDetail.Quantity__c}" />
+				<apex:inputField value="{!serviceQuoteDetail.Ship_From_Stock__c}" id="chkShipFromStock"/>
+				<span ID="StockNotice"></span>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection columns="1">
+				<apex:commandButton action="{!save}" value="Save" />
+				<apex:commandButton action="{!cancel}" value="Cancel" />
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		
+		 <apex:inputHidden value="{!ServicePartItemID}" id="hidServicePartItem"  />
+		
+		<apex:outputText value="{!Service_Quote_Detail__c.Service_Part__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Service_Quote__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Position__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Unit_Price__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Discount__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Freight__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Notes__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Quantity__c}" rendered="false" />
+		<apex:outputText value="{!Service_Quote_Detail__c.Ship_From_Stock__c}"  rendered="false" />
+
+</apex:form>
+
+</apex:page>

@@ -1,0 +1,10 @@
+<apex:page >
+    <apex:outputlink target="_top" value="/lead/leadImportWelcome.jsp" >Import
+                </apex:outputlink><br/>
+                    <apex:outputlink value="/setup/own/massdelete.jsp?ftype=l&retURL=%2F00Q%2Fo" >Mass Delete
+                </apex:outputlink><br/>
+                    <apex:outputlink value="/p/own/BulkTransfer?retURL=%2F00Q%2Fo&ent=Lead" >Transfer
+                </apex:outputlink><br/>
+                    <apex:outputlink value="/ui/massmail/MassMailStageManager?setupid=MassMailFilter&ftype=L&wizardRetUrl=%2F00Q%2Fo" >Mass Email
+                </apex:outputlink><br/>
+</apex:page>

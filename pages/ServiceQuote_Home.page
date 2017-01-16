@@ -1,0 +1,213 @@
+<apex:page controller="ServiceQuote_Home_Controller" tabStyle="Service_Quote__c" >
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+<apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+
+
+<style> 
+
+    .LoadingMessage {
+        font-size: 16px;
+        background-color: green;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+
+
+    j$(document).ready(function() {
+    
+    });
+    
+</script>
+ <script>
+            function openInNewTab(a){
+                 var a;
+                 
+                 
+                 var url = "{!$Site.Prefix}/apex/SerachresultsPageService"
+                 if((a==true) && (sforce.console.isInConsole())) { 
+                
+                 srcUp(url);
+                
+                 }
+                 else{
+                  window.open(url,'_blank');
+                 }
+            }
+
+
+            </script>
+
+<apex:tabpanel >     
+    <apex:tab label="Multi-Search" name="ms" id="tabms">
+        <apex:form id="theForm">
+        
+            <apex:pageBlock title="Search Service Quotes">  
+
+                <div style='display: block' id='AdvancedFields'>
+                    <apex:panelGrid columns="1" width="100%" >
+                        Service Quote #: <apex:inputtext value="{!SearchFields.ServiceQuoteNumber}"  size="5" id="filterServiceQuoteNumber" styleClass="simpleSearchField" />
+                        Case #: <apex:inputtext value="{!SearchFields.CaseNumber}" id="filterCaseNumber"  size="5" styleClass="simpleSearchField" />                          
+                        Case Type: <apex:inputfield value="{!SearchFields.FirstServiceQuote.Case__r.Type}" id="filterType" styleClass="simpleSearchField" />                          
+                        Service Quote Zip:<apex:inputtext value="{!SearchFields.Zip}"/> 
+                    
+                        Lo Amount:<apex:inputtext value="{!SearchFields.LoServiceQuoteAmount}" size="5"  styleClass="simpleSearchField"/>
+                        Hi Amount:<apex:inputtext value="{!SearchFields.HiServiceQuoteAmount}" size="5"  styleClass="simpleSearchField"/>
+                    
+                        <apex:commandButton value="Search" status="loadingstatus" action="{!searchobjects}" reRender="op" />
+                    </apex:panelGrid>
+                    <hr />
+                    <apex:panelGrid columns="1" width="100%" >
+                        
+                        Quote #: <apex:inputtext value="{!SearchFields.QuoteNumber}"  size="5" id="filterQuoteNumber" styleClass="simpleSearchField" />
+                        Order #: <apex:inputtext value="{!SearchFields.OrderNumber}" id="filterOrderNumber"  size="5" styleClass="simpleSearchField" />                       
+                    
+                        <apex:outputtext value="# Panels (L)" /> <apex:inputtext value="{!SearchFields.Panels_Left}" size="5"/>
+                        <apex:outputtext value="# Panels (R)" /> <apex:inputtext value="{!SearchFields.Panels_Right}"  size="5"/>
+                        <apex:outputtext value="Panel Count" /> <apex:inputtext value="{!SearchFields.Panels_Count}"  size="5"/>
+                    
+                        Address:<apex:inputtext value="{!SearchFields.Address}"/>
+                        City:<apex:inputtext value="{!SearchFields.City}"/>
+                        State:<apex:selectList value="{!SearchFields.state}" multiselect="false" size="1">
+                                <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+                                <apex:selectOptions value="{!states}"></apex:selectOptions>
+                            </apex:selectList>
+
+                        Phone: <apex:inputtext value="{!SearchFields.Phone}"/>
+                        Email:<apex:inputtext value="{!SearchFields.Email}"/>
+
+                        Model: 
+                        <apex:selectList value="{!models}" multiselect="false" size="1"  id="ModelSelector" styleClass="modelSelector">
+                            <apex:selectOptions value="{!modeloptions}"/>
+                        </apex:selectList>  
+
+                        Lo Grand Total:<apex:inputtext value="{!SearchFields.LoGrandTotal}"/>
+                        Hi Grand Total:<apex:inputtext value="{!SearchFields.HiGrandTotal}"/>
+                        Lo Create Date:<apex:inputfield value="{!SearchFields.FirstServiceQuote.ETA__c}"  />
+                        Hi Create Date:<apex:inputfield value="{!SearchFields.SecondServiceQuote.ETA__c}"  />
+                              
+                        
+                        Project Name: <apex:inputtext value="{!SearchFields.ProjectName}"  />
+                        Project Address: <apex:inputtext value="{!SearchFields.ProjectAddress}"  />
+                        
+                        Contact Name: <apex:inputtext value="{!SearchFields.ContactName}"  />
+                        
+                        <apex:commandButton value="Search" status="loadingstatus" action="{!searchobjects}" onComplete="openInNewTab({!urlPass});" reRender="op" />
+                    </apex:panelGrid> 
+                </div> 
+                
+                <apex:outputpanel id="op" rendered="{!(urlPass)}">
+                    <apex:actionstatus layout="block" startStyleClass="LoadingMessage" id="loadingstatus" starttext="Loading..." stoptext="{!resulttext}" />
+                    <apex:pagemessages ></apex:pagemessages>
+                    
+                    <apex:pageBlockSection id="pbs" columns="1">
+                        <apex:pageBlockTable id="pbtSearchResults" var="sqr" value="{!searchResults}" width="100%"  >
+
+                            <apex:column headerValue="Project">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ProjectName" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ProjectName" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.ProjectID}" >{!sqr.ProjectName}</apex:outputlink>
+                           </apex:column>
+                           
+                            <apex:column headerValue="Project Address">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ProjectAddress" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ProjectAddress" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.ProjectID}" >{!sqr.ProjectAddress}</apex:outputlink>
+                           </apex:column>
+                           
+                            <apex:column headerValue="Contact">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ContactName" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ContactName" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.ContactName}
+                           </apex:column>
+                           
+                           <apex:column > 
+                            <apex:facet name="header">Service Quotes</apex:facet>
+                                <apex:repeat value="{!sqr.ServiceQuotes}" var="sq" id="theRepeat">
+                                    <apex:outputlink value="/{!sq.ID}" >{!sq.ServiceQuoteNumber}</apex:outputlink><br />
+                                </apex:repeat>                         
+                           </apex:column>
+                        
+                            <apex:column headerValue="Quote #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Quote #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="QuoteID" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.QuoteID}" >{!sqr.QuoteNumber}</apex:outputlink> 
+                           </apex:column>
+
+                            <apex:column headerValue="Order #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Order #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="OrderID" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.OrderID}" >{!sqr.OrderID}</apex:outputlink> 
+                           </apex:column>
+
+                            <apex:column headerValue="City">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="City" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="City" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.City}
+                           </apex:column>
+
+                            <apex:column headerValue="State">
+                                <apex:facet name="header"> 
+                                    <apex:commandlink value="State" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="State" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.State}
+                           </apex:column>
+
+                            <apex:column headerValue="Zip">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Zip" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Zip" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.Zip} 
+                           </apex:column>
+
+                            <apex:column headerValue="O" rendered="false">
+                                <apex:facet name="header">
+                                </apex:facet> 
+                                {!sqr.origin} 
+                           </apex:column>
+
+                        </apex:pageBlockTable>          
+                    </apex:pageBlockSection>        
+                    
+                </apex:outputpanel>
+            </apex:pageBlock>       
+        </apex:form>
+    </apex:tab>
+    <apex:tab label="Filters" id="tabfilters" name="filters">
+        <apex:outputpanel layout="block"> 
+            <apex:enhancedList customizable="true" height="300" id="list" type="Service_Quote__c" />    
+        </apex:outputpanel>
+    
+    </apex:tab>
+</apex:tabpanel>
+
+
+</apex:page>

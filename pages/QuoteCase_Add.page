@@ -1,0 +1,91 @@
+<apex:page standardController="Case" extensions="QuoteCase_Add_Controller" >
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/> 
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+<script> 
+    function toggleTaskFields(ckObj) {
+    
+        if( ckObj.checked  )
+        {
+            jQuery('#newTaskFields').show();
+            jQuery('#noTaskMessage').hide();
+        } else
+        {
+            jQuery('#newTaskFields').hide();
+            jQuery('#noTaskMessage').show();
+        }
+    }
+    
+
+</script>
+    <apex:form >
+<apex:sectionHeader title="Case" subtitle="New Case"/>
+<apex:pageBlock >
+    <apex:pageBlockSection columns="2"  id="addressBlock" >
+        <apex:pagemessages />   <apex:outputlabel />
+        <apex:outputlabel style="color: #4A4A56;font-weight: bold;font-size: 91%;margin-left:82px;">Quote</apex:outputlabel>
+        <apex:outputlabel style="margin-left:-340px;">{!$CurrentPage.parameters.qn}</apex:outputlabel>
+         
+        <apex:outputlabel for="addressSelect" style="color: #4A4A56;font-weight: bold;font-size: 91%; margin-left:82px;">Use Address</apex:outputlabel>
+        <apex:SelectList id="addressSelect" value="{!UseAddress}" size="1" style="margin-left:-340px;" >
+            <apex:SelectOption itemLabel="-SELECT-" itemValue="-SELECT-"/>
+            <apex:SelectOption itemValue="-SELECT-" itemLabel="~~~~ Contacts ~~~~"/>
+            <apex:selectOptions value="{!contacts}"/>
+            <apex:SelectOption itemValue="-SELECT-" itemLabel="~~~~ Installers ~~~~"/>
+            <apex:selectOptions value="{!installers}"/>
+            <apex:SelectOption itemValue="-SELECT-" itemLabel="~~~~ Reps ~~~~"/>
+            <apex:selectOptions value="{!reps}"/>
+            <apex:actionSupport event="onchange" rerender="addressBlock" action="{!setaddress}" />
+        </apex:SelectList>
+
+        
+        <apex:inputField value="{!case.Other_First_Name__c}" /> 
+        <apex:inputField value="{!case.Other_Last_Name__c}" />
+        <apex:inputField value="{!case.Other_Phone__c}" />
+        <apex:inputField value="{!case.Other_Email__c}" />
+        
+        
+        <apex:inputField value="{!case.Responsible_Rep__c}" />
+        <apex:inputField value="{!case.Type}" />
+        
+        <apex:outputlabel for="casecomment" style="color: #4A4A56;font-weight: bold;font-size: 91%;margin-left:82px;">Resolution</apex:outputlabel>
+        <apex:inputTextarea id="casecomment" value="{!txtCaseComment}" rows="5" cols="50" style="margin-left:-340px;"/>
+
+    
+    </apex:pageBlockSection>
+            
+        
+
+        <apex:inputCheckbox value="{!CreateNewTask}" id="chkCreateTask" onclick="toggleTaskFields(this)"  styleClass="newTaskCheckbox tabIndex62" />  Create a task
+        <div id='noTaskMessage' style='display: block; margin: 15px; border: 1px solid blue; padding: 15px;'><h3>A task will not be created</h3></div>
+        <div id='newTaskFields' style='display: none'>
+            <apex:pageBlock id="pbConversionObjects"   title="Task Information" tabstyle="lead">
+                <apex:pageBlockSection title="Task" columns="2"> 
+                    <apex:inputField value="{!newtask.Subject}"  styleClass="tabIndex63" />
+                    <apex:inputField value="{!newtask.ActivityDate}"  styleClass="tabIndex67" />
+                    
+                    <apex:inputField value="{!newtask.Description}"  styleClass="tabIndex64" />
+                    <apex:inputField value="{!newtask.Type}"  styleClass="tabIndex68"  />
+                    
+                    <apex:inputField required="false" value="{!newtask.Status}"  styleClass="tabIndex65" />
+                    <apex:inputField required="false" value="{!newtask.Priority}"  styleClass="tabIndex69" />
+                    
+                    <apex:inputField value="{!newtask.IsReminderSet}"  styleClass="tabIndex66" /> 
+                    <apex:inputField value="{!newtask.ReminderDateTime}"  styleClass="tabIndex70" />
+                    
+                </apex:pageBlockSection>    
+            </apex:pageBlock>
+        </div>
+
+
+
+    
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!save}" value="Save"/>
+    </apex:pageBlockButtons>
+    </apex:pageBlock>
+</apex:form>
+
+</apex:page>

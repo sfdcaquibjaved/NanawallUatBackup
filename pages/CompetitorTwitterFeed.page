@@ -1,0 +1,39 @@
+<apex:page standardcontroller="Competitor__c" >
+ 
+<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'search',
+  search: '{!Competitor__c.Name}',
+  interval: 6000,
+  title: '',
+  subject:'',
+  width: 'auto',
+  height: 200,
+  theme: {
+    shell: {
+      background: '#ffffff',
+      color: '#ffffff'
+    },
+    tweets: {
+      background: '#ffffff',
+      color: '#000000',
+      links: '#1797C0'
+    }
+  },
+  features: {
+    scrollbar: false,
+    loop: true,
+    live: true,
+    hashtags: true,
+    timestamp: true,
+    avatars: true,
+    toptweets: true,
+    behavior: 'default'
+  }
+}).render().start();
+</script>
+    
+  
+</apex:page>

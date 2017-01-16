@@ -1,0 +1,68 @@
+<apex:page title="Opportunity Contact Role" StandardController="Opportunity" extensions="oppConRoleController">
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}" />
+ <apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}" />
+<script>
+     function changeValue(th) 
+     {
+       var radios = document.getElementById('out');
+       $(".temp").each(function(){this.checked = false;})
+       var s = $(th).next(".temp")[0];
+       s.checked = true;
+     }
+     $("input.temp").each(function()
+     { 
+       if(this.checked)
+       {
+         var b=$(this).prev("input"); 
+         $(b).attr("checked","checked");
+       }
+     })
+    </script>
+<apex:form >
+<apex:sectionheader title="" subtitle="Contact Roles for {!Opportunity.Name}" ></apex:sectionheader> 
+<apex:pageMessages id="errorMsg"/> <!-- To show any validation error messages. -->
+<!-- Block to show the page with the details -->
+<apex:pageBlock mode="Edit" >
+<apex:pageBlockButtons >
+<!-- Buttons for Save and Cancel -->
+  <apex:commandButton value="Save" action="{!saveRecords}"/>
+ <apex:commandButton value="Cancel" action="{!cancel}"/>
+</apex:pageBlockButtons>
+   <table width="50%">
+          <tr>
+            <th>Primary</th>
+            <th>Contact</th>
+            <th>Role</th>   
+          </tr>  
+        <tr>  
+             <apex:outputPanel rendered="{!noPrimaryContact}" layout="none">
+             <td><input type="radio" id="out" name="primary" checked="checked" onclick= "changeValue(this);" /></td>
+             <td>No Primary Contact</td>
+             </apex:outputPanel>
+             <apex:outputPanel rendered="{!NOT(noPrimaryContact)}" layout="none">
+             <td><input type="radio" id="out" name="primary" onclick= "changeValue(this);" /></td>
+             <td>No Primary Contact</td>
+             </apex:outputPanel>
+        </tr>
+          <apex:repeat value="{!results}" var="o">
+          <tr>
+            <td>
+            <apex:outputPanel rendered="{!o.isPrimary}" layout="none">
+            <input type="radio" id="out" value="{!o.isPrimary}" checked="checked" name="primary"  onclick= "changeValue(this);"/>
+            <apex:InputCheckBox value="{!o.isPrimary}" styleclass="temp" style="display:none !important;"/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!NOT(o.isPrimary)}" layout="none">
+            <input type="radio" id="out" value="{!o.isPrimary}" name="primary"  onclick= "changeValue(this);"/>
+            <apex:InputCheckBox value="{!o.isPrimary}" styleclass="temp" style="display:none !important;"/>
+            </apex:outputPanel>
+            </td>
+            <td><apex:inputField value="{!o.oppConRole.Contact__c}" required="false"/></td>
+            <td><apex:inputField value="{!o.oppConRole.Role__c}" /></td>
+          </tr>  
+          </apex:repeat>
+        </table>
+  
+</apex:pageBlock>
+</apex:form>
+
+</apex:page>

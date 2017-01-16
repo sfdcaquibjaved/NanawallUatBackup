@@ -1,0 +1,140 @@
+<apex:page extensions="StockOrder_Detail_AddEdit_Controller" standardcontroller="Stock_Order_Detail__c">
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+<apex:includeScript value="/soap/ajax/26.0/connection.js"/>  
+<apex:includeScript value="/support/console/26.0/integration.js"/>
+<apex:form >
+    <script type='text/javascript'>
+        function escID(myid) {
+            return myid.replace(/(:|\.)/g,'\\\\$1');
+        }
+    
+        var partsData = {};
+        
+        function _getStockValues( partid ) {
+            jQuery.ajax({
+            
+                url: "{!$Page.AjaxResponder}",
+                dataType: "json",
+                data: {
+                    "core.apexpages.devmode.url" :'1',
+                    "method": 'ServicePartItem',
+                    "lookupvalue": partid
+                },
+                success: function( data ) {
+//                  j$('#StockNotice').html("<h2>Quantity Notice</h2><br />In Stock: <b>" + data.ServicePartData.numberstocked + '</b>.  Promised to other positions: <b>' + data.ServicePartData.promisedquantity + '</b>.<br /><a href="/'+data.ServicePartData.id+'" target="_blank">view item</a> ' );
+                }
+            
+            });
+    
+        }
+        
+        
+        $(document).ready(function() {
+            jQuery( ".lookupvalue" ).autocomplete({
+                    minLength: 3,
+                    max: 50,
+                    select: function( event, ui ) {
+                        $('#'+ escID('{!$Component.hidServicePartItem}') ).val(ui.item.id);
+                        var checked = false;
+                        $.each(partsData, function(key, val) {
+                            if( val.id == ui.item.id )
+                            {
+
+                                $('[id$=txtUnitPrice]' ).val( val.vendor_cost);
+
+                                if( val.stocked ) 
+                                {
+                                    $('[id$=chkShipFromStock]' ).attr('checked','checked');
+                                } else  
+                                {
+                                    $('[id$=chkShipFromStock]').removeAttr('checked');
+                                }
+                                
+                                _getStockValues(val.id);
+                            }
+                        });
+                    },
+                    source: function(request, response) {
+                        //ok
+                        jQuery.ajax({
+                        
+                            url: "{!$Page.AjaxResponder}",
+                            dataType: "json",
+                            data: {
+                                "core.apexpages.devmode.url" :'1',
+                                "method": 'ServicePartItem_NameList',
+                                "lookupvalue": jQuery('.lookupvalue').val()
+                            },
+                            success: function( data ) {
+                                partsData = data.servicepartitems;
+
+                                response( jQuery.map( data.servicepartitems, function( item ) {
+                                    return {
+                                        label: item.name,
+                                        value: item.name,
+                                        id: item.id
+                                    }
+                                }));
+                            }
+                        
+                        });
+                        
+                    
+                        //ok
+                    }
+                });
+            }); 
+       
+    
+   
+    
+
+ 
+
+
+    </script> 
+    
+     
+    <apex:pagemessages />
+    <apex:sectionHeader title="Stock Order Detail" subtitle="Add/Edit Stock Order Detail"/>
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="2"  id="sqdBlock" >
+                <apex:inputField value="{!stockOrderDetail.Stock_Order__c}" />
+                <apex:inputField value="{!stockOrderDetail.Position__c}" />
+                <apex:inputField value="{!stockOrderDetail.Unit_Price__c}" id="txtUnitPrice"/>
+                
+                
+                <apex:inputText value="{!ServicePartName}" styleClass="lookupvalue"  label="Service Part" required="true"/>
+
+                
+                <apex:inputField value="{!stockOrderDetail.Discount__c}" />
+                <apex:inputField value="{!stockOrderDetail.Freight__c}" />
+                <apex:inputField value="{!stockOrderDetail.Notes__c}" />
+                <apex:inputField value="{!stockOrderDetail.Quantity__c}" />
+
+                <span ID="StockNotice"></span>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1">
+                <apex:commandButton action="{!save}" value="Save" />
+                <apex:commandButton action="{!cancel}" value="Cancel" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+         <apex:inputHidden value="{!ServicePartItemID}" id="hidServicePartItem"  />
+        
+        <apex:outputText value="{!Stock_Order_Detail__c.Service_Part__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Stock_Order__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Position__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Unit_Price__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Discount__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Freight__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Notes__c}" rendered="false" />
+        <apex:outputText value="{!Stock_Order_Detail__c.Quantity__c}" rendered="false" />
+
+</apex:form>
+
+</apex:page>

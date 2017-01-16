@@ -1,0 +1,95 @@
+<apex:page standardController="Opportunity" showheader="false" extensions="Opportunity_dupefinder_controller" sidebar="false" tabStyle="Opportunity">
+
+    <apex:form >
+<apex:pagemessages />
+
+ <apex:pageBlock id="dupeMatchesBlock"  title="manage related projects"> 
+<!--  
+	<apex:PageBlockSection title="Current Project Info">
+		<p>
+			<b>Project:</b> <a href='/{!opportunity.id}' target='_blank'>{!opportunity.name}</a><br />
+			<b>City:</b> {!opportunity.City__c}<br />
+			<b>State:</b> {!opportunity.State__c}<br />
+		</p>
+	</apex:PageBlockSection>	
+	-->
+	<apex:pageBlocksection columns="2">
+	
+			<apex:dataTable border="1" value="{!duplicateOpps}" var="dupe" id="dupetable" rowClasses="odd,even" styleClass="tableClass" width="500">
+				<apex:facet name="caption"><b>possibly related projects</b></apex:facet>			
+				<apex:Column >
+					<apex:facet name="header">Relate</apex:facet>
+					<apex:outputtext rendered="{!IF(dupe.MasterCount__c < 1, true, false)}">
+						<apex:commandLink action="{!RelateOpp}" value="add project">
+						 	<apex:param name="relatingOppId" assignto="{!relatingOppId}" value="{!dupe.id}"/>
+						</apex:commandLink>			
+					</apex:outputtext>
+					<apex:outputtext rendered='{! IF(dupe.MasterCount__c > 0, true, false)}'>
+						<i><b>MASTER PROJECT</b></i><br />
+						<apex:commandLink action="{!AddToMaster}" value="add to this master" rendered='{!NOT(opportunity.MasterCount__c > 0)}'>
+						 	<apex:param name="relatingOppId" assignto="{!relatingOppId}" value="{!dupe.id}"/>
+						</apex:commandLink>			
+						
+					</apex:outputtext>
+					
+				</apex:Column>	
+				
+		     	
+				<apex:column >
+				    <apex:facet name="header">Name</apex:facet>
+					<apex:outputLink value="/{!dupe.id}" target="_blank">{!dupe.name}</apex:outputLink>
+				</apex:column>
+				<apex:column >
+				    <apex:facet name="header">City</apex:facet>
+					<apex:outputText value="{!dupe.City__c}"/>
+				</apex:column>
+				<apex:column >
+				    <apex:facet name="header">State</apex:facet>
+					<apex:outputText value="{!dupe.State__c}"/>
+				</apex:column>
+				<apex:column >
+				    <apex:facet name="header">Quote Count</apex:facet>
+					<apex:outputText value="{!dupe.Quote_Count__c}"/>
+				</apex:column>
+		
+			</apex:dataTable>
+			
+			<apex:dataTable border="1" value="{!joins}" var="join" id="jointable" rowClasses="odd,even" styleClass="tableClass" width="500">
+
+				<apex:facet name="caption"><b>current related projects</b></apex:facet>			
+				<apex:Column >
+					<apex:facet name="header">Un-relate</apex:facet>
+					<apex:commandLink action="{!UnRelateOpp}" value="un-relate">
+					 	<apex:param name="relatingOppId" assignto="{!relatingOppId}" value="{!join.id}"/>
+					</apex:commandLink>			
+				</apex:Column>	
+				<apex:column >
+				    <apex:facet name="header">Project</apex:facet>
+					<apex:outputLink value="/{!join.Opportunity_2__c}" target="_blank">{!join.opportunity_2__r.name}</apex:outputLink>
+				</apex:column>
+				<apex:column >
+				    <apex:facet name="header">Quote Count</apex:facet>
+					{!join.opportunity_2__r.Quote_Count__c}
+				</apex:column>		
+			</apex:dataTable>
+				
+				<apex:pageblocksection >
+					<i><apex:outputlabel value="Select a project to link" for="manuallyaddedproject" /></i>
+					<apex:inputfield value="{!dummyjoin.Opportunity_1__c}" id="manuallyaddedproject" />
+					<apex:commandbutton value="relate" action="{!addotheropp}" />
+				</apex:pageblocksection>
+				
+				<a href='/apex/opportunity_linkedprojectlist?id={!opportunity.id}'>&lt; &lt; back</a><br /><br />
+			
+</apex:pageBlocksection>
+ </apex:pageBlock> 
+<apex:outputtext rendered="false" value="{!opportunity.id}" />
+<apex:outputtext rendered="false" value="{!opportunity.name}" />
+<apex:outputtext rendered="false" value="{!opportunity.City__c}" />
+<apex:outputtext rendered="false" value="{!opportunity.State__c}" />
+<apex:outputtext rendered="false" value="{!opportunity.Is_A_Dupe__c}" />
+
+</apex:form>
+
+
+</apex:page>

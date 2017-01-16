@@ -1,0 +1,9 @@
+<apex:page standardController="nrOpportunityContactRole__c" extensions="OppContRoleEditController" action="{!checkDelete}">
+<!-- Begin Default Content REMOVE THIS -->
+
+<apex:pagemessages />
+
+<h1>Contacts cannot be delete from opportunities.</h1>
+	
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page controller="URLTokenizer" action="{!tokenizeURL}">
+<!-- Begin Default Content REMOVE THIS -->
+URL Tokenizer.  You shouldn't see this message.<br /><br />
+{!urlString}
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

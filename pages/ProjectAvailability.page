@@ -1,0 +1,4 @@
+<apex:page standardController="Project__c">
+<style> body { margin-left:0px !important ;margin-right:0px !important; } </style>
+
+</apex:page>

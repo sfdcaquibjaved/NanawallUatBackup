@@ -1,0 +1,175 @@
+<apex:page controller="ascent_ConfigureObjects_Controller">
+
+<apex:includeScript value="{!URLFOR($Resource.Ascent_Javascript_Files, 'ascent_javascriptfiles/external/jquery/jquery.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Ascent_Javascript_Files, 'ascent_javascriptfiles/jquery-ui.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.Ascent_Javascript_Files, 'ascent_javascriptfiles/jquery-ui.min.css')}" />
+
+	<script>
+			jQuery.noConflict(); 
+			
+			
+			var ctlprefix = 1;
+			function loadFieldsForObject( object_apiname)
+			{
+				jQuery.ajax({
+					url: "{!$Page.ascent_AjaxResponder}",
+					dataType: "json",
+					data: 
+					{
+				          "core.apexpages.devmode.url" :'1',
+				          "method": 'GetFieldsForObject',
+				          "object_apiname": object_apiname
+					},
+				
+					success: function( data ) 
+					{
+						var html  = '<ul>';
+						ctlprefix++;
+						for( var i =0; i<data.Field_List.length; i++)
+						{
+						
+							html += '<li><input type="checkbox" '+(data.Field_List[i].IsSelected ? " checked='checked' " : "")+' class="'+ctlprefix+'_objfield" data-apiname="'+data.Field_List[i].API_Name+'" />'+data.Field_List[i].Label+'</li>';
+						}
+						html += '</ul>';
+						
+						jQuery('<div class="fieldSelector"></div>')
+									.html(html)
+									.dialog(
+										{
+											modal: true, 
+											buttons: { 
+												'close': function(){ jQuery(this).dialog('destroy'); }, 
+												'select': function() 
+												{ 
+													var values = {"fieldList": []};
+
+													jQuery('.'+ctlprefix+'_objfield:checked').each(function(){
+														values.fieldList[values.fieldList.length] = jQuery(this).attr('data-apiname');
+													});
+												
+													jQuery('.selectedFields_' + object_apiname).val( JSON.stringify(values) );
+													jQuery(this).dialog('destroy'); 
+												}   
+											}  
+										}
+									);
+					},
+					error: function(err)
+					{
+						alert('error! ' + err);
+					}
+					
+				});
+			}
+			
+			jQuery(document).ready(function() {
+				jQuery('.objchk').change(function(){
+					var id = jQuery(this).attr('data-id');
+					console.log('changed: ' + id);
+					if( jQuery(this).is(':checked') )
+					{
+						jQuery('#'+id+'_fieldselector').show();
+					} else
+					{
+						jQuery('#'+id+'_fieldselector').hide();
+					
+					}
+				});
+				
+				
+				jQuery("#FilterTextBox").keyup(function(){  
+					var s = jQuery(this).val().toLowerCase();  
+
+					if( s == null || s == '' ) 
+					{
+						jQuery('.ObjectDiv').show();
+						return;
+					}
+					//show all rows.  
+					
+					jQuery('.ObjectDiv').each(function() {
+						if( ( jQuery(this).attr('data-apiname').toLowerCase().indexOf(s) >= 0) )
+						{
+							jQuery(this).show();
+						} else
+						{
+							jQuery(this).hide();
+							
+						}
+					});
+				});//key up.   
+			});
+	</script>
+
+
+	<style>
+		.fieldSelector 
+		{
+			overflow: auto;
+			height: 350px!important;
+		}
+		.ObjectDiv
+		{
+			float: left;
+			padding: 5px;
+			margin: 5px;
+			width: 250px;
+			height: 150px;			
+			background-color: transparent;
+		}
+		.ObjectDiv:hover
+		{
+			background-color: white;
+		}
+		
+		.ObjectDiv ul li 
+		{
+			margin-left: 0;
+		}
+		.ObjectDiv ul 
+		{
+			padding-left: 30px;
+		}
+		.selectedFields { 
+			display: none; 
+		}
+	</style>
+
+	<apex:form >
+
+		<apex:pageBlock title="Manage Ascent-connected Objects">
+		
+			<b>Filter:</b> <input type='text' id='FilterTextBox' name='FilterTextBox' value='' />
+			<apex:panelGrid columns="4">
+				<apex:repeat value="{!ObjectOptions}" var="Obj">
+					<apex:outputPanel layout="block" styleClass="ObjectDiv" html-data-apiname="{!Obj.Name}">
+						<h3>{!Obj.Label}</h3>
+ 
+						<ul>
+							<li> Api Name: {!Obj.Name}</li>
+							<li><apex:inputCheckbox styleclass="objchk chk_{!Obj.Name}" html-data-id="{!Obj.Name}" selected="{!Obj.IsActive}" /> Included in Ascent  </li>
+							<li id='{!Obj.Name}_fieldselector' style="{!Obj.displayFieldSelector}">
+							
+								<div >
+									<a href='javascript: loadFieldsForObject("{!Obj.Name}")'>select fields</a></div>
+									
+								<apex:inputtext styleClass="selectedFields  selectedFields_{!Obj.Name}" value="{!Obj.selectedFields}"/>
+							</li>
+						</ul>
+
+					</apex:outputPanel>
+				</apex:repeat>			
+			</apex:panelGrid>
+			
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!saveObjectSettings}" value="Save Object Settings" id="theButton"/>
+			</apex:pageBlockButtons>
+		
+		</apex:pageBlock>
+	
+	
+	</apex:form>
+
+
+
+</apex:page>

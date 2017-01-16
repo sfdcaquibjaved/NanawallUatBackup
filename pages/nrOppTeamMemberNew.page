@@ -1,0 +1,59 @@
+<apex:page standardController="nrOpportunityTeamMember__c" extensions="nrOppTeamController">
+	<apex:pagemessages ></apex:pagemessages>
+
+<apex:form >
+<apex:pageblock >
+	<table>
+		<tr>
+			<td colspan='2'><apex:commandButton action="{!Cancel}" value="Cancel" /></td>
+		</tr>
+		<tr>
+			<td>User:</td>
+			<td>
+     <apex:selectList value="{!SelectedUser}" multiselect="false" size="1" rendered="{!renderUserLookup}" required="true">
+            <apex:selectOptions value="{!userItems}"/>
+        </apex:selectList>
+<apex:outputText value="{!nrOpportunityTeamMember__c.User__c}" rendered="false"/>
+<!--  				<apex:inputField value="{!nrOpportunityTeamMember__c.User__c}" rendered="{!renderUserLookup}"/>-->
+<apex:outputText value="{!UserName}" rendered="{!dontRenderUserLookup}" />
+<apex:outputText value="{!nrOpportunityTeamMember__c.OpportunityAccessLevel__c}" rendered="false" />
+				
+			</td>
+		</tr>
+		<tr>
+			<td>Role:</td>
+			<td>
+				<apex:inputField value="{!nrOpportunityTeamMember__c.TeamMemberRole__c}" required="true" />
+				
+				
+			</td>
+		</tr>
+		<tr>
+			<td>Opportunity Access Level:</td>
+			<td>
+<!-- 				<apex:inputField rendered="" value="{!nrOpportunityTeamMember__c.OpportunityAccessLevel__c}" /> -->
+
+					<apex:selectList value="{!SelectedAccessLevel}" multiselect="false" size="1" rendered="{!EditRoleOK}">
+						<apex:selectOptions value="{!AvailableAccessLevels}"/>
+					</apex:selectList>
+				
+				
+				<apex:outputpanel rendered="{!EditRoleNotOK}">
+					Access control cannot be edited on the primary rep.
+				</apex:outputpanel>	
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><apex:commandButton action="{!UpdateRec}" value="Save" /></td>
+		</tr>
+	</table>
+<!--  the below makes sure that the necessary properties are bound to the incoming Lead object for the Controller  -->
+<apex:outputText value="{!nrOpportunityTeamMember__c.Opportunity__c}" rendered="false" />
+<apex:outputText value="{!nrOpportunityTeamMember__c.sfOpportunityTeamMemberID__c}" rendered="false" />
+
+</apex:pageblock>
+
+</apex:form>
+
+
+</apex:page>

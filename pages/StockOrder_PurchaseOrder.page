@@ -1,0 +1,226 @@
+<apex:page standardcontroller="Stock_Order__c" renderAS="pdf" extensions="StockOrder_ReportController">
+<head>
+	<link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.service_quote_files, 'service_quote_files/report_styles.css')}" media="print" />
+</head>
+<body>
+	<div class='header'>
+		<div style='width: 100%'>
+			<table width="100%">
+				<tr>
+					<td valign='top'><img src='{!URLFOR($Resource.service_quote_files, "service_quote_files/nanalogo.tiff")}' width='200px' /></td>
+					<td valign='top' style='font-size: 10px'>
+						Nana Wall Systems Inc. <br />
+						100 Meadow Creek Drive<br />
+						Suite 250<br /> 
+						Corte Madera CA 94925<br />
+						800-873-5673 x256<br />
+						415-383-3148 x256<br /> 
+						Fax 415-383-0312
+					</td>
+					<td>
+						<table>
+							<tr>
+								<td class='labelCell' style='font-size: 10px'>Date:</td>
+								<td style='font-size: 10px'>
+									<apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+									    <apex:param value="{!Stock_Order__c.CreatedDate}" /> 
+									</apex:outputText>								
+								</td>
+							</tr>
+							<tr>
+								<td class='labelCell' style='font-size: 10px'>Service Rep:</td>
+								<td style='font-size: 10px'>{!ResponsibleRepInitials}</td>
+							</tr>							
+							<tr> 
+								<td class='labelCell' style='font-size: 10px'>Stock Order #:</td>
+								<td style='font-size: 10px'>{!OrderNumber}</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr><td colspan='4'><hr width='100%' /></td></tr>
+			</table>	
+		</div>
+	</div>	
+	<div class="footer">  		
+		<div>Page <span class="pagenumber"/> of <span class="pagecount"/></div>	
+	</div>	
+	
+	<div class='content'>
+	
+		<p>
+			<table cellspacing='3' cellpadding='3'>
+				<tr>
+					<td valign='top'>
+						<table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
+							<tr>
+								<td colspan='2' style='font-weight: bold'>VENDOR</td>
+							</tr>
+							<tr>
+								<td class='labelCell' width='50'>Name</td>
+								<td>{!PO_Vendor.Company}</td>
+							</tr>
+							<tr>
+								<td class='labelCell' width='50'>Email</td>
+								<td>{!PO_Vendor.Email}</td> 
+							</tr>
+							<tr>
+								<td class='labelCell'>Address</td>
+								<td>{!PO_Vendor.Address_1__c}</td>
+							</tr>
+							<tr>
+								<td colspan='2'>
+									<table>
+										<tr>
+											<td class='labelCell' width='30'>City</td>
+											<td align='left' width='85'>{!PO_Vendor.nrCity__c}</td>
+			
+											<td class='labelCell' width='30'>State</td>
+											<td align='left' width='80'>{!PO_Vendor.nrState__c}</td>
+			
+											<td class='labelCell' width='30'>Zip</td>
+											<td align='left' width='45'>{!PO_Vendor.Zip__c}</td>
+										</tr>
+									</table>
+								</td>
+							</tr> 
+							<tr>
+								<td colspan='2'>
+									<table>
+										<tr>
+											<td class='labelCell'>Phone</td>
+											<td>{!PO_Vendor.Phone}</td>
+			
+											<td class='labelCell'>Fax</td>
+											<td>{!PO_Vendor.Fax}</td>
+										</tr>
+									</table> 
+								</td>
+							</tr>
+							<tr>
+								<td class='labelCell'><!-- Email --></td>
+								<td><!-- {!PO_Vendor.Email} --></td>
+							</tr>
+							
+						</table>					
+					
+					</td>
+					<td>
+						<table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
+							<tr>
+								<td colspan='2' style='font-weight: bold'>SHIP TO</td>
+							</tr>
+							<tr>
+								<td class='labelCell' width='50'>Company</td> 
+								<td>Nana Wall Systems Inc</td>
+							</tr>
+							<tr>
+								<td class='labelCell'>Care Of</td>
+								<td>{!Stock_Order__c.Care_Of__c}</td>
+							</tr>							
+							<tr>
+								<td class='labelCell'>Address</td>
+								<td>100 Meadowcreek Drive Suite 250</td>
+							</tr>
+							<tr>
+								<td colspan='2'>
+									<table>
+										<tr>
+											<td class='labelCell' width='30'>City</td>
+											<td width='85'>Corte Madera</td>
+			
+											<td width='30' class='labelCell'>State</td>
+											<td width='80'>CA</td>
+			
+											<td width='30' class='labelCell'>Zip</td>
+											<td width='45'>94925</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan='2'>
+									<table>
+										<tr>
+											<td class='labelCell'>Phone</td>
+											<td>800-873-5673 x256</td>
+			
+											<td class='labelCell'>Fax</td>
+											<td>415-383-0312</td>
+										</tr>
+									</table> 
+								</td>
+							</tr>
+							<tr>
+								<td class='labelCell'>Ship Method</td>
+								<td>{!PO_Shipmethod}</td>
+							</tr>
+							
+						</table>					
+					</td>
+				</tr>
+			</table>
+		</p>
+
+		<div>
+			<apex:dataTable width="100%" value="{!Details_POItems}" var="sqd" id="tblServiceQuoteDetails" rowClasses="odd,even"  styleClass="dataTable">
+				<apex:column >
+					<apex:facet name="header"><div style='labelCell'>Pos</div></apex:facet>
+					<!-- <apex:outputText value="{!sqd.Position__c}"/> -->
+			 		<apex:outputText value="{0,number,###}" style="text-align:right">
+					     <apex:param value="{!sqd.Position__c}" /> 
+					</apex:outputText>								
+				</apex:column>			
+				
+				<apex:column >
+					<apex:facet name="header"><div style='labelCell'>Thumbnail</div></apex:facet>
+						<apex:image url="{!sqd.ThumbnailURL__c}"  width="40" rendered="{!NOT(ISBLANK(sqd.ThumbnailURL__c))}" />								
+				</apex:column>			
+
+				<apex:column >
+					<apex:facet name="header">Qty</apex:facet>
+					<!-- <apex:outputText value="{!sqd.Quantity__c}"/> -->
+			 		<apex:outputText value="{0,number,#####}" style="text-align:right">
+					     <apex:param value="{!sqd.Quantity__c}" /> 
+					</apex:outputText>								
+				</apex:column>			
+				
+				<apex:column >
+					<apex:facet name="header">Part #</apex:facet>
+					<apex:outputText value="{!sqd.Service_Part__r.Name}"/>
+				</apex:column>			
+				
+				<apex:column > 
+					<apex:facet name="header">Description</apex:facet>
+					<apex:outputText value="{!sqd.Service_Part__r.Part_Name__c}"/>
+					<apex:outputText value=".  {!sqd.Notes__c}"  rendered="{!NOT( OR( sqd.Notes__c == '', sqd.Notes__c == null) )}" />
+				</apex:column>			
+
+			</apex:dataTable>
+			<br /> 
+		</div>
+
+		<apex:outputText value="Complaint: Yes"  rendered="{!NOT(Stock_Order__c.Complaint_Note__c == null)}"/>						<br />
+		<apex:outputText value="{!Stock_Order__c.Complaint_Note__c}"  rendered="{!NOT(Stock_Order__c.Complaint_Note__c == null)}"/>						
+
+
+		<p align='center'>
+			<ol>
+				<li>Enter this order in accordance with the prices, terms, delivery method and specifications listed above.</li>
+				<li>Please notify us immediately if you are unable to ship as specified.</li>
+				<li>Send all correspondence to Nana Wall Systems, Inc.</li>
+				<li>Please send confirmation for this order.</li>
+			</ol>
+		</p>
+	</div>
+	
+
+</body>
+
+<apex:outputtext value="{!Stock_Order__c.Tax__c}" rendered="false" />
+<apex:outputtext value="{!Stock_Order__c.SubTotal__c}" rendered="false" />
+<apex:outputtext value="{!Stock_Order__c.Freight__c}" rendered="false" />
+<apex:outputtext value="{!Stock_Order__c.Responsible_Rep__c}" rendered="false" />
+
+
+</apex:page>

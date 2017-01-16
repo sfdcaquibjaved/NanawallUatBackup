@@ -1,0 +1,90 @@
+<!-- PreChatQuestionnaire_NWL -->
+<apex:page showHeader="false" sidebar="false" >
+<!-- This script takes the endpoint URL parameter passed from the deployment page and makes it the action for the form -->
+    <script type="text/javascript">
+        (function() {
+            function handlePageLoad(){
+                var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+                document.getElementById('prechatForm').setAttribute('action',
+                decodeURIComponent(endpointMatcher.exec(document.location.search)[1]));
+            }
+            if (window.addEventListener){
+                window.addEventListener('load', handlePageLoad, false);
+            } else {
+                window.attachEvent('onload', handlePageLoad, false);
+            }
+        })();
+    </script>
+    <style type="text/css">
+        p {font-weight: bolder }
+    </style>
+
+    <div class="page-container">
+        <form class='contact-us' method='post' id='prechatForm'>
+            <h1>Contact Us!</h1><br /><br />
+<!-- Input Fields -->
+          Email:  <input    placeholder="Email"     type="text" required="required"  name="liveagent.prechat:contactEmail" /><br /><br />
+          First Name:   <input    placeholder="First Name" type='text' required="required"  name='liveagent.prechat:contactFirstName' /><br /><br />
+          Last Name:   <input    placeholder="Last Name" type='text' required="required"  name='liveagent.prechat:contactLastName' /><br /><br />
+          Zip Code:   <input    placeholder="ZIP Code" type='text' required="required"  name='liveagent.prechat:contactZipCode' /><br /><br />
+          Company Name:   <input    placeholder="Company Name" type='text' required="required"  name='liveagent.prechat:contactCompanyName' /><br /><br />
+          Customer Type:   <select name="liveagent.prechat:contactCustomertype" required="required">
+          <option value="Architect">Architect</option>
+          <option value="Contractor">Contractor</option>
+          <option value="Business Owner">Business Owner</option>
+          <option value="Homeowner">Homeowner</option>
+          <option value="Other">Other</option>
+          </select><br /><br />
+
+<!-- *************** Contact *************** -->
+<!-- Map the values to Contact fields -->
+         <!--   <input type="hidden" name="liveagent.prechat:contactType" value="Consumer" />
+            <input type="hidden" name="liveagent.prechat:contactAccId" value="{!consumerAccId}" /> -->
+            <input type="hidden"
+                    name="liveagent.prechat.findorcreate.map:Contact"
+                    value="FirstName,contactFirstName;LastName,contactLastName;Email,contactEmail;contact Id" /> 
+                     <input type="hidden"
+                    name="liveagent.prechat.findorcreate.map:Lead"
+                    value="FirstName,contactFirstName;LastName,contactLastName;Email,contactEmail;Type__c,contactCustomertype;Company,contactCompanyName;Status,'Not Engaged';PostalCode,contactZipCode;lead Id" /> 
+<!-- Try to find the Contact by email (exact match) -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Contact" value="Email,true;" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Contact" value="Email,true;" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Lead" value="Email,true;" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Lead" value="Email,true;" />
+<!-- If the Contact is not found, then create one with the following fields set -->
+<input type="hidden" name="liveagent.prechat.findorcreate.map.doCreate:Lead" value="FirstName,true;LastName,true;Email,true;Type__c,true;Company,true;Status,true;PostalCode,true;" />
+<!-- Save the Contact on the Live Chat Transcript's Contact Loookup -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Contact" value="Contact" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Lead" value="Lead" />
+<!-- Show the Contact when it is found or created -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Contact" value="true" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Lead" value="true" />
+
+
+
+            <button type="submit" id="prechat_submit" >Request Chat</button>
+            <!-- <input type="submit" value="Request Chat" id="prechat_submit" /> -->
+            
+    <!-- Creates an auto-query for a matching Contact record’s Email field based on the
+    value of the liveagent.prechat:Email field -->
+    <input type="hidden" name="liveagent.prechat.query:Email" value="Contact,Contact.Email" />
+    <input type="hidden" name="liveagent.prechat.query:Email" value="Lead,Lead.Email" />
+
+    <!--- populate fields ---->
+    <input type="hidden" name="liveagent.prechat.query:Email" value="Lead,Lead.Email" />
+    <input type="hidden" name="liveagent.prechat.save:contactEmail"  value="Email__c" />
+    <input type="hidden" name="liveagent.prechat.save:contactFirstName"   value="First_Name__c" />
+    <input type="hidden" name="liveagent.prechat.save:contactLastName"   value="Last_Name__c" />
+    <input type="hidden" name="liveagent.prechat.save:contactZipCode"   value="Zip_Code__c" />
+    <input type="hidden" name="liveagent.prechat.save:contactCustomertype"   value="Customer_Type__c" />
+    <input type='hidden' name='liveagent.prechat:ContactId'   value='' id='contactid'/>  
+    <input type="hidden" name="liveagent.prechat.save:ContactId" value="Contact" />
+    
+    <input type="hidden" name="liveagent.prechat.save:Email"  value="Provided_Email__c" />
+
+    <input type='hidden' name='liveagent.prechat:LeadId'      value='' id='leadid' />  
+    <input type="hidden" name="liveagent.prechat.save:LeadId" value="Lead" />            
+        </form>
+    </div>
+    
+</apex:page>

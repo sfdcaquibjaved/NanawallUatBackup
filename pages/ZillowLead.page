@@ -1,0 +1,15 @@
+<apex:page standardcontroller="Lead" extensions="ZillowController">
+<apex:form >
+<apex:actionStatus rendered="false" id="as" startText="Running" stopText="Done" />
+<apex:commandButton rendered="false" value="Update Info" action="{!MyEstimate}"  reRender="op" />
+<apex:outputpanel id="op" >
+<apex:outputlabel rendered="{!LocationValueString!=''}"  value="Value: " /><apex:outputlabel value="{!LocationValueString}" />
+<br/>
+<apex:outputlink rendered="{!LocationDetailsLink!=''}" target="zillow" value="{!LocationDetailsLink}" >View Details</apex:outputlink> 
+</apex:outputpanel>
+</apex:form>
+
+<apex:outputlabel value="{!lead.Address_1__c}" rendered="false" />
+<apex:outputlabel value="{!lead.City}" rendered="false" />
+<apex:outputlabel value="{!lead.State}" rendered="false" />
+</apex:page>

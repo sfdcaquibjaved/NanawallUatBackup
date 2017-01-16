@@ -1,0 +1,290 @@
+<apex:page controller="ContactHomeController" tabStyle="Contact"  >
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+
+<script type="text/JavaScript">
+	jQuery.noConflict(); 
+    jQuery(document).ready(function() { 
+    
+    	jQuery('.enterclick').keypress(function(e) {
+    	
+			if( e.keyCode == 13 ) {  
+				A4J.AJAX.Submit('j_id0:theForm',event,{'status':'loadingstatus','similarityGroupingId':'j_id0:theForm:j_id12:j_id71','parameters':{'j_id0:theForm:j_id12:j_id71':'j_id0:theForm:j_id12:j_id71'} } );return false;			
+			}
+			 
+    	});
+    	primeSearch();
+    });
+</script>
+<style>
+	.labelCell {	
+		text-align: right;
+		background-color: #F5F5EA;
+		border-left: solid 8px #ECECDE;
+		padding-right: 3px;
+		font-size: 12px;
+		width: 11%;
+		font-weight: bold;
+
+	}
+</style>
+
+<apex:form >
+    <apex:actionFunction name="primeSearch" action="{!primeSearch}" rerender="debug,errors"></apex:actionFunction>
+	<apex:actionFunction name="jsDoSearch" action="{!myaction}" /><apex:commandButton value="New Contact" action="{!gotonew}"/>
+	 &nbsp; &nbsp;
+	<apex:commandButton value="New ContactProject" onclick="document.location.href = '/apex/SinglePageLeadConvert'; return false;" />
+</apex:form>
+
+<apex:tabpanel >    
+	<apex:tab label="Multi-Search" name="ms" id="tabms">
+		<apex:form id="theForm">
+			<apex:pageBlock title="Search Contacts"> 
+				<table width='100%' cellpadding='5' bgcolor='white'>
+					<tr>
+						<td class='labelCell'>First Name:</td>
+						<td><apex:inputtext value="{!FirstName}"  styleClass="enterclick"/></td>
+				
+						<td class='labelCell'>Last Name:</td>
+						<td><apex:inputtext value="{!LastName}"  styleClass="enterclick"/></td>
+				
+						<td class='labelCell'>Type:</td>
+						<td>
+							<apex:SelectList value="{!LeadType}" multiselect="false" size="1" >
+					            <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+					            <apex:selectOptions value="{!LeadTypes}"></apex:selectOptions>
+					        </apex:SelectList>
+				        </td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Account:</td>
+						<td colspan='3'><apex:inputtext value="{!AccountName}" styleClass="enterclick" style="width: 95%"/></td>
+				
+						<td class='labelCell'>Interest:</td>
+						<td>
+							<apex:SelectList value="{!Interest}" multiselect="false" size="1" >
+					            <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+					            <apex:selectOptions value="{!LeadInterests}" />
+					        </apex:SelectList>		
+						</td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Address:</td>
+						<td colspan='5'><apex:inputtext value="{!Address}" styleClass="enterclick" style="width: 95%"/></td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Address2:</td>
+						<td colspan='5'><apex:inputtext value="{!Address2}" style="width: 95%" styleClass="enterclick"/> </td>
+					</tr>
+					<tr>
+						<td class='labelCell'>City:</td>
+						<td><apex:inputtext value="{!City}" styleClass="enterclick"/></td>
+				
+						<td class='labelCell'>State:</td>
+						<td>
+							<apex:selectList value="{!state}" multiselect="false" size="1">        
+								<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+					            <apex:selectOptions value="{!states}"></apex:selectOptions>
+				    	    </apex:selectList>
+						</td>
+						<td class='labelCell'>Zip:</td>
+						<td><apex:inputtext value="{!Zip}" styleClass="enterclick"/></td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Territory:</td>
+						<td>
+							<apex:selectList rendered="{!OfficeUser}" value="{!selectedTerritory}" multiselect="false" size="1">        
+								<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+					            <apex:selectOptions value="{!Territories}"></apex:selectOptions>
+				    	    </apex:selectList>
+				        </td>
+						<td class='labelCell'>Country:</td>
+						<td>
+							<apex:selectList value="{!country}" multiselect="false" size="1">
+								<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+								<apex:selectOptions value="{!countries}"></apex:selectOptions>
+							</apex:selectList>	
+				       	</td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Source:</td>
+						<td>
+							<apex:selectList value="{!LeadSource}" multiselect="false" size="1">
+								<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+								<apex:selectOptions value="{!LeadSources}"></apex:selectOptions>
+							</apex:selectList>		
+						</td>
+				
+						<td class='labelCell'>Source Date:</td>
+						<td>
+							<apex:inputfield value="{!DummyContact.Source_Date__c}" />
+				       	</td> 
+					</tr>
+					<tr>
+						<td class='labelCell'>Phone:</td>
+						<td>
+							<apex:inputtext value="{!Phone}" styleClass="enterclick"/>		
+						</td>
+				
+						<td class='labelCell'>Phone Ext:</td>
+						<td>
+							<apex:inputtext value="{!PhoneExt}" styleClass="enterclick"/>
+				       	</td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Reg Number:</td>
+						<td>
+							<apex:inputtext value="{!RegNumber}"  styleClass="enterclick"/>	
+						</td>
+				
+						<td class='labelCell'>Email:</td>
+						<td>
+							<apex:inputtext value="{!Email}" styleClass="enterclick"/>
+				       	</td>
+					</tr>
+					<tr>
+						<td class='labelCell'>Create Dates:</td>
+						<td colspan='5'>
+							From <apex:inputfield value="{!DummyContact.Nana_Create_Date__c}" /> to <apex:inputfield value="{!DummyContact.Nana_Edit_Date__c}" />
+						</td>
+					</tr>
+					<tr>
+						<td class='labelCell'></td>
+						<td>
+							
+						</td>
+				
+						<td class='labelCell'>Competitor:</td>
+						<td>
+							<apex:inputcheckbox value="{!Competitor}" />
+				       	</td>
+					</tr>
+					<tr>
+						<td class='labelCell' colspan='6' style='text-align: left'>Full object search.( Includes description )</td>
+					</tr>
+					<tr>
+						<td colspan='6'>
+							 
+							<apex:inputfield value="{!DummyContact.Description}" style="width: 95%"/>
+				       	</td>
+					</tr>
+					<tr>
+						<td colspan='5'>
+						</td>
+						<td>
+							<apex:commandButton value="Reset" styleclass="searchbutton" action="{!reset}" status="resetting"  />
+							<apex:commandButton value="Search" styleclass="searchbutton" action="{!myaction}" status="loadingstatus" reRender="op" />
+						</td>
+					</tr>
+				</table>
+
+				<apex:outputpanel id="op">
+					<apex:pagemessages ></apex:pagemessages>
+
+					<apex:pageBlockSection id="pbs" columns="1">
+						
+						<apex:toolbar width="700px"  style="background-color:#8d8d8d;background-image:none" >
+							<apex:outputlabel value="{!Total}" />
+						            
+							<apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+							<apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+							<apex:actionstatus id="loadingstatus" starttext="Loading..." stoptext="" />
+						</apex:toolbar>
+						<br/>
+
+			            <apex:pageBlockTable id="search" var="a" value="{!myContacts}" width="100%"  >
+			            
+			                <apex:column headerValue="">
+			                <apex:outputlink value="/{!a.id}" >view 
+			                </apex:outputlink>
+			               </apex:column>
+			 
+							<apex:column headerValue="Name">
+			                <apex:facet name="header">
+			                    <apex:commandlink value="Name" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="Name" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                <apex:outputLabel value="{!a.Name}" /> 
+			               </apex:column>
+			               				<apex:column headerValue="Account">
+			                <apex:facet name="header">
+			                    <apex:commandlink value="Account" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="Account.Name" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                 <apex:outputLabel value="{!a.Account.Name}" />
+			               </apex:column>
+			                <apex:column headerValue="Address">
+			                <apex:facet name="header">
+			                    <apex:commandlink value="Address" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="Address_1__c" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                <apex:outputLabel value="{!a.Address_1__c}" /> 
+			               </apex:column>
+			                <apex:column headerValue="City">
+			                
+			                <apex:facet name="header">
+			                    <apex:commandlink value="City" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="city__c" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                <apex:outputLabel value="{!a.City__c}" /> 
+			               </apex:column>
+			               
+			                <apex:column headerValue="State">
+			                <apex:facet name="header">
+			                    <apex:commandlink value="State" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="State__c" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                <apex:outputLabel value="{!a.State__c}"/> 
+			               </apex:column>
+			               
+			                <apex:column headerValue="Zip">
+			                <apex:facet name="header">
+			                    <apex:commandlink value="Zip" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="zip__c" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                <apex:outputLabel value="{!a.Zip__c}" /> 
+			               </apex:column>
+			
+			                <apex:column headerValue="Repeat Customer">
+			                <apex:facet name="header">
+			                    <apex:commandlink value="Repeat Customer" action="{!dosort}" reRender="op" >
+			                    <apex:param name="sortfield" value="Repeat_Customer__c" assignto="{!sortfield}"/>
+			                    </apex:commandlink>
+			                </apex:facet>
+			                <apex:inputcheckbox disabled="true" value="{!a.Repeat_Customer__c}" /> 
+			               </apex:column>
+			               
+			           </apex:pageBlockTable> 
+			           
+					</apex:pageBlockSection>
+				</apex:outputpanel>
+		
+			</apex:pageBlock>		
+		</apex:form>	
+    </apex:tab>
+     
+	<apex:tab label="Filters" id="tabfilters" name="filters">
+		<apex:outputpanel layout="block"> 
+			<apex:enhancedList customizable="true" height="300" id="list" type="Contact" />
+		</apex:outputpanel>
+	</apex:tab>
+    
+	<apex:tab label="Tools" rendered="{!Tools}">
+		<apex:pageblock title="Contact Tools" >
+			<apex:include pageName="ContactTools"/>
+		</apex:pageblock>
+	</apex:tab>
+</apex:tabpanel>
+
+
+
+   
+</apex:page>

@@ -1,0 +1,26 @@
+<apex:page controller="TotalOrderReportDataManager_Controller">
+
+<apex:form >
+	<apex:pagemessages /> 
+	Year: <apex:inputText value="{!YearToRun}" /><br />
+	Segment:	<apex:selectList value="{!YearSegmentToRun}" multiselect="false" size="1">
+						<apex:selectOption itemvalue="1" itemlabel="1" />
+						<apex:selectOption itemvalue="2" itemlabel="2" />
+						<apex:selectOption itemvalue="3" itemlabel="3" />
+						<apex:selectOption itemvalue="4" itemlabel="4" />
+        </apex:selectList>
+	<apex:commandbutton value="Manually Rebuild Data" action="{!rebuildData}" />
+
+	<br /><br /> 
+
+	<div>
+		<h3>Rebuild Log</h3><br />
+		<apex:outputtext value="{!LastBuildResult}" escape="false"/> 
+	</div>
+
+	<br /><br />
+	<apex:commandbutton value="Reschedule Cron" action="{!rescheduleCron}" />
+
+
+</apex:form>
+</apex:page>

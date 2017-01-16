@@ -1,0 +1,120 @@
+<apex:page controller="TestController" showheader="true">
+
+<apex:form > 
+ 	<apex:pagemessages escape="false"/>
+ 	
+
+		<h3>Fix Owners by Zip Prefix</h3> 	
+ 		<table>
+ 			<tbody>
+ 				<tr>
+ 					<td>Zip Prefix</td> 
+ 					<td><apex:inputtext value="{!FixOwners_ZipPrefix}" /></td>
+ 				</tr>
+ 
+ 				<tr>
+ 					<td colspan='2'>
+						<apex:commandbutton action="{!FixOwnsersByZipPrefix}" value="Fix Owners by Zip Prefix" />
+ 					</td>
+ 				</tr>
+ 			</tbody>
+ 		</table>
+ 	<br /><br />
+ 	
+ 	
+		<h3>Sync Account-Reps on Projects</h3> 	
+ 		<table>
+ 			<tbody>
+ 				<tr> 
+ 					<td>From Date</td>
+ 					<td><apex:inputtext value="{!SyncAccReps_FromDate}" /></td>
+ 				</tr> 
+ 				<tr>
+ 					<td>To Date</td> 
+ 					<td><apex:inputtext value="{!SyncAccReps_ToDate}" /></td>
+ 				</tr>
+
+ 				<tr>
+ 					<td colspan='2'>
+						<apex:commandbutton action="{!SyncAccountRepsOnOpportunities}" value="Sync Account Reps" />
+ 					</td>
+ 				</tr>
+ 			</tbody>
+ 		</table>
+ 	<br /><br />
+ 	
+ 	
+ 		<apex:commandbutton action="{!InsertLiveChatData}" value="Insert Live Chat Data" />
+ 	<br /><br />
+ 	
+ 		<h3>Send NDG Email</h3>
+ 	
+ 		<table>
+ 			<tbody>
+ 				<tr> 
+ 					<td>NDG Quote ID</td>
+ 					<td><apex:inputtext value="{!NDG_SalesforceQuoteID}" /></td>
+ 				</tr> 
+ 				<tr>
+ 					<td>NDG CAD History ID</td> 
+ 					<td><apex:inputtext value="{!NDG_CADHistoryID}" /></td>
+ 				</tr>
+ 				<tr>
+ 					<td>NDG Recipient Email</td>
+ 					<td><apex:inputtext value="{!NDG_RecipientEmail}" /></td>
+ 				</tr>
+ 				<tr>
+ 					<td colspan='2'>
+						<apex:commandbutton action="{!SendNDGEMail}" value="Send NDG Email" />
+ 					</td>
+ 				</tr>
+ 			</tbody>
+ 		</table>
+ 	
+ 	
+ 	
+ 		<hr />
+		<table>
+			<tbody> 
+				<tr>  
+					<td>From</td>   
+					<td>To</td>  
+				</tr>
+				<tr>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Create_Date__c}" required="false"/></td>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Edit_Date__c}" required="false" /></td>
+				</tr> 
+			</tbody>
+		</table>
+	 
+
+
+	<apex:commandbutton action="{!runTest}" value="Run Test" />
+	<br/>
+	<apex:commandbutton action="{!runDataCleanup}" value="Run Data Cleanup" />
+	
+	<br/>
+	<hr />
+	<apex:commandbutton action="{!FindSalesteamsOverOneHundredPercent}" value="Find Opportunities with commissions > 100%" />
+
+	<apex:datatable value="{!oppsOverOneHundred}" var="opp" id="tblOppsOverOneHundred">
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Opportunity</div></apex:facet>
+	 		<a href='/{!opp.id}' target='_blank'>{!opp.id}</a>							
+		</apex:column>			
+	
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Commission Total</div></apex:facet>
+	 		{!opp.CommissionTotal}						
+		</apex:column>			
+	
+	</apex:datatable>
+	
+	
+	<br />
+	<hr />
+	zip: <apex:inputtext value="{!zipcode}" />
+	<apex:commandbutton action="{!gettaxrate}" value="Get Tax Rate" />
+	
+</apex:form>	
+</apex:page>

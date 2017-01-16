@@ -1,0 +1,124 @@
+<apex:page controller="successRatioControllerTablenew" sidebar="false">
+
+<!--<apex:pageBlock title="Success ratio based on Amount"></apex:pageBlock>-->
+<apex:form >   
+<html>
+<head>
+
+</head>
+
+ <h1 style="text-align:center; width:150%; margin-left: 14cm; color:red; font-weight:bold;font-size: 19px;"> SUCCESS RATIO BY AMOUNT </h1>
+
+<body>
+<div style="vertical-align:top;background-color: #00ff00;">
+<table  border="1"  style="float: left;display:inline-block;margin-bottom:20px; border-width: 1px; border-collapse: collapse;width:100%;height:auto;text-align:center" class="tabledisplay" id="myTable">
+<thead> 
+ <tr class="myHeader" height="15">
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;word-break:break-all">Year</th>            
+ <th width="5%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Commission Total</th>           
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Amount Total</th>
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quarterly Success Ratio </th>
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Halfyearly Success Ratio</th>
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Yearly Success Ratio</th>
+</tr>
+</thead>
+
+<apex:repeat var="drt" value="{!dataList}">
+<body>
+<tr>
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drt.yearname}" />
+</td>
+
+<td width="2"  bgcolor="#E6E6FA">
+<apex:outputText value="{!drt.totalOrderAmount}" />
+</td>
+
+<td width="2"  bgcolor="#E6E6FA">
+<apex:outputText value="{!drt.projectAmount}" />
+</td>
+
+<td width="2" bgcolor="#87CEFA">
+<apex:outputText value="{!drt.successRatio}" />
+</td>
+
+
+
+<td width="2" bgcolor="#B0E0E6" rowspan="2" style="Display: {!IF(drt.halfyearSuccessRatio==0,'None','')}">
+<apex:outputText value="{!drt.halfyearSuccessRatio}" />
+</td>
+
+<td width="2" bgcolor="#AFEEEE" rowspan="4" style="Display: {!IF(drt.yearSuccessRatio==0,'None','')}">
+<apex:outputText value="{!drt.yearSuccessRatio}" />
+</td>
+
+</tr>
+</body>
+ </apex:repeat>
+</table>
+
+ </div> 
+</body>
+
+
+
+
+
+<h1 style="text-align:center; width:150%; margin-left: 14cm;font-size: 19px; color:red; font-weight:bold;height: 120px;"> SUCCESS RATIO BY VOLUME </h1>
+
+<body>
+<div style="vertical-align:top;">
+<table  border="1"  style="float: left;display:inline-block;margin-bottom:30px; border-width: 1px; border-collapse: collapse;width:100%;height:auto;text-align:center" class="tabledisplay" id="myTable">
+<thead> 
+ <tr class="myHeader" height="15">
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;word-break:break-all">Year</th>            
+ <th width="5%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Order Finalized</th>           
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Projects Created</th>
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quarterly Success Ratio </th>
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Halfyearly Success Ratio</th>
+ <th width="8%" style="text-align:center;color: white; border-right: 1px solid #000;background-color:#3333ff; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Yearly Success Ratio</th>
+</tr>
+</thead>
+
+<apex:repeat var="drt2" value="{!dataListVolume}">
+<body>
+<tr>
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drt2.yearname}" />
+</td>
+
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drt2.totalOrderAmount}" />
+</td>
+
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drt2.projectAmount}" />
+</td>
+
+<td width="2" bgcolor="#87CEFA">
+<apex:outputText value="{!drt2.successRatio}" />
+</td>
+
+
+
+<td width="2" rowspan="2" bgcolor="#B0E0E6" style="Display: {!IF(drt2.halfyearSuccessRatio==0,'None','')}">
+<apex:outputText value="{!drt2.halfyearSuccessRatio}" />
+</td>
+
+<td width="2" rowspan="4" bgcolor="#AFEEEE" style="Display: {!IF(drt2.yearSuccessRatio==0,'None','')}">
+<apex:outputText value="{!drt2.yearSuccessRatio}" />
+</td>
+
+</tr>
+</body>
+ </apex:repeat>
+</table>
+
+ </div> 
+</body>
+
+
+</html>
+
+ </apex:form>  
+</apex:page>

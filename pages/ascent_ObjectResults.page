@@ -1,0 +1,71 @@
+<apex:page extensions="ascent_ObjectResults_Controller" standardController="Project__c" >
+
+<apex:stylesheet value="{!URLFOR($Resource.Ascent_StaticFiles, 'Ascent_StaticFiles/font-awesome-4.3.0/css/font-awesome.min.css')}"/>
+
+
+
+<table width='100%'>
+	<thead>
+		<tr>
+			<th>Score</th>
+			<th>Rank</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{!Project__c.Ascent_Score__c}</td>
+			<td>{!Project__c.Ascent_Rank__c}</td>
+			<td>
+				<apex:outputtext value="{!StarsRank}" escape="false" /> 
+				<apex:outputtext value="{!Project__c.Ascent_History__c}" rendered="false" /> 
+				<div style='display: none'>{!Project__c.Ascent_History__c}</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='3'>
+				<apex:chart height="200" width="500" animate="true" legend="true" data="{!ChartData}" rendered="true">
+					<apex:axis type="Numeric" position="left" title="# Stars"  fields="value" maximum="3" minimum="0" steps="2"/>
+					<apex:axis type="Category" position="bottom" title="Date" grid="false" fields="day"   />
+
+					<apex:barSeries orientation="vertical" axis="left" xField="day" yField="value">
+						<apex:chartTips height="50" width="150" rendererFn="renderChartTip"/>
+					</apex:barSeries>
+					
+				</apex:chart>
+				
+
+			</td>
+		</tr>
+		<tr style='display: none'>
+			<td colspan='3'>
+				<h1>Related  Projects</h1>
+				<apex:dataTable value="{!projects}" var="project" id="projecttable" rowClasses="odd,even" styleClass="tableClass" width="100%" >
+						<apex:column >
+						    <apex:facet name="header">view</apex:facet>
+							<a href="/{!project.ID}" target="_parent" >view</a>
+						</apex:column>
+						<apex:column >
+						    <apex:facet name="header">Project</apex:facet>
+							<apex:outputText value="{!project.Name}"/>
+						</apex:column>
+				</apex:dataTable>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<script>
+function renderChartTip(klass, item) {
+    var yField = item.yField;
+    var date = item.storeItem.get('day');
+	var val = item.storeItem.get('value');
+//	console.log(item.storeItem);
+	var invertedval = item.storeItem.data.invertedvalue;
+//	var invertedval = item.storeItem.get('invertedvalue');
+    this.setTitle( date + '<br>' + val +' stars<br>rank = ' + invertedval  );
+}
+</script>
+
+</apex:page>

@@ -1,0 +1,623 @@
+<apex:page tabStyle="Quote__c" controller="Quote_WizardController_Clone" standardStylesheets="true" sidebar="false"  docType="html-5.0" >
+<head>
+
+
+
+
+ <style>
+            .bread-table { padding: 0px; margin: 0px;border-spacing: 0px !important;}
+            .bread-before {  background-color: #FFF;  margin: 0; padding: 0;
+                border-top: 21px solid #3498db;
+                border-bottom: 21px solid #3498db;
+                border-left: 15px solid #fff;
+            }
+            .bread { width: 100%; background-color: #3498db; height: 30px; margin: 0; padding-top: 12px; color: #FFF; font-size: 8pt; text-align: center; cursor: pointer;}
+            .bread a { color: #FFF !important; text-decoration: none }
+            .bread a:hover { text-decoration: underline;}
+            .bread-after { background-color: #FFF;  margin: 0; padding: 0;
+                border-top: 21px solid #FFF;
+                border-bottom: 21px solid #FFF;
+                border-left: 15px solid #3498db;
+            }
+            .bread-active { width: 0%; background-color: green; height: 30px; margin: 0; padding-top: 12px; color: #FFF; font-size: 8pt; text-align: center;}           
+            .bread-before-active {  background-color: green; margin: 0; padding: 0;
+                border-top: 21px solid green;
+                border-bottom: 21px solid green; 
+                border-left: 15px solid #fff;
+            }
+            .bread-after-active { background-color: #FFF; margin: 0;
+                border-top: 21px solid #FFF;
+                border-bottom: 21px solid #FFF;
+                border-left: 15px solid green;
+            }
+            .bread-inactive { width: 100%; background-color: #A59D9D; height: 30px; margin: 0; padding-top: 12px; color: #FFF; font-size: 8pt; text-align: center;}          
+            .bread-before-inactive {  background-color: #A59D9D; margin: 0; padding: 0;
+                border-top: 21px solid #A59D9D;
+                border-bottom: 21px solid #A59D9D; 
+                border-left: 15px solid #fff;
+            }
+            .bread-after-inactive { background-color: #FFF; margin: 0;
+                border-top: 21px solid #FFF;
+                border-bottom: 21px solid #FFF;
+                border-left: 15px solid #A59D9D;
+            }
+            
+            .infoSection{
+                display: inline-block;
+                float: left;
+                height: 80px;
+                width: 95%;
+                background-color: #f8f8f8;
+                margin-top: 10px;
+                border-radius: 10px;
+            }
+            
+            .step1Section{
+                display: inline-block;
+                float: left;
+                width: 95%;
+                background-color: #f8f8f8;
+                margin-top: 5px;
+                border-radius: 10px;
+                border-top: 3px solid #3d8d8d;
+            }
+            
+            .boxStyle1{
+                color: #fff;;
+                font-family: arial;
+                font-size: 9px;
+                text-decoration: none;
+            }
+            
+            .boxStyle{
+                color: #000;
+                font-family: arial;
+                font-size: 13px;
+                text-decoration: none;
+            }
+            
+            .infoboxStyle{
+                color: #000;
+                font-family: arial;
+                font-size: 13px;
+                text-decoration: none;
+                margin-left:10px;
+                margin-top: 10px;
+            }
+            
+            .lookupInput
+{
+    display: inline;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.lookupInput img
+{
+    background-repeat: no-repeat;
+    margin-right: .25em;
+    vertical-align: middle;
+}
+.lookupInput .disabled
+{
+    background-color: #ccc;
+}
+.lookupInput .emptyDependentLookup
+{
+    font-style: italic;
+}
+.lookupInput input[readonly]
+{
+    background-color: #e6e6e6;
+    border: 2px solid #e6e6e6;
+    color: #333;
+    cursor: default;
+}
+.lookupInput a.readOnly
+{
+    float: right;
+}
+.lookupInput span.readOnly
+{
+    display: block;
+    white-space: normal;
+}
+.lookupInput span.totalSummary
+{
+    font-weight: bold;
+}
+.inlineEditRequiredDiv .lookupInput img,.inlineEditDiv .lookupInput img
+{
+    vertical-align: middle;
+}
+.quickCreateModule .lookupInput input {
+    max-width: 155px
+}
+.lookupIcon {
+    background-image: url(/img/func_icons/util/lookup20.gif);
+    background-position: 0 0;
+    width: 20px;
+    height: 20px;
+    background-position: top left
+}
+.lookupIconOn {
+    background-image: url(/img/func_icons/util/lookup20.gif);
+    background-position: 0 0;
+    width: 20px;
+    height: 20px;
+    background-position: top right
+}
+            
+            
+            
+            
+        </style>
+        
+         <style>
+            body .bPageBlock .pbBody .red .pbSubheader{
+                background-color:#c00000;
+            }
+            body .bPageBlock .pbBody .grey .pbSubheader{
+                background-color:#c0c0c0;
+            }
+            body .bPageBlock .pbBody .grey .pbSubheader h3{
+                color:#000;
+            }
+        </style>
+      <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <apex:stylesheet value="{!URLFOR($Resource.salesforce_lightning, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+
+
+    </head>
+<script>
+function fnChangeContact(a)
+    {
+    actionFuncContact(a);
+    }
+    
+function fnChangeAccount(a)
+    {
+    actionFuncAccount(a);
+    }
+    
+ function fnChangeProject(a)
+    {
+    actionFuncProject(a);
+    }
+   
+   
+   
+    
+    
+</script>
+<apex:form id="insuffSectionId" rendered="{!NOT(insufficentPrivilege)}">
+<apex:pagemessages escape="false" id="Displayerrors" />
+</apex:form>
+<apex:form id="formId" rendered="{!insufficentPrivilege}">
+
+<apex:outputPanel id="messagePanel" >
+<div id="allBar" style="width:95%">
+
+   <table width="100%"><tr>
+            <td width="33%">
+             <apex:outputpanel id="conNotCreated" rendered="{!(showProjectForm)}">
+            <table class="bread-table" width="100%">
+            
+             <tr>
+                <td class="bread-before-inactive"></td>
+                <td class="bread-inactive"><apex:OutputText value="Add Cont & Acc" styleclass="boxStyle1"/> <apex:outputText value="(Complete)" rendered="{!showProjectForm}" styleclass="boxStyle1"/></td>
+                <td class="bread-after-inactive"></td>
+            </tr>
+            </table>
+            </apex:outputpanel>
+            <apex:outputpanel id="conCreated" rendered="{!NOT(showProjectForm)}">
+             <table class="bread-table" width="100%"><tr>
+                <td class="bread-before-active"></td>
+                <td class="bread-active"><apex:OutputText value="Add Cont & Acc-You Are Here" styleclass="boxStyle1"/></td>
+                <td class="bread-after-active"></td>
+            </tr></table>
+            </apex:outputpanel>
+            </td>
+            <td width="33%">
+             <apex:outputpanel id="accNotCreated" rendered="{!NOT(showProjectForm)}">
+            <table class="bread-table" width="100%">
+             <tr>
+                <td class="bread-before-inactive"></td>
+                <td class="bread-inactive"><apex:OutputText value="Add Proj & Opp" styleclass="boxStyle1"/></td>
+                <td class="bread-after-inactive"></td>
+            </tr>
+            </table>
+            </apex:outputpanel>
+            <apex:outputpanel id="accCreated" rendered="{!(showProjectForm)}">
+             <table class="bread-table" width="100%"><tr>
+                <td class="bread-before-active"></td>
+                <td class="bread-active"><apex:OutputText value="Add Proj & Opp-You Are Here" styleclass="boxStyle1"/></td>
+                <td class="bread-after-active"></td>
+            </tr></table>
+            </apex:outputpanel>
+            </td>
+            <td width="34%">
+             <apex:outputpanel id="quotenotCreated" rendered="{!NOT(quoteCreated)}">
+            <table class="bread-table" width="100%">
+             <tr>
+                <td class="bread-before-inactive"></td>
+                <td class="bread-inactive"><apex:OutputText value="Add Quote     " styleclass="boxStyle1"/></td>
+                <td class="bread-after-inactive"></td>
+            </tr>
+            </table>
+            </apex:outputpanel>
+            <apex:outputpanel id="quoteCreated" rendered="{!quoteCreated}">
+             <table class="bread-table" width="100%"><tr>
+                <td class="bread-before-active"></td>
+                <td class="bread-active"><apex:OutputText value="Add Quote         " styleclass="boxStyle1"/></td>
+                <td class="bread-after-active"></td>
+            </tr></table>
+            </apex:outputpanel>
+            </td>
+           </tr></table>
+    </div>
+   
+</apex:outputPanel>
+<apex:pagemessages escape="false" />
+<apex:outputPanel id="accountContact" rendered="{!NOT(showProjectForm)}">
+
+<apex:actionRegion >
+ <apex:actionFunction name="actionFuncContact" action="{!syncContact}" status="loadingStatus" reRender="accountContact,messagePanel" >
+<apex:param name="contactId" value=""  /> 
+</apex:actionFunction>
+<apex:actionFunction name="actionFuncAccount" action="{!syncAccount}" status="loadingStatus" reRender="accountSectionId,messagePanel" >
+<apex:param name="accountId" value=""  /> 
+</apex:actionFunction>
+<apex:outputPanel id="accountContactSection" >
+<apex:actionRegion >
+<apex:pageBlock id="pbContactInformation" title="Step 1.1 : Select Contact Information">
+<apex:actionRegion >
+      <apex:selectRadio value="{!contactCreateOption}" disabled="{!(conURLSelected)}">
+            <apex:selectOptions value="{!ContactOption}"/>
+            
+          <apex:actionSupport event="onchange" action="{!initializeContactCreateOption}" status="loadingStatus" rerender="accountContact,messagePanel" />
+      </apex:selectRadio>
+   </apex:actionRegion>
+  <apex:outputpanel id="existingContactSection" rendered="{!NOT(createNewContact)}">
+   <apex:pageBlockSection columns="1" title="Enter Contact Information" >
+   
+   
+                    
+                    <apex:inputField styleClass="lookupInput" type="text" value="{!oppConRole.Contact__c}" rendered="{!(NOT(accountURLSelected) && NOT(conURLSelected) && NOT(oppURLSelected))}">
+                <apex:actionSupport event="onchange" reRender="conField" oncomplete="fnChangeContact('{!oppConRole.Contact__c}');"/>
+  </apex:inputfield>
+               
+   
+   
+   
+   
+  
+  <apex:outputfield value="{!oppConRole.Contact__c}" rendered="{!conURLSelected}"/>
+  <apex:selectList value="{!selectedContact}" multiselect="false" size="1" rendered="{!((accountURLSelected && NOT(conURLSelected)) || oppURLSelected)}">
+      <apex:selectOptions value="{!contactList}"/>
+    </apex:selectList>
+   </apex:pageBlockSection>  
+  </apex:outputpanel>
+  
+  <apex:outputPanel id="newContactSection" rendered="{!createNewContact}">
+  <apex:commandButton action="{!updateContactAddressNew}" status="loadingStatus" value="Copy info from Account" 
+                           reRender="accountContact"/>
+                           
+                       
+                        
+  <div id="abc">
+  <form action="#" id="form" method="post" name="form">
+  <table>
+  <tr>
+  <td> <apex:outputLabel value="First Name"> </apex:outputLabel> </td>
+                         <apex:outputPanel layout="none">
+                            <div class="requiredInput"><div class="requiredBlock"></div>
+                             </div></apex:outputPanel>
+                             
+                             
+ <td> <apex:inputField value="{!con.FirstName}"    required="true"/></td>
+   </tr>
+     
+     <tr>
+     <td> <apex:outputLabel value="Last Name"> </apex:outputLabel> </td>
+     <apex:outputPanel layout="none">
+                            <div class="requiredInput"><div class="requiredBlock"></div>
+                            </div></apex:outputPanel>
+                            
+
+      <td>  <apex:inputField value="{!con.LastName}"/> </td>
+      
+     </tr>
+     
+     <tr>
+     <td> <apex:outputLabel value="Phone"> </apex:outputLabel> </td>
+      <td>  <apex:inputField value="{!con.Phone}"/> </td>
+     </tr>
+     
+     <tr>
+     <td> <apex:outputLabel value="Email"> </apex:outputLabel> </td>
+                             <apex:outputPanel layout="none">
+                            <div class="requiredInput"><div class="requiredBlock"></div>
+                            </div></apex:outputPanel>
+
+      <td>  <apex:inputField value="{!con.Email}" required="true"/> </td>
+     </tr>
+     
+     <tr><td title="Sample Title"><h><b>ADDRESS INFORMATION</b></h></td></tr>
+     <tr>
+     <td> <apex:outputLabel value="Mailing Street"> </apex:outputLabel> </td>
+      <td>  <apex:inputField style="width:170px;" id="conStreet" value="{!con.MailingStreet}"/> </td>
+     </tr>
+     
+     <tr>
+     <td> <apex:outputLabel value="Mailing Country"> </apex:outputLabel> </td>
+      <td>  <apex:inputField style="width:175px;" id="conCount"  value="{!con.MailingCountryCode}" required="true"/> </td>
+     </tr>
+     
+     <tr>
+     <td> <apex:outputLabel value="Mailing City"> </apex:outputLabel> </td>
+      <td>  <apex:inputField id="conCity"  value="{!con.MailingCity}"/> </td>
+     </tr>
+     
+     
+     
+     <tr>
+    <td> <apex:outputLabel value="Mailing Zip/Postal Code" /></td>
+    <td> <apex:inputfield id="conZip" value="{!con.MailingPostalCode}"  /></td>
+     </tr>                   
+                       
+     
+     
+     
+   </table>
+  
+  </form>
+  </div>
+
+   </apex:outputPanel>
+ </apex:pageBlock>
+  <apex:outPutPanel id="accountSectionId">
+ <apex:pageBlock id="AccountInformation" title="Select 1.2 : Select Account Information"  rendered="{!showAccountSection}">
+     <apex:actionRegion > 
+      <apex:selectRadio value="{!accountCreateOption}" disabled="{!(accountURLSelected || conURLSelected)}">
+            <apex:selectOptions value="{!AccountOption}"/>
+          <apex:actionSupport event="onchange" action="{!initializeAccountCreateOption}" status="loadingStatus" rerender="accountSectionId,messagePanel"/>
+      </apex:selectRadio>
+       </apex:actionRegion> 
+      <apex:outputPanel id="existingAccountSection" rendered="{!(NOT(createNewAccount) && showAccountSection)}">
+       <apex:pageBlockSection columns="1" title="Enter Account Information" >
+          <apex:inputfield styleClass="lookupInput" type="text" value="{!con.AccountId}" rendered="{!(NOT(accountURLSelected) && NOT(conURLSelected))}">
+          <apex:actionSupport event="onchange" reRender="accField" oncomplete="fnChangeAccount('{!con.AccountId}');"/>
+          </apex:inputfield>
+          <apex:outputfield value="{!con.AccountId}" rendered="{!(accountURLSelected || conURLSelected)}"/>
+          </apex:pageBlockSection>
+      </apex:outputPanel>
+      <apex:outputpanel id="newAccountSection" rendered="{!(createNewAccount && showAccountSection)}">
+       <apex:commandButton action="{!updateAddressNew}" status="loadingStatus" value="Copy info from Contact" 
+                           reRender="accountAdreessId"/>
+   <apex:actionRegion >                          
+ <table>
+    
+    <tr><td title="Sample Title"><h><b>General Info</b></h></td></tr>                           
+ 
+   <tr>   
+   <td> <apex:outputLabel value="Account Name"> </apex:outputLabel> </td>
+   <td> <apex:inputField value="{!acc.name}"    required="true"/></td>  
+   </tr>
+   <tr>   
+   <td> <apex:outputLabel value="Phone"> </apex:outputLabel> </td>
+   <td> <apex:inputField value="{!acc.phone}"    /></td> 
+    </tr>
+   <tr> 
+    <td> <apex:outputLabel value="Company Email"> </apex:outputLabel> </td>  
+   <td> <apex:inputField value="{!acc.Company_Email__c}"    /></td> 
+    </tr>
+    
+    <tr><td title="Additional Information" id="accountAdreessId"><h><b>Additional Information</b></h></td></tr>  
+  
+    <tr> 
+    <td> <apex:outputLabel value="Billing Street"> </apex:outputLabel> </td>  
+    <td> <apex:inputField style="width:165px;" id="accStreet" value="{!acc.BillingStreet}"    /></td> 
+    </tr>    
+     
+     <tr> 
+    <td> <apex:outputLabel value="Billing Country"> </apex:outputLabel> </td>  
+    <td> <apex:inputField style="width:170px;" id="accCount" value="{!acc.BillingCountryCode}"  required="true"  /></td> 
+    </tr>   
+    
+    <tr> 
+    <td> <apex:outputLabel value="Billing City"> </apex:outputLabel> </td>  
+    <td> <apex:inputField id="accCity" value="{!acc.BillingCity}"    /></td> 
+    </tr>   
+    
+    <tr> 
+    <td> <apex:outputLabel value="Billing State"> </apex:outputLabel> </td>  
+    <td> <apex:inputField style="width:170px;" value="{!acc.BillingStateCode}"    /></td> 
+    </tr> 
+          
+    <tr> 
+    <td> <apex:outputLabel value="Billing Zip/Postal Code"> </apex:outputLabel> </td>  
+    <td> <apex:inputField value="{!acc.BillingPostalCode}"    /></td> 
+    </tr>     
+              
+              
+   <style>
+select {
+    width: 170px;
+}
+</style>           
+                          
+              </table>    
+               </apex:actionRegion>        
+      </apex:outputpanel>
+      <apex:CommandButton value="Go To Step 2" style="margin-left:45%" action="{!createOpportunityProjects}" reRender="formId" status="loadingStatus" rendered="{!NOT(projURLSelected)}"/>
+      <apex:CommandButton value="Create Quote" style="margin-left:45%" action="{!createOpportunityProjects}"  rendered="{!(projURLSelected) && ( !(Approve_Button))}" />
+       <apex:CommandButton Value="Request Approval" style="margin-left:45%" action="{!Approvalprocess}" rendered="{!(if(Approve_Button_sent==TRUE, Approve_Button_sent, Approve_Button))}"/>
+    </apex:pageBlock>
+  </apex:outPutPanel>
+ <apex:pageBlock title="Step 2.1 :Selected Account Section" id="selectedAccountSection" rendered="{!selectedAccountSection }" >
+    <apex:pageBlockSection columns="2" title="General Info">
+       <apex:outputfield value="{!acc.name}" />
+       <apex:outputfield value="{!acc.Owner.Name}" label="Rep Name" />
+    </apex:pageBlockSection>
+   
+    <apex:CommandButton value="Go To Step 2" style="margin-left:45%" action="{!createOpportunityProjects}" reRender="formId" status="loadingStatus" rendered="{!NOT(projURLSelected)}"/>
+    <apex:CommandButton value="Create Quote" style="margin-left:45%" action="{!createOpportunityProjects}" rendered="{!(projURLSelected) && ( !(Approve_Button))}"/>
+     <apex:CommandButton value="Clone and Create Quote" style="margin-left:45%" action="{!CloneAndCreateQuote}" rendered="{!Clone_Button}"  />
+     <apex:CommandButton Value="Request Approval" style="margin-left:45%" action="{!Approvalprocess}" rendered="{!(if(Approve_Button_sent==TRUE, Approve_Button_sent, Approve_Button))}"/>
+ </apex:pageBlock></apex:actionRegion></apex:outputPanel>
+ </apex:actionRegion>
+ </apex:outputPanel>
+<apex:outputPanel id="projectSection" rendered="{!showProjectForm}">
+
+<apex:actionRegion >
+ <apex:actionFunction name="actionFuncProject" action="{!syncProject}" status="loadingStatus" reRender="projectSection,messagePanel,formId" >
+<apex:param name="projectId" value=""  /> 
+</apex:actionFunction>
+</apex:actionRegion>
+<apex:pageBlock id="projectInformation" title="Step 2.1 : Select Project Information">
+<apex:actionRegion >
+      <apex:selectRadio value="{!projectCreateOption}" disabled="{!oppURLSelected}"  >
+            <apex:selectOptions value="{!ProjectOption}"/>
+          <apex:actionSupport event="onchange" action="{!initializeProjectCreateOption}" status="loadingStatus" rerender="projectSection,messagePanel"/>
+      </apex:selectRadio>
+     </apex:actionRegion>
+     <apex:outputPanel id="existingProjectSection" rendered="{!NOT(createNewProject)}">
+       <apex:pageBlockSection columns="1" title="Enter Project Information" >
+      <apex:inputfield styleClass="lookupInput" type="text" value="{!opp.Project_Name__c}" rendered="{!NOT(oppURLSelected)}">
+      <apex:actionSupport event="onchange" reRender="projField,Displayerrors"  oncomplete="fnChangeProject('{!opp.Project_Name__c}');"/>
+      </apex:inputfield>
+      <apex:outputfield value="{!opp.Project_Name__c}" rendered="{!oppURLSelected}"/>
+       </apex:pageBlockSection>
+       
+       <apex:outputPanel >
+       <apex:CommandButton value="Back"  style="margin-left:45%"  action="{!goback}" rerender="formId" status="loadingStatus" immediate="true"/>
+       <apex:CommandButton value="Create Quote" style="margin-left:2%" action="{!saveAndCreateQuote}" disabled="{!showNanaQuoteButton}" rendered="{!(NOT(Approve_Button))}" />
+       <apex:CommandButton value="Clone and Create Quote" style="margin-left:2%" action="{!CloneAndCreateQuote}" rendered="{!Clone_Button}"/>
+       <apex:CommandButton Value="Request Approval" style="margin-left:2%" action="{!Approvalprocess}" rendered="{!(if(Approve_Button_sent==TRUE, Approve_Button_sent, Approve_Button))}"/>
+       </apex:outputPanel>
+       
+     </apex:outputPanel>
+     <apex:outputPanel id="newProjectSection" rendered="{!createNewProject}">
+              <apex:actionRegion >
+              
+              <!-- -------------------------------------------------------------  -->
+              
+              <apex:pageBlockSection columns="1" title="Project Information" >
+                  <apex:inputfield style="width:150px;" value="{!proj.Name}"  required="true" label="Project Name"/>
+                  <apex:inputField style="width:150px;" value="{!proj.Close_Date__c}" required="true" label="Expected Resolution Date"/>
+              </apex:pageBlockSection>
+              
+              <apex:actionRegion >
+              <apex:pageBlockSection title="Additional Information" id="addSection1" columns="1">
+                  <apex:inputfield style="width:150px;" value="{!proj.RecordTypeId}" required="true" label="Project Type">
+                      <apex:actionSupport event="onchange" reRender="applicationSection1" status="loadingStatus1"/>
+                  </apex:inputfield>
+              </apex:pageBlockSection>
+              </apex:actionRegion>
+              
+              <apex:pageBlockSection id="applicationSection1" columns="1" >
+                  <apex:inputfield style="width:150px;" value="{!proj.Application__c}"  required="true" />
+                  <apex:inputfield style="width:150px;" value="{!proj.Application_2__c}" required="true"/>
+                  
+                  <apex:commandButton status="loadingStatus1" action="{!CopyAddressFields}" rerender="ProjAddress1" immediate="true" value="Copy Address info from Contact" title=""/>
+              </apex:pageBlockSection>
+              
+              <apex:pageBlockSection title="Project Site Address" columns="1" id="ProjAddress1">
+                  <apex:inputField style="width:150px;" value="{!proj.Project_Street_Address__c}" />
+                  <apex:inputField style="width:150px;" value="{!proj.Project_Country__c}"  required="true"/>
+                  <apex:inputField style="width:150px;" value="{!proj.Project_City__c}" />
+                  <div id="dependentlst1">
+                      <apex:inputField value="{!proj.Project_State__c}"/>
+                  </div>
+                  <apex:inputField style="width:150px;" value="{!proj.Project_Zip_Code__c}" />
+              </apex:pageBlockSection>
+              
+<style>
+select {
+    width: 150px;
+}
+</style>
+              <!-- ---------------------------------------------------------------- -->
+              
+              <!--
+              <apex:pageBlockSection columns="1" title="Project Information" >
+                        <apex:inputfield style="margin-left:-10px;width:150px;" value="{!proj.Name}"  required="true" label="Project Name"/>
+                        <apex:inputField style="margin-left:-1px;width:150px;" value="{!proj.Close_Date__c}" required="true" label="Expected Resolution Date"/>
+                    </apex:pageBlockSection>
+     
+                   
+                    
+                    <apex:actionRegion >
+                    
+                    <table>
+                   <apex:pageBlockSection title="Additional Information" id="addSection" columns="1">
+                   <tr><td><apex:inputfield style="width:150px;" value="{!proj.RecordTypeId}" required="true" label="Project Type">
+                        <apex:actionSupport event="onchange" reRender="applicationSection" status="loadingStatus"/>
+                      </apex:inputfield></td></tr>
+                    </apex:pageBlockSection>
+                    </table>
+                    </apex:actionRegion>
+              
+                    <table>
+                    <apex:pageBlockSection id="applicationSection" columns="1" > 
+                    <tr><td>  <apex:inputfield style="width:150px;" value="{!proj.Application__c}"  required="true" /></td></tr>
+                    <tr><td>  <apex:inputfield style="width:150px;" value="{!proj.Application_2__c}" required="true"/></td></tr>
+                   </apex:pageBlockSection>
+                  </table>
+                  
+                  <table>
+                      <apex:pageBlockSection >
+                      <apex:commandButton status="loadingStatus" action="{!CopyAddressFields}" rerender="ProjAddress" immediate="true" value="Copy Address info from Contact" title=""/>
+                     </apex:pageBlockSection>
+                      </table>
+                
+                     <table  style="width:100%">
+                     <apex:pageBlockSection title="Project Site Address" columns="1" id="ProjAddress">
+                       <tr>
+                       <td> <apex:inputField value="{!proj.Project_Street_Address__c}"  /></td>
+                       </tr>
+                      <tr>
+                      <td>  <apex:inputField style="width:70%;" value="{!proj.Project_Country__c}"  required="true"/></td>
+                      </tr>
+                        <tr><td><apex:inputField value="{!proj.Project_City__c}" /></td></tr>
+                      <tr><td>  <apex:inputField style="width:70%;" value="{!proj.Project_State__c}" /></td></tr>
+                       <tr><td> <apex:inputField value="{!proj.Project_Zip_Code__c}" /></td></tr>
+                    </apex:pageBlockSection>
+                    </table>
+                -->
+                 
+                 </apex:actionRegion>
+                   <apex:outputPanel >
+               <apex:CommandButton value="Back"  style="margin-left:45%"  action="{!goback}" rerender="formId" status="loadingStatus" immediate="true"/>
+               <apex:CommandButton value="Create Quote" style="margin-left:2%" action="{!saveAndCreateQuote}" />
+               </apex:outputPanel>
+               
+     </apex:outputPanel>
+   </apex:pageBlock>
+   <apex:outputPanel id="quoteSectionId" rendered="{!showQuoteSection}" >
+   <apex:pageBlock title="Existing Quote on Selected Project and Account">
+     <apex:pageBlockTable value="{!quoteList}" var="quote">
+       <apex:column headerValue="Action"><apex:outputLink value="{!URLFOR($Action.Quote__c.Edit,quote.Id)}">Edit</apex:outputLink> </apex:column>
+       <apex:column value="{!quote.name}"/>
+       <apex:column value="{!quote.Account_Name__c}"/>
+       <apex:column value="{!quote.Contact__c}"/>
+     </apex:pageBlockTable>
+   </apex:pageBlock>
+   </apex:outputPanel>
+</apex:outputPanel>
+ <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                    <div class="waitingHolder" style="top: 50%; width: 110px;">
+                        <img class="waitingImage" src="/img/loading.gif" />
+                        <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                    </div>
+                </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+</apex:form>
+</apex:page>

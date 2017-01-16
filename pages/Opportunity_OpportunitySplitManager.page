@@ -1,0 +1,68 @@
+<apex:page standardController="Opportunity" extensions="Opportunity_OppSplitManager_Controller">
+
+<style>
+	html, body, form, .tableClass
+	{
+		background-color: white;
+	}
+</style>
+
+<apex:form >
+
+<script type='text/javascript'>
+
+	<apex:outputText escape="false" rendered="{!RenderRedirectCode}">
+		self.parent.location = '/{!opp.id}';
+	</apex:outputText>
+
+</script>
+ 
+
+<apex:outputtext rendered="false" value="{!Opportunity.OwnerID}" />
+
+<apex:pageblock rendered="{!HasAccess}"><a href='{!newLink}' target="_parent"><b>Add a New Member</b></a></apex:pageblock>
+
+<apex:pagemessages />
+<apex:dataTable value="{!otms}" var="otm" id="otmtable" rowClasses="odd,even" styleClass="tableClass" width="100%">
+		<apex:facet name="footer"> 
+			<apex:commandButton value="Update" action="{!UpdateOTMs}" rendered="{!HasUpdateAccess}" /> 
+		</apex:facet> 
+		<apex:column >
+		    <apex:facet name="header">User</apex:facet> 
+			<apex:outputText value="{!otm.tm.User.FirstName & ' ' & otm.tm.User.LastName}"/>
+		</apex:column>
+		<apex:column >
+			<apex:facet name="header">Access</apex:facet>
+			<apex:outputText value="{!otm.tm.OpportunityAccessLevel}"/>
+		</apex:column>
+		<apex:column >
+			<apex:facet name="header">Role</apex:facet>
+			<apex:inputField value="{!otm.tm.TeamMemberRole}"/>
+		</apex:column>
+		<apex:column >
+			<apex:facet name="header">Commission</apex:facet>
+			<apex:inputField value="{!otm.split.SplitPercentage}" rendered="{!HasCommissionAccess}" style="text-align: right; width: 25px" />
+			<apex:outputField value="{!otm.split.SplitPercentage}" rendered="{!NOT(HasCommissionAccess)}" style="text-align: right; width: 25px" />
+		</apex:column>
+		<apex:column >
+			<apex:facet name="header">Credit</apex:facet>
+			<apex:inputField value="{!otm.tm.Credit__c}" rendered="{!HasCreditAccess}" />
+			<apex:outputField value="{!otm.tm.Credit__c}" rendered="{!NOT(HasCreditAccess)}" />
+		</apex:column>
+		<apex:column >
+			<apex:facet name="header">Credit1</apex:facet>
+			<apex:inputField value="{!otm.tm.Credit1__c}" rendered="{!HasCreditAccess}" />
+			<apex:outputField value="{!otm.tm.Credit1__c}" rendered="{!NOT(HasCreditAccess)}" />
+		</apex:column>
+		<apex:column rendered="{!HasDeleteAccess}">
+			<apex:facet name="header">Delete</apex:facet>
+            <apex:commandlink value="delete" action="{!DeleteOppRep}">
+        	    <apex:param name="OppRepID" value="{!otm.ID}" assignto="{!DeleteOppRepID}"/>
+            </apex:commandlink>
+
+		</apex:column>
+</apex:dataTable>
+
+</apex:form>
+
+</apex:page>

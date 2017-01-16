@@ -1,0 +1,20 @@
+<apex:page controller="ServiceQuote_Home_Controller_toFill" tabStyle="Service_Quote__c">
+  <!-- Begin Default Content REMOVE THIS -->
+   <apex:form > 
+                  <apex:pageBlock >
+                    <apex:pageBlockSection id="pbs" columns="1">
+                        <apex:pageBlockTable id="pbtSearchResults" var="sqr" value="{!searchResults}" width="100%"  >
+
+                            <apex:column headerValue="Project">
+                                
+                              <apex:outputtext >{!sqr}</apex:outputtext>
+                           </apex:column>
+                           
+                            
+
+                        </apex:pageBlockTable>          
+                    </apex:pageBlockSection>  
+                    </apex:pageBlock>        
+    </apex:form>                 
+                
+</apex:page>

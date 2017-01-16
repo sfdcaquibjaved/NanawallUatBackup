@@ -1,0 +1,18 @@
+<apex:page controller="VerifyOpportunityAccountsController" >
+<apex:form >
+        <apex:pageBlock title="Verify Opportunity Accounts">
+            <apex:pageMessages escape="false" />
+            <apex:pageBlockSection columns="1">
+
+					<apex:inputField label="Account to verify/fix:" value="{!oppAcc.Account__c}" />
+
+            </apex:pageBlockSection> 
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!verify}"  value="Find missing accounts" disabled="{!NOT(verifyButtonVisiable)}" />
+                <apex:commandButton action="{!commitaccounts}"  value="Add missing accounts"  disabled="{!NOT(commitButtonVisiable)}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+
+
+</apex:page>

@@ -1,0 +1,202 @@
+<apex:page controller="AccountHomeController" tabStyle="Account"  >
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+
+<script type="text/JavaScript">
+	
+	jQuery.noConflict();
+	    jQuery(document).ready(function() {
+	    
+	    	jQuery('.enterclick').keypress(function(e) {
+	    	
+		    	if( e.keyCode == 13 ) {  
+						A4J.AJAX.Submit('j_id0:theForm',event,{'status':'j_id0:theForm:j_id10:pbs:loadingstatus','similarityGroupingId':'j_id0:theForm:j_id10:j_id37','parameters':{'j_id0:theForm:j_id10:j_id37':'j_id0:theForm:j_id10:j_id37'} } );return false;						
+		    	  }
+				 
+	    	});
+	    	
+	    	primeSearch();
+	    	
+    });
+</script>
+<style>
+	.labelCell {	
+		text-align: right;
+		background-color: #F5F5EA;
+		border-left: solid 8px #ECECDE;
+		padding-right: 3px;
+		font-size: 12px;
+		width: 11%;
+		font-weight: bold;
+
+	}
+</style>
+
+<apex:form >
+    <apex:actionFunction name="primeSearch" action="{!primeSearch}" rerender="debug,errors">
+      </apex:actionFunction>
+
+<apex:actionFunction name="jsDoSearch" action="{!myaction}" />
+<apex:commandButton value="New Account" action="{!gotonew}"/>
+</apex:form>
+    <apex:tabpanel >    
+    
+        <apex:tab label="Multi-Search" name="ms" id="tabms">
+            <apex:form id="theForm">
+    <apex:pageBlock title="Search Accounts"> 
+
+<table width='100%' cellpadding='5' bgcolor='white'>
+	<tr>
+		<td class='labelCell'>Name:</td>
+		<td colspan='3'><apex:inputtext value="{!Name}"  styleClass="enterclick" style="width: 95%"/></td>
+	</tr>
+	<tr>
+		<td class='labelCell'>Address:</td>
+		<td colspan='3'><apex:inputtext value="{!Address}" styleClass="enterclick"  style="width: 95%"/></td>
+	</tr>
+	<tr>
+		<td class='labelCell'>City:</td>
+		<td><apex:inputtext value="{!City}" styleClass="enterclick"/></td>
+		<td class='labelCell'>State:</td>
+		<td><apex:selectList value="{!state}" multiselect="false" size="1">
+            <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+                <apex:selectOptions value="{!states}"></apex:selectOptions>
+            </apex:selectList>
+         </td>
+	</tr>
+	<tr>
+		<td class='labelCell'>Zip:</td>
+		<td><apex:inputtext value="{!Zip}" styleClass="enterclick"/></td>
+		<td class='labelCell'>Country:</td>
+		<td> 
+            <apex:selectList value="{!country}" multiselect="false" size="1">
+            	<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+                <apex:selectOptions value="{!countries}"></apex:selectOptions>
+            </apex:selectList>
+         </td>
+	</tr>
+	<tr>
+		<td class='labelCell'>Phone:</td>
+		<td><apex:inputtext value="{!Phone}"/></td>
+		<td class='labelCell'>Email:</td>
+		<td><apex:inputtext value="{!Email}"/>
+         </td>
+	</tr>
+	<tr>
+		<td class='labelCell'>Type</td>
+		<td>
+			<apex:inputfield value="{!dummyaccount.type}" />
+			
+		</td>
+	</tr>
+	<tr>
+		<td class='labelCell' colspan='4' style='text-align: left'>Full object search.( Includes description )</td>
+	</tr>
+	
+	<tr>
+		<td colspan='6'>
+			 
+			<apex:inputfield value="{!DummyAccount.Description}" style="width: 95%"/>
+       	</td>
+	</tr>
+	
+	<tr>
+		<td colspan='3'></td>
+		<td>
+			<apex:commandButton value="Reset" styleclass="searchbutton" action="{!reset}" status="resetting"  />
+			 <apex:commandButton value="Search" styleclass="searchbutton" status="loadingstatus" action="{!myaction}" reRender="op" />
+		</td>
+	</tr>
+</table>
+
+        <apex:outputpanel id="op" >
+        <apex:pagemessages ></apex:pagemessages>
+        <apex:pageBlockSection id="pbs" columns="1">
+        <apex:toolbar width="700px" style="background-color:#8d8d8d;background-image:none" >
+        <apex:outputlabel value="{!Total}" />
+            
+            <apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+            <apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+            <apex:actionstatus id="loadingstatus" starttext="Loading..." stoptext="" />
+</apex:toolbar>
+<br/>
+            <apex:pageBlockTable id="search" var="a" value="{!myaccounts}"  width="100%">
+            
+                <apex:column headerValue="">
+                <apex:outputlink value="/{!a.id}" >view
+                </apex:outputlink>
+               </apex:column>
+               
+                <apex:column headerValue="Name">
+                <apex:facet name="header">
+                    <apex:commandlink value="Name" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="Name" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Name}" /> 
+               </apex:column>
+               
+                <apex:column headerValue="Address">
+                <apex:facet name="header">
+                    <apex:commandlink value="Address" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="Address_1__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Address_1__c}" /> 
+               </apex:column>
+               
+                <apex:column headerValue="City">
+                <apex:facet name="header">
+                    <apex:commandlink value="City" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="city__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.City__c}" /> 
+               </apex:column>
+               
+                <apex:column headerValue="State"> 
+                <apex:facet name="header">
+                    <apex:commandlink value="State" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="State__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.State__c}"/> 
+               </apex:column>
+                
+                <apex:column width="50px" headerValue="Zip">
+                <apex:facet name="header">
+                    <apex:commandlink value="Zip" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="zip__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Zip__c}" /> 
+               </apex:column>
+               
+           </apex:pageBlockTable> 
+           
+           
+</apex:pageBlockSection>
+   
+        <apex:panelGrid columns="2"> 
+            <apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+            <apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+       </apex:panelGrid> 
+            </apex:outputpanel>
+
+    </apex:pageBlock>
+    </apex:form>
+    </apex:tab>
+    
+    <apex:tab label="Filters" id="tabfilters" name="filters">
+<apex:outputpanel layout="block"> 
+       <apex:enhancedList customizable="true" height="300" id="list" type="Account" />    
+</apex:outputpanel>
+
+    </apex:tab>
+    
+    </apex:tabpanel>
+
+   
+</apex:page>

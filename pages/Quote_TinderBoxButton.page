@@ -1,0 +1,28 @@
+<apex:page standardController="Quote__c" extensions="Quote_TinderBox_Button_Controller" action="{!GeneratePDFs}">
+	<apex:form >
+
+		<apex:pagemessages />
+
+		<div style='display: {!DivDisplay}'>
+			<h3>Click the button below to get Tinderbox PDFs ready</h3><br />
+			<apex:commandButton value="Generate PDFs" action="{!GeneratePDFs}"/>		
+		</div>
+
+		<div style='display: {!DivDisplay_NotPrinted}'>
+			<h3>This quote has already been printed</h3>
+		</div>
+
+<br /><br />
+ 
+		<apex:commandbutton value="Return to Quote" action="{!returntoquote}" />
+
+		<apex:outputtext value="{!Quote__c.Printed__c}" rendered="false" />
+		<apex:outputtext value="{!Quote__c.Quote_ID__c}" rendered="false" />
+		
+		
+		
+	
+	</apex:form> 
+
+ 
+</apex:page>

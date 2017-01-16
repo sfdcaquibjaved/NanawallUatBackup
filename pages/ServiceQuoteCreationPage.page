@@ -1,0 +1,529 @@
+<apex:page controller="ServiceQuotecreationController" sidebar="false" showHeader="false">
+    <apex:pageMessages ></apex:pageMessages>
+
+    <style>
+        .panelWrapper .mainTitle {
+            background-color: #1797c0 !important;
+            color: white !important;
+            padding: 10px 300px 20px !important;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .bread-table {
+            padding: 0px;
+            margin: 0px;
+            border-spacing: 0px !important;
+        }
+        
+        .bread-before {
+            background-color: #FFF;
+            margin: 0;
+            padding: 0;
+            border-top: 21px solid #3498db;
+            border-bottom: 21px solid #3498db;
+            border-left: 15px solid #fff;
+        }
+        
+        .bread {
+            width: 100%;
+            background-color: #3498db;
+            height: 30px;
+            margin: 0;
+            padding-top: 12px;
+            color: #FFF;
+            font-size: 8pt;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .bread a {
+            color: #FFF !important;
+            text-decoration: none
+        }
+        
+        .bread a:hover {
+            text-decoration: underline;
+        }
+        
+        .bread-after {
+            background-color: #FFF;
+            margin: 0;
+            padding: 0;
+            border-top: 21px solid #FFF;
+            border-bottom: 21px solid #FFF;
+            border-left: 15px solid #3498db;
+        }
+        
+        .bread-active {
+            width: 100%;
+            background-color: green;
+            height: 30px;
+            margin: 0;
+            padding-top: 12px;
+            color: #FFF;
+            font-size: 8pt;
+            text-align: center;
+        }
+        
+        .bread-before-active {
+            background-color: green;
+            margin: 0;
+            padding: 0;
+            border-top: 21px solid green;
+            border-bottom: 21px solid green;
+            border-left: 15px solid #fff;
+        }
+        
+        .bread-after-active {
+            background-color: #FFF;
+            margin: 0;
+            border-top: 21px solid #FFF;
+            border-bottom: 21px solid #FFF;
+            border-left: 15px solid green;
+        }
+        
+        .bread-inactive {
+            width: 100%;
+            background-color: #A59D9D;
+            height: 30px;
+            margin: 0;
+            padding-top: 12px;
+            color: #FFF;
+            font-size: 8pt;
+            text-align: center;
+        }
+        
+        .bread-before-inactive {
+            background-color: #A59D9D;
+            margin: 0;
+            padding: 0;
+            border-top: 21px solid #A59D9D;
+            border-bottom: 21px solid #A59D9D;
+            border-left: 15px solid #fff;
+        }
+        
+        .bread-after-inactive {
+            background-color: #FFF;
+            margin: 0;
+            border-top: 21px solid #FFF;
+            border-bottom: 21px solid #FFF;
+            border-left: 15px solid #A59D9D;
+        }
+        
+        .infoSection {
+            display: inline-block;
+            float: left;
+            height: 80px;
+            width: 95%;
+            background-color: #f8f8f8;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+        
+        .step1Section {
+            display: inline-block;
+            float: left;
+            width: 95%;
+            background-color: #f8f8f8;
+            margin-top: 5px;
+            border-radius: 10px;
+            border-top: 3px solid #3d8d8d;
+        }
+        
+        .boxStyle1 {
+            color: #fff;
+            ;
+            font-family: arial;
+            font-size: 13px;
+            text-decoration: none;
+        }
+        
+        .boxStyle {
+            color: #000;
+            font-family: arial;
+            font-size: 13px;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        function fnChangeContact(a) {
+            actionFuncContact(a);
+        }
+        function fnChangeAccount(a) {
+            actionFuncAccount(a);
+        }
+        
+    </script>
+    <script>
+            function openInNewTab(a){
+                 var a;
+                 if(a==true){
+                 var url = 'https://nanawall-parts-service.myshopify.com/admin/draft_orders/new';
+                 window.open(url,'_blank');
+                 }
+                 else{
+                 window.confirm('Required info like Email,zipcode is missing or you Selected new Account for existing Contact or data you entered is invalid ');
+                 }
+            }
+            </script>
+
+    <apex:form id="formId">
+        <apex:pageBlock id="block">
+
+            <style>
+                body .bPageBlock .pbBody .red .pbSubheader {
+                    background-color: #c00000;
+                }
+                
+                body .bPageBlock .pbBody .grey .pbSubheader {
+                    background-color: #0070d2;
+                }
+            </style>
+
+            <apex:outputPanel styleClass="grey"  layout="block" id="test">
+
+                <apex:pageBlockSection title="Case Information" columns="2" collapsible="false" id="pblock">
+
+                    <apex:outputText value="{!caseDetails.CaseNumber}" />
+                    <apex:outputText value="{!caseDetails.status}" />
+                    <apex:outputText value="{!caseDetails.type}" />
+                    <apex:outputText value="{!caseDetails.Responsible_Rep__c}" />
+                    <!--<apex:outputlabel value="Sales Rep:">{!caseDetails.Quote__r.Project__r.Owner.Name} </apex:outputLabel>-->
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Order Information" columns="2" collapsible="false" id="pblock1">
+
+
+                    <apex:outputText label="Order" value="{!caseDetails.Quote__r.Order_Number__c}" />
+                    <apex:outputText label="Quote" value="{!caseDetails.Quote__r.Name}" />
+                    <apex:outputText label="Installer Name" value="{!caseDetails.Quote__r.Installer__r.name}" />
+                    <apex:outputText label="Install date" value="{!caseDetails.Quote__r.Install_Date__c}" />
+                    <!--<apex:outputlabel value="Sales Rep:">{!caseDetails.Quote__r.Project__r.Owner.Name} </apex:outputLabel>-->
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Entitlement Information" columns="2" collapsible="false" id="pblock2">
+
+                    <apex:outputText label="Entitlement Name" value="{!caseDetails.Entitlement.name}" />
+                    <apex:outputText label="Entitlement Warranty" value="{!caseDetails.Entitlement.Warranty__c}" />
+                    <apex:outputText label="Entitlement Start Date" value="{!caseDetails.Entitlement.StartDate}" />
+                    <apex:outputText label="Entitlement End Date" value="{!caseDetails.Entitlement.EndDate}" />
+                    <!--<apex:outputText value="{0,date,MM/dd/yy}"> Start Date
+                        <apex:param value="{!caseDetails.Entitlement.StartDate}" />
+                    </apex:outputText>
+                    <apex:outputText value="{0,date,MM/dd/yy}"> End Date
+                        <apex:param value="{!caseDetails.Entitlement.EndDate}" />
+                    </apex:outputText>-->
+
+
+                    <!--<apex:outputlabel value="Sales Rep:">{!caseDetails.Quote__r.Project__r.Owner.Name} </apex:outputLabel>-->
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        <apex:outputPanel id="contactSectionId" styleClass="grey">
+            <apex:actionFunction name="actionFuncContact" action="{!syncContact}" status="loadingStatus" reRender="contactSectionId,pblock,accountSectionId,test3,messagePanel">
+                <apex:param name="contactId" value="" />
+            </apex:actionFunction>
+            <apex:pageBlock id="block2">
+                <style>
+                    body .bPageBlock .pbBody .red .pbSubheader {
+                        background-color: #c00000;
+                    }
+                    
+                    body .bPageBlock .pbBody .grey .pbSubheader {
+                        background-color: #0070d2;
+                    }
+                </style>
+                <apex:outputPanel styleClass="grey" layout="block" id="t">
+                    <apex:actionRegion >
+                        <apex:selectRadio value="{!contactCreateOption}">
+                            <apex:selectOptions value="{!ContactOption}" />
+                            <apex:actionSupport event="onchange" action="{!initializeContactCreateOption}" status="loadingStatus" rerender="contactSectionId,accountSectionId,existingAccountSection,messagePanel,test3,pblock" />
+                        </apex:selectRadio>
+                    </apex:actionRegion>
+                </apex:outputPanel>
+
+                <apex:outputpanel id="existingContactSection" styleClass="grey" rendered="{!NOT(createNewContact)}">
+                    <apex:pageBlockSection columns="1" title="Enter Contact Information">
+                        <apex:inputfield value="{!caseDetails.ContactID}">
+                            <apex:actionSupport event="onchange" reRender="conField" status="loadingStatus" oncomplete="fnChangeContact('{!caseDetails.ContactID}');" />
+                        </apex:inputfield>
+                        <apex:outputText label="Email" value="{!cont.email}" />
+                        <apex:outputText label="Phone" value="{!cont.phone}" />
+
+
+                    </apex:pageBlockSection>
+                </apex:outputpanel>
+                <apex:outputPanel id="newContactSection" styleClass="grey" rendered="{!createNewContact}">
+                    <!--<apex:commandButton action="{!updateContactAddressNew}" status="loadingStatus" value="Copy info from Account" reRender="accountContact" />-->
+                    <apex:pageBlockSection columns="2" title="General Info">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="First Name" />
+                            <apex:outputPanel layout="none">
+                                <div class="requiredInput">
+                                    <div class="requiredBlock"></div>
+                                    <apex:inputfield value="{!con.FirstName}" />
+                                </div>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Phone" />
+                            <apex:inputfield value="{!con.Phone}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Last Name" />
+                            <apex:outputPanel layout="none">
+                                <div class="requiredInput">
+                                    <div class="requiredBlock"></div>
+                                    <apex:inputfield value="{!con.LastName}" required="false" />
+                                </div>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Email" />
+                            <apex:outputPanel layout="none">
+                                <div class="requiredInput">
+                                    <div class="requiredBlock"></div>
+                                    <apex:inputfield id="conEmail" value="{!con.Email}" />
+                                </div>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Address Information" id="contactAddressId" columns="2">
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing Street" />
+                            <apex:inputfield id="conStreet" value="{!con.MailingStreet}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing Country" />
+                            <apex:inputfield id="conCount" value="{!con.MailingCountryCode}" required="true" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing City" />
+                            <apex:inputfield id="conCity" value="{!con.MailingCity}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing State/Province" />
+                            <apex:inputfield id="conState" value="{!con.MailingStateCode}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing Zip/Postal Code" />
+                            <apex:outputPanel layout="none">
+                                <!--<div class="requiredInput"><div class="requiredBlock"></div>-->
+                                <apex:inputfield id="conZip" value="{!con.MailingPostalCode}" />
+                                <!--</div>-->
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:outputPanel>
+            </apex:pageBlock>
+        </apex:outputpanel>
+        <apex:outPutPanel id="accountSectionId" styleClass="grey">
+        <apex:actionFunction name="actionFuncAccount" action="{!syncAccount}" status="loadingStatus" reRender="test3,messagePanel">
+                <apex:param name="AccountId" value="" />
+         </apex:actionFunction>
+            <apex:pageBlock id="AccountInformation">
+                <apex:actionRegion id="sect">
+                    <apex:selectRadio value="{!accountCreateOption}" disabled="{!(disableAccountSection)&&(displayAccSelectiononContact)}">
+                        <apex:selectOptions value="{!AccountOption}" />
+                        <apex:actionSupport event="onchange" action="{!initializeAccountCreateOption}" status="loadingStatus" rerender="accountSectionId,sect,existingAccountSection,test3,messagePanel" />
+                    </apex:selectRadio>
+                </apex:actionRegion>
+                <apex:outputPanel id="existingAccountSection" styleClass="grey" rendered="{!NOT(createNewAccount)}">
+                    <apex:pageBlockSection columns="1" title="Enter Account Information">
+                        <apex:inputfield value="{!Cont.AccountId}" rendered="{!((NOT(disableAccountSection)&&NOT(displayAccSelectiononContact))||NOT(disableAccountSection))}">
+                            <apex:actionSupport event="onchange" reRender="newAccountSection" status="loadingStatus" oncomplete="fnChangeAccount('{!Cont.AccountId}');" />
+                        </apex:inputfield>
+                        <apex:outputText Label="Account Name" value="{!cont.Account.Name}" rendered="{!((disableAccountSection)&&(displayAccSelectiononContact))}" />
+
+                    </apex:pageBlockSection>
+                </apex:outputPanel>
+                <apex:outputpanel id="newAccountSection" styleClass="grey" rendered="{!(createNewAccount) && (if(accountCreateOption == 'Attach To Existing Account',false,true))}">
+                    <apex:commandButton action="{!updateAddressNew}" status="loadingStatus" value="Copy info from Contact" reRender="newAccountSection,accountAdreessId" />
+                    <apex:pageBlockSection columns="2" title="General Info">
+                        <apex:inputfield value="{!acc.name}" required="true" />
+                        <apex:inputfield value="{!acc.phone}" />
+                        <apex:inputfield value="{!acc.Company_Email__c}" />
+                    </apex:pageBlockSection>
+                    <apex:actionRegion >
+                        <apex:pageBlockSection columns="2" title="Additional Information" id="accountAdreessId">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing Street" />
+                                <apex:inputfield id="accStreet" value="{!acc.BillingStreet}" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing Country" />
+                                <apex:inputfield id="accCount" value="{!acc.BillingCountryCode}" required="true" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing City" />
+                                <apex:inputfield id="accCity" value="{!acc.BillingCity}" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing State" />
+                                <apex:inputfield value="{!acc.BillingStateCode}" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing Zip/Postal Code" />
+                                <apex:outputPanel layout="none">
+                                    <!--<div class="requiredInput"><div class="requiredBlock"></div>-->
+                                    <apex:inputfield value="{!acc.BillingPostalCode}" />
+                                    <!--</div>-->
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                    </apex:actionRegion>
+                </apex:outputpanel>
+            </apex:pageBlock>
+        </apex:outPutPanel>
+
+        <apex:pageBlock id="block3">
+            <style>
+                body .bPageBlock .pbBody .red .pbSubheader {
+                    background-color: #c00000;
+                }
+                
+                body .bPageBlock .pbBody .grey .pbSubheader {
+                    background-color: #0070d2;
+                }
+            </style>
+
+            <apex:outputPanel styleClass="grey" layout="block" id="test3">
+
+
+                <apex:pageBlockSection title="Address Information" columns="2" collapsible="false" id="pblock">
+                    <apex:outputText label="Use Address for shipping">
+
+                        <apex:SelectList id="addressSelect2" value="{!UseAddressshipping}" size="1">
+                            <apex:SelectOption itemLabel="-SELECT-" itemValue="-SELECT-" rendered="{!showHideSelectShip}" />
+                            <apex:SelectOption itemLabel="Other Address" itemValue="Other" />
+                            <apex:SelectOption itemLabel="Use Contact Address" itemValue="cont" />
+
+                            <apex:actionSupport event="onchange" rerender="test3,contactSectionId" action="{!setaddressshipping}" status="loadingStatus" />
+                        </apex:SelectList>
+                    </apex:outputText>
+                    <apex:outputText label="Use Address for Billing">
+
+                        <apex:SelectList id="addressSelect" value="{!UseAddress}" size="1">
+                            <apex:SelectOption itemLabel="-SELECT-" itemValue="-SELECT-" rendered="{!showHideSelectBill}" />
+                            <apex:SelectOption itemLabel="Other Address" itemValue="Other" />
+                            <apex:SelectOption itemLabel="Use Contact Address" itemValue="cont" />
+                            <apex:SelectOption itemLabel="Use Project Address" itemValue="ProjectDummy" rendered="{!showHideProjectDummy}" />
+                            <apex:actionSupport event="onchange" rerender="test3,contactSectionId,newAccountSection" action="{!setaddress}" status="loadingStatus" />
+                        </apex:SelectList>
+                    </apex:outputText>
+
+
+                    <apex:outputText label="Ship to Street" value="{!Quot.Address__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to Street" value="{!cont.mailingStreet}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to Street" value="{!con.mailingStreet}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_Too_Street__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Bill_Too_Street__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to Street" value="{!Acct.BillingStreet}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Street" value="{!Acc.BillingStreet}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Street" value="{!con.mailingStreet}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to Street" value="{!cont.mailingStreet}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to Street" value="{!pro.Project_Street_Address__c}" rendered="{!ShowProj}" />
+                    <!--<apex:outputText label="Bill to Street" value="{!sq.Bill_Too_Street__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+                    <apex:outputText label="Ship to City" value="{!Quot.City__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to City" value="{!cont.MailingCity}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to City" value="{!con.MailingCity}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_Too_City__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Bill_Too_City__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to City" value="{!Acct.BillingCity}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to City" value="{!Acc.BillingCity}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to City" value="{!con.MailingCity}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to City" value="{!cont.MailingCity}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to City" value="{!pro.Project_City__c}" rendered="{!ShowProj}" />
+                    <!--<apex:outputText label="Bill to City" value="{!sq.Bill_Too_City__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+                    <apex:outputText label="Ship to State" value="{!Quot.State__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to State" value="{!cont.mailingStateCode}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to State" value="{!con.mailingStateCode}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_To_State__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Other_Bill_To_State__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to State" value="{!Acct.BillingStateCode}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to State" value="{!Acc.BillingStateCode}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to State" value="{!con.mailingStateCode}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to State" value="{!cont.mailingStateCode}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to State" value="{!pro.Project_State__c}" rendered="{!ShowProj}" />
+                    <!--<apex:outputText label="Bill to State" value="{!sq.Bill_Too_State__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+                    <apex:outputText label="Ship to Country" value="{!Quot.Country__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to Country" value="{!cont.mailingCountryCode}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to Country" value="{!con.mailingCountryCode}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_Too_Country__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Bill_To_Country__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to Country" value="{!Acct.BillingCountryCode}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Country" value="{!Acc.BillingCountryCode}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Country" value="{!con.mailingCountryCode}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to Country" value="{!cont.mailingCountryCode}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to Country" value="{!pro.Project_Country__c}" rendered="{!ShowProj}" />
+                    <!-- <apex:outputText label="Bill to Country" value="{!sq.Bill_To_Country__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+                    <apex:outputText label="Ship to Zip" value="{!Quot.Zip__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to Zip" value="{!cont.mailingPostalCode}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to Zip" value="{!con.mailingPostalCode}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_Too_Zip__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Bill_Too_Zip__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to Zip" value="{!Acct.BillingPostalCode}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Zip" value="{!Acc.BillingPostalCode}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Zip" value="{!Con.mailingPostalCode}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to Zip" value="{!Cont.mailingPostalCode}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to Zip" value="{!pro.Project_Zip_Code__c}" rendered="{!ShowProj}" />
+                    <!--<apex:outputText label="Bill to Zip" value="{!sq.Bill_Too_Zip__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+                    <apex:outputText label="Ship to Phone" value="{!Quot.Office_Phone__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to Phone" value="{!cont.Phone}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to Phone" value="{!con.Phone}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_Too_phone__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Bill_To_Phone__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to Phone" value="{!Acct.Phone}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Phone" value="{!Acc.Phone}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Phone" value="{!Con.Phone}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to Phone" value="{!Cont.Phone}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to Phone" rendered="{!ShowProj}" />
+                    <!--<apex:outputText label="Bill to Phone" value="{!sq.Bill_To_Phone__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+                    <apex:outputText label="Ship to Email" value="{!Quot.Email__c}" rendered="{!NOT(showOutputfieldToFillShipping)&&NOT(showconmatchShipping)&&(showHideSelectShip)}" />
+                    <apex:outputText label="Ship to Email" value="{!cont.Email}" rendered="{!NOT(showOutputfieldToFillShipping)&&(showconmatchShipping)&&NOT(newConShowHide)}" />
+                    <apex:outputText label="Ship to Email" value="{!con.Email}" rendered="{!NOT(showOutputfieldToFillShipping)&&(newConShowHide)&&(showconmatchShipping)}" />
+                    <apex:inputField value="{!sq.Ship_Too_Email__c}" rendered="{!((showOutputfieldToFillShipping)&&NOT(showHideSelectShip))||(showOutputfieldToFillShipping)}" />
+                    <apex:inputField value="{!sq.Bill_Too_Email__c}" rendered="{!((showOutputfieldToFill)&&NOT(showHideSelectBill))||(showOutputfieldToFill)}" />
+                    <apex:outputText label="Bill to Email" value="{!Acct.Company_Email__c}" rendered="{!NOT(showOutputfieldToFill)&&NOT(showconmatch)&&NOT(ShowProj)&&(showHideSelectBill)&&NOT(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Email" value="{!Acc.Company_Email__c}" rendered="{!NOT(showOutputfieldToFill)&&NOT(ShowProj)&&NOT(showconmatch)&&(newAccShowHide)}" />
+                    <apex:outputText label="Bill to Email" value="{!con.Email}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&NOT(existingConMatch)}" />
+                    <apex:outputText label="Bill to Email" value="{!cont.Email}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)&&(existingConMatch)}" />
+                    <apex:outputText label="Bill to Email" rendered="{!ShowProj}" />
+                    <!--<apex:outputText label="Bill to Email" value="{!sq.Bill_Too_Email__c}" rendered="{!NOT(showOutputfieldToFill)&&(showconmatch)}"/>-->
+
+
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+        </apex:pageBlock>
+
+        <div align="center" draggable="false">
+
+            <apex:commandButton value="Custom SQ" Action="{!CustomServiceQuote}"  />
+            
+                 <apex:commandButton value="Shopify SQ" Action="{!ShopifyServiceQuote}" onComplete="openInNewTab({!urlPass});" status="loadingStatus" reRender="formId" />
+            
+            
+ 
+            
+
+        </div>
+        <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 200%; display: block; opacity: 0.89;"></div>
+                <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 200%; display: block;">
+                    <div class="waitingHolder" style="top: 50%; width: 110px;">
+                        <img class="waitingImage" src="/img/loading.gif" />
+                        <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                    </div>
+                </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,39 @@
+<apex:page standardcontroller="Project__c"  extensions="ProjectsNotesAndAttachment"> 
+<apex:form >
+<apex:inputtext id="searchTextBox" value="{!searchText}"/> 
+<apex:commandButton action="{!dosearch}" value="Search" reRender="searchSection" status="actStatusId"/>
+ <apex:actionStatus id="actStatusId" >
+                <apex:facet name="start" >
+                  <img src="/img/loading.gif" />                    
+                </apex:facet>
+            </apex:actionStatus>
+<apex:pageBlock title="Search with Opportunity/Project Name" id="searchSection"> 
+<apex:pageMessages /> 
+<apex:pageBlockButtons >
+         <apex:commandButton action="{!doTransfer}" value="Transfer" reRender="searchSection" status="actStatusIdTrans"/>
+         <apex:actionStatus id="actStatusIdTrans" >
+                <apex:facet name="start" >
+                  <img src="/img/loading.gif" />                    
+                </apex:facet>
+            </apex:actionStatus>
+         <apex:commandButton action="{!goback}" value="Back"/>
+</apex:pageBlockButtons>
+  <apex:pageBlockTable value="{!searchResults}" var="results" >
+  <apex:column headerValue="Action" > 
+  <apex:inputCheckbox value="{!results.isSelected}" />
+  </apex:column>
+   <apex:column headerValue="Type" value="{!results.objtype}" /> 
+   <apex:column headerValue="Name">
+    <apex:outputlink value="/{!results.recordId}" target="_self">
+    <apex:outputText value="{!results.recName}" />
+    </apex:outputlink>    
+   </apex:column> 
+   <apex:column headerValue="Created Date" > 
+       <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+                    <apex:param value="{!results.CreatedDate}" ></apex:param>
+       </apex:outputText>
+   </apex:column>
+  </apex:pageBlockTable>
+</apex:pageBlock>       
+</apex:form>
+  </apex:page>

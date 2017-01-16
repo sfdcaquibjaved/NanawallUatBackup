@@ -1,0 +1,631 @@
+<apex:page standardController="case" extensions="caseAttachment,reCAPTCHA">
+    <html lang="en" dir="ltr" 
+prefix="content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/
+foaf: http://xmlns.com/foaf/0.1/ og: http://ogp.me/ns# rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# 
+sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema# 
+schema: http://schema.org/ fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article# 
+book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile# video: http://ogp.me/ns/video# product: http://ogp.me/ns/product#" class="js">
+        <head profile="http://www.w3.org/1999/xhtml/vocab">
+            <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/>
+            <script data-require="jquery@*" data-semver="2.0.3" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+            <script data-require="bootstrap@*" data-semver="3.1.1" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+            <!--         jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <!--         Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+            <!--         datatable---- -->
+            <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css" />
+            <script type="text/javascript" src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+            <script src="http://code.jquery.com/jquery.min.js"></script>
+            <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+            <title>Service | NanaWall</title>
+            <link rel="dns-prefetch" href="http://media.nanawall.com/" />
+            <link rel="canonical" href="http://www.nanawall.com/support/service"/>
+            <link rel="shortlink" href="http://www.nanawall.com/node/16776"/>
+            <link rel="shortcut icon" href="http://www.nanawall.com/files/leaficon2.png" type="image/png"/>
+            <apex:stylesheet value="{!$Resource.StylesheetNanawall}"/>
+            <apex:stylesheet value="{!$Resource.ServiceRequestFormStyle}"/>
+            <script url="{!URLFOR($Resource.NewZip, 'jquery.min.js')}"></script>
+           
+            
+        </head>
+        <body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-16776 node-type-page section-support">
+            <a name="top"></a>
+            <p id="skip-link">
+                <a href="http://www.nanawall.com/support/service#main-menu" class="element-invisible element-focusable">Jump to navigation</a>
+            </p>
+            <div id="top">
+                <div class="inner">
+                    <div class="region region-header-1">
+                        <div role="navigation" class="block block-menu first last odd" id="block-menu-menu-top">
+                            <div class="search-form">
+                                <form class="search" action="https://www.nanawall.com/search" method="get" __bizdiag="3678" __biza="WJ__">
+                                    <input type="submit" class="submit" value="search"/>
+                                    <input class="search-field" type="text" name="sq"/>
+                                </form>
+                            </div>
+                            <ul class="menu">
+                                <li class="leaf resources">
+                                    <a title="" href="http://www.nanawall.com/shortform?typ=NW%20-%20CAD%20Download&amp;doc=http://www.nanawall.com/resources">Design Resources</a>
+                                    <div id="mega-resources">
+                                        <div class="content">
+                                            <a href="http://www.nanawall.com/shortform?typ=NW%20-%20CAD%20Download&amp;doc=http://www.nanawall.com/support/architectural-binder">Architectural Binder</a>
+                                            <a href="http://www.nanawall.com/shortform?typ=NW%20-%20CAD%20Download&amp;doc=http://www.nanawall.com/resources/bim-3d">BIM / 3D</a>
+                                            <a href="http://www.nanawall.com/shortform?typ=NW%20-%20CAD%20Download&amp;doc=http://www.nanawall.com/cad">CAD Library</a>
+                                            <a href="http://www.nanawall.com/design-wizards">Design Wizards</a>
+                                            <a href="http://www.nanawall.com/shortform?typ=NW%20-%20Download&amp;doc=http://www.nanawall.com/support/manuals">Install/Owner's Manuals</a>
+                                            <a href="http://www.nanawall.com/shortform?typ=NW%20-%20Download&amp;doc=http://www.nanawall.com/specifications">Specifications</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="last leaf gallery">
+                                    <a title="" href="http://www.nanawall.com/photo-gallery">Gallery</a>
+                                    <div id="mega-gallery">
+                                        <div class="content">
+                                            <a href="http://www.nanawall.com/photo-gallery">Photos</a>
+                                            <a href="http://www.nanawall.com/animations">Animations</a>
+                                            <a href="http://www.nanawall.com/videos">Videos</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.block -->
+                    </div>
+                </div>
+            </div>
+            <div id="header" role="banner">
+                <div class="inner">
+                    <div id="menu-button"></div>
+                    <hgroup id="name-and-slogan">
+                        <div id="logo">
+                            <a href="http://www.nanawall.com/" title="Home" rel="home">
+                                <apex:image url="{!URLFOR($Resource.NewZip, 'nanawall-logo.png')}" style="width: 100%; height: auto;" />
+                            </a>
+                        </div>
+                    </hgroup>
+                    <!-- /#name-and-slogan -->
+                    <div class="header__region region region-header">
+                        <div id="block-menu-menu-mobile-menu" class="block block-menu first last odd" role="navigation">
+                            <ul class="menu">
+                                <li class="menu__item is-collapsed first collapsed">
+                                    <a href="http://www.nanawall.com/why-nanawall" title="" class="menu__link">Why Nanawall</a>
+                                </li>
+                                <li class="menu__item is-collapsed collapsed">
+                                    <a href="http://www.nanawall.com/applications" title="" class="menu__link">Applications</a>
+                                </li>
+                                <li class="menu__item is-collapsed collapsed">
+                                    <a href="http://www.nanawall.com/products" title="" class="menu__link">Our Products</a>
+                                </li>
+                                <li class="menu__item is-collapsed collapsed">
+                                    <a href="http://www.nanawall.com/photo-gallery" title="" class="menu__link">Gallery</a>
+                                </li>
+                                <li class="menu__item is-collapsed collapsed">
+                                    <a href="http://www.nanawall.com/shortform?typ=NW%20-%20CAD%20Download&amp;doc=http://www.nanawall.com/resources/bim-3d" title="" class="menu__link">Design Resources</a>
+                                </li>
+                                <li class="menu__item is-leaf leaf">
+                                    <a href="http://www.nanawall.com/contact" title="" class="menu__link">Contact Us</a>
+                                </li>
+                                <li class="menu__item is-leaf last leaf">
+                                    <a href="http://www.nanawall.com/search" title="" class="menu__link">Search</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.block -->
+                    </div>
+                    <div id="navigation">
+                        <ul class="menu">
+                            <li class="first leaf menu-mlid-522">
+                                <a class="active-trail active" href="http://www.nanawall.com/why-nanawall">Why Nanawall</a>
+                                <div id="mega-why" class="mega">
+                                    <div class="inner">
+                                        <div class="content">
+                                            <div class="content-inner clearfix">
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/architects-designers">
+                                                            <apex:image value="{!URLFOR($Resource.NewZip, 'architects_0.jpg')}" style="width: 100%; height: auto;" />
+                                                        </a>
+                                                        <h3>
+                                                            <apex:outputLink value="http://www.nanawall.com/architects-designers">Architects &amp; Designers</apex:outputLink>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/contractors-builders">
+                                                            <apex:image value="{!URLFOR($Resource.NewZip, 'contractor_1.jpg')}" style="width: 100%; height: auto;" />
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/contractors-builders">Contractors &amp; Builders</a>
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/home-owners">
+                                                            <apex:image url="{!URLFOR($Resource.NewZip, 'homeowner2_0.jpg')}" style="width: 100%; height: auto;" />
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/home-owners">Homeowners</a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/business-owners">
+                                                            <apex:image url="{!URLFOR($Resource.NewZip, 'business-owner_0.jpg')}" style="width: 100%; height: auto;" />
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/business-owners">Business Owners</a>
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="leaf  menu-mlid-521">
+                                <a href="http://www.nanawall.com/applications">Applications</a>
+                                <div id="mega-apps" class="mega">
+                                    <div class="inner">
+                                        <div class="content">
+                                            <div class="content-inner clearfix">
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/applications">
+                                                            <apex:image url="{!URLFOR($Resource.NewZip, 'residential.jpg')}" style="width: 100%; height: auto;" />
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/applications">Residential</a>
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/applications/commercial">
+                                                            <apex:image url="{!URLFOR($Resource.NewZip, 'commercial.jpg')}" style="width: 100%; height: auto;" />
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/applications/commercial">Commercial</a>
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="leaf menu-mlid-429">
+                                <a href="http://www.nanawall.com/products">Our Products</a>
+                                <div id="mega-products" class="mega">
+                                    <div class="inner">
+                                        <div class="content">
+                                            <div class="content-inner clearfix">
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/folding-glass-walls">
+                                                            <apex:image value="{!URLFOR($Resource.NewZip, 'folding.jpg')}" style="width: 300px; height: 180px;"/>
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/folding-glass-walls">Folding Glass Walls</a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="view view-product-categories view-id-product_categories view-display-id-block view-dom-id-e02a5c4e047be49806ebec38a3fbe4df">
+                                                        <div class="view-content">
+                                                            <div class="views-row views-row-1 views-row-odd views-row-first">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/sl60">SL60</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-2 views-row-even">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/sl45">SL45</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-3 views-row-odd">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/sl70">SL70</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-4 views-row-even">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/sl73">SL73</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-5 views-row-odd">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/sl80-81">SL80/81</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-6 views-row-even">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/sl82">SL82</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-7 views-row-odd">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/wa67">WA67</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-8 views-row-even">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/wd66">WD66</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-9 views-row-odd views-row-last">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/wd65">WD65</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/sliding-glass-walls">
+                                                            <img src="./Service _ NanaWall_files/sliding.jpg" style="width: 300px; height: 180px;"/>
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/sliding-glass-walls">Sliding Glass Walls</a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="view view-product-categories view-id-product_categories view-display-id-block_1 view-dom-id-5a037562ef7f2f83ecfa23c439b60008">
+                                                        <div class="view-content">
+                                                            <div class="views-row views-row-1 views-row-odd views-row-first">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/hsw60">HSW60</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="views-row views-row-1 views-row-odd views-row-first views-row-last">
+                                                                <div class="views-field views-field-title">
+                                                                    <span class="field-content">
+                                                                        <a href="http://www.nanawall.com/products/hsw66">HSW66</a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column">
+                                                    <div class="hover">
+                                                        <a href="http://www.nanawall.com/frameless-glass-walls">
+                                                            <img src="./Service _ NanaWall_files/frameless.jpg" style="width: 300px; height: 180px;"/>
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/frameless-glass-walls">Frameless Glass Walls</a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="view-content">
+                                                        <div class="views-row views-row-1 views-row-odd views-row-first">
+                                                            <div class="views-field views-field-title">
+                                                                <span class="field-content">
+                                                                    <a href="http://www.nanawall.com/products/hsw75">HSW75</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="views-row views-row-1 views-row-odd">
+                                                            <div class="views-field views-field-title">
+                                                                <span class="field-content">
+                                                                    <a href="http://www.nanawall.com/products/fsw75">FSW75</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="views-row views-row-1 views-row-odd">
+                                                            <div class="views-field views-field-title">
+                                                                <span class="field-content">
+                                                                    <a href="http://www.nanawall.com/products/csw75">CSW75</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="views-row views-row-2 views-row-even views-row-last">
+                                                            <div class="views-field views-field-title">
+                                                                <span class="field-content">
+                                                                    <a href="http://www.nanawall.com/products/sl25">SL25</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hover" style="margin-top: 20px;">
+                                                        <a href="http://www.nanawall.com/products/screen">
+                                                            <img src="./Service _ NanaWall_files/300x180-nanascreen-1.jpg" style="width: 300px; height: 180px;"/>
+                                                        </a>
+                                                        <h3>
+                                                            <a href="http://www.nanawall.com/products/screen">Screening Accessories</a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="view-content">
+                                                        <div class="views-row views-row-1 views-row-odd views-row-first">
+                                                            <div class="views-field views-field-title">
+                                                                <span class="field-content">
+                                                                    <a href="http://www.nanawall.com/products/screen#one">Screen ONE</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="views-row views-row-1 views-row-odd">
+                                                            <div class="views-field views-field-title">
+                                                                <span class="field-content">
+                                                                    <a href="http://www.nanawall.com/products/screen#classic">Screen Classic</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="selection-tool">
+                                                    <div class="cell">
+                                                        <span>Product Selection Tool</span>
+                                                    </div>
+                                                    <div class="cell">
+                                                        <div class="button green">
+                                                            <a href="http://www.nanawall.com/product-selection-tool">Start Here</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="last leaf menu-mlid-000">
+                                <a href="http://www.nanawall.com/contact">Contact Us</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /#navigation -->
+                </div>
+            </div>
+            <div id="page">
+                <div id="main">
+                    <div id="page-header">
+                        <a id="main-content"></a>
+                        <h1 class="title" id="page-title">Service</h1>
+                        <div class="breadcrumb">
+                            <a href="http://www.nanawall.com/">Home</a> / Service
+                        
+                        </div>
+                    </div>
+                    <div id="content" class="column" role="main">
+                        <article class="node-16776 node node-page view-mode-full clearfix" about="/support/service" typeof="foaf:Document">
+                            <header>
+                                <span property="dc:title" content="Service" class="rdf-meta element-hidden"></span>
+                                <span property="sioc:num_replies" content="0" datatype="xsd:integer" class="rdf-meta element-hidden"></span>
+                            </header>
+                            <div class="strata heading" style="">
+                                <div class="inner" style="">
+                                    <div class="body" style="">
+                                        <div class="subnav">
+                                            <div class="inner">
+                                                <div class="menu-block-wrapper menu-block-3 menu-name-menu-applications parent-mlid-0 menu-level-1">
+                                                    <ul class="menu">
+                                                        <li class="first leaf">
+                                                            <a class="" title="" href="http://www.nanawall.com/support">Warranty</a>
+                                                        </li>
+                                                        <li class="leaf">
+                                                            <a title="" href="http://www.nanawall.com/support/installation-service">Installation</a>
+                                                        </li>
+                                                        <li class="leaf">
+                                                            <a title="" href="http://www.nanawall.com/support/service">Service</a>
+                                                        </li>
+                                                        <li class="leaf">
+                                                            <a title="" href="http://www.nanawall.com/support/lead-times">Lead Times</a>
+                                                        </li>
+                                                        <li class="leaf">
+                                                            <a title="" href="http://www.nanawall.com/reps-finder">Rep Finder</a>
+                                                        </li>
+                                                        <li class="last leaf">
+                                                            <a title="" href="http://www.nanawall.com/support/budget-guidelines">Budget Guidelines</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="strata featured left" style="">
+                                <div class="inner" style="">
+                                    <div class="image">
+                                        <div class="item">
+                                            <apex:image url="{!URLFOR($Resource.NewZip, '620x320-parts.jpg')}" style="height:320px; width:620px;" alt="" title=""/>
+                                        </div>
+                                    </div>
+                                    <div class="body" style="height:320px;">
+                                        <h3>Order Parts</h3>
+                                        <p>To order parts for your NanaWall product, please visit our Online Parts Store.</p>
+                                        <div class="button green">
+                                            <a href="http://parts.nanawall.com/">Order Online</a>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="top-link"></div>
+                            <div>
+                                <a href="http://www.nanawall.com/support/service#top" class="smooth">Back to top</a>
+                            </div>
+                            <div class="strata heading" style="">
+                                <div class="inner" style="">
+                                    <div class="body" style="">
+                                        <h3>Service FAQ's</h3>
+                                    </div>
+                                   Service FAQs can be read at our 
+                                    <a href="http://www.nanawall.com/support/service">Service FAQ page</a>
+                                </div>
+                            </div>
+                            <div class="top-link"></div>
+                            <div>
+                                <a href="http://www.nanawall.com/support/service#top" class="smooth">Back to top</a>
+                            </div>
+                            <apex:form id="frm">
+                                <div class="inner strata featured left" style="">
+                                    <div class="image">
+                                        <div class="item">
+                                            <apex:image url="{!URLFOR($Resource.NewZip, '460x300-nanawall-service.jpg')}" style="height:300px; width:460px;" alt="" title=""/>
+                                        </div>
+                                    </div>
+                                    <div class="body" style="height:300px;">
+                                        <h4>Some General Considerations on all Projects:&nbsp;</h4>
+                                        <p>1. It is important that the product is installed correctly. A poorly installed unit will not function properly. This will cause more abnormal force or stress on the components and will lead to premature failure. When operating the unit, the panels should generally be able to be moved easily by one person (except when there are very large panels or when there are more than 6 panels folding to one side). All locking points should engage smoothly. There should be no rubbing on the floor and no binding. When the unit is closed, the reveal between panels and head jamb and between panels and sill should be consistent. There should be no daylight seen from the inside. Please have all problems corrected as soon as possible by a qualified technician.&nbsp;</p>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <center>
+                                    <div class="strata heading" style="">
+                                        <div class="inner" style="">
+                                            <div class="body" style="">
+                                                <h3>Please fill the  service request form</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </center>
+                                <apex:pageBlock >
+                                    <apex:pageMessages ></apex:pageMessages>
+                                    <apex:pageBlockSection id="section1" collapsible="false">
+                                        <apex:inputField styleclass="text_field form-control" value="{!objcase.Other_First_Name__c}"  required="true"/>
+                                        <apex:inputField styleclass="textarea form-control" label="Street Address" value="{!objcase.Project_Site_Street_Address__c}" />
+                                        <apex:inputField styleclass="text_field form-control" value="{!objcase.Other_Last_Name__c}"  required="true"/>
+                                        <apex:inputField styleclass="textarea form-control" label="City" value="{!objcase.Project_Site_City__c}" />
+                                        
+                                        <apex:inputField styleclass="text_field form-control"  value="{!objcase.Company_Name__c}" required="true"/>
+                                         <apex:inputField styleclass="selectlist form-control"  value="{!objcase.Project_Site_Country__c}"  required="true"/>
+                                        <apex:inputField styleclass="text_field form-control"  value="{!objcase.Email_Address__c}"  required="true"/>
+                                        <apex:inputField styleclass="selectlist form-control" label="State" value="{!objcase.Project_Site_State__c}" />
+                        
+                                        <apex:inputField styleclass="text_field form-control" label="Phone number" value="{!objcase.SuppliedPhone}"/>
+                                        <apex:inputField styleclass="text_field form-control"  value="{!objcase.Project_Site_Zip_Postal_Code__c}" required="true"/>
+                                       <br/>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <apex:inputField styleclass="text_field form-control" label="Order Number"  value="{!objcase.Order_Number__c}" />
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <apex:inputField styleclass="text_field form-control" label="Model" value="{!objcase.Model__c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <apex:inputField styleclass="text_field form-control" label="Service Request" value="{!objcase.Case_type__c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <apex:inputField styleclass="text_field form-control" label="I am requesting service as.." value="{!objcase.I_am_requesting_service_as__c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <apex:inputField styleclass="textarea form-control" value="{!objcase.Description}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <apex:outputPanel style="display: none;">
+                                            <apex:selectList value="{!objcase.Origin}" multiselect="false" size="1">
+                                                <apex:selectOption itemValue="Web" itemLabel="Web"/>
+                                            </apex:selectList>
+                                        </apex:outputPanel>
+                                         </apex:pageBlockSection>
+                                     
+                                       
+                                   
+                                    <apex:pageBlockSection collapsible="false" dir="LTR" columns="1">
+                                       
+                                     
+                                       
+                                           <!-- Show the reCAPTCHA form if they are not yet verified -->
+                                        <apex:pageBlockSectionItem rendered="{! NOT(verified)}">
+                                            <!-- reCAPTCHA verification 
+                     Source: https://developers.google.com/recaptcha/docs/display -->
+                                            <script type="text/javascript"
+                    src="https://www.google.com/recaptcha/api/challenge?k={!publicKey}"></script>
+                                            <noscript>
+                                                <iframe src="https://www.google.com/recaptcha/api/noscript?k={!publicKey}"
+                    height="300" width="500" frameborder="0"></iframe>
+                                                <br/>
+                                                <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                                                <input type="hidden" name="recaptcha_response_field"
+                        value="manual_challenge"/>
+                                            </noscript>
+                                            <!-- end reCAPTCHA verification -->
+                                        </apex:pageBlockSectionItem>
+                                        <div align="center" draggable="false" >
+                                            <apex:pageBlockSectionItem >
+                                                <apex:commandButton styleclass="btn btn-default "  action="{!verify}" 
+                        value="Verify captcha" rendered="{! NOT(verified)}"/>
+                                            </apex:pageBlockSectionItem>
+                                        </div>
+                                        
+                                        
+                                        
+                                          
+  
+                                  
+                                    </apex:pageBlockSection>
+                                    
+                                        
+                                        <apex:pageBlock rendered="{!verified}">
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save"  action="{!SaveAttachments}"/>
+            </apex:pageBlockButtons>
+            
+          
+           
+            
+            
+            
+       <apex:pageBlockSection title="Upload the Attachment" collapsible="false" dir="LTR" columns="1">
+        <div id="upload" class="upload">                                   
+            <apex:inputFile id="fileToUpload" value="{!fileBody}" filename="{!fileName}" styleClass="input-file"/>                            
+        </div> 
+        
+         
+        <div id="upload" class="upload">                                   
+            <apex:inputFile id="fileToUpload2" value="{!fileBody2}" filename="{!fileName2}" styleClass="input-file"/>                            
+        </div> 
+        <div id="upload" class="upload">                                   
+            <apex:inputFile id="fileToUpload3" value="{!fileBody3}" filename="{!fileName3}" styleClass="input-file"/>                            
+        </div>     
+            
+           
+           </apex:pageBlockSection>     
+         
+            
+        </apex:pageBlock>
+                                   
+                                </apex:pageBlock>
+                            </apex:form>
+                        </article>
+                        <!-- /.node -->
+                    </div>
+                    <!-- /#content -->
+                </div>
+                <!-- /#main -->
+            </div>
+            <!-- /#page -->
+        </body>
+    </html>
+</apex:page>

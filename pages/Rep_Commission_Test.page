@@ -1,0 +1,187 @@
+<apex:page controller="Rep_Commission_Test_Controller">
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+
+<style>
+	.bordercells {
+		border: 1px solid gray;
+	}
+	.tablerow:nth-child(odd)
+	{
+		background-color: #CCC;
+	}
+	.outputcell 
+	{
+		background-color: lightyellow;
+	}
+</style>
+
+<script>
+
+	jQuery(document).ready(function() {
+	
+		jQuery('.compareCell').each(function(){
+			var cellid = jQuery(this).attr('cellid');
+			var celltype = jQuery(this).attr('celltype');
+			var expectedValue = parseFloat(jQuery('.Expected_' + celltype + '_' + cellid ).html() );			
+			var outputValue = parseFloat( jQuery('.Output_' + celltype + '_' + cellid ).html());			
+			
+			if( Math.abs(expectedValue - outputValue) <= 1 )
+			{ //1.00 difference or less is considered matching
+				jQuery('.Output_' + celltype + '_' + cellid ).css('background-color','lightgreen');
+			} else jQuery('.Output_' + celltype + '_' + cellid ).css('background-color','pink');
+			
+//			console.log( expectedValue +' - ' + outputValue + ' = ' +Math.abs(expectedValue - outputValue) );
+		});
+	});
+</script>
+
+	<apex:form >
+	
+		<h1>Rep Commission Test Page</h1> 
+		<br />
+		<apex:commandbutton action="{!runtests}" value="Run Tests" />
+
+		<apex:dataTable cellpadding="5" cellspacing="5" rowclasses="tablerow" columnClasses="bordercells" width="100%" value="{!RepCommissionTestRows}" var="row" id="tblTestRows" rowClasses="tblTestRows_tr "  styleClass="dataTable">
+
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>User</div></apex:facet>
+				<apex:outputtext value="{!( row.User__r.FirstName & ' ' & row.User__r.LastName)}" />
+			</apex:column>
+		
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>Order</div></apex:facet>
+				<a href='/{!row.Id}' target='_blank'><apex:outputtext value="{!row.Name}" /></a>
+			</apex:column>
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Opp. Post. Code</div></apex:facet>
+				<apex:outputtext value="{!row.Opportunity_Postal_Code__c}" />
+			</apex:column>
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Opp. State</div></apex:facet>
+				<apex:outputtext value="{!row.Opportunity_State__c}" />
+			</apex:column>
+			
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Quote Zip</div></apex:facet>
+				<apex:outputtext value="{!row.Quote_Zip__c}" />
+			</apex:column>
+			
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Quote State</div></apex:facet>
+				<apex:outputtext value="{!row.Quote_State__c}" />
+			</apex:column>
+			
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Quote City</div></apex:facet>
+				<apex:outputtext value="{!row.Quote_City__c}" />
+			</apex:column>
+			
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: List</div></apex:facet>
+				<apex:outputtext value="{!row.List_price__c}" />
+			</apex:column>
+
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Subtotal</div></apex:facet>
+				<apex:outputtext value="{!row.Quote_Sub_Total__c}" />
+			</apex:column>
+
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Chain Acct</div></apex:facet>
+				<apex:outputtext value="{!row.Chain_Account__c}" />
+			</apex:column>
+
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Disc Over.</div></apex:facet>
+				<apex:outputtext value="{!row.Quote_Discount_Override__c}" />
+			</apex:column>
+
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Wtd Dis</div></apex:facet>
+				<apex:outputtext value="{!row.Weighted_Discount__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell">
+				<apex:facet name="header"><div style='labelCell'>O: Wtd Dis</div></apex:facet>
+				<apex:outputtext value="{!row.Output_Weighted_Discount__c}" />
+			</apex:column>
+
+
+			<apex:column styleClass="outputcell">
+				<apex:facet name="header"><div style='labelCell'>I: Comm. Split</div></apex:facet>
+				<apex:outputtext value="{!row.Commission_Split__c}" />
+			</apex:column>
+
+
+
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>I: Allow Show. Comm.</div></apex:facet>
+				<apex:outputtext value="{!row.Allow_Showroom_Commission__c}" />
+			</apex:column>
+
+			<apex:column styleClass="compareCell Expected_CommRate_{!row.Id}"  html-cellid="{!row.Id}" html-celltype="CommRate">
+				<apex:facet name="header"><div style='labelCell'>Exp. Comm. Rate</div></apex:facet>
+				<apex:outputtext value="{!row.Expected_Commission_Rate__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell Output_CommRate_{!row.Id}" >
+				<apex:facet name="header"><div style='labelCell'>O: Comm. Rate</div></apex:facet>
+				<apex:outputtext value="{!ROUND(row.Output_Commission_Rate__c,2)}" />
+			</apex:column>
+
+			<apex:column styleClass="compareCell Expected_BaseComm_{!row.Id}" html-cellid="{!row.Id}" html-celltype="BaseComm">
+				<apex:facet name="header"><div style='labelCell'>Exp. Base Comm</div></apex:facet>
+				<apex:outputtext value="{!row.Expected_Base_Commission__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell Output_BaseComm_{!row.Id}" >
+				<apex:facet name="header"><div style='labelCell'>O: Base Comm</div></apex:facet>
+				<apex:outputtext value="{!ROUND(row.Output_Base_Commission__c,2)}" />
+			</apex:column>
+
+			<apex:column styleClass="compareCell Expected_Overage_{!row.Id}"  html-cellid="{!row.Id}" html-celltype="Overage"> 
+				<apex:facet name="header"><div style='labelCell'>Exp. Overage</div></apex:facet>
+				<apex:outputtext value="{!row.Expected_Overage__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell Output_Overage_{!row.Id}" >
+				<apex:facet name="header"><div style='labelCell'>O: Overage</div></apex:facet>
+				<apex:outputtext value="{!row.Output_Overage__c}" />
+			</apex:column>
+			
+			<apex:column styleClass="compareCell Expected_NB_{!row.Id}"  html-cellid="{!row.Id}" html-celltype="NB"> 
+				<apex:facet name="header"><div style='labelCell'>Exp. NB</div></apex:facet>
+				<apex:outputtext value="{!row.Expected_NB__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell Output_NB_{!row.Id}" >
+				<apex:facet name="header"><div style='labelCell'>O: NB</div></apex:facet>
+				<apex:outputtext value="{!ROUND(row.Output_NB__c,2)}" />
+			</apex:column>
+			
+			<apex:column styleClass="compareCell Expected_NS_{!row.Id}"  html-cellid="{!row.Id}" html-celltype="NS"> 
+				<apex:facet name="header"><div style='labelCell'>Exp. NS</div></apex:facet>
+				<apex:outputtext value="{!row.Expected_NS__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell Output_NS_{!row.Id}">
+				<apex:facet name="header"><div style='labelCell'>O: NS</div></apex:facet>
+				<apex:outputtext value="{!ROUND( row.Output_NS__c,2)}" />
+			</apex:column>
+			
+
+			<apex:column styleClass="compareCell Expected_NE_{!row.Id}"  html-cellid="{!row.Id}" html-celltype="NE"> 
+				<apex:facet name="header"><div style='labelCell'>Exp. NE</div></apex:facet>
+				<apex:outputtext value="{!row.Expected_NE__c}" />
+			</apex:column>
+			<apex:column styleClass="outputcell Output_NE_{!row.Id}" >
+				<apex:facet name="header"><div style='labelCell'>O: NE</div></apex:facet>
+				<apex:outputtext value="{!row.Output_NE__c}" />
+			</apex:column>
+			
+
+
+		</apex:dataTable>
+
+
+		<br />
+		<br />
+	</apex:form>
+
+</apex:page>

@@ -1,0 +1,7 @@
+<apex:page controller="Community_CommissionChart_Controller">
+
+
+<iframe src="{!url}" border="0" style="display: block;" height="651" width="1001"></iframe>
+
+
+</apex:page>

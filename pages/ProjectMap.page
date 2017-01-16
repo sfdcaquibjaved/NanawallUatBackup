@@ -1,0 +1,120 @@
+<apex:page standardController="Opportunity" extensions="ProjectMapController">
+    
+    <style type="text/css">   html {height: 100%;}   body { height: 100%; margin: 0; padding: 0 }  #map_canvas { height: 100% }     </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4PV7spdAVZo8g6wA7Dw8IP_PIDpK9ohw&ver=3&sensor=false"></script>
+      
+        <script>
+ 
+     var pinImageR = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569",
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34));
+        
+	var pinImageG = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00FF00",
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34));
+        
+	var pinImageY = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFF00",
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34));     
+        	
+  function initialize() {     
+  
+  var mapOptions = {  center: new google.maps.LatLng({!Center}), zoom: 8,mapTypeId: google.maps.MapTypeId.ROADMAP };  
+  var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);  
+  
+  var projects =
+  	[
+  		{!Array}
+  	];
+  
+  for (var i=0; i< projects.length; i++)
+  {
+  	var project=projects[i];
+  	
+  	  	var image;
+  	if (project[3] == 'y')
+  		image = pinImageY;
+  	else if(project[3] == 'g')
+  		image = pinImageG;
+  	else
+  		image = pinImageR;
+  	
+  	
+  	var market=new google.maps.Marker(
+  	{
+  		position: new google.maps.LatLng(project[1],project[2]),
+  		map: map,
+  		title: project[0],
+  		icon: image
+  	});
+  } 
+   
+  
+  }   
+  
+  
+                  var previousOnload = window.onload;
+        window.onload = function() 
+        {
+        if (previousOnload){
+        	previousOnload();
+        	}
+        	
+			initialize();
+        	}
+        
+
+    </script>
+    <apex:form >
+<apex:pagemessages />    
+<table>
+	<tr>
+		<td>Project name:</td>
+		<td><apex:inputtext value="{!projectname}" /></td>
+		
+		<td>Territory:</td>
+		<td><apex:selectList value="{!selectedTerritory}"  multiselect="false" size="1"> <apex:selectOption itemValue="" itemLabel="-SELECT-" /> <apex:selectOptions value="{!Territories}"></apex:selectOptions> </apex:selectList></td>
+	</tr>
+	
+	<tr>
+		<td>Date from:</td>
+		<td><apex:inputfield value="{!dummyopportunity.Nana_Create_Date__c}" required="false"/> </td>
+		
+		<td>Date to:</td>
+		<td><apex:inputfield value="{!dummyOpportunity2.Nana_Create_Date__c}" required="false" /></td>
+	</tr>
+
+	<tr>
+		<td>Expected Resolution Date From:</td>
+		<td><apex:inputfield value="{!dummyOpportunity.CloseDate}" required="false" /></td>
+		
+		<td>Expected Resolution Date To:</td>
+		<td><apex:inputfield value="{!dummyOpportunity2.closedate}" required="false" /></td>
+	</tr>
+
+
+	
+</table>
+
+
+
+
+ 
+
+   
+ 
+
+
+
+	<apex:commandbutton action="{!refreshdata}" value="Refresh" />
+</apex:form>
+
+     <div id="map_canvas" style="width:100%; height:80%; position: absolute;"></div> 
+
+
+
+
+</apex:page>

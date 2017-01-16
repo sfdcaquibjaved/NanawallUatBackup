@@ -1,0 +1,92 @@
+<apex:page standardController="Installation_Form__c" extensions="InstallationSignatureController" docType="html-5.0" showHeader="false" sidebar="false" standardStylesheets="false" >
+    <apex:stylesheet value="{!URLFOR($Resource.slds120,'assets/styles/salesforce-lightning-design-system.css')}"/> 
+    
+    
+    <script src="{!URLFOR($Resource.sPad,'')}"/>
+    <script src='/canvas/sdk/js/publisher.js'></script>
+    <apex:form >
+       
+                <apex:commandButton value="Save Signature" onclick="uploadSignature(); return false;" styleClass="button"/>
+    </apex:form>
+
+
+    <script>
+        var signaturePad;
+        var canvas;
+        var recId = '{!$CurrentPage.parameters.Id}'
+        var signatureData;
+        Sfdc.canvas.publisher.subscribe({name: "publisher.showPanel",
+            onData:function(e) {
+                Sfdc.canvas.publisher.publish({name:"publisher.setValidForSubmit", payload:"true"});
+        }});
+    
+        Sfdc.canvas.publisher.subscribe({ 
+            name:"publisher.post",
+            onData: function(e){
+                uploadSignature();
+            }    
+        })
+        function onLoad(){
+            canvas = document.getElementById('sPad');
+            resizeCanvas();
+            signaturePad = new SignaturePad(canvas);
+        }    
+                
+        function sPadClear(){
+            signaturePad.clear();
+        }
+    
+
+        function uploadSignature(){
+            signatureData = signaturePad.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
+            
+            Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.InstallationSignatureController.uploadSignature}', signatureData, recId,
+                        function(result, event){
+                            if(!!result && event.status){
+                                var res = JSON.parse(result);
+                                if(res.success){
+                                }else{
+                                    alert('Error:' +  res.message);
+                                }    
+                            }else {
+                                alert('Error in calling controller to upload signature');
+                            }
+                            Sfdc.canvas.publisher.publish({name:"publisher.close",payload:{refresh:"true"}});
+                    },{escape: false});
+            if(sforce.one){
+            	var attachid = '{!$CurrentPage.parameters.Id}';
+            	
+				sforce.one.back(true);
+                
+            }
+        }
+        
+        function resizeCanvas() {
+            var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+    </script>    
+        
+    <style>
+        .sPad{
+            width: 100%;
+            height: 90vh;
+            background-color: white;
+       
+        }
+    </style>
+    
+    <body onload="onLoad();">
+        <div class="slds-grid slds-m-around--small slds-grid--vertical">
+                <button class="slds-col slds-m-bottom--small slds-button slds-button--neutral" onclick="sPadClear();">Clear</button>
+            
+            <div class="slds-col slds-col-rule--top slds-col-rule--right slds-col-rule--bottom slds-col-rule--left">
+                <canvas class="sPad" id="sPad"/>
+            </div>
+        </div>
+        
+    </body>
+</apex:page>
