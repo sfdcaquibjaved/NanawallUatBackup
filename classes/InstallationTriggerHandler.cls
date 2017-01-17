@@ -2,9 +2,9 @@
     @ Author        : Absyz Software Consulting Pvt. Ltd.
     @ Date          : June-2016
     @ Description   : Handler class for InstallationTrigger
-    @ Audit Trial   : Added comments
+    @ Audit Trial   : Added comments , Case Sharing with Installer
     @ Test Class    : InstallationTriggerHandler_Test
-    @ Last Modified Date : 02-July-2016
+    @ Last Modified Date : 02-January-2017
   
 ****************************************************************************/
 
@@ -121,35 +121,35 @@ public class InstallationTriggerHandler {
          */
     
     public static void updateTaskEventOwner(List < Installation__c > newTrigger){
-        	List <ID> lstInstallationId = new List<ID> () ;
-        	List <Task> lstTaskUpdate = new List <Task> () ;
-        	List <Event> lstEventUpdate = new List <Event> () ;
+            List <ID> lstInstallationId = new List<ID> () ;
+            List <Task> lstTaskUpdate = new List <Task> () ;
+            List <Event> lstEventUpdate = new List <Event> () ;
         
-        	for(Installation__c i : newTrigger ){
-            		lstInstallationId.add(i.ID) ; 
-        		}
+            for(Installation__c i : newTrigger ){
+                    lstInstallationId.add(i.ID) ; 
+                }
         
-			Integer countActivity = [SELECT Count() FROM Task WHERE WhatID in : lstInstallationId] ; 
-        	if(countActivity > 0){
-            			List <Task> lstRelatedTasks = [SELECT id , OwnerID  FROM Task WHERE WhatID in :  lstInstallationId ] ; 
+            Integer countActivity = [SELECT Count() FROM Task WHERE WhatID in : lstInstallationId] ; 
+            if(countActivity > 0){
+                        List <Task> lstRelatedTasks = [SELECT id , OwnerID  FROM Task WHERE WhatID in :  lstInstallationId ] ; 
                 for(Installation__c ins : newTrigger ){
-                	for(Task t : lstRelatedTasks){
-                    			t.OwnerID = ins.Assigned_to__c ; 
-                        		lstTaskUpdate.add(t);
-                		}
+                    for(Task t : lstRelatedTasks){
+                                t.OwnerID = ins.Assigned_to__c ; 
+                                lstTaskUpdate.add(t);
+                        }
                 }
             }
                 Integer countEvent = [SELECT Count() FROM Event WHERE WhatID in : lstInstallationId] ; 
-        	if(countEvent > 0){
-            		List <Event> lstRelatedEvent = [SELECT id , OwnerID  FROM Event WHERE WhatID in :  lstInstallationId ] ;
-       				for(Installation__c ins : newTrigger ){
-                		for(Event e : lstRelatedEvent){
-                    			e.OwnerID = ins.Assigned_to__c ; 
-                        		lstEventUpdate.add(e);
-                		}
-                	} 
+            if(countEvent > 0){
+                    List <Event> lstRelatedEvent = [SELECT id , OwnerID  FROM Event WHERE WhatID in :  lstInstallationId ] ;
+                    for(Installation__c ins : newTrigger ){
+                        for(Event e : lstRelatedEvent){
+                                e.OwnerID = ins.Assigned_to__c ; 
+                                lstEventUpdate.add(e);
+                        }
+                    } 
             
-            	}
+                }
                 
                 try{
                     if(lstTaskUpdate.size() > 0){
@@ -157,7 +157,7 @@ public class InstallationTriggerHandler {
                         
                     }
                     if (lstEventUpdate .size() > 0) {
-                   			update lstEventUpdate ;
+                            update lstEventUpdate ;
                        }
                     
                 }
@@ -165,7 +165,7 @@ public class InstallationTriggerHandler {
                     System.debug('Exception is:' +e.getMessage()) ;
                 }
                 
-            	
+                
         
     }
     
@@ -388,12 +388,12 @@ public class InstallationTriggerHandler {
     public static void updateInstallationName(list<Installation__c> installList){
        system.debug('Inside updateInstallationName');
         set<id> setOrderId = new set<id>();
-		set<id> setQuoteId = new set<id>();
+        set<id> setQuoteId = new set<id>();
        List<Installation__c> InsList = new List<Installation__c>() ;  
         
         for(Installation__c i : InstallList){
                // Id ord = i.Order_Id__c ; 
-            if(i.Order_Number__c != null){			
+            if(i.Order_Number__c != null){          
                 setOrderId.add(i.Order_Id__c);
             }
             else if(i.Quote_Number__c != null){
@@ -403,17 +403,17 @@ public class InstallationTriggerHandler {
         }
         system.debug('The set is'+setOrderId);
         Integer count = [SELECT COUNT() FROM Installation__c Where Order__c IN: setOrderId ];
-		Integer countQuote = [SELECT COUNT() FROM Installation__c Where Quote_Name__c IN: setQuoteId ];
+        Integer countQuote = [SELECT COUNT() FROM Installation__c Where Quote_Name__c IN: setQuoteId ];
          system.debug('Value of count' + count);
      
         if((count > 0) && (countQuote == 0)){
             count = Count +1 ;
-			system.debug('I am here4' +countQuote);
+            system.debug('I am here4' +countQuote);
             system.debug('Inside if');
             for(Installation__c i : InstallList){
                 if(i.Order_Number__c != Null){
                 i.Name = 'INS'+ i.Order_Number__c +'_'+count ;
-				 i.Status__c = 'Assigned' ;
+                 i.Status__c = 'Assigned' ;
                    
                         
                     
@@ -423,7 +423,7 @@ public class InstallationTriggerHandler {
             }
         }
         else if((count == 0) && (countQuote == 0)){
-			system.debug('I am here3' +countQuote);
+            system.debug('I am here3' +countQuote);
             for(Installation__c i : InstallList){
               if(i.Order_Number__c != Null){
                 i.Name = 'INS'+ i.Order_Number__c  ;
@@ -441,11 +441,11 @@ public class InstallationTriggerHandler {
                 
             }
         }
-	
+    
         else if((count == 0) && (countQuote != 0)){
-			
-			 countQuote = countQuote +1 ;
-				system.debug('I am here' +countQuote);
+            
+             countQuote = countQuote +1 ;
+                system.debug('I am here' +countQuote);
             for(Installation__c i : InstallList) {
             i.Name = 'INS'+ i.Quote_Number__c +'_'+countQuote ;
                 i.Status__c = 'Assigned' ;
@@ -454,10 +454,10 @@ public class InstallationTriggerHandler {
             }
         }
 
-		else if((count != 0) && (countQuote != 0)){
-			countQuote = countQuote +1 ;
-			count = count+1 ; 
-			system.debug('I am here2' +countQuote);
+        else if((count != 0) && (countQuote != 0)){
+            countQuote = countQuote +1 ;
+            count = count+1 ; 
+            system.debug('I am here2' +countQuote);
             for(Installation__c i : InstallList){
               if(i.Order_Number__c != Null){
                 i.Name = 'INS'+ i.Order_Number__c +'_'+count  ;
@@ -474,7 +474,7 @@ public class InstallationTriggerHandler {
                 
             }
         }
-		 
+         
         
     }
     
