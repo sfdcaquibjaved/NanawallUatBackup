@@ -223,9 +223,7 @@
                         
                    </apex:outputpanel>
 
-                  </td>
-                </tr>
-            </table>
+
     <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',true,false)}">
         
             <table>
@@ -298,6 +296,9 @@
             </table>
 
             </apex:outputpanel>
+                                          </td>
+                </tr>
+            </table>
     </p>
     </div>
         <div>

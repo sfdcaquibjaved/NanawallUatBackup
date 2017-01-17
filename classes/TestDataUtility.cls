@@ -216,6 +216,21 @@ public with sharing class TestDataUtility {
         return orderList;
     }
     
+    public static list<Installation__c> createInsTestData(list<Order> orderList){
+        
+                
+        list<Installation__c> insList = new list<Installation__c>();
+        
+        for(integer i=0; i < testDataSize; i++){
+            Installation__c ins = new Installation__c();
+            ins.Status__c = 'Accepted by Installer' ;
+            ins.Installation_Date__c = system.today() ;
+            ins.Order__c = orderList[i].id;
+            insList.add(ins);
+        }
+        return insList;
+    }
+    
     public static list<Competitor_Detail__c> createcompDetailTestData(list < Opportunity > lstOpportunity, list < Project__c > lstProject) {
         
         list<Competitor_Detail__c> compDetaillst = new list<Competitor_Detail__c>(); 

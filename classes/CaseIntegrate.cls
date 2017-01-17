@@ -56,8 +56,9 @@ global class CaseIntegrate {
     }
     
     global void search() {
-        flag = true;
+        
         if(string.isNotBlank(searchEmail) && (string.isNotBlank(searchstring))) {
+        flag = true;
         string searchquery = 'select CaseNumber,id,Status,Email__c from case where Status!=null AND Email__c=:searchEmail AND CaseNumber=:searchstring';
         if (string.isNotBlank(searchEmail))
             searchquery += ' and Email__c LIKE \'%' + searchEmail + '%\' ';
@@ -67,7 +68,7 @@ global class CaseIntegrate {
         system.debug('###########' + caseList);
         }
         else{
-            ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR,'Error: Invalid Input.');
+            ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR,'Invalid Input.');
             ApexPages.addMessage(myMsg1);
         }
 
@@ -76,6 +77,7 @@ global class CaseIntegrate {
     global void search1() {
         
         if((searchServiceQuote.length()>2) && (string.isNotBlank(searchEmail1)) ){
+        flag1 = true;
         string searchquery1 = 'select id,name,Status__c,Shopify_Order_NO__c,Send_Quote_To_Email__c from Service_Quote__c where status__c !=null AND Send_Quote_To_Email__c=:searchEmail1';
         if (string.isNotBlank(searchEmail1)){
             searchquery1 += ' and Send_Quote_To_Email__c LIKE \'%' + searchEmail1 + '%\' ';
@@ -99,11 +101,11 @@ global class CaseIntegrate {
         QuoteList = Database.query(searchquery1);
         }
         else{
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,'Error: Invalid Input.');
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,'Invalid Input.');
             ApexPages.addMessage(myMsg);
         }
         system.debug('###########QuoteList' + QuoteList);
-    flag1 = true;
+    
     }
 
 }
