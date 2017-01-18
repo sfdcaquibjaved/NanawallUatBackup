@@ -1,17 +1,7 @@
 public with sharing class ServiceQuote_ReportController {
-    
+
     public boolean servicepartcheck {get; set;}
     //quote specific
-    
-    /*public Contact getShipToContact(){
-        set<id> shipCon = new set<id>(); 
-        if(sq2.Ship_To_Contact__c  != null){
-            shipCon.add(sq2.Ship_To_Contact__c);
-        }
-        Contact cc = [select id,firstname,lastname from contact where id in:shipCon limit 1];
-        return cc;
-    }*/
-    
     public string getCalculatedShippingMethod () 
     {
         //somehow it makes sense to fork the displayed shipping type when both the 
@@ -336,18 +326,18 @@ public with sharing class ServiceQuote_ReportController {
     //tlkpservicebillto
     public Lead getOtherBillingAddress() {
         Lead l  = new Lead();
-        l.firstname = sq.other_bill_to_first_name__c;
-        l.lastname = sq.other_bill_to_last_name__c;
-        l.Company = sq.Other_Bill_To_Company__c;
-        l.Address_1__c = sq.Other_Bill_To_Address__c;
-        l.Address_2__c = sq.Other_Bill_To_Address_2__c;
-        l.nrCity__c = sq.Other_Bill_To_City__c;
-        l.nrState__c = sq.Other_Bill_To_State__c;
-        l.Zip__c = sq.Other_Bill_To_Zip__c;
-        l.Phone = sq.Other_Bill_To_Phone__c;
-        l.Fax = sq.Other_Bill_To_Fax__c;
-        l.Email = sq.Other_Bill_To_Email__c;
-        l.nrCountry__c = sq.other_bill_to_country__c;
+        l.firstname = sq2.other_bill_to_first_name__c;
+        l.lastname = sq2.other_bill_to_last_name__c;
+        l.Company = sq2.Other_Bill_To_Company__c;
+        l.Address_1__c = sq2.Other_Bill_To_Address__c;
+        l.Address_2__c = sq2.Other_Bill_To_Address_2__c;
+        l.nrCity__c = sq2.Other_Bill_To_City__c;
+        l.nrState__c = sq2.Other_Bill_To_State__c;
+        l.Zip__c = sq2.Other_Bill_To_Zip__c;
+        l.Phone = sq2.Other_Bill_To_Phone__c;
+        l.Fax = sq2.Other_Bill_To_Fax__c;
+        l.Email = sq2.Other_Bill_To_Email__c;
+        l.nrCountry__c = sq2.other_bill_to_country__c;
         
         return l;
     }
@@ -367,6 +357,8 @@ public with sharing class ServiceQuote_ReportController {
         if( GlobalStrings.HostName() == 'cs9.salesforce.com' )
         { //dev
             Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c FROM Contact WHERE id = '003A0000013vBBmIAM' ];
+            l.FirstName = c.FirstName;
+            l.LastName = c.LastName;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
@@ -375,14 +367,17 @@ public with sharing class ServiceQuote_ReportController {
             
         } else if(GlobalStrings.HostName() == 'na7.salesforce.com' )
         {
-            Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c FROM Contact WHERE id = '003A0000013vBBmIAM' ];
+            Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c,Account.Country__c FROM Contact WHERE id = '003A0000013vBBmIAM' ];
+            l.FirstName = c.FirstName;
+             l.LastName = c.LastName;
+             l.nrCountry__c=c.Account.Country__c;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
             l.nrState__c = c.Account.State__c;
             l.Zip__c = c.Account.Zip__c;
         
-        } else l  = new Lead(   Company = 'UPS remit address', Address_1__c = 'PO BOX 894820',nrCity__c = 'LOS ANGELES', nrState__c = 'CA', Zip__c = '90189-4820' );
+        } else l  = new Lead( FirstName='Accounts',LastName='Receivable',Company = 'UPS remit address', Address_1__c = 'PO BOX 894820',nrCity__c = 'LOS ANGELES', nrState__c = 'CA', Zip__c = '90189-4820' );
         
         return l;
 
@@ -393,30 +388,29 @@ public with sharing class ServiceQuote_ReportController {
         if(sq2.recordtypeid != Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Shopify Service Quote').getRecordTypeId()){
         l.FirstName =   sq2.Send_Quote_To_Contact__r.FirstName;
         l.LastName  = sq2.Send_Quote_To_Contact__r.LastName;
-        l.Company = sq2.Other_Bill_To_Company__c;
+        l.Company = sq2.Care_Of__c;
         l.Address_1__c = sq2.Bill_Too_Street__c;
         l.Address_2__c = sq2.Other_Bill_To_Address_2__c;
         l.nrCity__c = sq2.Bill_Too_City__c;
         l.nrState__c = sq2.Other_Bill_To_State__c;
         l.Zip__c = sq2.Bill_Too_Zip__c;
         l.Phone = sq2.Bill_To_Phone__c;
-        l.nrCountry__c = sq2.Bill_To_Country__c;
-        
-      l.Fax = sq.Ship_To_Fax__c;
+//      l.Fax = sq.Ship_To_Fax__c;
         l.Email = sq2.Bill_Too_Email__c;
+        l.nrCountry__c = sq2.Bill_To_Country__c;
         }else{
         l.FirstName =   sq2.Send_Quote_To_Contact__r.FirstName;
         l.LastName  = sq2.Send_Quote_To_Contact__r.LastName;
-        l.Company = sq2.Other_Bill_To_Company__c;
+        l.Company = sq2.Care_Of__c;
         l.Address_1__c = sq2.Shopify_Bill_To_Street__c;
         //l.Address_2__c = sq2.Other_Bill_To_Address_2__c;
         l.nrCity__c = sq2.Shopify_Bill_To_City__c;
         l.nrState__c = sq2.Shopify_Bill_To_State__c;
-        l.nrCountry__c = sq2.Shopify_Bill_To_country__c;
         l.Zip__c = sq2.Shopify_Bill_To_Zip__c;
         l.Phone = sq2.Shopify_Bill_To_Phone__c;
-      l.Fax = sq.Ship_To_Fax__c;
+//      l.Fax = sq.Ship_To_Fax__c;
         l.Email = sq2.Shopify_Bill_To_Email__c;  
+        l.nrCountry__c = sq2.Shopify_Bill_To_country__c;
         }
         
 
@@ -451,6 +445,8 @@ public with sharing class ServiceQuote_ReportController {
         if( GlobalStrings.HostName() == 'cs9.salesforce.com' )
         { //dev
             Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c FROM Contact WHERE id = '003A0000013vB5wIAE' ];
+            l.FirstName = c.FirstName;
+            l.LastName = c.LastName;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
@@ -459,16 +455,20 @@ public with sharing class ServiceQuote_ReportController {
             
         } else if(GlobalStrings.HostName() == 'na7.salesforce.com' )
         {
-            Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c FROM Contact WHERE id = '003A0000013vB5wIAE' ];
+            Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c,Account.Country__c FROM Contact WHERE id = '003A0000013vB5wIAE' ];
+             l.FirstName = c.FirstName;
+             l.LastName = c.LastName;
+             l.nrCountry__c=c.Account.Country__c;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
             l.nrState__c = c.Account.State__c;
             l.Zip__c = c.Account.Zip__c;
+            
         
-        } else l  = new Lead(   Company = 'YRC FREIGHT', Address_1__c = 'PO BOX 7914',nrCity__c = 'OVERLAND PARK', nrState__c = 'KS', Zip__c = '66207' );
+        } else l  = new Lead( FirstName='Accounts',LastName='Receivable',  Company = 'YRC FREIGHT', Address_1__c = 'PO BOX 7914',nrCity__c = 'OVERLAND PARK', nrState__c = 'KS', Zip__c = '66207',nrCountry__c = 'United States' );
         
-        return l;       
+        return l;   
     }
     
     public decimal getBalanceDue() {
@@ -754,7 +754,7 @@ public with sharing class ServiceQuote_ReportController {
         servicepartcheck = false;
         this.sq = (Service_Quote__c)stdController.getRecord();
 
-        sq2 = [SELECT Id,Bill_To_Country__c,Final_Payment_Amount__c,Ship_To_Contact__c,Bill_To_Contact__c,Ship_To_Company__c,Bill_To_Company__c,Deposit_Amount__c,Bill_To_countryy__c,LastFourDigitsOfPaymentMedium__c,Final_Payment_Date__c,Final_Payment_Type__c,Tax_Exempt__c,Tax__c,Final_Last_4_Digits__c,recordtypeid,Shopify_Ship_To_City__c,Shopify_Bill_To_State__c,Shopify_Bill_To_Phone__c,Shopify_Bill_To_Email__c, Shopify_Bill_To_City__c,Shopify_Bill_To_Street__c,Shopify_Bill_To_Zip__c,SubTotal__c ,Send_Quote_To_Contact__r.FirstName ,Nonstock_Company__c,Send_Quote_To_Contact__c, Other_Bill_To_Company__c, Other_Bill_To_Address_2__c  ,Send_Quote_To_Contact__r.LastName,Bill_Tooo__c,Other_Bill_To_Email__c, Bill_Too_City__c,Other_Bill_To_State__c,Bill_Too_Zip__c, Bill_To_Phone__c,Bill_Too_Email__c ,Bill_Too_Street__c ,Care_Of__c,Responsibility__c, quote__r.SL_Order_number__c,ETA__c, NonStock_ETA__c, quote__r.Order_number__c, Name,Case__c, Shipping_Method__c, Shopify_Bill_To_country__c, NonStock_Shipping_Method__c FROM Service_Quote__c WHERE id = :sq.id];
+        sq2 = [SELECT Id,Order_Number_MF__c,Order_Number_M__c,Shopify_Bill_To_country__c,Bill_To_Country__c,Final_Payment_Amount__c,Deposit_Amount__c,LastFourDigitsOfPaymentMedium__c,Final_Payment_Date__c,Final_Payment_Type__c,Tax_Exempt__c,Tax__c,Final_Last_4_Digits__c,recordtypeid,Shopify_Ship_To_City__c,Shopify_Bill_To_State__c,Shopify_Bill_To_Phone__c,Shopify_Bill_To_Email__c, Shopify_Bill_To_City__c,Shopify_Bill_To_Street__c,Shopify_Bill_To_Zip__c,SubTotal__c ,Send_Quote_To_Contact__r.FirstName ,Nonstock_Company__c,Send_Quote_To_Contact__c, Other_Bill_To_Company__c, Other_Bill_To_Address_2__c  ,Send_Quote_To_Contact__r.LastName,Bill_Tooo__c,Other_Bill_To_Email__c, Bill_Too_City__c,Other_Bill_To_State__c,Bill_Too_Zip__c, Bill_To_Phone__c,Bill_Too_Email__c ,Bill_Too_Street__c ,Care_Of__c,Responsibility__c, quote__r.SL_Order_number__c,ETA__c, NonStock_ETA__c, quote__r.Order_number__c,Quote__r.Order_Number_Link__c, Name,Case__c, Shipping_Method__c, NonStock_Shipping_Method__c,Other_Bill_To_City__c,other_bill_to_first_name__c, other_bill_to_last_name__c, Other_Bill_To_Address__c, Other_Bill_To_Zip__c, Other_Bill_To_Phone__c, Other_Bill_To_Fax__c, other_bill_to_country__c FROM Service_Quote__c WHERE id = :sq.id];
 
 
         string reconciliationmode = ApexPages.currentPage().getParameters().get('reconciliationmode');
