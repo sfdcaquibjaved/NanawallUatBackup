@@ -57,7 +57,8 @@ System.debug('pp_EmailFlowUtility: Calling http://'+GlobalStrings.NanaServerAddr
 	public static void doCallout(string QuoteID, string GUID) 
 	{
 		HttpRequest req = new HttpRequest();
-		req.setEndpoint('http://'+GlobalStrings.NanaServerAddress()+'/generatepdfs.aspx?quoteid='+QuoteID+'&type=cad&guid='+GUID);
+//		req.setEndpoint('http://'+GlobalStrings.NanaServerAddress()+'/generatepdfs.aspx?quoteid='+QuoteID+'&type=cad&guid='+GUID);
+		req.setEndpoint('http://'+GlobalStrings.NanaServerAddress()+'/generatepdfs.aspx?quoteid='+QuoteID+'&type=cad_installer&guid='+GUID);
 		req.setMethod('GET');
 	 	req.setHeader('Content-Type', 'text/plain; charset=utf-8');
 
