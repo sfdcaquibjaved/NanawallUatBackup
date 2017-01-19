@@ -43,7 +43,7 @@ global class BatchPosition implements Database.Batchable < sObject > {
         for (Quote_Detail__c q : lstQuoteDetail){
             
                 
-            if((mapQuoteInstall.size() > 0 ) && (mapQuoteInstall != null)){
+            if(mapQuoteInstall.size() > 0 ) {
                       lstPosition.add( new Position__c(
                             Installation__c = mapQuoteInstall.get(q.Quote__c),
                             Nana_Quote__c = q.Quote__c ,
