@@ -216,7 +216,7 @@ public with sharing class TestDataUtility {
         return orderList;
     }
     
-    public static list<Installation__c> createInsTestData(list<Order> orderList){
+    public static list<Installation__c> createInsTestData(){
         
                 
         list<Installation__c> insList = new list<Installation__c>();
@@ -225,7 +225,7 @@ public with sharing class TestDataUtility {
             Installation__c ins = new Installation__c();
             ins.Status__c = 'Accepted by Installer' ;
             ins.Installation_Date__c = system.today() ;
-            ins.Order__c = orderList[i].id;
+            //ins.Order__c = orderList[i].id;
             insList.add(ins);
         }
         return insList;
