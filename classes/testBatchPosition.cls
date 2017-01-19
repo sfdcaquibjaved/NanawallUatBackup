@@ -30,6 +30,7 @@ public class testBatchPosition {
         list<Installation__c> inslist = TestDataUtility.createInsTestData();
         for(Integer k=0;k<inslist.size();k++){
             inslist[k].Quote_Name__c = quotlist[k].id;
+            //inslist[k].NUMBER_OF_POSITIONS__C = 0;
         }
         insert inslist;
         BatchPosition en = new BatchPosition();
