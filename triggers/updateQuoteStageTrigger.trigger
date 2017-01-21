@@ -1,4 +1,4 @@
-trigger updateQuoteStageTrigger on Order (after insert , after update) {
+trigger updateQuoteStageTrigger on Order (before insert,after insert , after update) {
     
     /********************
     Added by satish Lokinindi
@@ -87,5 +87,11 @@ trigger updateQuoteStageTrigger on Order (after insert , after update) {
     }catch(Exception e){} 
     */
     //*********CODE COMMENTED************//
+    
+    //Method to update
+    //Added by Satish lokin
+   if(trigger.isBefore && trigger.isInsert){
+      OrderTriggerStagesHelper.updateOrderNumber(trigger.new);
+   }
     
 }

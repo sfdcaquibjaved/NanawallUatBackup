@@ -142,7 +142,7 @@ global with sharing class Order_Trigger_Helper {
 			manufacturingOrderMap.get(mo.Order__c).add( mo );
 		} 
 		
-		for( Shipping_Order__c so : [SELECT Id,Order__c, Status__c, Actual_Pickup_Date__c,Actual_Delivery_Date__c,ETA_Jobsite__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c, Revised_ETA_Jobsite__c FROM Shipping_Order__c WHERE Order__c = :orderids ])
+		for( Shipping_Order__c so : [SELECT Id,Order__c, Status__c, Actual_Pickup_Date__c,Actual_Delivery_Date__c,ETA_Jobsite__c,ETA_Jobsite_2__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c, Revised_ETA_Jobsite__c FROM Shipping_Order__c WHERE Order__c = :orderids ])
 		{
 			if( !shippingOrderMap.containsKey( so.Order__c) )
 			{
@@ -200,13 +200,21 @@ system.debug('** SO: setting temp actual delivery date');
 					{
 						set_IN_Actual_Delivery_Date = false;
 					}
-					
+
+/*					
 					if( so.ETA_Jobsite__c != null )
 					{
 						if( IN_ETA_Jobsite == null || so.ETA_Jobsite__c > IN_ETA_Jobsite )
 							IN_ETA_Jobsite = so.ETA_Jobsite__c;
 					}  else set_IN_ETA_Jobsite = false;
- 					
+*/
+					if( IN_ETA_Jobsite == null || (  so.ETA_Jobsite_2__c != null && so.ETA_Jobsite_2__c > IN_ETA_Jobsite ) ) 
+					{
+						IN_ETA_Jobsite = so.ETA_Jobsite_2__c;
+						set_IN_ETA_Jobsite = true;
+					} else set_IN_ETA_Jobsite = false;
+					
+					 					
 					if( so.Freight_ETA_Jobsite__c != null )
 					{
 						if( IN_Freight_ETA_Jobsite == null || so.Freight_ETA_Jobsite__c > IN_Freight_ETA_Jobsite )
@@ -250,6 +258,7 @@ system.debug('** SO: assigning actual delivery date');
             	{
             		ordersNeedUpdating  = true;
             		o.IN_ETA_Jobsite_c__c = IN_ETA_Jobsite;
+            		o.IN_ETA_Jobsite_rollup__c = IN_ETA_Jobsite;
             	}
 				if(set_IN_Freight_ETA_Jobsite ) 
 				{

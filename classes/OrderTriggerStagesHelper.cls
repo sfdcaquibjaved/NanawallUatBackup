@@ -131,6 +131,49 @@ public with sharing class OrderTriggerStagesHelper{
         
         
     }
+   /*************************************************
+    Method Name: updateOrderNumber
+    Description:  This Method is used to update order number based on US /CA          
+    Input Parameter:  trigger.new values   
+    *************************************************/ 
+    public static void updateOrderNumber(list<Order> OrderNewValues){
+        
+        //Query the highest order from US
+           list<order> ord = [select id,order_number__c,ShippingCountryCode from order where ShippingCountryCode = 'US' ORDER BY Order_Number__c DESC NULLS last limit 1 ];
+            
+            decimal usD= ord[0].order_number__c;
+         //Query the highest order from CA  
+           list<order> ord2 = [select id,order_number__c,ShippingCountryCode from order where ShippingCountryCode = 'CA' ORDER BY Order_Number__c DESC NULLS last limit 1 ];
+            
+            decimal caD= ord2[0].order_number__c;
+            
+            for(order oNew: OrderNewValues){
+               system.debug('debugggg'+oNew.ShippingCountryCode);
+                if(oNew.ShippingCountryCode.equalsIgnoreCase('CA')&& (caD >=20000)){
+                
+                    oNew.Order_Number__c=caD+1;
+                    caD =oNew.Order_Number__c;
+                }
+                else if(oNew.ShippingCountryCode.equalsIgnoreCase('CA')){
+                    oNew.Order_Number__c=20000;
+                    caD =oNew.Order_Number__c;
+
+                }
+                if(oNew.ShippingCountryCode.equalsIgnoreCase('US') && ((usD >= 1)&&(usD < 20000))){
+                
+                   
+                    oNew.Order_Number__c=usD+1;
+                    usD = oNew.Order_Number__c;
+                  
+                }
+                else if(oNew.ShippingCountryCode.equalsIgnoreCase('US')){
+                    oNew.Order_Number__c=1;
+                    usD = oNew.Order_Number__c;
+                }
+                
+            }
+            
+    }
    
     
 }

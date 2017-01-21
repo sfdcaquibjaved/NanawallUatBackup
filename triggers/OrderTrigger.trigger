@@ -21,7 +21,7 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
         }
         for( Quote__c nq: [SELECT Id, Order_Number__c FROM Quote__c WHERE Id = :nanaquoteids] )
         {
-        	//turn off for backfill
+            //turn off for backfill
             nq.Order_Number__c  = Decimal.valueOf(ordernumbermap.get(nq.Id) ); 
 
             nq.Ordered__c  = true;
@@ -65,21 +65,21 @@ System.debug('***ORDERTRIGGER:UPDATED!');
                     
                 system.debug('sending CAD email to  ' + pipelineEmails.get(o.Id) );
 //Quote.Nana_Quote__r.Installer__r.Company_Email__c             
-				try
-				{
-	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
-	                Task tsk = new Task();
-	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
-	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
-	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
-	                tsk.Description = '';
-	                
-	                tasksToInsert.add( tsk ); 
-	                
-				}catch (Exception ex )
-				{
-					system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
-				}
+                try
+                {
+                    pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+                    Task tsk = new Task();
+                    tsk.WhatId = pipelineEmails.get(o.Id).Id;
+                    tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
+                    tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
+                    tsk.Description = '';
+                    
+                    tasksToInsert.add( tsk ); 
+                    
+                }catch (Exception ex )
+                {
+                    system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+                }
 //              pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ pipelineEmails.get(o.Id).Company_Email__c }, new string[]{}, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
                 
             }
