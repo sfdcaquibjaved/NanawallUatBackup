@@ -4,12 +4,10 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+       list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
         
-         statecodes__c statcode2 = new statecodes__c();
+        statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
         statCode2.State__c = 'California';
         insert statcode2;
@@ -141,11 +139,8 @@ public class testServiceQuotecreationController {
     static testmethod void createmethod2() {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
-
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
         
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -279,10 +274,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
         statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -410,10 +403,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
         
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -543,10 +534,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
         
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -688,10 +677,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -820,10 +807,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+       list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -953,10 +938,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -1091,10 +1074,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -1225,10 +1206,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
         statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -1359,11 +1338,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
-
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
         statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
         statCode2.State__c = 'California';
@@ -1494,10 +1470,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+       list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -1629,10 +1603,8 @@ public class testServiceQuotecreationController {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -1764,11 +1736,8 @@ public class testServiceQuotecreationController {
     static testmethod void createmethod14() {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
-
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
         statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -1899,11 +1868,8 @@ cc.validateButtons();
     static testmethod void createmethod15() {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
-
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
          statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -2035,11 +2001,8 @@ cc.validateButtons();
     static testmethod void createmethod16() {
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
-
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
         statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';
@@ -2178,10 +2141,8 @@ cc.validateButtons();
         list < Zip_Codes_Master__c > tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
 
-        Country_codes__c couCode1 = new Country_codes__c();
-        couCode1.Name = 'US';
-        couCode1.Country__c = 'United States';
-        insert couCode1;
+        list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
+       insert cclist;
 
         statecodes__c statcode2 = new statecodes__c();
         statCode2.Name = 'CA';

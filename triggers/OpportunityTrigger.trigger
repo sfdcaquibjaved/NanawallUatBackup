@@ -13,6 +13,8 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
    /*if(!Org_Default_Settings__c.getInstance().OpportunityTrigger__c){
      return;
    }*/
+   if(Limits.getQueries()<50){
+   System.debug('I am here with Limit in opportunity'+Limits.getQueries());
     if(!projectStageUpdate.skipOppTrigger){
         //Declaration of Collections and Variables
         Set<Id> projIds = new Set<Id>();
@@ -553,5 +555,5 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
     }
     
      /**************************************************************************************************************/
-    
+    }
 }

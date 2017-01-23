@@ -98,11 +98,11 @@
                         
                         Contact Name: <apex:inputtext value="{!SearchFields.ContactName}"  />
                         
-                        <apex:commandButton value="Search" status="loadingstatus" action="{!searchobjects}" onComplete="openInNewTab({!urlPass});" reRender="op" />
+                        <apex:commandButton value="Search" status="loadingstatus" action="{!searchobjects}"  reRender="op" />
                     </apex:panelGrid> 
                 </div> 
                 
-                <apex:outputpanel id="op" rendered="{!(urlPass)}">
+                <!--<apex:outputpanel id="op" rendered="{!(urlPass)}">
                     <apex:actionstatus layout="block" startStyleClass="LoadingMessage" id="loadingstatus" starttext="Loading..." stoptext="{!resulttext}" />
                     <apex:pagemessages ></apex:pagemessages>
                     
@@ -197,7 +197,7 @@
                         </apex:pageBlockTable>          
                     </apex:pageBlockSection>        
                     
-                </apex:outputpanel>
+                </apex:outputpanel>-->
             </apex:pageBlock>       
         </apex:form>
     </apex:tab>

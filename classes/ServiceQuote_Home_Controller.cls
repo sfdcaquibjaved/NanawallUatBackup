@@ -96,7 +96,7 @@ public with sharing class ServiceQuote_Home_Controller {
         public list<ServiceQuoteEntry> serviceQuotes { get; set; }
         public string origin { get; set; }
     }
-    public list<ServiceQuoteSearchResult> searchResults { get; set; }
+    public static list<ServiceQuoteSearchResult> searchResults { get; set; }
     
     public List<SelectOption> getStates() {
        List<SelectOption> options = new List<SelectOption>();
@@ -435,9 +435,10 @@ System.debug(soql);
                 Apexpages.addMessage( new ApexPages.message( apexpages.Severity.INFO,'A very large amount of records were returned. Only the first 500 will be shown.') );
             }
         }       
-        urlPass = true;
-        
-        return null;
+           urlPass = true;
+           PageReference pageRef= new PageReference('/apex/SerachresultsPageService');
+           pageRef.setRedirect(true);       
+           return pageRef; 
     }
     
    // ***** Unit Tests

@@ -2,7 +2,7 @@ trigger Quote_AggregateTrigger on Quote__c (after delete, after insert, after un
 after update, before delete, before insert, before update) {
 
 if(Limits.getQueries()<50){
-
+System.debug('I am here with limit in Aggregate Trigger' + Limits.getQueries());
     if(Trigger.isAfter && Trigger.isInsert) { //After Insert
         //Quote_TriggerCode.handleAfterInsert(Trigger.new);
     }  else if(Trigger.isBefore && Trigger.isInsert) { //Before Insert

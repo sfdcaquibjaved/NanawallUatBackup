@@ -12,6 +12,8 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
      Code and after insert for approval process. 
     *************************************************************************************************/
        //Added by Satish Lokinindi 
+       if(Limits.getQueries()<50){
+       System.debug('I am here with Limit in project'+Limits.getQueries());
        if(trigger.isUpdate && trigger.isAfter)
        {
             for(project__c pro: Trigger.new){
@@ -209,5 +211,5 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
         }
      }
     /**************************************************************************************************************/
-    
+    }
 }

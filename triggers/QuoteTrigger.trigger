@@ -6,6 +6,7 @@ Description: This trigger is
 trigger QuoteTrigger on Quote__c (after insert, after update, before insert, before update, after delete) {
 
 if(Limits.getQueries()<50){
+System.debug('I am here with limit' + Limits.getQueries());
     //Declaration of Collections and Variables
     Set<Id> oppIds = new Set<Id>();
     Set<Id> primaryOppIds = new Set<Id>();
