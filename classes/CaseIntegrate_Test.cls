@@ -1,8 +1,13 @@
 @IsTest
 public class CaseIntegrate_Test {
+    public static List < Contact > olstContact;
 public static testMethod void testMyController() {
  PageReference pageRef = Page.IntegrateCase;
  Test.setCurrentPage(pageRef);
+    olstContact = TestDataUtility.createConTestData();
+    olstContact[1].Email='testmail@test.com';
+    insert olstContact;
+    
     Case c1=new Case();
     c1.Status='New';
     //c1.Email__c='testmail@test.com';
