@@ -1,6 +1,6 @@
 @RestResource(urlMapping='/v1/case2/*')
 global with sharing class integrateCase2 {
-  
+  /*  
     @HttpGet
     global static void getIntgCase() {
         RestContext.response.addHeader('Content-Type', 'Application/JSON');
@@ -43,5 +43,5 @@ global with sharing class integrateCase2 {
             } catch (exception e) {
             System.debug('eee' + e);
             }
-    }
+    }*/
     }

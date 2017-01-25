@@ -84,7 +84,6 @@ public with sharing class TrendDashBoardController {
 			communityuser = TRUE;
 			username = u.name;	
 		}
-
 		if(communityuser == TRUE)
 		{
 			quoteList = [select count(id) qid, CALENDAR_YEAR(convertTimezone(CreatedDate)) year, CALENDAR_MONTH(convertTimezone(CreatedDate)) month from Quote__c where Project__r.Owner.name=:username AND CALENDAR_YEAR(convertTimezone(CreatedDate))>=: startyearval GROUP BY CALENDAR_YEAR(convertTimezone(CreatedDate)), CALENDAR_MONTH(convertTimezone(CreatedDate)) ORDER BY CALENDAR_YEAR(convertTimezone(CreatedDate)), CALENDAR_MONTH(convertTimezone(CreatedDate)) ASC];

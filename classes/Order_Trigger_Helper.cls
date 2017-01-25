@@ -258,7 +258,7 @@ system.debug('** SO: assigning actual delivery date');
             	{
             		ordersNeedUpdating  = true;
             		o.IN_ETA_Jobsite_c__c = IN_ETA_Jobsite;
-            		o.IN_ETA_Jobsite_rollup__c = IN_ETA_Jobsite;
+//            		o.IN_ETA_Jobsite_rollup__c = IN_ETA_Jobsite; //no clue where this came from, it just appeared in the sandbox. it breaks deploy in production b/c whoever put it in sadndbox never deployed to production
             	}
 				if(set_IN_Freight_ETA_Jobsite ) 
 				{

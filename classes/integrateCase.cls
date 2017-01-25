@@ -1,7 +1,7 @@
 @RestResource(urlMapping='/v1/case/*')
 global with sharing class integrateCase {
   
-    @HttpGet
+ /* @HttpGet
     global static case getIntgCase() {
         RestRequest req = RestContext.request; 
         RestResponse res = RestContext.Response;      
@@ -11,5 +11,5 @@ global with sharing class integrateCase {
         case result =[SELECT id,CaseNumber,Status FROM case WHERE CaseNumber = :caseId];
         system.debug('#######'+result);
         return result;
-    }
+    }*/
     }
