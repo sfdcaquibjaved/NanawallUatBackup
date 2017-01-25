@@ -50,7 +50,7 @@ public with sharing class ServiceQuote_PositionList_Controller {
 	}
 
 
-	private list<Service_Quote_detail__c> details = null;
+	@TestVisible private list<Service_Quote_detail__c> details = null;
 	public list<Service_Quote_detail__c> getDetails() {
 		if( details == null )
 		{
