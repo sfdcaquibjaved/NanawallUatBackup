@@ -90,6 +90,24 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
     *************************************************************************************************/
     if (trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)) {
         
+       // To insert opportunity if Architect Account is filled on Project and related Opportunity is not there
+
+       List<Project__c> lstProject = new List <Project__c> () ;
+
+       for(Project__c p : Trigger.new){
+            if ((p.Architect_Account__c != null) ){
+              system.debug('I am here Inside Trigger IF');
+                lstProject.add(p) ; 
+            }
+       }
+
+       if(lstProject.size() > 0 ){
+            system.debug('I am here with lstProject' +lstProject) ; 
+            ProjectHelper.createInfluencerOpportunity(lstProject) ; 
+       }
+      /*****END OF INFLUENCER OPPORTUNITY CREATION FUNCTIONALITY****/
+
+
         if(Trigger.isInsert){
             ProjectHelper.createProjSplitLocation(trigger.new);
             

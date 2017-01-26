@@ -5,10 +5,29 @@ trigger OrderTrigger on Order (before update, after update, after insert) {
     if( trigger.isAfter && trigger.isInsert )
     {
 
+
+    	//do the ridiculous order number thing
+    	Custom_Order_Number__c[] orderNumbers = [SELECT Id, US_Order_Number__c, Canadian_Order_Number__c FROM Custom_Order_Number__c LIMIT 1 FOR UPDATE];
+    	Custom_Order_Number__c con = null;
+    	//if it dont exist, make it. though it shoudl exist. 
+    	if( orderNumbers.size() < 1 )
+    	{
+    		con = new Custom_Order_Number__c();
+    		con.US_Order_Number__c = 1;
+    		con.Canadian_Order_Number__c = 10000;
+    		insert con;
+    	} else 
+    	{
+    		con = orderNumbers[0];
+    	}
+
+        // end the ridiculous order number thing
+        
         map<Id, string> ordernumbermap = new map<Id, string>();
         map<Id, Id> orderidmap = new map<Id, Id>();
         list<Id> nanaquoteids = new list<Id>();         
         list<Quote__c> nanaQuotesToUpdate = new list<Quote__c>();
+        list<Order> ordersToUpdate  = new list<Order>();
         for( Order o : trigger.new )
         {
             nanaquoteids.add(o.Nana_Quote_ID__c);
@@ -17,11 +36,24 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
             ordernumbermap.put(o.Nana_Quote_ID__c, o.Hidden_Another_Auto_Number__c);
             orderidmap.put(o.Nana_Quote_ID__c, o.Id);
             
+            //ridicuous order number range thing
+            if( o.ShippingCountryCode == 'CA')
+            {
+            	o.Ranged_Order_Number__c = con.Canadian_Order_Number__c;
+            	con.Canadian_Order_Number__c++;
+            } else
+            {
+            	o.Ranged_Order_Number__c = con.US_Order_Number__c;
+            	con.US_Order_Number__c++;
+            
+            }
+            
+            ordersToUpdate.add(o);
             
         }
         for( Quote__c nq: [SELECT Id, Order_Number__c FROM Quote__c WHERE Id = :nanaquoteids] )
         {
-            //turn off for backfill
+        	//turn off for backfill
             nq.Order_Number__c  = Decimal.valueOf(ordernumbermap.get(nq.Id) ); 
 
             nq.Ordered__c  = true;
@@ -35,6 +67,14 @@ System.debug('***ORDERTRIGGER:UPDATED!');
         //during data backfill this needs to be disabled 
         if( nanaQuotesToUpdate.size() > 0 )
             update nanaQuotesToUpdate;
+            
+ 		// now to do the updates for the ridiculous order range thing
+ 		if( ordersToUpdate.size() > 0  )
+ 		{
+			update ordersToUpdate;
+			update con;
+ 		}           
+            
             
     } else  if( trigger.isAfter && trigger.isUpdate ) 
     {
@@ -65,21 +105,21 @@ System.debug('***ORDERTRIGGER:UPDATED!');
                     
                 system.debug('sending CAD email to  ' + pipelineEmails.get(o.Id) );
 //Quote.Nana_Quote__r.Installer__r.Company_Email__c             
-                try
-                {
-                    pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
-                    Task tsk = new Task();
-                    tsk.WhatId = pipelineEmails.get(o.Id).Id;
-                    tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
-                    tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
-                    tsk.Description = '';
-                    
-                    tasksToInsert.add( tsk ); 
-                    
-                }catch (Exception ex )
-                {
-                    system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
-                }
+				try
+				{
+	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+	                Task tsk = new Task();
+	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
+	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
+	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
+	                tsk.Description = '';
+	                
+	                tasksToInsert.add( tsk ); 
+	                
+				}catch (Exception ex )
+				{
+					system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+				}
 //              pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ pipelineEmails.get(o.Id).Company_Email__c }, new string[]{}, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
                 
             }
@@ -240,10 +280,15 @@ System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_N
     
     } else if( trigger.isBefore && trigger.isInsert )
     {
+ 
+    	
         for( Order o : trigger.new )
         {
             //this needs to be commented out for backfill
             o.Status = 'Order Created';
+            
+
+           
         }
     }
     

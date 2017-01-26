@@ -38,8 +38,8 @@
             </apex:pageBlockSection>
 
             <apex:pageBlockSection rendered="{!lstProject.size > 0}" columns="1">
-                <apex:outputText label="Architects" ></apex:outputText>
-                <apex:outputText label="Purchasers"></apex:outputText>
+                <apex:outputText label="Architects" value="{!str}"></apex:outputText>
+                <apex:outputText label="Purchasers" value="{!str2}"></apex:outputText>
             </apex:pageBlockSection>
             
             <apex:pageBlockTable value="{!lstProject}" var="p" rendered="{!lstProject.size > 0}">

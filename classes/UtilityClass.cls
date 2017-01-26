@@ -25,6 +25,7 @@ public static Boolean runQuoteTrigger = true;
 public static Boolean oppUpdateOppTeam = true;
 public static Boolean projSharingRecalOnInsertUpdate = true ; 
 public static Boolean updateProjectBidderSplit = true ; 
+public static string influencerOpportunityRecordTypeName = 'Influencer Opportunity' ; 
 
 /*********************************
 Method Name: getStringValue

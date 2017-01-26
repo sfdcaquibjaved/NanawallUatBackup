@@ -91,7 +91,9 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
     //Method to update
     //Added by Satish lokin
    if(trigger.isBefore && trigger.isInsert){
-      OrderTriggerStagesHelper.updateOrderNumber(trigger.new);
+      //OrderTriggerStagesHelper.updateOrderNumber(trigger.new);
+      OrderTriggerStagesHelper.updateOrderNumberBasedonManufacturing(trigger.new);
    }
+   
     
 }

@@ -485,6 +485,24 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
     {
         List<Opportunity> lstNewOpp = Trigger.new;
         Map<Id,Opportunity> mapOldOpp = Trigger.oldMap;
+       
+        //for adding architect account on related project
+
+        List<Opportunity> lstOpp = new List<opportunity> ();
+
+        for(Opportunity opp : Trigger.new){
+            system.debug('Inside trigger for') ; 
+            if(opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId){
+                system.debug('Inside trigger if') ;  
+                lstOpp.add(opp) ; 
+            }
+        }
+
+        //Function to add architect account on related project
+        if(lstOpp.size() > 0 ){
+            OpportunityHelper.UpdateProjectArchitect(lstOpp);
+        }
+
         //Creates the Project Share records whenever the Opportunity is created or updated
          //Testing
         for (Opportunity opps: lstNewOpp) {

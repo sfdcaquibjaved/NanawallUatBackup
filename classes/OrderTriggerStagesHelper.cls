@@ -136,8 +136,9 @@ public with sharing class OrderTriggerStagesHelper{
     Description:  This Method is used to update order number based on US /CA          
     Input Parameter:  trigger.new values   
     *************************************************/ 
+    //*********CODE COMMENTED************//
     public static void updateOrderNumber(list<Order> OrderNewValues){
-        
+       /* 
         //Query the highest order from US
            list<order> ord = [select id,order_number__c,ShippingCountryCode from order where ShippingCountryCode = 'US' ORDER BY Order_Number__c DESC NULLS last limit 1 ];
             
@@ -171,9 +172,72 @@ public with sharing class OrderTriggerStagesHelper{
                     usD = oNew.Order_Number__c;
                 }
                 
-            }
+            }*/
             
     }
-   
+    
+    /*************************************************
+    Method Name: updateOrderNumberBasedonManufacturing
+    Description:  This Method is used to update order number based on Manufactuting          
+    Input Parameter:  trigger.new values   
+    ------------------CREATED FOR TESTING PURPOSE------------------
+    *************************************************/ 
+   public static void updateOrderNumberBasedonManufacturing(list<Order> OrderNewValues){
+       Decimal rd ;
+       Decimal sd ;
+       Decimal td ;
+       list<order> ord = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Richmond'  ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+        if(ord.size()>0){rd= ord[0].Order_Number_Default__c;}
+       list<order> ord1 = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Solarlux' ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+         if(ord1.size()>0){sd= ord1[0].Order_Number_Default__c;}
+       list<order> ord2 = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Teuffel' ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+        if(ord2.size()>0){ td= ord2[0].Order_Number_Default__c;}
+        
+        for(order oNew: OrderNewValues){
+               //check if manufacturing is from richmond and assign ordernumber with incremental value
+                if(oNew.Manufacturing__c.equalsIgnoreCase('Richmond')&& (rd >=40000)){
+                
+                    oNew.Order_Number_Default__c=rd+1;
+                     //store incremental value 
+                    rd =oNew.Order_Number_Default__c;
+                }
+                else if(oNew.Manufacturing__c.equalsIgnoreCase('Richmond')){
+                    oNew.Order_Number_Default__c=40000;
+                     //store incremental value 
+                    rd =oNew.Order_Number_Default__c;
+
+                }
+                //check if manufacturing is from solarlux and assign ordernumber with incremental value
+                if(oNew.Manufacturing__c.equalsIgnoreCase('Solarlux') && (sd >=20000)){
+                
+                   
+                    oNew.Order_Number_Default__c=sd+1;
+                    //store incremental value 
+                    sd = oNew.Order_Number_Default__c;
+                  
+                }
+                else if(oNew.Manufacturing__c.equalsIgnoreCase('Solarlux')){
+                    oNew.Order_Number_Default__c=20000;
+                     //store incremental value 
+                    sd = oNew.Order_Number_Default__c;
+                }
+                //check if manufacturing is from teuffel and assign ordernumber with incremental value
+                if(oNew.Manufacturing__c.equalsIgnoreCase('Teuffel') && (td>=75000)){
+                
+                   
+                    oNew.Order_Number_Default__c=td+1;
+                     //store incremental value 
+                    td = oNew.Order_Number_Default__c;
+                  
+                }
+                else if(oNew.Manufacturing__c.equalsIgnoreCase('Teuffel')){
+                    oNew.Order_Number_Default__c=75000;
+                     //store incremental value 
+                    td = oNew.Order_Number_Default__c;
+                }
+                
+            }
+            
+   }
     
 }

@@ -187,4 +187,92 @@ public class ProjectHelper {
           }
      }
 
+     /****************************************************************************************************************************************
+      Method Name: createInfluencerOpportunity
+      Description: The method creates Influencer opportunity below Project 
+      Input Parameter: List of projects       
+    *****************************************************************************************************************************************/
+     public static void createInfluencerOpportunity (List<Project__c> lstPro) {
+
+        system.debug('I am here createInfluencerOpportunity');
+
+        map<ID , ID > mapProjectArchitect = new map <ID,ID> ();
+        List<opportunity> lstOppInsert = new List <opportunity> () ;
+
+        for(Project__c p : lstPro){
+
+            mapProjectArchitect.put(p.ID , p.Architect_Account__c) ; 
+        }
+        string InfluencerRecordTypeID = label.Influencer_Opportunity_RecordTypeId ; 
+        //To know if Project already have a Influencer opportunity or not
+
+     Integer count =   [SELECT count() From opportunity WHERE project_name__c in: mapProjectArchitect.keyset() AND recordTypeID =: InfluencerRecordTypeID ] ;
+     
+     // Project Doesn't have a Influencer Opp - Create one
+     if(count == 0){
+
+        system.debug('I am inside if') ; 
+
+        for(Project__c p : lstPro ){
+
+            Opportunity opp = new Opportunity () ; 
+            
+            opp.project_name__c = p.ID ; 
+            opp.AccountID = p.Architect_Account__c ; 
+            opp.Name = 'Fills Automatically' ;
+            opp.StageName = 'Need Analysis' ; 
+            opp.CloseDate = p.Close_Date__c ;
+            opp.ForecastCategoryName = 'Pipeline';
+            opp.recordTypeID = InfluencerRecordTypeID ; 
+            lstOppInsert.add(opp) ; 
+
+
+        }
+        system.debug('Value of lstOppInsert' +lstOppInsert) ; 
+     }
+     
+     else{
+
+        system.debug('I am inside else') ; 
+        // Influencer opp already exist , check if its account is same as Architect account, if not then create new
+
+        List<Opportunity> lstOpps = [SELECT AccountID , ID , Close_Date__c, project_name__c  FROM Opportunity WHERE project_name__c in: mapProjectArchitect.keyset() AND  recordTypeID =: InfluencerRecordTypeID ] ; 
+        
+
+        for(Opportunity o : lstOpps){
+
+            if(o.AccountID != mapProjectArchitect.get (o.project_name__c)){
+
+            system.debug('I am inside inner if' + lstOpps);
+            Opportunity opp = new Opportunity (); 
+            opp.project_name__c = o.project_name__c ; 
+            opp.Name = 'Fills Automatically' ; 
+            opp.AccountID = mapProjectArchitect.get (o.project_name__c) ; 
+            opp.StageName = 'Need Analysis' ; 
+            opp.CloseDate = o.Close_Date__c ; 
+             opp.recordTypeID = InfluencerRecordTypeID ;
+             opp.ForecastCategoryName = 'Pipeline';
+            lstOppInsert.add(opp) ; 
+            }
+        }
+
+     }
+
+
+     try{
+                if(lstOppInsert.size() > 0 ){
+                    system.debug('Inside Try lstOppInsert' +lstOppInsert) ; 
+                Database.saveresult[] sr = Database.insert(lstOppInsert, False); 
+                  }
+        }
+
+    catch(exception e){
+
+        system.debug('Exception is:' +e.getMessage());
+
+    }
+     
+
+
+     }
 }

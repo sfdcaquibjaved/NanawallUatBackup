@@ -1358,5 +1358,47 @@ public class OpportunityHelper {
     }
     }catch(exception e){}
     }
+
+/*************************************************
+    Method Name: UpdateProjectArchitect
+    Description: This method is used to update the project Architect account based on opportunity Account if it is of type Influencer
+    Input Parameter: List of opportunities    
+    *************************************************/  
+public static void UpdateProjectArchitect (List < opportunity > oppRec) {
+
+    system.debug('I am here') ; 
+    List < Project__c > updateProjList = new List < Project__c > ();
+    map<ID , ID> mapProjectAccount = new map <ID , ID > () ;
+
+       for (opportunity opp: oppRec) {
+                mapProjectAccount.put(opp.Project_Name__c , opp.AccountID);
+                
+    }
+    system.debug('Value of mapProjectAccount' + mapProjectAccount) ; 
+    // Query related projects
+
+    for(project__c pro: [SELECT ID, Architect_Account__c FROM Project__c WHERE ID IN: mapProjectAccount.keyset() AND Architect_Account__c = null]) {
+
+        pro.Architect_Account__c =  mapProjectAccount.get(Pro.ID);
+        updateProjList.add(pro) ; 
+    }   
+    
+   
+
+     try{
+        // Updating Project
+         system.debug('Inside try' + updateProjList ) ; 
+         if(updateProjList.size() > 0){
+         Database.saveresult[] sr = Database.update(updateProjList, False);
+     }
+     }
+     catch(exception e){
+
+     }
+
+}
+
+
+
     
 }
