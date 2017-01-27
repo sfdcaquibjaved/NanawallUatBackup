@@ -210,7 +210,7 @@ public class OpportunityHelper_Test {
         p2.Stage__c = 'Quoted';
         olstProject2.add(p2);
         insert olstProject2;
-
+test.starttest();
         olstOpportunity = TestDataUtility.createOppTestData();
         olstOpportunity[0].Project_Name__c = olstProject[0].Id;
         olstOpportunity[0].StageName = 'Quote - Negotiation/Review';
@@ -235,7 +235,7 @@ public class OpportunityHelper_Test {
         olstOpportunity[1].RecordTypeId = Label.Influencer_Opportunity_RecordTypeId;
         olstOpportunity[1].Preliminary_Drawlings__c = true;
         insert olstOpportunity;
-        test.starttest();
+        
 
         olstQuote = TestDataUtility.createQuoteRecords(olstOpportunity);
         olstQuote[1].Primary_Quote__c = TRUE;
@@ -1015,6 +1015,240 @@ public class OpportunityHelper_Test {
                  
         Test.StopTest();
     }
+    static testMethod void OpportunityTriggerHelper_Test9() {
+         list < Zip_Codes_Master__c > z = new list < Zip_Codes_Master__c > ();
+        z = TestDataUtility.getTerritoryMaster();
+        insert z;
+
+        User testUser = TestDataUtility.createUser('admin1', 'testUser@testing.com');
+        insert testUser;
+
+        User testUser1 = TestDataUtility.createUser('admin2', 'testUser1@testing.com');
+        insert testUser1;
 
 
+        olstprojectStages = TestDataUtility.getProjectStages();
+        insert olstprojectStages;
+
+        list < account > a = new list < account > ();
+        a = TestDataUtility.createAccountTestData();
+        a[0].OwnerId = testUser.id;
+        a[1].OwnerId = testUser1.id;
+        a[0].Type = 'Architecture Firm';
+        insert a;
+
+        list < contact > olstContact = new list < contact > ();
+        Contact c = new Contact();
+        c.Accountid = a[0].id;
+        c.FirstName = 'john';
+        c.LastName = 'doe';
+        c.MailingStreet = 'street';
+        c.MailingCity = 'city';
+        c.Mailingstate = 'Utah';
+        c.MailingPostalCode = '12345';
+        c.MailingCountryCode = 'US';
+        olstContact.add(c);
+        insert olstContact;
+
+        //list < Project__c > olstProject = new list < Project__c > ();
+        Project__c p1 = new Project__c();
+        p1.Name = 'Test Project CompetitorHelper_Test';
+        p1.Application__c = 'Automotive';
+        p1.Application_2__c = 'Dealership';
+        p1.Project_Zip_Code__c = '12345';
+        p1.Project_Country__c = 'United States';
+        p1.Close_Date__c = Date.newInstance(2015, 12, 12);
+        p1.Stage__c = 'Quoted';
+        p1.Corporate_Account__c = true;
+        //olstProject.add(p1);
+        insert p1;
+        List < Opportunity > opplist = new List < Opportunity > ();
+        Opportunity o = new Opportunity();
+        o.Name = 'Test2';
+        o.Project_Name__c = p1.Id;
+        o.StageName = 'Need Analysis';
+        o.CloseDate = Date.today() - 10;
+        o.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Commercial Opportunity').getRecordTypeId();
+        o.Country__c = 'USA';
+        o.Postal_Code__c = '12345';
+        o.OwnerId = testUser.Id;
+        o.Accountid = a[0].id;
+        o.chain_account__c = true;
+        o.Residential_Vertical__c = true;
+  
+        opplist.add(o);
+        insert opplist;
+        test.startTest();
+opplist[0].StageName = 'Closed/Lost';
+        update opplist;
+        test.stopTest();
+    }
+static testMethod void OpportunityTriggerHelper_Test10() {
+         list < Zip_Codes_Master__c > z = new list < Zip_Codes_Master__c > ();
+        z = TestDataUtility.getTerritoryMaster();
+        insert z;
+
+        User testUser = TestDataUtility.createUser('admin1', 'testUser@testing.com');
+        insert testUser;
+
+        User testUser1 = TestDataUtility.createUser('admin2', 'testUser1@testing.com');
+        insert testUser1;
+
+
+        olstprojectStages = TestDataUtility.getProjectStages();
+        insert olstprojectStages;
+
+        list < account > a = new list < account > ();
+        a = TestDataUtility.createAccountTestData();
+        a[0].OwnerId = testUser.id;
+        a[1].OwnerId = testUser1.id;
+        a[0].Type = 'Architecture Firm';
+        insert a;
+
+        list < contact > olstContact = new list < contact > ();
+        Contact c = new Contact();
+        c.Accountid = a[0].id;
+        c.FirstName = 'john';
+        c.LastName = 'doe';
+        c.MailingStreet = 'street';
+        c.MailingCity = 'city';
+        c.Mailingstate = 'Utah';
+        c.MailingPostalCode = '12345';
+        c.MailingCountryCode = 'US';
+        olstContact.add(c);
+        insert olstContact;
+
+        //list < Project__c > olstProject = new list < Project__c > ();
+        Project__c p1 = new Project__c();
+        p1.Name = 'Test Project CompetitorHelper_Test';
+        p1.Application__c = 'Automotive';
+        p1.Application_2__c = 'Dealership';
+        p1.Project_Zip_Code__c = '12345';
+        p1.Project_Country__c = 'United States';
+        p1.Close_Date__c = Date.newInstance(2015, 12, 12);
+        p1.Stage__c = 'Quoted';
+        p1.Corporate_Account__c = true;
+        //olstProject.add(p1);
+        insert p1;
+        List < Opportunity > opplist = new List < Opportunity > ();
+        Opportunity o = new Opportunity();
+        o.Name = 'Test2';
+        o.Project_Name__c = p1.Id;
+        o.StageName = 'Need Analysis';
+        o.CloseDate = Date.today() - 10;
+        o.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Residential Opportunity').getRecordTypeId();
+        o.Country__c = 'USA';
+        o.Postal_Code__c = '12345';
+        o.OwnerId = testUser.Id;
+        o.Accountid = a[0].id;
+        o.chain_account__c = true;
+        o.Residential_Vertical__c = true;
+  
+        opplist.add(o);
+        insert opplist;
+    OpportunityContactRole oppcon = new OpportunityContactRole();
+    oppcon.OpportunityId = opplist[0].id;
+    oppcon.ContactId = olstContact[0].id;
+    oppcon.Role = 'Engineer';
+    oppcon.IsPrimary = true;
+    insert oppcon;
+        test.startTest();
+    Quote__c q1 = new Quote__c();
+        q1.Name = 'Test Quote1';
+        q1.Opportunity__c = opplist[0].Id;
+        q1.Order_Number__c = 12388;
+        q1.Balanced_Received_Date__c = Date.today();
+        q1.Order_Finalized_Date__c = Date.today();
+        q1.Discount__c = 10;
+    insert q1;
+    Quote__c q2 = new Quote__c();
+        q2.Name = 'Test Quote3';
+        q2.Opportunity__c = opplist[0].Id;
+        q2.Order_Number__c = 12388;
+        q2.Balanced_Received_Date__c = Date.today();
+        q2.Order_Finalized_Date__c = Date.today();
+        q2.Discount__c = 10;
+    insert q2;
+opplist[0].StageName = 'Closed/Won';
+        update opplist;
+        test.stopTest();
+    }
+  static testMethod void OpportunityTriggerHelper_Test11() {
+         list < Zip_Codes_Master__c > z = new list < Zip_Codes_Master__c > ();
+        z = TestDataUtility.getTerritoryMaster();
+        insert z;
+
+        User testUser = TestDataUtility.createUser('admin1', 'testUser@testing.com');
+        insert testUser;
+
+        User testUser1 = TestDataUtility.createUser('admin2', 'testUser1@testing.com');
+        insert testUser1;
+
+
+        olstprojectStages = TestDataUtility.getProjectStages();
+        insert olstprojectStages;
+
+        list < account > a = new list < account > ();
+        a = TestDataUtility.createAccountTestData();
+        a[0].OwnerId = testUser.id;
+        a[1].OwnerId = testUser1.id;
+        a[0].Type = 'Architecture Firm';
+        insert a;
+
+        list < contact > olstContact = new list < contact > ();
+        Contact c = new Contact();
+        c.Accountid = a[0].id;
+        c.FirstName = 'john';
+        c.LastName = 'doe';
+        c.MailingStreet = 'street';
+        c.MailingCity = 'city';
+        c.Mailingstate = 'Utah';
+        c.MailingPostalCode = '12345';
+        c.MailingCountryCode = 'US';
+        olstContact.add(c);
+        insert olstContact;
+
+        //list < Project__c > olstProject = new list < Project__c > ();
+        Project__c p1 = new Project__c();
+        p1.Name = 'Test Project CompetitorHelper_Test';
+        p1.Application__c = 'Automotive';
+        p1.Application_2__c = 'Dealership';
+        p1.Project_Zip_Code__c = '12345';
+        p1.Project_Country__c = 'United States';
+        p1.Close_Date__c = Date.newInstance(2015, 12, 12);
+        p1.Stage__c = 'Quoted';
+        p1.Corporate_Account__c = true;
+        //olstProject.add(p1);
+        insert p1;
+        List < Opportunity > opplist = new List < Opportunity > ();
+        Opportunity o = new Opportunity();
+        o.Name = 'Test2';
+        o.Project_Name__c = p1.Id;
+        o.StageName = 'Need Analysis';
+        o.CloseDate = Date.today() - 10;
+        o.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Commercial Opportunity').getRecordTypeId();
+        o.Country__c = 'USA';
+        o.Postal_Code__c = '12345';
+        o.OwnerId = testUser.Id;
+        o.Accountid = a[0].id;
+      o.Amount = 100;
+        o.chain_account__c = true;
+        o.Residential_Vertical__c = true;
+              test.startTest();
+      Opportunity o1 = new Opportunity();
+        o1.Name = 'Test2';
+        o1.Project_Name__c = p1.Id;
+        o1.StageName = 'Quote - Requested';
+      o1.Amount = 200;
+        o1.CloseDate = Date.today() - 10;
+        o1.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Commercial Opportunity').getRecordTypeId();
+        o1.Country__c = 'USA';
+        o1.Postal_Code__c = '12345';
+        o1.OwnerId = testUser.Id;
+        o1.Accountid = a[0].id;
+  opplist.add(o1);
+        opplist.add(o);
+        insert opplist;
+        test.stopTest();
+    }
 }

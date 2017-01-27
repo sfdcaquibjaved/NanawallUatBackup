@@ -921,7 +921,10 @@ public class OpportunityHelper {
         map<ID, DATE> oppMap= new map<ID, DATE>();
         map<ID, String> oppMap2 = new map<ID, String>();
         map<ID, DATE> oppMap3 = new map<ID, DATE>();
-        for(Opportunity opp: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where Project_Name__c =: projId ORDER BY CloseDate LIMIT 1])
+
+        
+
+        for(Opportunity opp: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where Project_Name__c =: projId  ORDER BY CloseDate LIMIT 1  ])
         {
             if(opp.CloseDate!=null)
             {
@@ -929,7 +932,7 @@ public class OpportunityHelper {
             }       
             
         }
-        for(Opportunity opp2: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where StageName =: 'Closed/Won' AND Project_Name__c =: projId])
+        for(Opportunity opp2: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where StageName =: 'Closed/Won' AND Project_Name__c =: projId ])
         {
             if(opp2.StageName!=null)
             {
@@ -1389,6 +1392,7 @@ public static void UpdateProjectArchitect (List < opportunity > oppRec) {
         // Updating Project
          system.debug('Inside try' + updateProjList ) ; 
          if(updateProjList.size() > 0){
+        UtilityClass.firstRun = FALSE ;
          Database.saveresult[] sr = Database.update(updateProjList, False);
      }
      }

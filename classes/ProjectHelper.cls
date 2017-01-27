@@ -220,7 +220,7 @@ public class ProjectHelper {
             opp.project_name__c = p.ID ; 
             opp.AccountID = p.Architect_Account__c ; 
             opp.Name = 'Fills Automatically' ;
-            opp.StageName = 'Need Analysis' ; 
+            opp.StageName = 'Drawings - Requested' ; 
             opp.CloseDate = p.Close_Date__c ;
             opp.ForecastCategoryName = 'Pipeline';
             opp.recordTypeID = InfluencerRecordTypeID ; 
@@ -248,7 +248,7 @@ public class ProjectHelper {
             opp.project_name__c = o.project_name__c ; 
             opp.Name = 'Fills Automatically' ; 
             opp.AccountID = mapProjectArchitect.get (o.project_name__c) ; 
-            opp.StageName = 'Need Analysis' ; 
+            opp.StageName = 'Drawings - Requested' ; 
             opp.CloseDate = o.Close_Date__c ; 
              opp.recordTypeID = InfluencerRecordTypeID ;
              opp.ForecastCategoryName = 'Pipeline';
@@ -262,7 +262,9 @@ public class ProjectHelper {
      try{
                 if(lstOppInsert.size() > 0 ){
                     system.debug('Inside Try lstOppInsert' +lstOppInsert) ; 
+                     UtilityClass.firstRun = FALSE ;
                 Database.saveresult[] sr = Database.insert(lstOppInsert, False); 
+
                   }
         }
 

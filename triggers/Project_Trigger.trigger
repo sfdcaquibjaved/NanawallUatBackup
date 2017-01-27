@@ -101,9 +101,10 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
             }
        }
 
-       if(lstProject.size() > 0 ){
+       if((lstProject.size() > 0 ) && (utilityClass.FirstRun == TRUE )){
             system.debug('I am here with lstProject' +lstProject) ; 
             ProjectHelper.createInfluencerOpportunity(lstProject) ; 
+            UtilityClass.firstRun = FALSE ;
        }
       /*****END OF INFLUENCER OPPORTUNITY CREATION FUNCTIONALITY****/
 

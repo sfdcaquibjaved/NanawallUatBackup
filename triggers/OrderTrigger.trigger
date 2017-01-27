@@ -7,6 +7,7 @@ trigger OrderTrigger on Order (before update, after update, after insert) {
 
 
     	//do the ridiculous order number thing
+    	/*
     	Custom_Order_Number__c[] orderNumbers = [SELECT Id, US_Order_Number__c, Canadian_Order_Number__c FROM Custom_Order_Number__c LIMIT 1 FOR UPDATE];
     	Custom_Order_Number__c con = null;
     	//if it dont exist, make it. though it shoudl exist. 
@@ -20,7 +21,7 @@ trigger OrderTrigger on Order (before update, after update, after insert) {
     	{
     		con = orderNumbers[0];
     	}
-
+*/
         // end the ridiculous order number thing
         
         map<Id, string> ordernumbermap = new map<Id, string>();
@@ -37,6 +38,7 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
             orderidmap.put(o.Nana_Quote_ID__c, o.Id);
             
             //ridicuous order number range thing
+            /*
             if( o.ShippingCountryCode == 'CA')
             {
             	o.Ranged_Order_Number__c = con.Canadian_Order_Number__c;
@@ -49,7 +51,7 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
             }
             
             ordersToUpdate.add(o);
-            
+            */
         }
         for( Quote__c nq: [SELECT Id, Order_Number__c FROM Quote__c WHERE Id = :nanaquoteids] )
         {
@@ -69,11 +71,13 @@ System.debug('***ORDERTRIGGER:UPDATED!');
             update nanaQuotesToUpdate;
             
  		// now to do the updates for the ridiculous order range thing
+ 		/*
  		if( ordersToUpdate.size() > 0  )
  		{
 			update ordersToUpdate;
 			update con;
- 		}           
+ 		} 
+ 		*/          
             
             
     } else  if( trigger.isAfter && trigger.isUpdate ) 
