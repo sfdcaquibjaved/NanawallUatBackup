@@ -7,7 +7,7 @@ public with sharing class CorporateAccountProjectListController2
         public Project__c proj {get; set;}
     }
     public List<ProjectContainer> lstProject {get; set;}
-    private List<Project__c> lstProj {get; set;}
+    @TestVisible private List<Project__c> lstProj {get; set;}
     public Integer intProjectWon {get; set;}
     public Double dblAmountTotal {get; set;}
     public Double dblAmountWon {get; set;}
