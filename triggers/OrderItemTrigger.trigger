@@ -66,6 +66,7 @@ system.debug('got a seiki');
 		|| oi.Product_Name__c.toLowerCase().contains('fsw75f')
 		|| oi.Product_Name__c.toLowerCase().contains('fsw75c')
 		|| oi.Product_Name__c.toLowerCase().contains('privasee')
+		|| oi.Product_Name__c.toLowerCase().contains('climaclear')
 		)
 		{
 			//make sure a teuffel WO doesnt already exist

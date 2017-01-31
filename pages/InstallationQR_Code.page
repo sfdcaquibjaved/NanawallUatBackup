@@ -1,3 +1,8 @@
 <apex:page standardController="Installation__c" renderAs="pdf">
-  <apex:outputText value="{!Installation__c.QR_Code__c}" escape="false"/>
+  <apex:pageBlock title="QR Code">
+    <p style="padding-bottom: 10px">
+       Scan the code below on your mobile device to open the account record in Salesforce1
+    </p>
+    <apex:image value="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={!URLENCODE('salesforce1://sObject/' + Installation__c.Id + '/view')}" />
+  </apex:pageBlock>
 </apex:page>
