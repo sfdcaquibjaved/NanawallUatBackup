@@ -6,5 +6,5 @@
         <minorNumber>8</minorNumber>
         <namespace>CRMfusionDBR101</namespace>
     </packageVersions>
-    <status>Active</status>
+    <status>Inactive</status>
 </ApexTrigger>

@@ -15,13 +15,15 @@ global class batchNoInfluencerOnProject implements Database.Batchable < sObject 
     global Database.querylocator start(Database.BatchableContext BC) {
         //Query all projects where Architect account is filled
         
-        Query = 'SELECT ID , Architect_Account__c FROM Project__c WHERE Architect_Account__c != null AND Influencer_Count__c = 0' ; 
+        Query = 'SELECT ID , Name ,  Architect_Account__c , Close_Date__c , Architect_Account__r.Name FROM Project__c WHERE Architect_Account__c != null AND Influencer_Count__c = 0 ' ; 
    		 return Database.getQueryLocator(query);
       }
 
       //Execute Method of Batch class
     global void execute(Database.BatchableContext BC, List < Project__c > pro) 
     {
+        
+        system.debug('The value of pro %%%%' +pro);
 		
          List<opportunity> lstOppInsert = new List <opportunity> () ;
          
@@ -31,7 +33,7 @@ global class batchNoInfluencerOnProject implements Database.Batchable < sObject 
             
             opp.project_name__c = p.ID ; 
             opp.AccountID = p.Architect_Account__c ; 
-            opp.Name = 'Fills Automatically' ;
+            opp.Name = p.Name + '-' + p.Architect_Account__r.Name ;
             opp.StageName = 'Drawings - Requested' ; 
             opp.CloseDate = p.Close_Date__c ;
             opp.ForecastCategoryName = 'Pipeline';

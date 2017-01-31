@@ -22,13 +22,14 @@ global class batchArchitectAccount implements Database.Batchable < sObject > {
     //Execute Method of Batch class
     global void execute(Database.BatchableContext BC, List < Opportunity > opp) 
     {
-		        system.debug('Value of opp' +opp);
+		        system.debug('Value of opp %%%%%' +opp);
         		
         		List < Project__c > updateProjList = new List < Project__c > ();
     			map<ID , ID> mapProjectAccount = new map <ID , ID > () ;
         
         		for (opportunity o: opp) {
-                mapProjectAccount.put(o.Project_Name__c , o.AccountID);
+                    if(o.AccountId!=null)
+                		mapProjectAccount.put(o.Project_Name__c , o.AccountID);
                 
     			}
 				
