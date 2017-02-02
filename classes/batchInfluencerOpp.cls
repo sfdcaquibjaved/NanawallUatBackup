@@ -64,7 +64,9 @@ global class batchInfluencerOpp implements Database.Batchable < sObject > {
        
        for (Project__c p : pro) {
             if(mapProjectIdOppID.containsKey(p.id) && mapProjectArchitect.containsKey(p.id) && ! mapProjectIdOppID.get(p.ID).contains(mapProjectArchitect.get(p.ID))) {
-                  system.debug('I am here Inside IF'); 
+                  system.debug('I am here Inside IF');
+                System.debug('proidoppid'+mapProjectIdOppID.containsKey(p.id));
+                System.debug('projarchi'+mapProjectArchitect.containsKey(p.id));
           Opportunity opp = new Opportunity () ; 
             opp.project_name__c = p.ID ; 
             opp.AccountID = p.Architect_Account__c ; 

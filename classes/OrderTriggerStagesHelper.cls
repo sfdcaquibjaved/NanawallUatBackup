@@ -183,9 +183,14 @@ public with sharing class OrderTriggerStagesHelper{
     ------------------CREATED FOR TESTING PURPOSE------------------
     *************************************************/ 
    public static void updateOrderNumberBasedonManufacturing(list<Order> OrderNewValues){
+       
+
+
        Decimal rd ;
        Decimal sd ;
        Decimal td ;
+
+       
        list<order> ord = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Richmond'  ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
         if(ord.size()>0){rd= ord[0].Order_Number_Default__c;}
        list<order> ord1 = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Solarlux' ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
@@ -238,6 +243,109 @@ public with sharing class OrderTriggerStagesHelper{
                 
             }
             
+   }
+    /*************************************************
+    Added by Satish Lokinindi
+    Method Name: orderNumberBasedOnRangeAndModel
+    Description:  This Method is used to update order number based on first positions          
+    Input Parameter:  trigger.new values   
+    ------------------CREATED FOR TESTING PURPOSE------
+    *************************************************/ 
+   public static void orderNumberBasedOnRangeAndModel(list<Order> orderList){
+    //loop over all orders and store the quote ids
+    set<id> qid = new set<id>();
+       for(order o: orderList){
+            qid.add(o.NanaQuote__c);
+       }
+    //string s;
+    //map the quote and model and use them  to request the model manfacturer from custom settings
+    map<string,string> mapQuoteModel = new map<string,string>();
+    //Query the first created model from the set of quote ids and store it in map
+    for(Quote_detail__c qdList : [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN:qid ORDER BY createdDate ASC  limit 1 ]){
+        mapQuoteModel.put(qdList.Quote__c,qdList.model__c);
+    }
+     //if(qdList.size()>0){s = ModelManufacturer__c.getinstance(qdList[0].model__c).Manufacturer__c;}
+       
+       Decimal rd ;
+       Decimal sd ;
+       Decimal td ;
+       Decimal wd ;
+       //query to get the highest ordernumber for that respective manufacturer
+       list<order> ord = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Richmond'  ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+        if(ord.size()>0){rd= ord[0].Order_Number_Default__c;}
+       list<order> ord1 = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Solarlux' ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+         if(ord1.size()>0){sd= ord1[0].Order_Number_Default__c;}
+       list<order> ord2 = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Teuffel' ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+        if(ord2.size()>0){ td= ord2[0].Order_Number_Default__c;}
+       list<order> ord3 = [select id, Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Wizard' ORDER BY Order_Number_Default__c DESC NULLS last limit 1 ];
+        if(ord3.size()>0){ wd= ord3[0].Order_Number_Default__c;}
+    //loop over the orders and assign order number and update the manufacturer on orders
+     for(order oNew: orderList){
+       
+               //check if manufacturing is from richmond and assign ordernumber with incremental value
+               //based  on model get the manufacturer from custom settings
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000)){
+                
+                    oNew.Order_Number_Default__c=rd+1;
+                    oNew.Manufacturing__c='Richmond';
+                     //store incremental value 
+                    rd =oNew.Order_Number_Default__c;
+                }
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')){
+                    oNew.Order_Number_Default__c=40200;
+                    oNew.Manufacturing__c='Richmond';
+                     //store incremental value 
+                    rd =oNew.Order_Number_Default__c;
+
+                }
+                //check if manufacturing is from solarlux and assign ordernumber with incremental value
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux') && (sd >=20000)){
+                
+                    oNew.Manufacturing__c='Solarlux';
+                    oNew.Order_Number_Default__c=sd+1;
+                    //store incremental value 
+                    sd = oNew.Order_Number_Default__c;
+                  
+                }
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux')){
+                    oNew.Order_Number_Default__c=20000;
+                    oNew.Manufacturing__c='Solarlux';
+                     //store incremental value 
+                    sd = oNew.Order_Number_Default__c;
+                }
+                //check if manufacturing is from teuffel and assign ordernumber with incremental value
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Teuffel') && (td>=75000)){
+                
+                   oNew.Manufacturing__c='Teuffel';
+                    oNew.Order_Number_Default__c=td+1;
+                     //store incremental value 
+                    td = oNew.Order_Number_Default__c;
+                  
+                }
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Teuffel')){
+                    oNew.Order_Number_Default__c=75400;
+                    oNew.Manufacturing__c='Teuffel';
+                     //store incremental value 
+                    td = oNew.Order_Number_Default__c;
+                }
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard') && (wd>=90000)){
+                
+                   oNew.Manufacturing__c='Wizard';
+                    oNew.Order_Number_Default__c=wd+1;
+                     //store incremental value 
+                    wd = oNew.Order_Number_Default__c;
+                  
+                }
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard')){
+                    oNew.Order_Number_Default__c=97000;
+                    oNew.Manufacturing__c='Wizard';
+                     //store incremental value 
+                    wd = oNew.Order_Number_Default__c;
+                }
+                
+            
+        }
+
    }
     
 }

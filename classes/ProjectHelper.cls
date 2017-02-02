@@ -196,7 +196,7 @@ public class ProjectHelper {
 
         system.debug('I am here createInfluencerOpportunity');
 
-        map<ID , ID > mapProjectArchitect = new map <ID,ID> ();
+        map<ID , string > mapProjectArchitect = new map <ID,string> ();
         List<opportunity> lstOppInsert = new List <opportunity> () ;
 
         for(Project__c p : lstPro){
@@ -238,11 +238,16 @@ public class ProjectHelper {
 
         List<Opportunity> lstOpps = [SELECT AccountID , ID , Close_Date__c, project_name__c  FROM Opportunity WHERE project_name__c in: mapProjectArchitect.keyset() AND  recordTypeID =: InfluencerRecordTypeID ] ; 
         
-
+        set<ID> setAccountID = new set<ID>() ; 
+        for(Opportunity opp : lstOpps){
+               setAccountID.add(opp.AccountID) ;  
+        }
+        
+       
         for(Opportunity o : lstOpps){
 
-            if(o.AccountID != mapProjectArchitect.get (o.project_name__c)){
-
+            if((!setAccountID.contains(mapProjectArchitect.get(o.project_name__c))) && (UtilityClass.onlyrunOnce == TRUE)) {
+            
             system.debug('I am inside inner if' + lstOpps);
             Opportunity opp = new Opportunity (); 
             opp.project_name__c = o.project_name__c ; 
@@ -253,6 +258,7 @@ public class ProjectHelper {
              opp.recordTypeID = InfluencerRecordTypeID ;
              opp.ForecastCategoryName = 'Pipeline';
             lstOppInsert.add(opp) ; 
+            UtilityClass.onlyRunOnce = FALSE ;
             }
         }
 

@@ -13,6 +13,7 @@ public static Boolean runUpdateResident= true;
 public static Boolean runUpdatePrelims= true;
 public static Boolean doNotRunOnRecTypeChange= true;
 public static Boolean doNotRunonTransfer= true;
+public static Boolean onlyRunOnce= true;
 public static Boolean runOppTrigger= true;
 public static Boolean doNotRun=false;
 public static Boolean firstRun = true ;

@@ -5,30 +5,10 @@ trigger OrderTrigger on Order (before update, after update, after insert) {
     if( trigger.isAfter && trigger.isInsert )
     {
 
-
-    	//do the ridiculous order number thing
-    	/*
-    	Custom_Order_Number__c[] orderNumbers = [SELECT Id, US_Order_Number__c, Canadian_Order_Number__c FROM Custom_Order_Number__c LIMIT 1 FOR UPDATE];
-    	Custom_Order_Number__c con = null;
-    	//if it dont exist, make it. though it shoudl exist. 
-    	if( orderNumbers.size() < 1 )
-    	{
-    		con = new Custom_Order_Number__c();
-    		con.US_Order_Number__c = 1;
-    		con.Canadian_Order_Number__c = 10000;
-    		insert con;
-    	} else 
-    	{
-    		con = orderNumbers[0];
-    	}
-*/
-        // end the ridiculous order number thing
-        
         map<Id, string> ordernumbermap = new map<Id, string>();
         map<Id, Id> orderidmap = new map<Id, Id>();
         list<Id> nanaquoteids = new list<Id>();         
         list<Quote__c> nanaQuotesToUpdate = new list<Quote__c>();
-        list<Order> ordersToUpdate  = new list<Order>();
         for( Order o : trigger.new )
         {
             nanaquoteids.add(o.Nana_Quote_ID__c);
@@ -37,21 +17,7 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
             ordernumbermap.put(o.Nana_Quote_ID__c, o.Hidden_Another_Auto_Number__c);
             orderidmap.put(o.Nana_Quote_ID__c, o.Id);
             
-            //ridicuous order number range thing
-            /*
-            if( o.ShippingCountryCode == 'CA')
-            {
-            	o.Ranged_Order_Number__c = con.Canadian_Order_Number__c;
-            	con.Canadian_Order_Number__c++;
-            } else
-            {
-            	o.Ranged_Order_Number__c = con.US_Order_Number__c;
-            	con.US_Order_Number__c++;
             
-            }
-            
-            ordersToUpdate.add(o);
-            */
         }
         for( Quote__c nq: [SELECT Id, Order_Number__c FROM Quote__c WHERE Id = :nanaquoteids] )
         {
@@ -69,16 +35,6 @@ System.debug('***ORDERTRIGGER:UPDATED!');
         //during data backfill this needs to be disabled 
         if( nanaQuotesToUpdate.size() > 0 )
             update nanaQuotesToUpdate;
-            
- 		// now to do the updates for the ridiculous order range thing
- 		/*
- 		if( ordersToUpdate.size() > 0  )
- 		{
-			update ordersToUpdate;
-			update con;
- 		} 
- 		*/          
-            
             
     } else  if( trigger.isAfter && trigger.isUpdate ) 
     {
@@ -223,7 +179,10 @@ System.debug('***ORDERTRIGGER: In the o loop:  ' + o.Quote_Name__c );
             }
             // end pipeline updates         
             
-            if( o.Order_Finalized_Date__c != null && trigger.oldMap.get(o.Id).Order_Finalized_Date__c == null )
+            if( 
+            	(o.Order_Finalized_Date__c != null && trigger.oldMap.get(o.Id).Order_Finalized_Date__c == null )
+            	|| o.Regenerate_GUUID__c
+            	)
             { //the order finalized date was set
                  
                 //(1) update GUUID
@@ -231,6 +190,7 @@ System.debug('***ORDERTRIGGER: In the o loop:  ' + o.Quote_Name__c );
                 String hex = EncodingUtil.convertToHex(aes);                
                 
                 o.Test_GUID__c = hex;
+                o.Regenerate_GUUID__c = false;
                                 
                 //(2) Tell nana about the GUUID
 System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_Name__c );
@@ -284,15 +244,10 @@ System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_N
     
     } else if( trigger.isBefore && trigger.isInsert )
     {
- 
-    	
         for( Order o : trigger.new )
         {
             //this needs to be commented out for backfill
             o.Status = 'Order Created';
-            
-
-           
         }
     }
     
