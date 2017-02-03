@@ -67,6 +67,7 @@ public with sharing class TestDataUtility {
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '08619';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         conlist.add(con);  
         }
         return conlist ;

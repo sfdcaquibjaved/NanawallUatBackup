@@ -34,6 +34,7 @@ public class testServiceQuotecreationController {
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '08619';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
         Contact con1 = new Contact();
@@ -45,6 +46,7 @@ public class testServiceQuotecreationController {
         con1.MailingstateCode = 'CA';
         con1.MailingPostalCode = '08619';
         con1.MailingCountryCode = 'US';
+        con1.Phone = '(123) 456-7891';
         insert con1;
 
 
@@ -169,6 +171,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '08619';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
         Contact con1 = new Contact();
@@ -180,6 +183,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con1.MailingstateCode = 'CA';
         con1.MailingPostalCode = '08619';
         con1.MailingCountryCode = 'US';
+        con1.Phone = '(123) 456-7892';
         insert con1;
 
 
@@ -302,6 +306,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingCity = 'city';
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
+        con.Phone = '(123) 456-7890';
         con.MailingCountryCode = 'US';
         insert con;
 
@@ -433,6 +438,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingCity = 'city';
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
+        con.Phone = '(123) 456-7890';
         con.MailingCountryCode = 'US';
         insert con;
 
@@ -564,6 +570,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '08619';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         con.Accountid = a.id;
 
         insert con;
@@ -577,6 +584,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con1.MailingstateCode = 'CA';
         con1.MailingPostalCode = '08619';
         con1.MailingCountryCode = 'US';
+        con1.Phone = '(123) 456-7893';
         insert con1;
 
 
@@ -707,6 +715,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -837,6 +846,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -970,6 +980,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
         con.email = 'ab@absyz.com';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1104,6 +1115,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1236,6 +1248,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1367,6 +1380,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1500,6 +1514,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1633,6 +1648,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1767,6 +1783,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
         con.Email = 'aditya.moro@absyz.com';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -1898,6 +1915,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -2032,6 +2050,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
         con.email = 'ab@absyz.com';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 
@@ -2172,6 +2191,7 @@ list<Country_Codes__c> cclist = TestDataUtility.getTestCountryCodes();
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
         con.email = 'ab@absyz.com';
+        con.Phone = '(123) 456-7890';
         insert con;
 
 

@@ -186,14 +186,17 @@ public class InstallationTriggerHandler {
       List<id> AccountList = new List<id>() ;
       List<string> TerritoryList = new List<string>() ;
       List<id> ContactIdList = new List <id>();
-      
-       system.debug('Inside AssignInstaller'); 
+      List<id> newContactIdList = new List <id>();
+      List<String> Accname = new List <String>();
+      Set<String> newAccname = new Set <String>();
+       
+        system.debug('Inside AssignInstaller'); 
       for(Installation__c p : newTrigger ){
             string Projectid = p.Project__c ;
             ProjectIdList.add(Projectid);
         }
         
-        list < project__c > projects = [SELECT id, TerritoryName__c  FROM Project__c WHERE id IN: ProjectIdList Limit 1];
+        list < project__c > projects = [SELECT id, TerritoryName__c, Installer_Account_Assigned__c  FROM Project__c WHERE id IN: ProjectIdList Limit 1];
         system.debug('Inside AssignInstaller projects' +projects); 
         
         if(projects.size() > 0){
@@ -212,8 +215,30 @@ public class InstallationTriggerHandler {
                 AccountList.add(i)  ; 
             }
         }
-        
-        list < contact> con = [SELECT id, Name FROM Contact WHERE AccountId in: AccountList AND Title = 'Certified Nana Installer'  LIMIT 1] ;
+         else{
+            for(project__c p:projects){
+               if (p.Installer_Account_Assigned__c != null){
+                   newAccname.add(p.Installer_Account_Assigned__c);
+               }
+            }
+        }
+        System.debug('Account name'+newAccname);
+       if(newAccname.size() >0){
+         for(String a : newAccname){
+            Accname.add(a);
+         }
+       }
+        list<Contact> conname = [select id, name, AccountId from contact where account.name in: newAccname And Title = 'Certified Nana Installer'  LIMIT 1];
+          if(conname.size() > 0 ){
+            for(contact c : conname){
+                
+                Id i = c.id ; 
+                newContactIdList.add(i);
+            }
+        }
+        list < user > newuserId = [SELECT id , ContactId FROM USER WHERE ContactId IN: newContactIdList Limit 1];
+        System.debug('User is'+newuserId);
+        list < contact> con = [SELECT id, Name, AccountId FROM Contact WHERE AccountId in: AccountList AND Title = 'Certified Nana Installer'  LIMIT 1] ;
         system.debug('Inside AssignInstaller con' +con);
        if(con.size() > 0 ){
             for(contact c : con){
@@ -225,25 +250,41 @@ public class InstallationTriggerHandler {
         
         list < user > userId = [SELECT id , ContactId FROM USER WHERE ContactId IN: ContactIdList Limit 1];
         
-        
-        if((acc.size() >0 ) ){
+        System.debug('Size of name'+Accname);
+        if((Accname.size() >0 ) ){
         for(Installation__c Ins : newTrigger){
+            ins.Installer_Account__c = conname[0].accountid ; 
+         
+        }
+        }
+        else if((acc.size() >0)){
+       for(Installation__c Ins : newTrigger){
             ins.Installer_Account__c = acc[0].id ; 
          
         }
         }
-        if(con.size() > 0){
+        if(conname.size() > 0){
             for(Installation__c Ins : newTrigger) {
+                  ins.Installer_Contact__c = conname[0].id ;
+            }
+        }
+        else if(con.size() > 0){
+              for(Installation__c Ins : newTrigger) {
                   ins.Installer_Contact__c = con[0].id ;
             }
         }
-        if(userId.size()>0){
+        if(newuserId.size()>0){
             for(Installation__c Ins : newTrigger){
-                ins.Assigned_to__c = userId[0].id ;
+                ins.Assigned_to__c = newuserId[0].id ;
                 ins.OwnerId = ins.Assigned_to__c ;
             }
         }
-    
+    else if(userId.size()>0){
+        for(Installation__c Ins : newTrigger){
+                ins.Assigned_to__c = userId[0].id ;
+                ins.OwnerId = ins.Assigned_to__c ;
+            }
+    }
         
     }
     
