@@ -232,8 +232,8 @@ public class InstallationTriggerHandler {
           if(conname.size() > 0 ){
             for(contact c : conname){
                 
-                Id i = c.id ; 
-                newContactIdList.add(i);
+               // Id i = c.id ; 
+                newContactIdList.add(c.id);
             }
         }
         list < user > newuserId = [SELECT id , ContactId FROM USER WHERE ContactId IN: newContactIdList Limit 1];
