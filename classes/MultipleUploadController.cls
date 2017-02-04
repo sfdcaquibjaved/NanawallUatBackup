@@ -15,7 +15,7 @@ public class MultipleUploadController
         allFileList = new List<Attachment>() ;
         
         //Adding values count list - you can change this according to your need
-        for(Integer i = 1 ; i < 11 ; i++)
+        for(Integer i = 0 ; i < 11 ; i++)
             filesCountList.add(new SelectOption(''+i , ''+i)) ;
     }
     
