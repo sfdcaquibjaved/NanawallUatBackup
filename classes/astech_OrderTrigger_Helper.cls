@@ -10,14 +10,14 @@ public with sharing class astech_OrderTrigger_Helper {
 	
 	
 			//assign the order fields
+			system.debug('Order acount =  ' + q.Opportunity.AccountId);
 			o.AccountId = q.Opportunity.AccountId;
-			o.EffectiveDate = date.today();
 			o.Pricebook2Id = q.Pricebook2Id;
-			o.BillingStreet = q.Account.BillingStreet;
-			o.BillingCity = q.Account.BillingCity;
-			o.BillingState = q.Account.BillingState;
-			o.BillingPostalCode = q.Account.BillingPostalCode;
-			o.BillingCountry = q.Account.BillingCountry;
+			o.BillingStreet = q.Opportunity.Account.BillingStreet;
+			o.BillingCity = q.Opportunity.Account.BillingCity;
+			o.BillingState = q.Opportunity.Account.BillingState; 
+			o.BillingPostalCode = q.Opportunity.Account.BillingPostalCode;
+			o.BillingCountry = q.Opportunity.Account.BillingCountry;
 			o.ShippingStreet =  ( q.Shipping_Address__c != null ? q.Shipping_Address__c : '' ) + ( q.Shipping_Address_2__c != null? '\n' + q.Shipping_Address_2__c : '');
 			o.ShippingCity = q.Shipping_City__c;
 			o.ShippingStateCode = q.Shipping_State__c;
@@ -41,8 +41,8 @@ public with sharing class astech_OrderTrigger_Helper {
 			o.Canada_Tax_Label__c = q.Canada_Tax_Label__c;
 			o.Ship_Label__c = q.Ship_Label__c;
 			o.Bill_to_Contact__c = q.ContactId;
-			o.Status = 'Order Created'; //or Draft
-			o.OpportunityId = q.OpportunityId;
+			o.Status = 'Draft'; //or Order Created
+			o.OpportunityId = q.OpportunityId;			
 			o.QuoteId = q.Id;		
 			
 			
@@ -69,7 +69,7 @@ public with sharing class astech_OrderTrigger_Helper {
 		
 		if( oldOrdersToUpdate.size() > 0  )
 			update oldOrdersToUpdate;
-
+system.debug('astech_OrderTrigger_Helper: finished before insert ...');
 		return;
 	}
  
@@ -85,7 +85,7 @@ public with sharing class astech_OrderTrigger_Helper {
 			QuoteId_To_Order_Map.put( o.QuoteId, o);
 		}
 		map< id, list<QuoteLineItem> > Order_QuoteLineMap = new map<Id, list<QuoteLineItem> >();
-		for( QuoteLineItem qLineItem : [ SELECT Id FROM QuoteLineItem WHERE QuoteID = :QuoteIds] )
+		for( QuoteLineItem qLineItem : [ SELECT ActiveSide_Description__c,ActiveSide_Notes__c,ActiveSide__c,Aluminum_Description__c,Aluminum_Lookup_Price__c,Aluminum_Notes__c,Aluminum_Quoted_Price__c,Aluminum__c,AngleChanges_Description__c,AngleChanges_Lookup_Price__c,AngleChanges_Notes__c,AngleChanges_Quoted_Price__c,AngleChanges__c,Base_Lookup_Price__c,Base_Quoted_Price__c,BottomRail_Description__c,BottomRail_Notes__c,BottomRail__c,CEROType_Description__c,CEROType_Notes__c,CEROType__c,Code__c,CornerFinish_Description__c,CornerFinish_Notes__c,CornerFinish__c,CreatedById,CreatedDate,CustodialHardware_Description__c,CustodialHardware_Lookup_Price__c,CustodialHardware_Notes__c,CustodialHardware_Quoted_Price__c,CustodialHardware__c,Description,Direction_Description__c,Direction_Notes__c,Direction__c,Discount,Discount__c,Extended_SubTotal__c,Florida_Approved__c,FoldFlat_Description__c,FoldFlat_Notes__c,FoldFlat__c,GlazingDesignation_Description__c,GlazingDesignation_Notes__c,GlazingDesignation__c,Glazing_Lookup_Price__c,Glazing_Notes__c,Glazing_Quoted_Price__c,Glazing__c,HandleFinish_Description__c,HandleFinish_Notes__c,HandleFinish__c,HardwareColor_Description__c,HardwareColor_Notes__c,HardwareColor__c,HardwareHeight_Description__c,HardwareHeight_Notes__c,HardwareHeight__c,Hardware_Description__c,Hardware_Lookup_Price__c,Hardware_Notes__c,Hardware_Quoted_Price__c,Hardware__c,Height_Denominator__c,Height_Feet__c,Height_Inches__c,Height_MM__c,Height_Numerator__c,HingeFinish_Description__c,HingeFinish_Notes__c,HingeFinish__c,HingePin_Description__c,HingePin_Notes__c,HingePin__c,HingeType_Description__c,HingeType_Notes__c,HingeType__c,Id,IncorpSwingDoor_Description__c,IncorpSwingDoor_Lookup_Price__c,IncorpSwingDoor_Notes__c,IncorpSwingDoor_Quoted_Price__c,IncorpSwingDoor__c,IsDeleted,Kickplate_Description__c,Kickplate_Lookup_Price__c,Kickplate_Notes__c,Kickplate_Quoted_Price__c,Kickplate__c,LastModifiedById,LastModifiedDate,LeftStack_Description__c,LeftStack_Notes__c,LeftStack__c,LineNumber,ListPrice,Lites_Description__c,Lites_Lookup_Price__c,Lites_Notes__c,Lites_Quoted_Price__c,Lites__c,Mounting_Description__c,Mounting_Notes__c,Mounting__c,Nana_ID__c,NFRC__c,Panels__c,ParkingBay_Description__c,ParkingBay_Lookup_Price__c,ParkingBay_Notes__c,ParkingBay_Quoted_Price__c,ParkingBay__c,Position_Subtotal__c,Position__c,PricebookEntryId,Product2Id,Quantity,QuoteId,ReinforcedLocking_Description__c,ReinforcedLocking_Lookup_Price__c,ReinforcedLocking_Notes__c,ReinforcedLocking_Quoted_Price__c,ReinforcedLocking__c,RightStack_Description__c,RightStack_Notes__c,RightStack__c,ScreenFinish_Description__c,ScreenFinish_Notes__c,ScreenFinish__c,ScreenOneConfiguration_Description__c,ScreenOneConfiguration_Notes__c,ScreenOneConfiguration__c,ScreenOneFinish_Description__c,ScreenOneFinish_Notes__c,ScreenOneFinish__c,ScreenOneMesh_Description__c,ScreenOneMesh_Notes__c,ScreenOneMesh__c,ScreenOneNumber_Description__c,ScreenOneNumber_Notes__c,ScreenOneNumber__c,ScreenType_Description__c,ScreenType_Lookup_Price__c,ScreenType_Notes__c,ScreenType_Quoted_Price__c,ScreenType__c,Screen_Description__c,Screen_Notes__c,Screen__c,ServiceDate,SHGC_Label__c,SillColor_Description__c,SillColor_Notes__c,SillColor__c,Sill_Description__c,Sill_Lookup_Price__c,Sill_Notes__c,Sill_Quoted_Price__c,Sill__c,SlidingPanel_Description__c,SlidingPanel_Notes__c,SlidingPanel__c,Socket_Description__c,Socket_Notes__c,Socket__c,SortOrder,SpacerBar_Description__c,SpacerBar_Notes__c,SpacerBar__c,StackingDirection_Description__c,StackingDirection_Notes__c,StackingDirection__c,Stile_Description__c,Stile_Lookup_Price__c,Stile_Notes__c,Stile_Quoted_Price__c,Stile__c,Subtotal,SwingDoorHinge_Description__c,SwingDoorHinge_Notes__c,SwingDoorHinge__c,SwingPanelWidth_Description__c,SwingPanelWidth_Notes__c,SwingPanelWidth__c,SwingPanel_Description__c,SwingPanel_Notes__c,SwingPanel__c,SystemModstamp,TotalPrice,UnitPrice,Units__c,Unit_Base_Price__c,Unit_Subtotal__c,UValue_Label__c,Weight__c,Width_Denominator__c,Width_Feet__c,Width_Inches__c,Width_MM__c,Width_Numerator__c,WoodFinish_Description__c,WoodFinish_Lookup_Price__c,WoodFinish_Notes__c,WoodFinish_Quoted_Price__c,WoodFinish__c,Wood_Description__c,Wood_Lookup_Price__c,Wood_Notes__c,Wood_Quoted_Price__c,Wood__c FROM QuoteLineItem WHERE QuoteID = :QuoteIds] )
 		{
 			Order o = QuoteId_To_Order_Map.get( qLineItem.QuoteID);
 			if( !Order_QuoteLineMap.containsKey(o.Id) )
@@ -317,6 +317,9 @@ public with sharing class astech_OrderTrigger_Helper {
 			Order o = QuoteId_To_Order_Map.get( q.Id );
 			q.Order__c = o.Id;
 			q.Order_Generated__c = true;
+	        q.Ordered__c = true;
+	        q.Order_Created__c = true;
+			
 			quotesToUpdate.add( q );
 		}
 		
@@ -327,6 +330,8 @@ public with sharing class astech_OrderTrigger_Helper {
 		
 		if( quotesToUpdate.size() > 0 )
 			update quotesToUpdate;
-		
+
+system.debug('astech_OrderTrigger_Helper: finished after insert ...');
+
 	}    
 }

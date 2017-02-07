@@ -917,6 +917,8 @@ public class OpportunityHelper {
     Input Parameter: Set of ProjectId's       
     *******************************************************************************************************************/
     public static void UpdateERDDate(set<Id> projId){
+        if(UtilityClass.doNotRunTwiceOfERDCode==true){
+        UtilityClass.doNotRunTwiceOfERDCode=false;
         list<project__c> plist = new list<Project__c>();
         map<ID, DATE> oppMap= new map<ID, DATE>();
         map<ID, String> oppMap2 = new map<ID, String>();
@@ -963,7 +965,7 @@ public class OpportunityHelper {
             
         }
         update plist;
-        
+        }
         }
         
          /******************************************************************************************************************

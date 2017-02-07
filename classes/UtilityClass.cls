@@ -6,6 +6,9 @@ Created Date: 27thMarch,2014
 ************************************/
 global with sharing class UtilityClass {
 
+public static Boolean doNotRunOnConverstionOfLead = true;
+public static Boolean doNotRunTwiceOfERDCode =true;
+public static Boolean doNotRunTwiceContactOwnerAssignmt =true;
 public static Boolean updateFromQuoteTrigger = false;
 public static Boolean updateFromInfluencer = false;
 public static Boolean runUpdateCorpAcc= true;

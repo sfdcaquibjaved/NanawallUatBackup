@@ -9,8 +9,9 @@ list<Contact> lstContacts= new list<Contact>();
          lstContacts.add(conRec);
        }}}
      }
-      if(lstContacts!=null && lstContacts.size()>0){
+      if(lstContacts!=null && lstContacts.size()>0 &&UtilityClass.doNotRunTwiceContactOwnerAssignmt == true){
          contactOwnerAssignment.assignOwner(lstContacts);
+         UtilityClass.doNotRunTwiceContactOwnerAssignmt = false;
       }
       
       

@@ -17,7 +17,7 @@ trigger OrderItemTrigger on OrderItem (after insert) {
 	}
 	
 	map<Id,  list<Manufacturing_Order__c>> existingWorkOrders = new map< Id, list<Manufacturing_Order__c>>();
-	for( Manufacturing_Order__c wo : [SELECT Id FROM Manufacturing_Order__c WHERE Order__c = :orderids ] )
+	for( Manufacturing_Order__c wo : [SELECT Id, Order__c FROM Manufacturing_Order__c WHERE Order__c = :orderids ] )
 	{
 		if( !existingWorkOrders.containsKey(wo.Order__c) )
 		{
@@ -312,9 +312,10 @@ system.debug('using Solarlux record type ' + recordTypes.get('Solarlux') );
 				
 				workorderlineitemstocreate.add(newlineitem);	
 				
-			}
+			} 
 		}			 
 
+/* this was causing exception during the port ;; need to rewrite 
 		if( mfoTypes.keySet().size() > 0 ) 
 		{
 			list<Order> orderUpdates = new list<Order>();
@@ -328,7 +329,7 @@ system.debug('using Solarlux record type ' + recordTypes.get('Solarlux') );
 				update orderUpdates;
 
 		}
-			
+*/			
 			
 			
 			

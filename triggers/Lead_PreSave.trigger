@@ -1,5 +1,5 @@
 trigger Lead_PreSave on Lead (before insert, before update, after insert, after update) {
-  
+  if(UtilityClass.doNotRunOnConverstionOfLead = true){
   /*  trigger purpose
         cleans up invalid phone formats;  
         
@@ -107,5 +107,6 @@ trigger Lead_PreSave on Lead (before insert, before update, after insert, after 
     
     if( emailsToChangeOnEloqua.size() > 0 )
         Async_WebServiceCaller.ChangeEloquaEmailAddress(emailsToChangeOnEloqua);
+  }
   }
 }

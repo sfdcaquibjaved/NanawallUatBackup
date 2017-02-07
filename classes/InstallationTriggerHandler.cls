@@ -228,7 +228,7 @@ public class InstallationTriggerHandler {
             Accname.add(a);
          }
        }
-        list<Contact> conname = [select id, name, AccountId from contact where account.name in: newAccname And Title = 'Certified Nana Installer'  LIMIT 1];
+        list<Contact> conname = [select id, name, AccountId from contact where account.name in: Accname And Title = 'Certified Nana Installer'  LIMIT 1];
           if(conname.size() > 0 ){
             for(contact c : conname){
                 
@@ -341,6 +341,8 @@ public class InstallationTriggerHandler {
          List<Installation__Share> ShareInstallation = new List<Installation__Share>();
            List<OpportunityShare> OppToShare = new List<OpportunityShare>();
          List<CaseShare> ShareCase = new List<CaseShare>();
+         List<OrderShare> OrderToShare = new List<OrderShare> () ;
+         List<ContactShare> ContactToShare = new List<ContactShare> () ; 
          
          for (Installation__c ins : newTrigger) {
              //To share Account
@@ -383,6 +385,28 @@ public class InstallationTriggerHandler {
                  ShareInstallation.add(InsShare);
              } */
              
+              // To share Order
+              if((ins.Order__c != null)&& (ins.Assigned_to__c != null)){
+                 OrderShare shareOrder = new OrderShare ();
+                shareOrder.OrderAccessLevel = 'Read';
+                 shareOrder.OrderID = Ins.Order__c ; 
+                 shareOrder.UserOrGroupId = ins.Assigned_to__c;
+                 
+                 OrderToShare.add(shareOrder); 
+             } 
+             
+               // To share Contact
+          /*    if((ins.Contact__c != null)&& (ins.Assigned_to__c != null)){
+                 ContactShare shareContact = new ContactShare ();
+                shareContact.ContactAccessLevel = 'Read';
+                 shareContact.ContactID = Ins.Contact__c ; 
+                 shareContact.UserOrGroupId = ins.Assigned_to__c;
+                 
+                 ContactToShare.add(shareContact); 
+             } */
+             
+             
+             
              // To share Quote 
 
             
@@ -395,6 +419,9 @@ public class InstallationTriggerHandler {
                  OppToShare.add(OppShare);
              }          
          }
+         
+          if (!OrderToShare.isEmpty())
+                      insert OrderToShare;
          
          // do the DML to create shares
              if (!sharesToCreate.isEmpty())
