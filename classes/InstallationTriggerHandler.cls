@@ -182,110 +182,35 @@ public class InstallationTriggerHandler {
     public static void AssignInstaller(List < Installation__c > newTrigger)
     {
         
-      List<id> ProjectIdList = new List<id>() ;  
-      List<id> AccountList = new List<id>() ;
-      List<string> TerritoryList = new List<string>() ;
-      List<id> ContactIdList = new List <id>();
-      List<id> newContactIdList = new List <id>();
-      List<String> Accname = new List <String>();
-      Set<String> newAccname = new Set <String>();
-       
-        system.debug('Inside AssignInstaller'); 
-      for(Installation__c p : newTrigger ){
-            string Projectid = p.Project__c ;
-            ProjectIdList.add(Projectid);
-        }
+        set <string> setTerritory = new set<string>() ; 
         
-        list < project__c > projects = [SELECT id, TerritoryName__c, Installer_Account_Assigned__c  FROM Project__c WHERE id IN: ProjectIdList Limit 1];
-        system.debug('Inside AssignInstaller projects' +projects); 
-        
-        if(projects.size() > 0){
-        for(project__c p  : projects){
-            string Territory = p.TerritoryName__c ; 
-            TerritoryList.add(Territory);
-            
+
+        for(Installation__C i : newTrigger){
+                 setTerritory.add(i.Territory__c);
         }
-        }
-        
-        list < account> acc = [SELECT id , Territory__c FROM Account WHERE Territory__c IN: TerritoryList AND Certified_Installer__c = TRUE AND IsPartner = TRUE LIMIT 1] ; 
-        system.debug('Inside AssignInstaller acc' +acc); 
-        if(acc.size()>0){
-            for(account a : acc ){
-                id i = a.id ;
-                AccountList.add(i)  ; 
+
+        List<Zip_Codes_Master__c> zipCodeList = [SELECT id , Territory__c , Installer_Contact__c , Installer_Account__c , Installer_User__c FROM Zip_Codes_Master__c WHERE Territory__c in: setTerritory ];
+
+
+        for(Installation__c i : newTrigger){
+            if(zipCodeList.size() > 0){
+                for(Zip_Codes_Master__c zip : zipCodeList){
+                    if((i.Territory__c == zip.Territory__c)&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
+                            if(zip.Installer_Contact__c != null){
+                                    i.Installer_Contact__c = zip.Installer_Contact__c ; 
+                            }
+                            if(zip.Installer_Account__c != null){
+                                    i.Installer_Account__c = zip.Installer_Account__c ;
+                            }
+                            if(zip.Installer_User__c != null){
+                                    i.Assigned_to__c = zip.Installer_User__c ;
+                                    i.OwnerID = zip.Installer_User__c ;
+                            }
+                }
             }
         }
-         else{
-            for(project__c p:projects){
-               if (p.Installer_Account_Assigned__c != null){
-                   newAccname.add(p.Installer_Account_Assigned__c);
-               }
-            }
         }
-        System.debug('Account name'+newAccname);
-       if(newAccname.size() >0){
-         for(String a : newAccname){
-            Accname.add(a);
-         }
-       }
-        list<Contact> conname = [select id, name, AccountId from contact where account.name in: Accname And Title = 'Certified Nana Installer'  LIMIT 1];
-          if(conname.size() > 0 ){
-            for(contact c : conname){
-                
-               // Id i = c.id ; 
-                newContactIdList.add(c.id);
-            }
-        }
-        list < user > newuserId = [SELECT id , ContactId FROM USER WHERE ContactId IN: newContactIdList Limit 1];
-        System.debug('User is'+newuserId);
-        list < contact> con = [SELECT id, Name, AccountId FROM Contact WHERE AccountId in: AccountList AND Title = 'Certified Nana Installer'  LIMIT 1] ;
-        system.debug('Inside AssignInstaller con' +con);
-       if(con.size() > 0 ){
-            for(contact c : con){
-                
-                Id i = c.id ; 
-                ContactIdList.add(i);
-            }
-        }
-        
-        list < user > userId = [SELECT id , ContactId FROM USER WHERE ContactId IN: ContactIdList Limit 1];
-        
-        System.debug('Size of name'+Accname);
-        if((Accname.size() >0 ) ){
-        for(Installation__c Ins : newTrigger){
-            ins.Installer_Account__c = conname[0].accountid ; 
-         
-        }
-        }
-        else if((acc.size() >0)){
-       for(Installation__c Ins : newTrigger){
-            ins.Installer_Account__c = acc[0].id ; 
-         
-        }
-        }
-        if(conname.size() > 0){
-            for(Installation__c Ins : newTrigger) {
-                  ins.Installer_Contact__c = conname[0].id ;
-            }
-        }
-        else if(con.size() > 0){
-              for(Installation__c Ins : newTrigger) {
-                  ins.Installer_Contact__c = con[0].id ;
-            }
-        }
-        if(newuserId.size()>0){
-            for(Installation__c Ins : newTrigger){
-                ins.Assigned_to__c = newuserId[0].id ;
-                ins.OwnerId = ins.Assigned_to__c ;
-            }
-        }
-    else if(userId.size()>0){
-        for(Installation__c Ins : newTrigger){
-                ins.Assigned_to__c = userId[0].id ;
-                ins.OwnerId = ins.Assigned_to__c ;
-            }
-    }
-        
+
     }
     
     
@@ -298,7 +223,7 @@ public class InstallationTriggerHandler {
              Created Date: August 2016
              */
     
-    public static void updateInstallerUser(List < Installation__c > newTrigger) {
+   /* public static void updateInstallerUser(List < Installation__c > newTrigger) {
         List<id> EmailAddress = new List<id>() ; 
       
         for(Installation__c s : newTrigger ){
@@ -324,7 +249,7 @@ public class InstallationTriggerHandler {
         }
        
         
-    }
+    } */
     
     /*
              Method Name: manualShareRead

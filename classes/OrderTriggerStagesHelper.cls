@@ -256,14 +256,68 @@ public with sharing class OrderTriggerStagesHelper{
     set<id> qid = new set<id>();
        for(order o: orderList){
             qid.add(o.NanaQuote__c);
+            
        }
     //string s;
     //map the quote and model and use them  to request the model manfacturer from custom settings
     map<string,string> mapQuoteModel = new map<string,string>();
     //Query the first created model from the set of quote ids and store it in map
-    for(Quote_detail__c qdList : [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN:qid ORDER BY createdDate ASC  limit 1 ]){
-        mapQuoteModel.put(qdList.Quote__c,qdList.model__c);
-    }
+     list<Quote_detail__c> qdlistAll = [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN:qid ORDER BY createdDate ASC]; 
+     
+     for(order o: orderList){ 
+     decimal x=0;
+     decimal c=0;
+     decimal count=0; 
+     decimal count2=0; 
+     string sModel;
+     string s2Model;
+     string sQuote;
+     
+     boolean f =true;
+        for(Quote_detail__c qdList : qdlistAll){
+        
+        
+            if(qdList.Quote__c==o.NanaQuote__c){
+            count=count+1;
+                if(!qdList.model__c.contains('Screen')){  
+                        c=c+1;
+                        count2=count2+1; 
+                        if(c==1){
+                        //mapQuoteModel.put(qdList.Quote__c,qdList.model__c); 
+                        sModel=qdList.model__c;
+                        sQuote=qdList.Quote__c;
+                        
+                         f=false;     
+                        }                                                    
+                }
+                    else{
+                    x=x+1;
+                    count2=count2+1;
+                        if(c==0 && x==1){
+                         s2Model=qdList.model__c;
+                         sQuote =qdList.Quote__c;
+                        }
+                    
+                    }
+            }
+             
+           
+            
+        }
+            if((count>0)==(count2>0)){
+            if(f==false){
+            mapQuoteModel.put(sQuote,sModel);
+            system.debug(mapQuoteModel);
+            }
+            else if((c==0)&& (x > 0)){
+            mapQuoteModel.put(sQuote,s2Model);
+             system.debug(mapQuoteModel);
+            }
+            } 
+            
+        
+    }   
+       
      //if(qdList.size()>0){s = ModelManufacturer__c.getinstance(qdList[0].model__c).Manufacturer__c;}
        
        Decimal rd ;
@@ -281,10 +335,11 @@ public with sharing class OrderTriggerStagesHelper{
         if(ord3.size()>0){ wd= ord3[0].Order_Number_Default__c;}
     //loop over the orders and assign order number and update the manufacturer on orders
      for(order oNew: orderList){
-       
+       system.debug(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)));
+       system.debug(mapQuoteModel.get(string.valueof(oNew.NanaQuote__c)));
                //check if manufacturing is from richmond and assign ordernumber with incremental value
                //based  on model get the manufacturer from custom settings
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000)){
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(string.valueof(oNew.NanaQuote__c))).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000)){
                 
                     oNew.Order_Number_Default__c=rd+1;
                     oNew.Manufacturing__c='Richmond';

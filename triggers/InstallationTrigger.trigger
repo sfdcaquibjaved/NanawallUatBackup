@@ -17,12 +17,12 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
         List < Installation__c > InstallationUserList = new List < Installation__c > ();
 
         for (installation__c i: trigger.new) {
-            if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
+            /**if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
                     .Installer_Contact__c != i.Installer_Contact__c)))) {
                 InstallationUserList.add(i);
 
 
-            }
+            }   */
 
             if (((trigger.isUpdate) && (trigger.isBefore)) && (trigger.oldMap.get(i.ID)
                     .Installation_Date__c == null) && (i.Installation_Date__c != null) && (i.RecordTypeId == label.Pre_Site_Visit_Record_ID)) {
@@ -31,11 +31,11 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
 
         }
         //for assigning installer user 
-        if (InstallationUserList.size() > 0) {
-            InstallationTriggerHandler.updateInstallerUser(InstallationUserList);
+      /*  if (InstallationUserList.size() > 0) {
+          //  InstallationTriggerHandler.updateInstallerUser(InstallationUserList);
             system.debug('DML 2' + Limits.getDMLStatements());
             system.debug('SOQL 2' + Limits.getQueries());
-        }
+        } */
     }
 
 
@@ -70,8 +70,8 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
         List < Installation__c > InstallationAccountList = new List < Installation__c > ();
         for (installation__c i: trigger.new) {
             if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
-                    .Project__c != i.Project__c)))) {
-                InstallationAccountList.add(i);
+                    .Project__c != i.Project__c)))|| (trigger.isUpdate && (trigger.oldMap.get(i.ID).Installer_Contact__c != i.Installer_Contact__c))){
+                              InstallationAccountList.add(i);
 
 
             }
