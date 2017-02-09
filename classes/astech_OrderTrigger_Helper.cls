@@ -95,12 +95,13 @@ system.debug('astech_OrderTrigger_Helper: finished before insert ...');
 			
 			Order_QuoteLineMap.get( o.Id).add( qLineItem );
 		}
-		
+
 		/* now create the list of order line items */
 		list<OrderItem> newOrderItems = new list<OrderItem>();
 		
 		for( Order o : orders )
 		{
+system.debug('**ASTECH Order ' + o.Id + ' has ' +  Order_QuoteLineMap.get(o.Id).size() + ' line item'  );
 			for( QuoteLineItem qLineItem : Order_QuoteLineMap.get(o.Id) )
 			{
 				OrderItem oi = new OrderItem();
@@ -308,20 +309,35 @@ system.debug('astech_OrderTrigger_Helper: finished before insert ...');
 				newOrderItems.add( oi );
 			}
 		}
-		
+System.debug('**ASTECH: total items to insert: ' +newOrderItems.size() );		
 		
 		//look up the quote to update 
 		list<Quote> quotesToUpdate = new list<Quote>();
-		for (Quote q : [SELECT Id, Order__c FROM Quote WHERE Id = :QuoteIds ] )
+		map< Id, Id> nanaQuoteToOrderIDLookup = new map<Id,Id>();
+		list<Quote__c> nanaQuotesToUpdate = new list<Quote__c>();
+		list<Id> nanaQuoteIDs = new list<Id>();
+		for (Quote q : [SELECT Id, Order__c, Nana_Quote__c FROM Quote WHERE Id = :QuoteIds ] )
 		{
 			Order o = QuoteId_To_Order_Map.get( q.Id );
 			q.Order__c = o.Id;
 			q.Order_Generated__c = true;
 	        q.Ordered__c = true;
 	        q.Order_Created__c = true;
+	        nanaQuoteIDs.add( q.Nana_Quote__c);
+	        nanaQuoteToOrderIDLookup.put( q.Nana_Quote__c, o.Id );
 			
 			quotesToUpdate.add( q );
+system.debug( '**ASTECH: Fixing up quote '+ q.Id +' order flags. ');			
 		}
+		
+		//look up the NANA quotes to update
+		for (Quote__c q : [SELECT Id, Order__c  FROM Quote__c WHERE Id = :nanaQuoteIDs ] )
+		{
+system.debug( '**ASTECH: setting quote__c '+ q.Id +' Order__c = ' + nanaQuoteToOrderIDLookup.get(q.Id) );			
+			q.Order__c = nanaQuoteToOrderIDLookup.get(q.Id);
+			nanaQuotesToUpdate.add( q );
+		}
+		
 		
 		
 		//now insert/update the objects
@@ -330,6 +346,8 @@ system.debug('astech_OrderTrigger_Helper: finished before insert ...');
 		
 		if( quotesToUpdate.size() > 0 )
 			update quotesToUpdate;
+		if ( nanaQuotesToUpdate.size() > 0 )
+			update nanaQuotesToUpdate;
 
 system.debug('astech_OrderTrigger_Helper: finished after insert ...');
 
