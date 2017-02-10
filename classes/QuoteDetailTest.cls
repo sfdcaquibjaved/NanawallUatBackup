@@ -84,25 +84,25 @@ public class QuoteDetailTest {
         QuoteDetailList[1].Model__C='CERO';
         QuoteDetailList[1].Discount__c=10;
         insert QuoteDetailList[1];
-        test.starttest();
-        QuoteDetailList[1].Price__c=1235;
+        //test.starttest();
+        /*QuoteDetailList[1].Price__c=1235;
         QuoteDetailList[1].Discount__c=10;
-        update QuoteDetailList[1];
+        update QuoteDetailList[1];*/
 
        // QuoteDetailList[1].Model__C='HSW 50';
                
-        delete QuoteDetailList[1];
+       // delete QuoteDetailList[1];
         
-        QuoteDetailList[2].Quote__C=QuoteList[0].id;
+        /*QuoteDetailList[2].Quote__C=QuoteList[0].id;
         QuoteDetailList[2].Model__C='HSW 50';
         //QuoteDetailList[3].Price__c=1235;
         //QuoteDetailList[4].Price__c=56708;
         insert QuoteDetailList[2];
         
         QuoteDetailList[2].Model__C='CERO';
-        update QuoteDetailList[2];
+        update QuoteDetailList[2];*/
        
-        test.stoptest();
+        //test.stoptest();
                            
        
         

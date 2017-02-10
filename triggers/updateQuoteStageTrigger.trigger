@@ -44,15 +44,16 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
       set< ID > newOrderID = new set <ID > () ;
     if((trigger.isUpdate && trigger.isAfter) || ((trigger.isInsert)&&(trigger.isAfter)) ){
         for(Order o : trigger.new){
-            if((((trigger.isUpdate && trigger.isAfter) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c !=o.Order_Finalized_Date__c) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c == null) ) || ((trigger.isInsert)&&(trigger.isAfter)&&(o.Order_Finalized_Date__c != null))) && (o.Order_Finalized_Date__c.year() > 2016)){
+            if((o.Order_Finalized_Date__c != null) && (o.Order_Finalized_Date__c.year() > 2016)){
+            if((((trigger.isUpdate && trigger.isAfter) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c !=o.Order_Finalized_Date__c) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c == null) ) || ((trigger.isInsert)&&(trigger.isAfter)&&(o.Order_Finalized_Date__c != null))) ){
                 OrderList = Trigger.newMap.values();
                 system.debug('Inside After update');
             }
-            if(((trigger.isUpdate && trigger.isAfter) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c != null) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c != o.Order_Finalized_Date__c )  )&& (o.Order_Finalized_Date__c.year() > 2016)){
+            if(((trigger.isUpdate && trigger.isAfter) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c != null) && (trigger.oldMap.get(o.ID).Order_Finalized_Date__c != o.Order_Finalized_Date__c )  )){
                 updateInstallationList = Trigger.newMap.values();
                 newOrderID = Trigger.newMap.keyset();
             }
-            
+            }
         }
         if(OrderList.size() > 0 ){
         //trigger this method to create installation if order finalized date is changed from null
