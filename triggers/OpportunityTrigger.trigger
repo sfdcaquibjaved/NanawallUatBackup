@@ -13,8 +13,6 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
    /*if(!Org_Default_Settings__c.getInstance().OpportunityTrigger__c){
      return;
    }*/
-   if(Limits.getQueries()<50){
-   System.debug('I am here with Limit in opportunity'+Limits.getQueries());
     if(!projectStageUpdate.skipOppTrigger){
         //Declaration of Collections and Variables
         Set<Id> projIds = new Set<Id>();
@@ -249,12 +247,10 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
                     if(trigger.isInsert )
                     {
                     setProjIdsForFc.add(opp.project_name__c);
-                    if(opp.RecordTypeID != label.Influencer_Opportunity_RecordTypeId ){}
                     setProjIdsForERD.add(opp.project_name__c);
                     }
                  
-                    if((trigger.isUpdate && Trigger.oldMap.get(opp.id).CloseDate!=opp.CloseDate) && (opp.RecordTypeID != label.Influencer_Opportunity_RecordTypeId))
-
+                    if(trigger.isUpdate && Trigger.oldMap.get(opp.id).CloseDate!=opp.CloseDate)
                     {
                     setProjIdsForERDUpdate.add(opp.project_name__c);             
                     }
@@ -304,7 +300,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
              
             if (trigger.isDelete){
                 for (opportunity oppDel : trigger.old){
-                    if((oppDel.project_name__c != null) && (oppDel.RecordTypeID != label.Influencer_Opportunity_RecordTypeId )){
+                    if(oppDel.project_name__c != null){
                         setOppDelProj.add(oppDel.project_name__c);
                         setProjIdsForERDDelete.add(oppDel.project_name__c);  
                     }
@@ -336,7 +332,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
               if(setProjIdsForFc.size()>0 && trigger.isInsert){
                 opportunityHelper.opportunityCountFC(setProjIdsForFc);
               }
-              if(setProjIdsForERD.size()>0 && trigger.isInsert) {
+              if(setProjIdsForERD.size()>0 && trigger.isInsert){
                 OpportunityHelper.UpdateERDDate(setProjIdsForERD);
               }
           
@@ -363,7 +359,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
        if(trigger.isAfter && (trigger.isInsert || trigger.isUpdate)){
            for(Opportunity opp :[SELECT id,RecordTypeID,StageName FROM Opportunity WHERE Id IN :Trigger.Newmap.keyset()]){
                if(trigger.isAfter && (trigger.isInsert || (trigger.isUpdate && (trigger.oldmap.get(opp.id).RecordTypeID != opp.RecordTypeID) &&  (opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId) ))){
-                    if((opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId) && (opp.StageName!= 'Budget Quote - Requested') && (opp.StageName!= 'Budget Quote - Provided') && (opp.StageName!= 'Drawings - Requested')){
+                    if(opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId && opp.StageName!= 'Budget Quote - Requested' && opp.StageName!= 'Budget Quote - Provided' ){
                         opp.StageName = 'Drawings - Requested';
                         UpdateOppList.add(opp);
                     }
@@ -487,25 +483,6 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
     {
         List<Opportunity> lstNewOpp = Trigger.new;
         Map<Id,Opportunity> mapOldOpp = Trigger.oldMap;
-       
-        //for adding architect account on related project
-
-        List<Opportunity> lstOpp = new List<opportunity> ();
-
-        for(Opportunity opp : Trigger.new){
-            system.debug('Inside trigger for') ; 
-            if(opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId){
-                system.debug('Inside trigger if') ;  
-                lstOpp.add(opp) ; 
-            }
-        }
-
-        //Function to add architect account on related project
-        if((lstOpp.size() > 0 )&& (UtilityClass.firstRun == TRUE)){
-            OpportunityHelper.UpdateProjectArchitect(lstOpp);
-             
-        }
-
         //Creates the Project Share records whenever the Opportunity is created or updated
          //Testing
         for (Opportunity opps: lstNewOpp) {
@@ -576,5 +553,5 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
     }
     
      /**************************************************************************************************************/
-    }
+    
 }

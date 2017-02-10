@@ -11,7 +11,7 @@ trigger Contact_RepeatCustomer on Contact (after update) {
         
     */   
    
-  /*List<id> ids=new List<id>();
+  List<id> ids=new List<id>();
   for (Contact c : trigger.new)
   {
     if (c.repeat_customer__c)
@@ -37,6 +37,6 @@ trigger Contact_RepeatCustomer on Contact (after update) {
   }
   integer ending1 = Limits.getScriptStatements();
   update(updateroles.values());
-  integer ending = Limits.getScriptStatements();*/
+  integer ending = Limits.getScriptStatements();
   //utility.jimdebug(null,'script statements in trigger ' + (ending-start) + ' before update ' + (ending1-start));
 }

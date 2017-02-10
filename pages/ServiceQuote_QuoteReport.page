@@ -40,7 +40,7 @@
                             </tr>
                             <tr>
                                 <td style='font-size: 10px' class='labelCell'>Reference Order #:</td>
-                                <td style='font-size: 10px'>{!Service_Quote__c.Case__r.Order_Number__c}</td>
+                                <td style='font-size: 10px'>{!Service_Quote__c.Order_Number_MF__c}/ SL #: {!Service_Quote__c.SL_Order_Id__c}</td>
                             </tr>
                             <tr>
                                 <td style='font-size: 10px' class='labelCell'>Project:</td>
@@ -66,23 +66,23 @@
     </div>  
     
     <div class='content'>
-    <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Custom Service Quote',true,false)}">
+    <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',false,true)}">
         <p>
             <table>
                 <tr>
-                    <td class='labelCell' colspan='2'>To</td>
+                    <td class = 'labelCell' colspan='2'>To</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Name</td>
-                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
+                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName} </td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Care Of</td>
-                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Company</td> 
-                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Address</td>
@@ -143,19 +143,19 @@
         <p>
             <table>
                 <tr>
-                    <td class='labelCell' colspan='2'>To</td>
+                    <td class = 'labelCell' colspan='2'>To</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Name</td>
-                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName}{!Service_Quote__c.Send_Quote_To_Contact__r.LastName} </td>
+                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Care Of</td>
-                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Company</td> 
-                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Address</td>

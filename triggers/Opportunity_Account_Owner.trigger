@@ -8,7 +8,7 @@ trigger Opportunity_Account_Owner on nrOpportunity_Account__c (after insert, aft
     */
 
     //load up all the objects needed for the trigger; make sure to use the TriggerVariables structure to prevent unnecessary SOQL hits
-   /* list<Id> oppIds = new list<id>();
+    list<Id> oppIds = new list<id>();
     list<Id> accIds = new list<id>();
     for( nrOpportunity_Account__c noa : trigger.new )
     {
@@ -81,5 +81,5 @@ trigger Opportunity_Account_Owner on nrOpportunity_Account__c (after insert, aft
         }
         opplist = new List<Opportunity>(oppset2  );
         update opplist;
-    }*/
+    }
 }

@@ -1,10 +1,10 @@
 trigger StockOrder_Detail_Delete on Stock_Order_Detail__c (after delete, before delete) {
 
-   /* if( trigger.isAfter )
+    if( trigger.isAfter )
     {
         
         /* adjust the position__c of the other positions on the service quote*/
-        /*list<id> stockOrders = new List<Id>();
+        list<id> stockOrders = new List<Id>();
         list<id> deletingStockOrderDetails = new List<Id>();
         
         map< Id, Decimal> soBreakpoint = new map<Id, Decimal>();
@@ -35,8 +35,8 @@ trigger StockOrder_Detail_Delete on Stock_Order_Detail__c (after delete, before 
             update updateSods;
         /* finish adjusting the position__c of the other position on the service quote */       
         
-    /*} else if( trigger.isBefore )
+    } else if( trigger.isBefore )
     {
     
-    }*/
+    }
 }

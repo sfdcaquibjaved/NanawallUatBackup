@@ -5,7 +5,7 @@ trigger Project_PreUpdateInsert on Opportunity(before insert, before update) {
             flags projects as needing a "LatLng" update; flags the opp as "Architect known" when appropriate;  sends the In2Clouds call out for scoring when appropriate
     */
 
-    /*set < id > ids = new set < id > ();
+    set < id > ids = new set < id > ();
     for (Opportunity o: trigger.new) {
         if (trigger.isInsert) {
 
@@ -49,7 +49,7 @@ trigger Project_PreUpdateInsert on Opportunity(before insert, before update) {
 
     if (ids.size() > 0) {
         Opportunity_UtilityClass.SetIn2CloudsScore(new list < id > (ids));
-    }*/
+    }
 
 
 }

@@ -9,7 +9,7 @@ public with sharing class Quote_AuditEventList_Controller {
 		Quote_AuditEventList_Controller cont = new Quote_AuditEventList_Controller(new ApexPages.StandardController( q) );
 		cont.GetEvents();
 	}
-@testvisible
+
 	private string formatNanaSoapPayload(string xml ) {
 	
 	return xml;
@@ -17,7 +17,7 @@ public with sharing class Quote_AuditEventList_Controller {
 	}
 	private string buildNanaSoapEnvelope(string xml) {
             string xml2 = '<?xml version=\'1.0\' encoding=\'utf-8\'?>';
-            xml2 += '<soap12:Envelotpe xmlns:xsi=\'http://www.w3.org/2001/XMLSchema-instance\' xmlns:xsd=\'http://www.w3.org/2001/XMLSchema\' xmlns:soap12=\'http://www.w3.org/2003/05/soap-envelope\'>';
+            xml2 += '<soap12:Envelope xmlns:xsi=\'http://www.w3.org/2001/XMLSchema-instance\' xmlns:xsd=\'http://www.w3.org/2001/XMLSchema\' xmlns:soap12=\'http://www.w3.org/2003/05/soap-envelope\'>';
             xml2 += '<soap12:Body><QuoteEvents  xmlns="http://tempuri.org/">';
             xml2 += xml;
             xml2 += '</QuoteEvents></soap12:Body>';

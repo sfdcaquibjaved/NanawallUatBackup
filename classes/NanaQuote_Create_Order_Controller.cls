@@ -2,7 +2,7 @@ public with sharing class NanaQuote_Create_Order_Controller {
     
     protected Quote__c thisQuote = null;
     public Order thisOrder = null;
-    public NanaQuote_Create_Order_Controller(ApexPages.StandardController stdController)
+    public NanaQuote_Create_Order_Controller(ApexPages.StandardController stdController) 
     {
         this.thisQuote = (Quote__c)stdController.getRecord();
         
@@ -25,7 +25,7 @@ public with sharing class NanaQuote_Create_Order_Controller {
     }
     
     
-    
+     
     public Id existingOrder { get; set; }
     
     public boolean doTest { get{ if( doTest == null) {doTest = false;} return doTest; } set; }

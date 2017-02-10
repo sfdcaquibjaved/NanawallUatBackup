@@ -46,7 +46,7 @@
                                 </tr>
                                 <tr>
                                     <td class='labelCell' style='font-size: 10px'>Reference Order #:</td>
-                                    <td style='font-size: 10px'>{!ROUND(Service_Quote__c.Case__r.Order_Number__c,0)} / SL #: {!Service_Quote__c.SL_Order_Id__c}</td>
+                                    <td style='font-size: 10px'>{!Service_Quote__c.Order_Number_MF__c} / SL #: {!Service_Quote__c.SL_Order_Id__c}</td>
                                 </tr>
                                 <tr>
                                     <td class='labelCell' style='font-size: 10px'>Project:</td>
@@ -73,7 +73,7 @@
                         <td valign='top'>
                             <table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
                                 <tr>
-                                    <td colspan='2' style='font-weight: bold'>VENDOR</td>
+                                    <td class = 'labelCell' colspan='2' style='font-weight: bold'>VENDOR</td>
                                 </tr>
                                 <tr>
                                     <td class='labelCell' width='50'>Name</td>
@@ -129,11 +129,7 @@
 
                             <table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
                                 <tr>
-                                    <td colspan='2' style='font-weight: bold'>SHIP TO</td>
-                                </tr>
-                                <tr>
-                                    <td class='labelCell' width='50'>Company</td> 
-                                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                                    <td class = 'labelCell' colspan='2' style='font-weight: bold'>To</td>
                                 </tr>
                                 <tr>
                                     <td class='labelCell'>Name</td>
@@ -141,8 +137,14 @@
                                 </tr>
                                 <tr>
                                     <td class='labelCell'>Care Of</td>
-                                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                                    <td>{!Service_Quote__c.Care_Of__c}</td>
                                 </tr>
+                                <tr>
+                                    <td class='labelCell' width='50'>Company</td> 
+                                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
+                                </tr>
+                                
+                                
                                 <tr>
                                     <td class='labelCell'>Address</td>
                                     <td>{!Service_Quote__c.Ship_Too_Street__c}</td>
@@ -188,7 +190,7 @@
                                     <td>{!Service_Quote__c.Ship_Too_Email__c}</td>
                                 </tr>
                                 <tr>
-                                    <td class='labelCell'>Ship Method</td>
+                                    <td class='labelCell'>Shipping Method</td>
                                     <td>{!PO_Shipmethod}</td>
                                 </tr>
                                 
@@ -196,21 +198,21 @@
                             </apex:outputpanel>
                             <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',true,false)}">
         <p>
-            <table>
+             <table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
                 <tr>
-                    <td colspan='2'>To</td>
+                    <td class = 'labelCell' colspan='2'>To</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Name</td>
-                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} </td>
+                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Care Of</td>
-                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Company</td> 
-                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Address</td>

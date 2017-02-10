@@ -1,6 +1,6 @@
 trigger OpportunityTeamMember_Delete on OpportunityTeamMember (before delete , after delete) {
 
-    /*if(trigger.isBefore  )
+    if(trigger.isBefore  )
     {
         
         list<Id> OppIds = new list<Id>();
@@ -57,7 +57,7 @@ trigger OpportunityTeamMember_Delete on OpportunityTeamMember (before delete , a
     
     /****************************************************************************/
     /*After Insert*/
-   /* else if(trigger.isAfter)
+    else if(trigger.isAfter)
             //Delete the old share records
             Project_Sharing.delete_share_record(Trigger.old);
     /****************************************************************************/

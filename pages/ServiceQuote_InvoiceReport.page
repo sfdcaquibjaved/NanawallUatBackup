@@ -1,11 +1,9 @@
 <apex:page renderAs="pdf" standardcontroller="Service_Quote__c" extensions="ServiceQuote_ReportController" showHeader="false" sidebar="false">
 
-<head>     
-
+<head>
     <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.service_quote_files, 'service_quote_files/report_styles.css')}" media="print" />
 </head>
 <body>
-
     <div class='header'>
         <div style='width: 100%'>
             <table width='100%'>
@@ -44,7 +42,7 @@
                             </tr>
                             <tr>
                                 <td style='font-size: 10px' class='labelCell'>Reference Order #:</td>
-                                <td style='font-size: 10px'>{!Service_Quote__c.Case__r.Order_Number__c}</td>
+                                <td style='font-size: 10px'>{!Service_Quote__c.Order_Number_MF__c}/ SL #: {!Service_Quote__c.SL_Order_Id__c}</td>
                             </tr>
                             <tr>
                                 <td style='font-size: 10px' class='labelCell'>Project:</td>
@@ -70,9 +68,9 @@
             <table>
                 <tr>
                     <td>
-                        <table style='border: 1px solid black; min-height: 200px' width='350' cellpadding='2' cellspacing='5'>
+                        <table style='border: 1px solid black; min-height: 200px' width='335' cellpadding='2' cellspacing='5'>
                             <tr>
-                                <td class = "labelCell" colspan='2' style='font-weight: bold'>Bill To</td>
+                                <td class = 'labelCell' colspan='2' style='font-weight: bold'>Bill To</td>
                             </tr>
                             <tr>
                                 <td class='labelCell' width='50'>Name</td>
@@ -80,11 +78,11 @@
                             </tr>
                             <tr>
                                 <td class='labelCell'>Care Of</td>
-                                <td>{!Service_Quote__c.Bill_To_Contact__r.Name }</td>
+                                <td>{!Service_Quote__c.Care_Of__c }</td>
                             </tr>
                             <tr>
                                 <td class='labelCell'>Company</td> 
-                                <td>{!Service_Quote__c.Bill_To_Company__r.Name}</td>
+                                <td>{!InvoiceAddress.Company}</td>
                             </tr>
                             <tr>
                                 <td class='labelCell'>Address</td>
@@ -151,24 +149,23 @@
                     
                      
                     <td valign='top'>
-                            <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Custom Service Quote',true,false)}">
+                            <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',false,true)}">
 
-                        <table style='border: 1px solid black; min-height: 200px' width='350' cellpadding='2' cellspacing='5'>
-
+                        <table style='border: 1px solid black; min-height: 200px' width='335' cellpadding='2' cellspacing='5'>
                             <tr>
-                                <td colspan='2' style='font-weight: bold'>Ship To</td>
+                                <td class = 'labelCell' colspan='2' style='font-weight: bold'>Ship To</td>
                             </tr>
                             <tr>
                                 <td class='labelCell' widht='50'>Name</td>
-                                <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} </td>
+                                <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName} </td>
                             </tr>
                             <tr>
                                 <td class='labelCell'>Care Of</td>
-                                <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                                <td>{!Service_Quote__c.Care_Of__c}</td>
                             </tr>
                             <tr>
                                 <td class='labelCell'>Company</td> 
-                                <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                                <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                             </tr>
                             <tr>
                                 <td class='labelCell'>Address</td>
@@ -183,13 +180,13 @@
                                     <table>
                                         <tr>
                                             <td width='30' class='labelCell'>City</td>
-                                            <td width='85'>{!Service_Quote__c.Ship_Too_City__c}</td>
+                                            <td width='85'>{!Service_Quote__c.Ship_Too_City__c}&nbsp;</td>
             
                                             <td width='30' class='labelCell'>State</td>
-                                            <td width='80'>{!Service_Quote__c.Ship_To_State__c}</td>
+                                            <td width='80'>{!Service_Quote__c.Ship_To_State__c}&nbsp;</td>
                                             
-                                            <td width='30' class='labelCell'>State</td>
-                                            <td width='80'>{!Service_Quote__c.Ship_Too_Country__c}</td>
+                                            <td width='30' class='labelCell'>Country</td>
+                                            <td width='80'>{!Service_Quote__c.Ship_Too_Country__c}&nbsp;</td>
             
                                             <td width='30' class='labelCell'>Zip</td>
                                             <td width='45'>{!Service_quote__c.Ship_Too_Zip__c}</td>
@@ -220,27 +217,29 @@
                             </tr>
                             
                         </table> 
-                        
                    </apex:outputpanel>
 
+                 </td>
 
+
+            <td valign = 'top'>
     <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',true,false)}">
         
-            <table>
+            <table style='border: 1px solid black; min-height: 200px' width='335' cellpadding='2' cellspacing='5'>
                 <tr>
-                    <td class ="labelCell" colspan='2'>To</td>
+                    <td class = 'labelCell' colspan='2'>Ship To</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Name</td>
-                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName}{!Service_Quote__c.Send_Quote_To_Contact__r.LastName} </td>
+                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Care Of</td>
-                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Company</td> 
-                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Address</td>
@@ -255,13 +254,13 @@
                         <table>
                             <tr>
                                 <td class='labelCell'>City</td>
-                                <td>{!Service_Quote__c.Shopify_Ship_To_City__c}</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_City__c}&nbsp;</td>
 
                                 <td class='labelCell'>State</td>
-                                <td>{!Service_Quote__c.Shopify_Ship_To_State__c}</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_State__c}&nbsp;</td>
                                 
                                 <td class='labelCell'>Country</td>
-                                <td>{!Service_Quote__c.Shopify_Ship_To_Country__c}</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_Country__c}&nbsp;</td>
 
 
                                 <td class='labelCell'>Zip</td>
@@ -294,13 +293,11 @@
                 </tr>
                 
             </table>
-
+        
             </apex:outputpanel>
-                                          </td>
+</td>
                 </tr>
-            </table>
-    </p>
-    </div>
+            </table> 
         <div>
             <apex:dataTable width="100%" value="{!Details}" var="sqd" id="tblServiceQuoteDetails" rowClasses="odd,even"  styleClass="dataTable">
                 <apex:column >
@@ -345,8 +342,8 @@
                 </apex:column>          
 
                 <apex:column style="text-align:right">
-                    <apex:outputText value="{!Service_Quote__c.SubTotal__c}" rendered="false"/>
                     <apex:facet name="header"><div style='text-align: right'>Total</div></apex:facet>
+    
                     <apex:outputText value="{0,number,$#,###,###.00}" style="text-align:right">
                         <apex:param value="{!sqd.SubTotal__c}" /> 
                     </apex:outputText>              
@@ -356,8 +353,7 @@
             </apex:dataTable>
             <br />
             <table width="100%" cellpadding='0' cellspacing='0'>
-                <tr>       
-
+                <tr>
                     <td align='right'>Subtotal</td>
                     <td align='right' width='100' >
                         <apex:outputText value="{0, number,$###,###,###.00}">
@@ -368,8 +364,6 @@
                 <tr>
                     <td align='right'>Shipping and Handling</td>
                     <td align='right' width='100'>
-                  <apex:outputText value="{!Service_Quote__c.Freight__c}" rendered="false"/>
-
                         <apex:outputText value="{0, number,$###,###,###.00}">
                           <apex:param value="{!Freight}" />
                         </apex:outputText>                      
@@ -378,9 +372,6 @@
                 <tr>
                     <td align='right'>Taxes</td>
                     <td align='right' width='100' >
-                  <apex:outputText value="{!Service_quote__c.Tax_Exempt__c }" rendered="false"/>
-                  <apex:outputText value="{!Service_quote__c.Tax__c }" rendered="false"/>
-
                         <apex:outputText value="{0, number,$###,###,###.00}">
                           <apex:param value="{!Tax}"/>
                         </apex:outputText>                      
@@ -440,13 +431,22 @@
             </table>
             
         </div>
-    
-    
+        </p>
+    </div>
     <p align='center'>
         <b>Thank you for your business.</b>
     </p>
 
 </body>
+
+
+<apex:outputField value="{!Service_Quote__c.SubTotal__c}" rendered="false"/>
+<apex:outputField value="{!Service_Quote__c.Freight__c}" rendered="false"/>
+<apex:outputField value="{!Service_Quote__c.Tax__c}" rendered="false"/>
+<apex:outputField value="{!Service_Quote__c.Tax_Exempt__c}" rendered="false"/>
+
+
+
 
 <!--<apex:outputtext value="{!Service_Quote__c.Tax_Exempt__c}" rendered="false" />
 <apex:outputtext value="{!Service_Quote__c.Tax__c}" rendered="false" />

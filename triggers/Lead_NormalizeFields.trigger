@@ -2,7 +2,7 @@ trigger Lead_NormalizeFields on Lead (before insert, before update) {
     
     //maintains the sync with the built-in address fields and the lead wrapper fields
 
-   /* for( Lead l : trigger.new )
+    for( Lead l : trigger.new )
     {
         //clean funny capitalizations ; both insert and update 
         l.FirstName = Utility.StringToTitleCase(l.FirstName);
@@ -57,7 +57,7 @@ trigger Lead_NormalizeFields on Lead (before insert, before update) {
 
 */          
 
-           /* if( l.Street != '' && ( l.Address_1__c == null || l.Address_1__c == '' ) )  
+            if( l.Street != '' && ( l.Address_1__c == null || l.Address_1__c == '' ) )  
             {
                 /*
                 try 
@@ -90,7 +90,7 @@ trigger Lead_NormalizeFields on Lead (before insert, before update) {
                     l.Address_1__c  = l.Street; 
                 } 
 */
-                /*l.Address_1__c = l.Street;
+                l.Address_1__c = l.Street;
             } else 
             {
                 l.Street = l.Address_1__c;
@@ -103,7 +103,7 @@ trigger Lead_NormalizeFields on Lead (before insert, before update) {
                 l.Address_1__c = l.Street;
             }
     */      
-            /*if( l.PostalCode != '' && ( l.Zip__c == null || l.Zip__c == '' ) )
+            if( l.PostalCode != '' && ( l.Zip__c == null || l.Zip__c == '' ) )
             {
                 l.Zip__c = l.PostalCode;
             }
@@ -163,7 +163,7 @@ trigger Lead_NormalizeFields on Lead (before insert, before update) {
                     l.Address_1__c  = l.Street; 
                 } 
 */
-               /* l.Address_1__c = l.Street;
+                l.Address_1__c = l.Street;
             } else  
             {
 //                l.Street = l.Address_1__c + ( l.address_2__c != '' && l.address_2__c != null ?  '\n' + l.Address_2__c : '');  
@@ -193,5 +193,5 @@ trigger Lead_NormalizeFields on Lead (before insert, before update) {
         
 
         
-    }*/
+    }
 }

@@ -10,7 +10,7 @@ trigger FollowupTaskCheck on Task (after insert, after update) {
     
     
     //prefetch the data for the trigger
-    /*set<Id> quotesToFetch = new set<Id>();
+    set<Id> quotesToFetch = new set<Id>();
     set<Id> taskquotesToFetch = new set<Id>();
     for( Task t : trigger.new )
     {
@@ -24,7 +24,7 @@ trigger FollowupTaskCheck on Task (after insert, after update) {
         }
             
         /*NB: if you add another subject line to pick up, you need to put it in here to make sure the quote gets looked up */
-        /*if(
+        if(
         (t.Subject=='Quote Rep Followup' || t.Subject=='Quote Office Followup'
         || t.Subject=='Quote Link Clicked: View'
         || t.Subject =='CAD Link Clicked' )
@@ -116,7 +116,7 @@ system.debug('it was not completed before though!');
                 else if( TriggerVariables.QuoteMap_All.containsKey(i) )
                     q = TriggerVariables.QuoteMap_All.get(i );
 */
-                /*if( q != null )
+                if( q != null )
                 {
                     q.CAD_Viewed__c = true;
                     quotesToUpdate.put( q.Id, q ); //store it back in .. just in case
@@ -136,7 +136,7 @@ system.debug('it was not completed before though!');
                 else if( TriggerVariables.QuoteMap_All.containsKey(i) )
                     q = TriggerVariables.QuoteMap_All.get(i );
 */
-                /*if( q != null )
+                if( q != null )
                 {
                     q.Followup_Status__c = 'Reviewed';
                     q.Followup__c = true;
@@ -187,5 +187,5 @@ system.debug('skipping ' + ta.Id + '; ('+ta.subject+' ; '+ta.Status+')'  );
     catch (Exception ex)
     {
         utility.jimdebug(ex,'followup task check trigger ' + linenbr);
-    }*/
+    }
 }

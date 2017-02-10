@@ -5,10 +5,7 @@ Private class TestZillowProject{
   public static List<Project__c> olstTestProject;
   public static List<Contact> olstTestContact;
   public static List<Opportunity> olstTestOpp;
-  
-  
  Static testMethod void Zillow(){
-        
  
  olstTestAccount=TestDataUtility.createAccountTestData();
      try{
@@ -48,16 +45,7 @@ Private class TestZillowProject{
      
  Test.StopTest();
  }
-    
     Static testMethod void Zillow2(){
-        
-           profile p = [select id from Profile where name = 'Standard User'];
-        User u = new User(alias = 'testme', email = 'testme@noemail.com', emailencodingkey = 'UTF-8', lastname = 'test', languagelocalekey = 'en_US',
-            localesidkey = 'en_US', profileid = p.Id, country = 'United Kingdom', timezonesidkey = 'Europe/London', username = 'testme@noemail.com');
-        insert u;
-     
-        List<Country_codes__c> lstCountryCodes= TestDataUtility.getTestCountryCodes();
-        insert lstCountryCodes;
         
         list<Zip_Codes_Master__c> lstzipCode = new list<Zip_Codes_Master__c>();
         Zip_Codes_Master__c zipCode1 = new Zip_Codes_Master__c();
@@ -65,7 +53,6 @@ Private class TestZillowProject{
         zipCode1.Country__c = 'United States';
         zipCode1.State__c = 'California';
         zipCode1.Zip_Code__c = '12345' ;
-        zipCode1.user__c=u.Id;
         lstzipCode.add(zipCode1);
         insert  lstzipCode;
         
@@ -115,7 +102,6 @@ Private class TestZillowProject{
         List<Lead> leadlist = new List<Lead>();
         Lead l = new Lead();
         l.Phone = '(123) 456-7890';
-        l.Company ='bnj';
         l.project_name__c = 'Test Proj';
         l.FirstName = 'testfirst' ;
         l.LastName = 'testlast';
@@ -125,7 +111,6 @@ Private class TestZillowProject{
         l.Project_Application_Industry__c = 'Automotive';
         l.Project_Application__c = 'Dealership';
         l.Project_Site_Zip_Code__c= '12345';
-        l.OwnerID = u.Id;
         leadlist.add(l); 
         insert leadlist;
         

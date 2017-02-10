@@ -9,7 +9,7 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
         
 */
     //build the opp lookup of the incoming inserts
-    /*set<Id> oppIDs = new set<id>();
+    set<Id> oppIDs = new set<id>();
     set<Id> accIds = new set<id>();
     set<Id> opportunityUpdateIDs = new set<Id>();
     set<Id> oppsToFlagAsResidentialVertical = new Set<Id>();
@@ -27,7 +27,7 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
     }
 
     /* build the account map; note this gets used in various places in this trigger*/
-    /*map<string, Account> accountMap = new map<string, Account>();
+    map<string, Account> accountMap = new map<string, Account>();
     for( Account a : [SELECT id, Chain_Account__c, OwnerId, Type, Subdivision_Potential__c FROM Account WHERE id in :accIds ] )
     {
         
@@ -43,7 +43,7 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
 
 
     /*we need to look up all of the salesteam members on the opportunities to see if we need to add new ones */
-   /* map<string, OpportunityTeamMember> oppTeams = new map<string, OpportunityTeamMember>();
+    map<string, OpportunityTeamMember> oppTeams = new map<string, OpportunityTeamMember>();
     for( OpportunityTeamMember otm : [SELECT UserId, OpportunityId FROM OpportunityTeamMember t WHERE OpportunityId in :oppIDs ] )
     {
         if( !oppTeams.containsKey( otm.OpportunityId + '_' + otm.UserId) )
@@ -55,9 +55,9 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
         
         
     /* deal with cleaning up the list of accounts to trim off duplicates first*/ 
-    //map<string, nrOpportunity_Account__c> extantJoins = new map<string, nrOpportunity_Account__c>();
+    map<string, nrOpportunity_Account__c> extantJoins = new map<string, nrOpportunity_Account__c>();
     //find all of the existing joins on the incoming projects, do a crappy key thing to enable a lookup against the objs in trigger.new
-    /*for( nrOpportunity_Account__c oJoin : [SELECT id, Opportunity__c, Account__c FROM nrOpportunity_Account__c WHERE Opportunity__c in :oppIDs ])   
+    for( nrOpportunity_Account__c oJoin : [SELECT id, Opportunity__c, Account__c FROM nrOpportunity_Account__c WHERE Opportunity__c in :oppIDs ])   
     {
         if( !extantJoins.containsKey( oJoin.Opportunity__c + '_' + oJoin.Account__c  ) )
             extantJoins.put(oJoin.Opportunity__c + '_' + oJoin.Account__c, oJoin);      
@@ -89,7 +89,7 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
             
             /* 2014-12-18 - we no longer want to add the account's owner to the project */
             /* 2015-03-05 - we changed our mind again */
-           /* OpportunitySplit split = new OpportunitySplit();
+            OpportunitySplit split = new OpportunitySplit();
             split.OpportunityId = oJoin.Opportunity__c;
             split.SplitOwnerId = accountMap.get(oJoin.Account__c).OwnerId;
             split.SplitTypeId = splittype.Id;
@@ -97,14 +97,14 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
             newSplits.add(split);
             /**/ 
             
-      //  }
+        }
         
-   // }
+    }
     
 
     
     // if there were any opportunities picked up for "chain account" updates, do the do
-    /*list<Opportunity> opportunityUpdates = new List<Opportunity>();
+    list<Opportunity> opportunityUpdates = new List<Opportunity>();
     if( opportunityUpdateIDs.size() > 0 )
     {
         for( Opportunity o : [SELECT id, chain_account__c FROM Opportunity WHERE id in :opportunityUpdateIDs] )
@@ -137,5 +137,5 @@ trigger nrOpportunity_Account_Pre_Insert on nrOpportunity_Account__c (before ins
         update opportunityUpdates;
     
     if( newSplits.size() > 0 )
-        insert newSplits;  */ 
+        insert newSplits;   
 }

@@ -11,7 +11,6 @@ global class ProjectsNotesAndAttachment {
     
     //Global Variables
     public list<noteAttach> notesAttaclst {get;set;}
-    public list<activitytask> actytsk { get; set;}
     public String recordId {get; set;}
     public Project__c project ;
     public Set<Id> selectedNoteAttach { get ; set;}
@@ -52,6 +51,7 @@ global class ProjectsNotesAndAttachment {
       
       oppId.add(opp.Id);
       oppMap.put(opp.Id, opp.Name);
+      
       oppAccMap.put(opp.Id,opp.Account.Name);
       
       }
@@ -65,15 +65,7 @@ global class ProjectsNotesAndAttachment {
       attachmentlst.sort();
       notesAttaclst = new list<noteAttach>();
       
-      actytsk = new list<activitytask>();
-      list<Task> tasklist = [select WhatId,Type,Subject,WhoId,OwnerId, LastModifiedBy.Name, ActivityDate,Who.Name,Status,Owner.Name from task where Status = 'Completed'and WhatId =: project.Id order by CreatedDate Desc];
-      tasklist.sort();
       //Populating the Wrapper object which gives Notes and Attachment list
-      for(Task tsk:tasklist){
-      activitytask attk = new activitytask(tsk,tsk.Type,tsk.LastModifiedBy.Name,tsk.Subject,tsk.Owner.Name,tsk.Who.Name, '');
-      //System.debug('Hello'+ntAttopp);
-      actytsk.add(attk);
-      }
       for (Attachment att : attachmentlst){
            if (oppId.contains(att.ParentId)){
             noteAttach ntAttopp = new noteAttach(att,'Opportunity',oppMap.get(att.ParentId),oppAccMap.get(att.ParentId));
@@ -100,10 +92,8 @@ global class ProjectsNotesAndAttachment {
            }
        }
        
-       system.debug('noteattch'+notesAttaclst);
-       if(notesAttaclst.size()> 0){
        notesAttaclst.sort();
-       }
+       
       
     }
     
@@ -360,37 +350,6 @@ global class ProjectsNotesAndAttachment {
 
     
     //Wrapper class for storing both Notes and Attachment
-    global class activitytask implements Comparable{
-      public Task tsk {get;set;}
-      public Date AcDate { get; set;}
-      public String owId { get; set;}
-      public String Subject {get;set;}
-      public String whoIDcon { get; set;}
-      public String AccountName {get ; set ;}
-      public String lastmodified {get;set;}
-      public String typeoftask { get; set;}
-     
-     public activitytask (Task t,String type,String lm,String obj,String ownId, String who, string Accountname){
-      this.tsk = t;
-      this.Subject = obj;
-      this.AcDate = date.newinstance(t.Activitydate.year(), t.Activitydate.month(), t.Activitydate.day());
-      this.owId = ownId;
-      this.whoIDcon = who;
-      this.lastmodified = lm;
-      this.typeoftask = type;
-      if(Accountname!=null){
-          this.AccountName=Accountname ;
-          }
-    }
-    global integer compareTo(Object ObjToCompare) {
-          
-          
-              return AccountName.CompareTo(((noteAttach )ObjToCompare).AccountName);
-              
-        }
-    
-    
-    }
     global class noteAttach  implements Comparable {
         
      public Note note {get ; set;}
@@ -403,7 +362,6 @@ global class ProjectsNotesAndAttachment {
      public string AccountName {get ; set ;}
      public Date CreatedDate{get ; set ;}
      public Date LastModifiedDate{get ; set ;}
-     
      
      public noteAttach (Note nt , String obj, String parentName ,string Accountname){
         this.note = nt ;

@@ -8,11 +8,11 @@ trigger astech_OpportunityTrigger on Opportunity (after update) {
     
         for( Opportunity o : trigger.new )
         {
-            
+        	
             if(   o.Project_Name__c != trigger.oldMap.get(o.Id).Project_Name__c  
-                && !oppsToFlush.contains(o.Id)  )
+            	&& !oppsToFlush.contains(o.Id)  )
                 {
-                    oppsToFlush.add( o.id );
+                	oppsToFlush.add( o.id );
                 }
         }
     }

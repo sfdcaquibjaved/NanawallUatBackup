@@ -214,7 +214,7 @@ System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_N
             }
             
         }
-
+ 
         if(OrderUpdateMap.keySet().size() > 0 )
         {
             list<Quote__c> nanaQuoteUpdates = [ SELECT Id,Invoices_Sent_Date__c,Deposit_Date__c,Balanced_Received_Date__c,Deposit_Received_Date__c,Order_Confirmation_Started__c,Order_Finalized_Date__c FROM Quote__c WHERE Id = :OrderUpdateMap.keySet() ];
@@ -251,7 +251,7 @@ System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_N
         }
     }
     
-   
+    
    
     
        

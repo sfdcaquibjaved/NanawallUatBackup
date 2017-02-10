@@ -1,6 +1,6 @@
 trigger DB_Custom_Opportunity on Opportunity ( before delete, after insert, after update, after undelete )
 {
-    /*try
+    try
     {
         if ( Test.isRunningTest() && CRMfusionDBR101.DB_Globals.generateCustomTriggerException )
         {
@@ -19,5 +19,5 @@ trigger DB_Custom_Opportunity on Opportunity ( before delete, after insert, afte
     catch ( Exception ex )
     {
         CRMfusionDBR101.DB_TriggerHandler.handleTriggerException( ex, 'DB_Custom_Opportunity' );
-    }*/
+    }
 }

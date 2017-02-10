@@ -308,7 +308,7 @@ system.debug('**ASTECH Order ' + o.Id + ' has ' +  Order_QuoteLineMap.get(o.Id).
 
 				newOrderItems.add( oi );
 			}
-		}
+		}   
 System.debug('**ASTECH: total items to insert: ' +newOrderItems.size() );		
 		
 		//look up the quote to update 

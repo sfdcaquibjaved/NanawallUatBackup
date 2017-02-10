@@ -23,9 +23,9 @@ global with sharing class API_ConvertOrder {
 
 		if( thisorder != null )
 		{
-			//need to comment out for the backfill 
-			thisorder.Status = 'Order Created';
-			update thisorder;
+			//need to comment out for backfill
+//			thisorder.Status = 'Order Created';
+//			update thisorder;
 		}
 		
        return;

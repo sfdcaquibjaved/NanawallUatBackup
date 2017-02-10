@@ -89,7 +89,6 @@ public class accountOwnerAssignment
              l.ownerID= id.valueof(system.label.Default_owner);//if(zipDummy != NULL && zipDummy !=''){ l.BillingPostalCode=zipdummy;}
             
         }System.debug('owner' + user);
-         System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
     }
     
     public static boolean validateZip(Account acc){
@@ -181,66 +180,4 @@ public class accountOwnerAssignment
         }
         
     }
-    
-    public static void CaseUpdationwithAccountAddress(set<Account> AccountSet){
-    
-        //set<id> AccountIdSet = new set<id>();
-        system.debug('ACCOUNT SET IS::::'+AccountSet);
-        map<id, Account> AccountMap = new map<id, Account>();
-        list<case> CaseEndCustomerList = new list<case>();
-        list<case> CaseCallerContactList = new list<case>();
-        for(Account acc: AccountSet)
-        {
-            AccountMap.put(acc.id, acc);
-        }
-        system.debug('AccountId and status');
-        list<case> CaseEndCustomlist = [select id, AccountId, Shipping_City_EndCustomer__c, Shipping_Country__c, Shipping_State_End_Customer__c, Shipping_Street_End_Customer__c, Shipping_Zip_End_Customer__c, Billing_City__c, Billing_Country__c, Billing_State__c, Billing_Street_End_Customer__c, Billing_Zipcode__c from case where AccountId IN: AccountMap.keySet() AND Status!='Closed'];
-        if(CaseEndCustomlist.size()>0)
-        {
-            for(case c: CaseEndCustomlist )
-            {
-                c.Shipping_City_EndCustomer__c = AccountMap.get(c.AccountId).Shippingcity;
-                c.Shipping_Country__c = AccountMap.get(c.AccountId).ShippingCountry;
-                c.Shipping_State_End_Customer__c= AccountMap.get(c.AccountId).ShippingState;
-                c.Shipping_Street_End_Customer__c = AccountMap.get(c.AccountId).ShippingStreet;
-                c.Shipping_Zip_End_Customer__c= AccountMap.get(c.AccountId).ShippingPostalCode;
-                c.Billing_City__c= AccountMap.get(c.AccountId).Billingcity;
-                c.Billing_Country__c = AccountMap.get(c.AccountId).BillingCountry;
-                c.Billing_State__c= AccountMap.get(c.AccountId).BillingState;
-                c.Billing_Street_End_Customer__c= AccountMap.get(c.AccountId).BillingStreet;
-                c.Billing_Zipcode__c= AccountMap.get(c.AccountId).BillingPostalCode;
-                
-                CaseEndCustomerList.add(c);
-            }
-        }
-        
-        list<case> CaseCallerConlist = [select id, Caller_contact__r.AccountId, Billing_City_Caller__c, Billing_Country_Caller__c, Billing_State_Caller__c, Billing_Street_Caller__c, Billing_Zipcode_Caller__c, Shipping_City_Caller__c, Shipping_Country_Caller__c, Shipping_State_Caller__c, Shipping_Street_Caller__c, Shipping_Zip_Caller__c from case where Caller_contact__c!=NULL AND Caller_contact__r.Account.Id IN: AccountMap.keySet() AND Status!='Closed'];
-        
-        if(CaseCallerConlist.size()>0)
-        {
-            for(case c: CaseCallerConlist)
-            {
-                c.Shipping_City_Caller__c= AccountMap.get(c.Caller_contact__r.AccountId).Shippingcity;
-                c.Shipping_Country_Caller__c = AccountMap.get(c.Caller_contact__r.AccountId).ShippingCountry;
-                c.Shipping_State_Caller__c = AccountMap.get(c.Caller_contact__r.AccountId).ShippingState;
-                c.Shipping_Street_Caller__c = AccountMap.get(c.Caller_contact__r.AccountId).ShippingStreet;
-                c.Shipping_Zip_Caller__c = AccountMap.get(c.Caller_contact__r.AccountId).ShippingPostalCode;
-                c.Billing_City_Caller__c= AccountMap.get(c.Caller_contact__r.AccountId).Billingcity;
-                c.Billing_Country_Caller__c= AccountMap.get(c.Caller_contact__r.AccountId).BillingCountry;
-                c.Billing_State_Caller__c= AccountMap.get(c.Caller_contact__r.AccountId).BillingState;
-                c.Billing_Street_Caller__c= AccountMap.get(c.Caller_contact__r.AccountId).BillingStreet;
-                c.Billing_Zipcode_Caller__c = AccountMap.get(c.Caller_contact__r.AccountId).BillingPostalCode;
-                
-                CaseCallerContactList.add(c);
-            }
-        }
-        if(CaseEndCustomerList.size()>0)
-        update CaseEndCustomerList;
-        
-        if(CaseCallerContactList.size()>0)
-        update CaseCallerContactList;
-         System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
-        
-    }
-     
 }

@@ -5,7 +5,7 @@ trigger OpportunityInsertAddSalesTeam on Opportunity (after insert) {
         Adds the team wrapper object for the salesteam. for some reason, its not getting added when the default split-team owner is added
     */
 
-    /*if( trigger.isAfter && trigger.isInsert )
+    if( trigger.isAfter && trigger.isInsert )
     {
         list<OpportunitySplit> oppSplits = new list<OpportunitySplit>();
 //      OpportunitySplitType splittype = [SELECT Id FROM OpportunitySplitType WHERE MasterLabel = 'Revenue'];
@@ -37,5 +37,5 @@ trigger OpportunityInsertAddSalesTeam on Opportunity (after insert) {
     
         if( nrOTMs.size() > 0  )
             insert nrOTMs;
-    }*/
+    }
 }

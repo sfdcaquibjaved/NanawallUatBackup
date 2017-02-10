@@ -6,7 +6,7 @@ trigger OppCheckSalesteam on Opportunity (after insert, after update) {
     */
     
     
-    /*list<nrOpportunityTeamMember__c> inserts = new list<nrOpportunityTeamMember__c>();
+    list<nrOpportunityTeamMember__c> inserts = new list<nrOpportunityTeamMember__c>();
     list<OpportunityShare> osInserts = new list<OpportunityShare>();
 
     if( trigger.isAfter )
@@ -33,7 +33,7 @@ trigger OppCheckSalesteam on Opportunity (after insert, after update) {
                     
                     osInserts.add(os);      
 */
-               /* }
+                }
             }
         }
     }
@@ -45,5 +45,5 @@ trigger OppCheckSalesteam on Opportunity (after insert, after update) {
     {
         insert osInserts;
         
-    }*/
+    }
 }

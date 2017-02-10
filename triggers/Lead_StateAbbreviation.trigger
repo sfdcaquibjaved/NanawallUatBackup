@@ -6,7 +6,7 @@ trigger Lead_StateAbbreviation on Lead (before insert, before update) {
         
     */
     
-    /*for (Lead c : trigger.new)
+    for (Lead c : trigger.new)
     {
          if( c.State != '' && ( c.nrState__c == null || c.nrState__c == '' ) )
         {
@@ -80,5 +80,5 @@ trigger Lead_StateAbbreviation on Lead (before insert, before update) {
         {
             c.State_Abbr__c = c.nrState__c;
         }
-    }*/
+    }
 }

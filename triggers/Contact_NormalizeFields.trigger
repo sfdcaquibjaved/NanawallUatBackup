@@ -3,7 +3,7 @@ trigger Contact_NormalizeFields on Contact (before insert, before update) {
     /*trigger purpose
         fixes capitalization in name fields, maintains sync with built-in fields and our wrappers
     */
-  /*  for( Contact c : trigger.new )
+    for( Contact c : trigger.new )
     {
         //clean funny capitalizations ; both insert and update 
         c.FirstName = Utility.StringToTitleCase(c.FirstName);
@@ -18,7 +18,7 @@ trigger Contact_NormalizeFields on Contact (before insert, before update) {
                 c.Address_1__c = c.MailingStreet;
             }*/
             
-           /* if( c.MailingStreet == null || c.MailingStreet == 'null')
+            if( c.MailingStreet == null || c.MailingStreet == 'null')
                 c.MailingStreet = '';
             
             if( c.Address_1__c == null || c.Address_1__c == 'null')
@@ -61,7 +61,7 @@ trigger Contact_NormalizeFields on Contact (before insert, before update) {
                     c.Address_1__c = c.MailingStreet;
                 } 
                 */
-               /* c.Address_1__c = c.MailingStreet;
+                c.Address_1__c = c.MailingStreet;
 
             } else 
             {
@@ -87,7 +87,7 @@ trigger Contact_NormalizeFields on Contact (before insert, before update) {
                 
             }
     */
-           /* if( c.MailingCountryCode != '' )
+            if( c.MailingCountryCode != '' )
             {
                 map<string,string > CountryCodeMap = Utility.GetCountryCodeMap();
                 
@@ -189,7 +189,7 @@ trigger Contact_NormalizeFields on Contact (before insert, before update) {
                 } 
                 */
                 
-           /*     c.Address_1__c = c.MailingStreet;
+                c.Address_1__c = c.MailingStreet;
 
             } else  
             {
@@ -229,5 +229,5 @@ trigger Contact_NormalizeFields on Contact (before insert, before update) {
                 c.MailingCountry  = c.country__c;                       
             }
         }
-    }*/
+    }
 }

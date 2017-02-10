@@ -29,16 +29,10 @@
         function escID(myid) {
             return myid.replace(/(:|\.)/g,'\\\\$1');
         }
-
-
         var console_activeTabId = null;
         sforce.console.getFocusedPrimaryTabId(function(res){ console_activeTabId = res.id; });
-       
+        
         function NewPosition() {
-
-
-
- 
             if(sforce.console.isInConsole())
             {
                 sforce.console.openSubtab(
@@ -47,24 +41,10 @@
                     true,
                     '{!Service_Quote__c.Name}'
                 );
-
             } else
             {
                 parent.location.href = '/apex/Service_Quote_Detail_AddEdit?CF00NQ0000000sU0G=22&CF00NQ0000000sU0G_lkid={!Service_Quote__c.id}&scontrolCaching=1&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1';
             }
-        }
-        function NewPosition2(a,b) {
-        if(sforce.console.isInConsole())
-                    {
-                        sforce.console.openSubtab(
-                          console_activeTabId,
-                            ' /apex/Service_Quote_Detail_AddEdit?id='+a+'&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1',true,b
-                        );
-        
-                    } else
-                    {
-                        parent.location.href = '/apex/Service_Quote_Detail_AddEdit?id='+a+'&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1';
-                    }
         }
         
         $(document).ready(function() {
@@ -89,7 +69,18 @@
         <apex:dataTable width="100%" value="{!Details}" var="sqd" id="tblServiceQuoteDetails" rowClasses="tblServiceQuoteDetails_tr"  styleClass="dataTable">
             <apex:column >
                 <apex:facet name="header">Action</apex:facet>
-                 <a id="scrollWrapper,tblServiceQuoteDetails" href="#" onclick="NewPosition2('{!sqd.id}','{!sqd.name}') ;return false">Edit</a>
+                 <a id="scrollWrapper,tblServiceQuoteDetails" href="javascript:
+                 if(sforce.console.isInConsole())
+                    {
+                        sforce.console.openSubtab(
+                          console_activeTabId,
+                            ' /apex/Service_Quote_Detail_AddEdit?id={!sqd.id}&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1',true,'{!sqd.name}'
+                        );
+        
+                    } else
+                    {
+                        parent.location.href = '/apex/Service_Quote_Detail_AddEdit?id={!sqd.id}&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1';
+                    }" >Edit</a>
                 | 
                 <!-- <a href='javascript: if( confirm("Are you sure that you would like to remove this position?") ) { parent.location.href = "/setup/own/deleteredirect.jsp?delID={!sqd.Id}&retURL=%2F{!sqd.Service_Quote__r.Id}&failRetURL=%2F{!sqd.Service_Quote__r.Id}&_CONFIRMATIONTOKEN={!ConfirmationToken}";}'>delete</a> -->
                 <apex:commandLink action="{!deletePosition}" onclick="if(confirm('Are you sure that you would like to remove this position??')) return true" value="Del">

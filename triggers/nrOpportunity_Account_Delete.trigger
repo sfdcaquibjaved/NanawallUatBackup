@@ -2,13 +2,13 @@ trigger nrOpportunity_Account_Delete on nrOpportunity_Account__c (after delete, 
 
 
     
-    /*if( Trigger.isAfter )
+    if( Trigger.isAfter )
     {
     
     } else
     { //trigger.isBefore
     
-    }*/
+    }
     
 
 }

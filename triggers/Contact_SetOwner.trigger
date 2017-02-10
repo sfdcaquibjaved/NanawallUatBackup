@@ -5,7 +5,7 @@ trigger Contact_SetOwner on Contact (before insert) {
         before inserting a contact, assigns the owner based on a zip code 
     */
 
-    /*for( Contact c : trigger.new )
+    for( Contact c : trigger.new )
     {
         //this is taken out of normalize trigger because we realize we cannot know 
         //the order they should be running in
@@ -25,6 +25,6 @@ trigger Contact_SetOwner on Contact (before insert) {
         
         c.OwnerId = Utility.getUserForTerritory( country, postalcode );
 
-    }*/
+    }
 
 }

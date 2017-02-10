@@ -1,7 +1,7 @@
 trigger FeedItem_Inserted on FeedItem (after insert, before insert) {
 
 
-    /*if(trigger.isAfter)
+    if(trigger.isAfter)
     {
         if( !ChatterUtility.FeedItemInsertTriggerCalled )
         {  //we need to avoid infinite recursion with this flag
@@ -58,7 +58,7 @@ trigger FeedItem_Inserted on FeedItem (after insert, before insert) {
 
                 System.schedule( 'ChatterPostSync',nextFireTime, new ChatterUtility() );
 */
-          /*  }
+            }
         }
             
         
@@ -67,7 +67,7 @@ trigger FeedItem_Inserted on FeedItem (after insert, before insert) {
         
     
     
-    }*/
+    }
 
 
 }

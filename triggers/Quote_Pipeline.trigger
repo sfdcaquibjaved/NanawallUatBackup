@@ -1,15 +1,15 @@
 trigger Quote_Pipeline on Quote__c (before insert, before update, after update) {
     
     
-   /* 
+    /*
     trigger purpose
         updates Most_Recently_Ordered_Account__c, Most_Recently_Ordered_Contact__c for i2c realtime scoring (quite a lot of code just for that); 
         
         creates performance label tasks; triggers contacts on opportunities to update their quote counts for I2C scoring (cascading code);
+    */
     
-    
-    // load up all necessary data for the trigger
-    
+    // *** load up all necessary data for the trigger
+    /*
     if( !TriggerVariables.Quote_Pipeline_DataLoaded )
     { 
         list<Id> oppsToFetch = new List<Id>();
@@ -111,7 +111,7 @@ trigger Quote_Pipeline on Quote__c (before insert, before update, after update) 
         
         TriggerVariables.Quote_Pipeline_DataLoaded = true;
     }
-    end loading necessary data    
+    //*** end loading necessary data    
     
     list<Opportunity> oppsToUpdate = new List<Opportunity>();
     
@@ -274,7 +274,7 @@ trigger Quote_Pipeline on Quote__c (before insert, before update, after update) 
     }
     
     if(oppsToUpdate.size() > 0 )
-        update oppsToUpdate;    */
-        
+        update oppsToUpdate;    
+        */
 
 }

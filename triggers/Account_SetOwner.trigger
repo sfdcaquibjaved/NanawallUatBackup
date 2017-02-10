@@ -5,7 +5,7 @@ trigger Account_SetOwner on Account (before insert) {
      owner of a lead (or overwrite when necessary) based on lead convert options
      */
 
-    /*for( Account a : trigger.new )
+    for( Account a : trigger.new )
     {
         if( a.DoNotAutoAssignOwner__c != true )
         {
@@ -25,5 +25,5 @@ trigger Account_SetOwner on Account (before insert) {
             
             a.OwnerId = Utility.getUserForTerritory(a.BillingCountryCode, a.BillingPostalCode);
         }
-    }*/
+    }
 }

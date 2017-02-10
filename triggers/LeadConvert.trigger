@@ -7,7 +7,7 @@ trigger LeadConvert on Lead (after update) {
         this trigger makes sure that opportunities get the contactroles on convert; I THINK that we ould actually get rid of the contactrole and this trigger.  
     */
 
-    /*set<Id> contactIds = new set<Id>();
+    set<Id> contactIds = new set<Id>();
     for( Lead l : trigger.new )
     {
         if( !l.IsConverted || l.ConvertedContactId == null)
@@ -57,7 +57,7 @@ trigger LeadConvert on Lead (after update) {
     if( ocrList.size() > 0)
     {
         insert ocrList;   
-    }*/
+    }
     
 
 }

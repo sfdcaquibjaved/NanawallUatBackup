@@ -695,7 +695,7 @@ else  use 005A0000000MOPI (jurgen)
 		}
 
 		
-		for( Quote_Detail__c qd : [SELECT id, Quote__c,UValue__c, SHGC__c, Units__c,Glazing_Notes__c  FROM Quote_Detail__c WHERE Quote__c in :quotesToLookupForPerformanceLabelTasks] )
+		for( Quote_Detail__c qd : [SELECT id, Quote__c,UValue__c, SHGC__c, Units__c, Glazing_Notes__c  FROM Quote_Detail__c WHERE Quote__c in :quotesToLookupForPerformanceLabelTasks] )
 		{
 			if( qd.UValue__c != null && qd.UValue__c != 0 
 			&& qd.SHGC__c != null && qd.SHGC__c != 0 
@@ -709,8 +709,8 @@ else  use 005A0000000MOPI (jurgen)
 					if( GlobalStrings.NanaServerAddress().contains('nanareps'))
 						tsk.OwnerId = '005A0000000MOJS';
 					else tsk.OwnerID = '005A0000000M8pi';
-					tsk.Subject = 'Performance Label (ed) ';
-					tsk.Description = 'Unit_'+(i+1) + ' ;  ' + qd.Glazing_Notes__c;
+					tsk.Subject = 'Performance Label';
+					tsk.Description = 'Unit_'+(i+1);
 					newTasks.add( tsk);	
 				
 				}

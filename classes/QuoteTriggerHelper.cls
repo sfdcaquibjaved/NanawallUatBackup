@@ -235,7 +235,7 @@ public with sharing class QuoteTriggerHelper{
     /* */
     public static void CheckInfluencerOppOrder(list<Quote__c> Quotelist){
     
-     /*Map < Id, String > MapProjRecTypeID = new Map < Id, String > ();
+     Map < Id, String > MapProjRecTypeID = new Map < Id, String > ();
         Set < Id > projId = new Set < Id > ();
         set < Id > oppId = new set < Id >();
         
@@ -258,7 +258,7 @@ public with sharing class QuoteTriggerHelper{
           If(oppId.size()>0){
             list<Opportunity> Opplist = new List<Opportunity>();
             for(Quote__c qu:[select Id ,Order_Number__c,Project__c,Opportunity__r.Id,Opportunity__r.recordTypeId  from Quote__c Where Opportunity__c IN:oppId ]){
-                
+        
              if(string.valueOf(qu.Opportunity__r.recordTypeId).substring(0,15) == Label.Influencer_Opportunity_RecordTypeId){
                 if(MapProjRecTypeID.get(qu.Project__c) == ResRecTypeID){
                 Opportunity opp=qu.Opportunity__r;
@@ -282,7 +282,7 @@ public with sharing class QuoteTriggerHelper{
         System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
            update Opplist; 
           }
-        }*/
+        }
      }
      /********************************************************
      Purpose:Creating entitlements for the Quote detail records

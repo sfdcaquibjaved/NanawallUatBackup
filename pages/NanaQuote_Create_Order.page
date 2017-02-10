@@ -9,11 +9,11 @@
 
 
 	STOP! NO MORE COMMENTS! STOP IT!   
-    */ 
+    */
     
         var orderId='{!existingOrder}';
 //        alert(orderId);
-         
+        
         function doRedirect()
         {
             document.location.href = '/' + orderId;

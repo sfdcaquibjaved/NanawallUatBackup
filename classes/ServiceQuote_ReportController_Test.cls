@@ -419,10 +419,10 @@ public class ServiceQuote_ReportController_Test {
         sqr.getSubTotal();
         sqr.getTax();
         sqr.getTotal();
-        sqr.getUPSBillingAddress();
-        sqr.getYellowBillingAddress();
+        //sqr.getUPSBillingAddress();
+        //sqr.getYellowBillingAddress();
         sqr.PurchaseOrder_SelectPositions();
-        sqr.testPoVendor();
+        //sqr.testPoVendor();
           
     
     }
@@ -1236,21 +1236,6 @@ public class ServiceQuote_ReportController_Test {
          qList.add(qt);
          insert qList;
         
-       /* list < Stock_Order_Detail__c > soList = new list < Stock_Order_Detail__c > ();
-        Stock_Order_Detail__c sl=new Stock_Order_Detail__c();
-        sl.Checked_In_Quantity__c =12;
-        sl.Position__c = 112;
-        sl.Quantity__c = 50;
-        sl.Service_Part__c = acc.Id;
-        sl.Stock_Order__c = acc.Id;
-        sl.Unit_Price__c = 100;
-        sl.discount__c = 11;
-        soList.add(sl);
-        insert soList;*/
-        
-                
-            
-        
          test.startTest();
         
          order order1=new order();
@@ -1403,7 +1388,7 @@ public class ServiceQuote_ReportController_Test {
         sqr.getPaymentType();
         sqr.getPOBody_Display_Rendered();
         sqr.getPOBPositionSelector_Display_Rendered();
-        ApexPages.currentPage().getHeaders().get('na7.salesforce.com');
+        
         sqr.getPurchaseOrder_Reconciliation_Positions();
         sqr.getpurchaseOrder_RenderAs();
         sqr.getRichmondBillingAddress();
@@ -1411,11 +1396,11 @@ public class ServiceQuote_ReportController_Test {
         sqr.getSubTotal();
         sqr.getTax();
         sqr.getTotal();
-       // sqr.getUPSBillingAddress();
-       // sqr.getYellowBillingAddress();
+        //sqr.getUPSBillingAddress();
+        //sqr.getYellowBillingAddress();
         sqr.PurchaseOrder_SelectPositions();
         sqr.getPOVendor();
-       // sqr.testPoVendor();
+        //sqr.testPoVendor();
         
     
     }

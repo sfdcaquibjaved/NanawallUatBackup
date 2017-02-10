@@ -2,7 +2,7 @@ trigger Opportunity_Account_Roles on nrOpportunity_Account__c (after insert, aft
 
 
     
-   /* try{
+    try{
         set<id> oppids = new set<id>();
         
         for (nrOpportunity_Account__c oa : trigger.new)
@@ -41,6 +41,6 @@ trigger Opportunity_Account_Roles on nrOpportunity_Account__c (after insert, aft
     }
     catch (Exception ex)
     {
-    }*/
+    }
     
 }

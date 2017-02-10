@@ -43,7 +43,9 @@
                                 <td style='font-size: 10px' class='labelCell'>Reference Order #:</td>
                            <!-- </tr>
                             <tr> -->                    
-                                <td style='font-size: 10px'>{!Service_Quote__c.Case__r.Order_Number__c}</td>
+                                <td style='font-size: 10px'>
+{!Service_Quote__c.Order_Number_MF__c} / SL #: {!Service_Quote__c.SL_Order_Id__c}</td>
+                                
                             </tr>
                             <tr>
                                 <td style='font-size: 10px' class='labelCell'>Project:</td>
@@ -64,27 +66,25 @@
     </div>  
     
     <div class='content'>
-    <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Custom Service Quote',true,false)}">
+    <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',false,true)}">
 
         <p>
             <table>
                 <tr>
-                    <td colspan='2' class='labelCell' style='font-size: 12px'><b>Ship To</b></td>
-                    <td rowspan='9' valign='top'>
-                        <span class='labelCell'  style='font-size: 12px'>Shipping Method:</span> {!packinglist_ShippingMethod}
-                    </td>
+                    <td colspan='2' class='labelCell' style='font-size: 12px'><b>To</b></td>
+                    
                 </tr>
                 <tr>
                     <td class='labelCell'>Name</td>
-                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
+                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName} </td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Care Of</td>
-                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Company</td> 
-                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Address</td>
@@ -99,13 +99,13 @@
                         <table>
                             <tr>
                                 <td class='labelCell'>City</td>
-                                <td>{!Service_Quote__c.Ship_Too_City__c}</td>
+                                <td>{!Service_Quote__c.Ship_Too_City__c}&nbsp;</td>
 
                                 <td class='labelCell'>State</td>
-                                <td>{!Service_Quote__c.Ship_To_State__c}</td>
+                                <td>{!Service_Quote__c.Ship_To_State__c}&nbsp;</td>
                                 
-                                <td class='labelCell'>State</td>
-                                <td>{!Service_Quote__c.Ship_Too_Country__c}</td>
+                                <td class='labelCell'>Country</td>
+                                <td>{!Service_Quote__c.Ship_Too_Country__c}&nbsp;</td>
 
                                 <td class='labelCell'>Zip</td>
                                 <td>{!Service_quote__c.Ship_Too_Zip__c}</td>
@@ -130,7 +130,9 @@
                     <td class='labelCell'>Email</td>
                     <td>{!Service_Quote__c.Ship_Too_Email__c}</td>
                 </tr>
-                
+                <td rowspan='9' valign='top'>
+                        <span class='labelCell'  style='font-size: 12px'>Shipping Method:</span> {!packinglist_ShippingMethod}
+                    </td>
             </table>
         </p>
     </apex:outputpanel>
@@ -138,7 +140,7 @@
         <p>
             <table>
                 <tr>
-                    <td colspan='2'>To</td>
+                    <td class='labelCell' colspan='2'>To</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Name</td>
@@ -146,11 +148,11 @@
                 </tr>
                 <tr>
                     <td class='labelCell'>Care Of</td>
-                    <td>{!Service_Quote__c.Ship_To_Contact__r.Name}</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Company</td> 
-                    <td>{!Service_Quote__c.Ship_To_Company__r.Name}</td>
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
                 </tr>
                 <tr>
                     <td class='labelCell'>Address</td>
@@ -165,13 +167,13 @@
                         <table>
                             <tr>
                                 <td class='labelCell'>City</td>
-                                <td>{!Service_Quote__c.Shopify_Ship_To_City__c}</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_City__c}&nbsp;</td>
 
                                 <td class='labelCell'>State</td>
-                                <td>{!Service_Quote__c.Shopify_Ship_To_State__c}</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_State__c}&nbsp;</td>
                                 
                                 <td class='labelCell'>Country</td>
-                                <td>{!Service_Quote__c.Shopify_Ship_To_Country__c}</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_Country__c}&nbsp;</td>
 
 
                                 <td class='labelCell'>Zip</td>
@@ -200,7 +202,7 @@
                 
                 <tr>
                     <td class='labelCell'>Shipping Method</td>
-                    <td>{!CalculatedShippingMethod}</td>
+                    <td>{!packinglist_ShippingMethod}</td>
                 </tr>
                 
             </table>

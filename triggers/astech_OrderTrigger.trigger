@@ -12,6 +12,6 @@ system.debug('astech_OrderTrigger: after insert');
 		astech_OrderTrigger_Helper.handleAfterInsert(  trigger.new);
 		
 	}
-  
+   
     
 }

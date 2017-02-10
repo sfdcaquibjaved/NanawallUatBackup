@@ -177,7 +177,7 @@
                 }
                 
                 body .bPageBlock .pbBody .grey .pbSubheader {
-                    background-color: #0070d2;
+                    background-color: #9495a5;
                 }
             </style>
 
@@ -229,7 +229,7 @@
                     }
                     
                     body .bPageBlock .pbBody .grey .pbSubheader {
-                        background-color: #0070d2;
+                        background-color: #9495a5;
                     }
                 </style>
                 <apex:outputPanel styleClass="grey" layout="block" id="t">
@@ -383,7 +383,7 @@
                 }
                 
                 body .bPageBlock .pbBody .grey .pbSubheader {
-                    background-color: #0070d2;
+                    background-color: #9495a5;
                 }
             </style>
 
@@ -506,7 +506,7 @@
 
             <apex:commandButton value="Custom SQ" Action="{!CustomServiceQuote}"  />
             
-                 <apex:commandButton value="Shopify SQ" Action="{!ShopifyServiceQuote}" onComplete="openInNewTab({!urlPass});" status="loadingStatus" reRender="formId" />
+                 <apex:commandButton value="Shopify SQ" Action="{!ShopifyServiceQuote}" onComplete="openInNewTab({!urlPass});" status="loadingStatus" />
             
             
  

@@ -5,7 +5,7 @@ trigger Lead_GoogleAdwords on Lead (after insert, after update) {
             when the keywords object change, this creates a record; do we still use ad words? If not, we can get rid of this
     */
 
-    /*list<SFGA__Keyword__c>   sfgaKeywordUpdates = new List<SFGA__Keyword__c>();
+    list<SFGA__Keyword__c>   sfgaKeywordUpdates = new List<SFGA__Keyword__c>();
     for ( Integer i=0; i< trigger.size; i++ )
     {
 
@@ -56,6 +56,6 @@ trigger Lead_GoogleAdwords on Lead (after insert, after update) {
     
     }
     
-    if( sfgaKeywordUpdates.size() > 0 ) insert sfgaKeywordUpdates;*/
+    if( sfgaKeywordUpdates.size() > 0 ) insert sfgaKeywordUpdates;
 
 }

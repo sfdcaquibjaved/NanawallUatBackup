@@ -1,5 +1,5 @@
 trigger Account_NormalizeFields on Account (before insert, before update) {
-/*
+
     //this is the trigger that keeps the built-in address fields and the custom address fields in sync
     
     for( Account a : trigger.new )
@@ -61,7 +61,7 @@ trigger Account_NormalizeFields on Account (before insert, before update) {
                 a.BillingStreet = a.Address_1__c;
             }
             */
-          /*  if( a.BillingStreet == null || a.BillingStreet == 'null')
+            if( a.BillingStreet == null || a.BillingStreet == 'null')
                 a.BillingStreet = '';
             
             if( a.Address_1__c == null || a.Address_1__c == 'null')
@@ -106,7 +106,7 @@ trigger Account_NormalizeFields on Account (before insert, before update) {
                 } 
                 */
                 
-               /* a.Address_1__c = a.BillingStreet;
+                a.Address_1__c = a.BillingStreet;
 
             } else
             {
@@ -198,6 +198,6 @@ trigger Account_NormalizeFields on Account (before insert, before update) {
 
         }
         
-    }*/
+    }
 
 }

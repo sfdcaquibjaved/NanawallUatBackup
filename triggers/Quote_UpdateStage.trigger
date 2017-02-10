@@ -7,11 +7,11 @@ trigger Quote_UpdateStage on Quote__c (after update) {
         
         flags an opp as considered, if it was passed ERD; 
         
-        does various stage updates based on OppCont Role*/
+        does various stage updates based on OppCont Role
+    */
     
-    
-    
-  /*  Task newTask ;
+    /*
+    Task newTask ;
 
     Set<id> oppids = new Set<id>();
     for (Quote__c q : trigger.new)
@@ -91,6 +91,6 @@ trigger Quote_UpdateStage on Quote__c (after update) {
         }
         index++;
     }
-    update updateopps.values();*/
-    
+    update updateopps.values();
+    */
 }

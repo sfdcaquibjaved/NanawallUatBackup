@@ -38,7 +38,7 @@ if (trigger.isBefore && trigger.isInsert) {
     CaseAddressToShopifyOnCreation.updateOrderInfoBasedOnQuote(trigger.new);
 
 }
-//added by satish 
+//added by satish  
 //trigger this method to update order info based on quote update on both custom and shopify service quotes on update
 
 if (trigger.isBefore && trigger.isUpdate) {

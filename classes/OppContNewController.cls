@@ -26,6 +26,7 @@ public class OppContNewController {
 
 		Opportunity opp = [SELECT id, ownerid, (SELECT User__c FROM nrOpportunityTeamMembers__r t) FROM opportunity WHERE id = :o.Opportunity__c];	
 		Contact c = [SELECT c.id, c.ownerid,c.AccountId, c.Account.Chain_Account__c FROM Contact c WHERE id = :o.Contact__c  ];
+		
 		insert o;
  
 

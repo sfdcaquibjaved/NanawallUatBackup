@@ -79,7 +79,6 @@ string user,zipDummy;
             
             l.owner_assignment__c = false ;
         }
-         System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
     }
         public static boolean validateZip(Contact con){
         string zipUS = '\\d{5}(-\\d{4})?';
@@ -94,8 +93,6 @@ string user,zipDummy;
         }
         if(con.mailingCountryCode!=null && con.mailingPostalCode!=null && ((con.mailingCountryCode=='US'&& !(pattern.matches(ZipUS,con.mailingPostalCode)))||(con.mailingCountryCode=='CA'&& !(pattern.matches(zipCan,con.mailingPostalCode))))){
                 
-            System.debug('CheckCountry'+con.mailingCountryCode);    
-            System.debug('CheckZip'+con.mailingPostalCode);  
             con.mailingPostalCode.adderror('Please enter a valid Zip code');
             returnValue= false;
             return returnValue ;
@@ -116,7 +113,7 @@ string user,zipDummy;
             returnValue = true;
             return returnValue ;
             }*/
-         System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
+        
         system.debug('the return value is' + returnValue );
         return returnValue ;
         

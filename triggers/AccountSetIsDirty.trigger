@@ -3,7 +3,7 @@ trigger AccountSetIsDirty on Account (before insert, before update) {
     //this trigger cleans phone numbers on acocunt
     
     
-    /*Map<string,string> statemap = Utility.StateAbbrNameMap(); 
+    Map<string,string> statemap = Utility.StateAbbrNameMap(); 
      for( Account a : Trigger.new )
     {
         if (a.Phone != NULL)
@@ -20,5 +20,5 @@ trigger AccountSetIsDirty on Account (before insert, before update) {
         a.SyncInProgress__c = false;
         
                             
-    }*/
+    }
 }

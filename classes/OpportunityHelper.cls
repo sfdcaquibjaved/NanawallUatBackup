@@ -364,7 +364,6 @@ public class OpportunityHelper {
 
     /*******************************************************************************************/
     public static void UpdateProjectStagesFromOppStages(Set < Id > projectIds) {
-    System.debug('Entering the method');
         map < String, Integer > mapStageInt = new map < String, Integer > ();
         Integer i = 1;
         Schema.DescribeFieldResult f = Schema.sObjectType.Opportunity.fields.StageName;
@@ -407,11 +406,8 @@ public class OpportunityHelper {
             k++;
         }
         for (Project__c proj: projList) {
-        System.debug('Entering the for loop'+ proj.id);
-        System.debug(projectStageMap);
-        System.debug(mapStageProj);
         //system.debug(mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c));
-        if(projectStageMap != null && projectStageMap.containskey(proj.ID) && mapStageProj != null && mapStageProj.containsKey(proj.stage__c) && mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c) > 0 && mapStageProj.get(proj.stage__c) < mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c)){
+        if(projectStageMap != null && projectStageMap.containskey(proj.ID) && mapStageProj != null && mapStageProj.containsKey(proj.stage__c) && mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c)!= null && mapStageProj.get(proj.stage__c) < mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c)){
             system.debug('project stage is' + proj.id + proj.stage__c);
             system.debug('#################'+mapStageProj.get(proj.stage__c));
             system.debug('#################'+mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c));
@@ -437,11 +433,8 @@ public class OpportunityHelper {
                 }
                 updateProjList.add(proj);
             //}
-              System.debug('You are here');
            }
-
            else if(proj.stage__c == 'Cancelled' || proj.stage__c == 'Closed - Inactivity' || proj.stage__c == 'Project On Hold'){
-             System.debug('You are inside else:'+proj.stage__c);
               proj.stage__c = opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c;
               updateProjList.add(proj);
            }
@@ -917,16 +910,11 @@ public class OpportunityHelper {
     Input Parameter: Set of ProjectId's       
     *******************************************************************************************************************/
     public static void UpdateERDDate(set<Id> projId){
-        if(UtilityClass.doNotRunTwiceOfERDCode==true){
-        UtilityClass.doNotRunTwiceOfERDCode=false;
         list<project__c> plist = new list<Project__c>();
         map<ID, DATE> oppMap= new map<ID, DATE>();
         map<ID, String> oppMap2 = new map<ID, String>();
         map<ID, DATE> oppMap3 = new map<ID, DATE>();
-
-        
-
-        for(Opportunity opp: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where Project_Name__c =: projId  ORDER BY CloseDate LIMIT 1  ])
+        for(Opportunity opp: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where Project_Name__c =: projId ORDER BY CloseDate LIMIT 1])
         {
             if(opp.CloseDate!=null)
             {
@@ -934,7 +922,7 @@ public class OpportunityHelper {
             }       
             
         }
-        for(Opportunity opp2: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where StageName =: 'Closed/Won' AND Project_Name__c =: projId ])
+        for(Opportunity opp2: [select id, CloseDate, StageName, Project_Name__c FROM Opportunity where StageName =: 'Closed/Won' AND Project_Name__c =: projId])
         {
             if(opp2.StageName!=null)
             {
@@ -965,7 +953,7 @@ public class OpportunityHelper {
             
         }
         update plist;
-        }
+        
         }
         
          /******************************************************************************************************************
@@ -1279,25 +1267,25 @@ public class OpportunityHelper {
     
     ***************************************************/
     public static void UpdateProjectStagetoClosedLost(list<Opportunity> opplist){
-        set<id> projIds = new set<id>();
-        for(opportunity opp:opplist){
-            projIds.add(opp.Project_Name__c);
-        }
-        list<Project__c> projList = [select id,stage__c ,(select id from Opportunities__r) from Project__c where id IN :projIds ];
-        list<Project__c> updateProList = new list<Project__c>();
-            for(Project__c pro:projList){
-                if(pro.Opportunities__r.size()==1){
-                    pro.stage__c = 'Closed Lost - Project Lost';
-                    pro.Reason_Project_lost__c ='None';
-                    updateProList.add(pro);
-                }
-            }
-        if(updateProList.size()>0){
-            
-            Database.saveresult[] sr = Database.update(updateProList, False);
+    	set<id> projIds = new set<id>();
+    	for(opportunity opp:opplist){
+    		projIds.add(opp.Project_Name__c);
+    	}
+    	list<Project__c> projList = [select id,stage__c ,(select id from Opportunities__r) from Project__c where id IN :projIds ];
+    	list<Project__c> updateProList = new list<Project__c>();
+    		for(Project__c pro:projList){
+    			if(pro.Opportunities__r.size()==1){
+    				pro.stage__c = 'Closed Lost - Project Lost';
+    				pro.Reason_Project_lost__c ='None';
+    				updateProList.add(pro);
+    			}
+    		}
+    	if(updateProList.size()>0){
+    		
+    		Database.saveresult[] sr = Database.update(updateProList, False);
             ErrorLogUtility.processErrorLogs(sr, updateProList, 'Opportunity Helper', 'UpdateProjectStagetoClosedLost', 'Project__c', 'Update');
-        }   
-        
+    	}	
+    	
     }
 
     
@@ -1363,48 +1351,5 @@ public class OpportunityHelper {
     }
     }catch(exception e){}
     }
-
-/*************************************************
-    Method Name: UpdateProjectArchitect
-    Description: This method is used to update the project Architect account based on opportunity Account if it is of type Influencer
-    Input Parameter: List of opportunities    
-    *************************************************/  
-public static void UpdateProjectArchitect (List < opportunity > oppRec) {
-
-    system.debug('I am here') ; 
-    List < Project__c > updateProjList = new List < Project__c > ();
-    map<ID , ID> mapProjectAccount = new map <ID , ID > () ;
-
-       for (opportunity opp: oppRec) {
-                mapProjectAccount.put(opp.Project_Name__c , opp.AccountID);
-                
-    }
-    system.debug('Value of mapProjectAccount' + mapProjectAccount) ; 
-    // Query related projects
-
-    for(project__c pro: [SELECT ID, Architect_Account__c FROM Project__c WHERE ID IN: mapProjectAccount.keyset() AND Architect_Account__c = null]) {
-
-        pro.Architect_Account__c =  mapProjectAccount.get(Pro.ID);
-        updateProjList.add(pro) ; 
-    }   
-    
-   
-
-     try{
-        // Updating Project
-         system.debug('Inside try' + updateProjList ) ; 
-         if(updateProjList.size() > 0){
-        UtilityClass.firstRun = FALSE ;
-         Database.saveresult[] sr = Database.update(updateProjList, False);
-     }
-     }
-     catch(exception e){
-
-     }
-
-}
-
-
-
     
 }

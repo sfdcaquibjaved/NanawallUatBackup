@@ -87,9 +87,9 @@ private with sharing class Project_Trigger_Test
         Test.stopTest();
     
     }
+/*
 
-
-   /* static testMethod void testProjectTrigger2()
+    static testMethod void testProjectTrigger2()
     {
         list<Zip_Codes_Master__c> z= new list<Zip_Codes_Master__c>();
         z=TestDataUtility.getTerritoryMaster();
@@ -333,8 +333,6 @@ private with sharing class Project_Trigger_Test
         z=TestDataUtility.getTerritoryMaster();
         insert z;*/
         
-        Test.startTest();
-        
          list<Zip_Codes_Master__c> lstzipCode = new list<Zip_Codes_Master__c>();
         Zip_Codes_Master__c zipCode1 = new Zip_Codes_Master__c();
         zipCode1.City__c = 'Stow';
@@ -433,15 +431,14 @@ private with sharing class Project_Trigger_Test
         acc8.BillingPostalCode='08614';
         insert acc8; 
         
-         
+         Test.startTest();
         Project__c p1 = new Project__c();
         p1.Name='Test Architect Account';
         p1.Architect_Account__c = acc.Id;
         p1.Project_Zip_Code__c = '12345';
-       // p1.Send_for_Approval__c=false;
         insert p1;
         
-        Project__c p2 = new Project__c();
+        /*Project__c p2 = new Project__c();
         p2.Name='Test Architect Account1';
         p2.Architect_Account__c = acc1.Id;
         p2.Project_Zip_Code__c = '12345';
@@ -456,7 +453,7 @@ private with sharing class Project_Trigger_Test
         p3.Stage__c='Closed Lost - Project Lost';
         p3.Reason_Project_Lost__c='Wrong Product';
         p3.Residential_Vertical__c=true;
-        insert p3;
+        insert p3;*/
         
         Project__c p4 = new Project__c();
         p4.Name='Test Architect Account4';
@@ -588,8 +585,8 @@ private with sharing class Project_Trigger_Test
         //p7.Architect_Account__c = acc6.Id;
         //p8.Stage__c='Closed Lost - Project Cancelled';
         //p8.Reason_Project_Lost__c='Wrong Product';
-        p1.Stage__c='Closed Lost - Project Cancelled';
-        update p1;
+        
+        //update p1;
         //update p2;
         //update p3;
         update p4;
@@ -598,8 +595,8 @@ private with sharing class Project_Trigger_Test
         //update p7;
         //update p8;
         update p9;
-        p9.Amount__c=1900;
-        p9.Id=acc8.id;
+       // p9.Amount__c=1900;
+        //p9.Id=acc8.id;
         //p5.OwnerId=testUser.Id;
         //p6.Corporate_Account__c=true;
         

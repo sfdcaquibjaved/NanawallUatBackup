@@ -5,7 +5,7 @@ trigger Lead_SetOwner on Lead (before insert) {
         sets proper owner id based on zip code
     */
 
-    /*for( Lead l : trigger.new )
+    for( Lead l : trigger.new )
     {
         if( l.PostalCode != '' && ( l.Zip__c == null || l.Zip__c == '' ) )
         {
@@ -24,5 +24,5 @@ trigger Lead_SetOwner on Lead (before insert) {
 
         l.OwnerId = Utility.getUserForTerritory( countrycode, postalcode );
         
-    }*/
+    }
 }

@@ -1,9 +1,7 @@
-trigger astech_QuoteTrigger on Quote__c (after update, before update) {
+trigger astech_QuoteTrigger on Quote__c (after update) {
 
 
-	if( trigger.isBefore && trigger.isUpdate )
-	{
- 	} else if( trigger.isAfter && trigger.isUpdate )
+	if( trigger.isAfter && trigger.isUpdate )
 	{
 		
 		list<Task> newTasks = new list<Task>();		
@@ -11,8 +9,6 @@ trigger astech_QuoteTrigger on Quote__c (after update, before update) {
 		Set<Id> quotesToLookupForPerformanceLabelTasks = new Set<Id>();
 		for (Quote__c q : trigger.new)
 		{
-			
-			
 			if( q.Order_Finalized_Date__c != null
 			&& trigger.oldMap.get(q.ID).Order_Finalized_Date__c == null )
 			{	//Order finalized date going from null to non-null

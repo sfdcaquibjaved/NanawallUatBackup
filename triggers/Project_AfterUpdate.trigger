@@ -10,7 +10,7 @@ when the max_finalized_date__c on a project goes from nothing to something all t
 which means we also have to go back and update all the old data
 */
 
-    /*list<id> contactRepeatOppIDs = new List<id>();
+    list<id> contactRepeatOppIDs = new List<id>();
     list<id> contactOrderingOppIDs = new List<id>();
     map<Id, list<nrOpportunity_Account__c>> oppAccWonMap = new map<Id, list<nrOpportunity_Account__c>>();
 
@@ -130,5 +130,5 @@ which means we also have to go back and update all the old data
             mail.setHtmlBody('Got an exception with Project_AfterUpdate trigger: ' + ex  );
             Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });                   
         }
-    }*/
+    }
 }

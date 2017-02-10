@@ -23,15 +23,10 @@ trigger accountownerassignmentTrigger on Account (before insert,before update,af
     
     //Added for SF Ticket # 37.
     if(Trigger.isAfter && Trigger.isUpdate){
-        
-        Set<Id> accountlstForOwner = new set<Id>();
-        Set<Account> accountUpdateAddSet = new set<Account>();
+    	
+    	Set<Id> accountlstForOwner = new set<Id>();
+    	
         for(Account a : Trigger.New){
-            //Updating case Deatils
-            if((trigger.oldMap.get(a.id).ShippingStreet!=a.ShippingStreet) || (trigger.oldMap.get(a.id).Shippingcity!=a.Shippingcity) || (trigger.oldMap.get(a.id).ShippingState!=a.ShippingState) || (trigger.oldMap.get(a.id).ShippingCountry!=a.ShippingCountry) || (trigger.oldMap.get(a.id).ShippingPostalCode!=a.ShippingPostalCode) || (trigger.oldMap.get(a.id).BillingPostalCode!=a.BillingPostalCode) || (trigger.oldMap.get(a.id).BillingCountry!=a.BillingCountry) || (trigger.oldMap.get(a.id).BillingState!=a.BillingState) || (trigger.oldMap.get(a.id).Billingcity!=a.Billingcity) || (trigger.oldMap.get(a.id).Billingstreet!=a.Billingstreet))
-            {
-                accountUpdateAddSet.add(a);
-            }
             if(a.Name != Trigger.oldMap.get(a.Id).Name){
                 accIdsToUpdateOppNames.add(a.Id);
             }
@@ -43,13 +38,9 @@ trigger accountownerassignmentTrigger on Account (before insert,before update,af
             projectStageUpdate.updateOppNames(accIdsToUpdateOppNames,'Account');
         }
         if (accountlstForOwner.size()>0){
-            accountOwnerAssignment.assignoppowner(accountlstForOwner);
-            
-            accountOwnerAssignment.checkProjectSplit(accountlstForOwner);
-        }
-        if(accountUpdateAddSet.size()>0)
-        {
-            accountOwnerAssignment.CaseUpdationwithAccountAddress(accountUpdateAddSet);
+        	accountOwnerAssignment.assignoppowner(accountlstForOwner);
+        	
+        	accountOwnerAssignment.checkProjectSplit(accountlstForOwner);
         }
     }
 }

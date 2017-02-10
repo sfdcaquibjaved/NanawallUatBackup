@@ -13,7 +13,7 @@ public class CaseAddressToShopifyOnCreation {
         //fetch the case address info based on case ids
         for (
             case c:
-                [select id, Other_Phone__c, Other_Email__c, Other_Shipping_Phone__c, Other_Shipping_Email__c, Billing_Street_End_Customer__c, Shipping_Country__c, Billing_Country__c, Billing_Zipcode__c, Billing_State__c, Billing_City__c, Shipping_Address_Country__c, Shipping_Zip_End_Customer__c, Shipping_City_EndCustomer__c, Shipping_Street_End_Customer__c, Shipping_State_End_Customer__c from
+                [select id,Category__c,Sub_Category__c, Other_Phone__c, Other_Email__c, Other_Shipping_Phone__c, Other_Shipping_Email__c, Billing_Street_End_Customer__c, Shipping_Country__c, Billing_Country__c, Billing_Zipcode__c, Billing_State__c, Billing_City__c, Shipping_Address_Country__c, Shipping_Zip_End_Customer__c, Shipping_City_EndCustomer__c, Shipping_Street_End_Customer__c, Shipping_State_End_Customer__c from
                     case where id IN:
                         sqCaseId
                 ]) {
@@ -24,6 +24,8 @@ public class CaseAddressToShopifyOnCreation {
                     system.debug('WEBTOSHOPIFY' + sq.Shopify_Ship_To_City__c);
                     system.debug('WEBTOSHOPIFY2' + sq.Shopify_Bill_To_country__c);
                     system.debug('WEBTOSHOPIFY3' + sq.Shopify_Ship_To_country__c);
+                    sq.Category__c =c.Category__c;
+                    sq.Sub_Category__c=c.Sub_Category__c;
                     sq.Shopify_Ship_To_City__c = c.Shipping_City_EndCustomer__c;
                     sq.Shopify_Ship_To_Street__c = c.Shipping_Street_End_Customer__c;
                     sq.Shopify_Ship_To_State__c = c.Shipping_State_End_Customer__c;

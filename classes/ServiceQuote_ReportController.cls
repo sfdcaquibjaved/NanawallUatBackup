@@ -357,8 +357,6 @@ public with sharing class ServiceQuote_ReportController {
         if( GlobalStrings.HostName() == 'cs9.salesforce.com' )
         { //dev
             Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c FROM Contact WHERE id = '003A0000013vBBmIAM' ];
-            l.FirstName = c.FirstName;
-            l.LastName = c.LastName;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
@@ -369,8 +367,8 @@ public with sharing class ServiceQuote_ReportController {
         {
             Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c,Account.Country__c FROM Contact WHERE id = '003A0000013vBBmIAM' ];
             l.FirstName = c.FirstName;
-             l.LastName = c.LastName;
-             l.nrCountry__c=c.Account.Country__c;
+           	l.LastName = c.LastName;
+           	l.nrCountry__c=c.Account.Country__c;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
@@ -409,7 +407,7 @@ public with sharing class ServiceQuote_ReportController {
         l.Zip__c = sq2.Shopify_Bill_To_Zip__c;
         l.Phone = sq2.Shopify_Bill_To_Phone__c;
 //      l.Fax = sq.Ship_To_Fax__c;
-        l.Email = sq2.Shopify_Bill_To_Email__c;  
+        l.Email = sq2.Shopify_Bill_To_Email__c;	
         l.nrCountry__c = sq2.Shopify_Bill_To_country__c;
         }
         
@@ -445,8 +443,6 @@ public with sharing class ServiceQuote_ReportController {
         if( GlobalStrings.HostName() == 'cs9.salesforce.com' )
         { //dev
             Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c FROM Contact WHERE id = '003A0000013vB5wIAE' ];
-            l.FirstName = c.FirstName;
-            l.LastName = c.LastName;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;
@@ -456,9 +452,9 @@ public with sharing class ServiceQuote_ReportController {
         } else if(GlobalStrings.HostName() == 'na7.salesforce.com' )
         {
             Contact c = [SELECT FirstName, LastName, Account.Name, Account.Address_1__c, Account.City__c, account.State__c, Account.Zip__c,Account.Country__c FROM Contact WHERE id = '003A0000013vB5wIAE' ];
-             l.FirstName = c.FirstName;
-             l.LastName = c.LastName;
-             l.nrCountry__c=c.Account.Country__c;
+           	l.FirstName = c.FirstName;
+           	l.LastName = c.LastName;
+           	l.nrCountry__c=c.Account.Country__c;
             l.Company = c.Account.Name;
             l.Address_1__c = c.Account.Address_1__c;
             l.nrCity__c = c.Account.City__c;

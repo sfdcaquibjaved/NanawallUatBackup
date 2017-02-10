@@ -1,9 +1,12 @@
 global class DataCleanup implements Schedulable{
 
+
+	public static integer perfDaysToCheck = -15;
+
 	public static void cleanupPerformanceTasks() 
 	{
 		 //clean up any dupliucate performance label tasks
-		 date d = system.today().addDays(-5); 
+		 date d = system.today().addDays(perfDaysToCheck); 
 		 list<Task> perfTasks = [SELECT Id, Subject, WhoId, WhatId, Description FROM Task WHERE Subject = 'Performance Label' AND CreatedDate > :d	 ];
 		 map<string, list<Task> > perfTaskMap = new map<string, list<Task>>();
 		 for( Task t: perfTasks ) 
@@ -13,7 +16,7 @@ global class DataCleanup implements Schedulable{
 		 		
 	 		perfTaskMap.get(t.WhatId+'_'+t.Description).add(t);
 		 }
-		 System.debug( perfTaskMap.keySet().size() + ' quote details to check for dupes. ' );
+		 System.debug( perfTaskMap.keySet().size() + ' quote details to check for dupes since '+d+'. ' );
 	
 		list<Task> perfTasksToDelete = new list<Task>();
 		for( string i : perfTaskMap.keySet()  )
