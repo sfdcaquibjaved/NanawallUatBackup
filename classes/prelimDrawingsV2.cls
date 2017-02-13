@@ -1,3 +1,7 @@
+/************************************************
+Purpose:This is for building a page to show the projects,quotes and order stages for prelim drawings
+Created Date:December 2015
+*************************************************/
 public class prelimDrawingsV2 {
     
     public List<wrapperquote> wraplist1{get;set;}
@@ -159,10 +163,10 @@ public class prelimDrawingsV2 {
                 if(q.ProjectAmount!=null){
                   prtAmount = prtAmount + q.ProjectAmount;
                      system.debug('The project amount is::'+prtamount);
-                    	Decimal toround1 = prtAmount;
-						Decimal rounded1 = toRound1.setScale(2, RoundingMode.HALF_UP);
-						system.debug(rounded1);
-                    	Amount = rounded1;
+                        Decimal toround1 = prtAmount;
+                        Decimal rounded1 = toRound1.setScale(2, RoundingMode.HALF_UP);
+                        system.debug(rounded1);
+                        Amount = rounded1;
                 }
           }
          //Amount = prtAmount;
@@ -173,8 +177,8 @@ public class prelimDrawingsV2 {
                   prtAmount1 = prtAmount1 + q.ProjectAmount;
                      system.debug('The project amount is::'+prtamount1);
                     Decimal toround2 = prtAmount1;
-						Decimal rounded2 = toRound2.setScale(2);
-							system.debug(rounded2);
+                        Decimal rounded2 = toRound2.setScale(2);
+                            system.debug(rounded2);
                     Amount1 = rounded2;
                 }
               }
@@ -185,8 +189,8 @@ public class prelimDrawingsV2 {
                   prtAmount2 = prtAmount2 + q.ProjectAmount;
                      system.debug('The project amount is::'+prtamount2);
                      Decimal toround3 = prtAmount2;
-					 Decimal rounded3 = toRound3.setScale(2, RoundingMode.HALF_UP);
-			         system.debug(rounded3);
+                     Decimal rounded3 = toRound3.setScale(2, RoundingMode.HALF_UP);
+                     system.debug(rounded3);
                      Amount2 = rounded3;
                 }
               }
@@ -198,8 +202,8 @@ public class prelimDrawingsV2 {
                   prtAmount3 = prtAmount3 + q.ProjectAmount;
                      system.debug('The project amount is::'+prtamount3);
                      Decimal toround4 = prtAmount3;
-					 Decimal rounded4 = toRound4.setScale(2, RoundingMode.HALF_UP);
-			         system.debug(rounded4);
+                     Decimal rounded4 = toRound4.setScale(2, RoundingMode.HALF_UP);
+                     system.debug(rounded4);
                      Amount3 = rounded4;
                 }
               }
@@ -212,8 +216,8 @@ public class prelimDrawingsV2 {
                   prtAmount4 = prtAmount4 + q.ProjectAmount;
                      system.debug('The project amount is::'+prtamount4);
                     Decimal toround = prtAmount4;
-						Decimal rounded = toRound.setScale(2, RoundingMode.HALF_UP);
-							system.debug('The rounded::::::'+rounded);
+                        Decimal rounded = toRound.setScale(2, RoundingMode.HALF_UP);
+                            system.debug('The rounded::::::'+rounded);
                     Amount4 = rounded;
                 }
              

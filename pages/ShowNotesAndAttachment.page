@@ -112,6 +112,50 @@
                     </apex:column>
                      
                     </apex:pageBlockTable>
+
      </apex:pageBlock>
+         <apex:pageBlock title="Activity History" >
+         <apex:pageBlockTable value="{!actytsk}" var="acthis">
+                    <!-- The pageBlockTable iterates through the list of the custom Class -->
+                    <apex:column headerValue="Action" width="15%"> 
+                    <apex:outputlink value="{!$Site.BaseUrl}/{!acthis.tsk.Id}" target="_blank" styleclass="actionLink" style="color: #015ba7;">
+                    View
+                    </apex:outputlink>
+                    </apex:column>
+                    <apex:column headerValue="Subject" width="20%" >
+                    <apex:outputText value="{!acthis.Subject}" >
+                    </apex:outputText>
+                    
+                    </apex:column>
+                    <apex:column headerValue="Name" width="20%" >
+                    <apex:outputText value="{!acthis.whoIdcon}" >
+                    </apex:outputText>                  
+                    </apex:column>
+                    
+                    <apex:column headerValue="Due Date" width="20%" >
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+                    <apex:param value="{!acthis.Acdate}" ></apex:param>
+                    </apex:outputText>
+                    
+                    </apex:column>
+                    <apex:column headerValue="Assigned to" width="30%" >
+                    <apex:outputText value="{!acthis.owId}" >
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Type" width="30%" >
+                    <apex:outputText value="{!acthis.typeoftask}" >
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Last Modified By" width="30%" >
+                    <apex:outputText value="{!acthis.lastmodified}" >
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    
+                    </apex:pageBlocktable>
+         </apex:pageBlock>
     </apex:form>
+
 </apex:page>

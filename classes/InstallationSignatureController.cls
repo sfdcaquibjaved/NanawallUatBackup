@@ -40,6 +40,31 @@ public class InstallationSignatureController {
             att.IsPrivate = false;
             att.ParentId = id;
             insert att;
+            
+            ContentVersion cont = new ContentVersion();
+            cont.versionData = signature;
+        	cont.title = 'testing upload';
+       		cont.pathOnClient ='eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
+            system.debug('Value of cont' +cont);
+            try{
+                system.debug('I am here');
+            	insert cont ;
+                system.debug('I am here after insertion');
+            }
+            catch(exception e){
+                system.debug('Exception is:' +e);
+            }
+            
+            FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = id, RelatedRecordId = cont.ID, Type = 'ContentPost');
+            try{
+            insert elm;
+            }
+            catch(Exception e){
+                system.debug('Exception is:' +e.getMessage());
+            }
+            
+            
+            
         }catch(Exception e){
             ret.success = false;
             ret.message = e.getMessage();

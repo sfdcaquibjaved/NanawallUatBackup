@@ -179,6 +179,7 @@ private class ProjectOwnerAssignment_Test {
         a.BillingState = 'New York';
         a.BillingCountry='United States';
         a.BillingPostalCode='12345';
+        a.type='Competitor Firm';
         acc.add(a);
         
     insert acc;
@@ -317,6 +318,7 @@ static testMethod void testProjectOwnerAssignment5() {
         a.BillingState = 'New York';
         a.BillingCountry='United States';
         a.BillingPostalCode='12345';
+        a.type='Competitor Firm';
         acc.add(a);
         
     insert acc;
@@ -413,4 +415,65 @@ static testMethod void testProjectOwnerAssignment5() {
     projectOwnerAssignment.updateOppTeam(olstTestProject2);
          }
     }
+    
+    static testMethod void testProjectOwnerAssignment6() {
+         
+        list<Zip_Codes_Master__c> z= new list<Zip_Codes_Master__c>();
+        z=TestDataUtility.getTerritoryMaster();
+        insert z;
+        
+    olstTestCountryCode = TestDataUtility.getTestCountryCodes();
+    insert olstTestCountryCode ;
+    
+    olstTestStateCode = TestDataUtility.getTestStateCodes();
+    insert olstTestStateCode ; 
+    
+    olstTerritoryMastereCode = TestDataUtility.getTerritoryMaster();
+    insert olstTerritoryMastereCode ;
+    
+    list<project__c> olstTestProject2 = new list<project__c>();
+        project__c p= new project__c();
+        p.Name='xyz enterprise';
+        p.Project_Zip_Code__c='V0M 9S9';
+        p.Project_Country__c='United States';
+        p.Close_Date__c=Date.newInstance(2015, 12, 12);
+        p.Stage__c='Prospecting';
+            
+        olstTestProject2.add(p);
+        try{ 
+    insert olstTestProject2[0];
+        }catch(DMLEXCEPTION e){}
+        project__c p2= new project__c();
+        p2.Name='xyzw enterprise';
+        
+        p2.Project_Country__c='Canada';
+        p2.Project_Zip_Code__c='V0M 9S9';
+        p2.Close_Date__c=Date.newInstance(2015, 12, 12);
+        p2.Stage__c='Prospecting';
+            
+        olstTestProject2.add(p2);
+        insert olstTestProject2[1];
+
+        project__c p3= new project__c();
+        p3.Name='xyzw enterprise2';
+        p3.Project_Zip_Code__c='V0M 9S9';
+        p3.Project_Country__c='Canada';
+        p3.Project_State__c='Delhi';
+        p3.Close_Date__c=Date.newInstance(2015, 12, 12);
+        p3.Stage__c='Prospecting';
+            
+        olstTestProject2.add(p3);
+        insert olstTestProject2[2];   
+        
+        list<opportunity> opp= new list<opportunity>();
+        opp=TestDataUtility.createOppTestData();
+        opp[0].Project_Name__c=olstTestProject2[1].id;
+        insert opp;
+        
+    //projectOwnerAssignment.assignOwner(olstTestProject);
+    projectOwnerAssignment.updateResolutionDate(olstTestProject2);
+    projectOwnerAssignment.validateZip(olstTestProject2[0]);
+    projectOwnerAssignment.updateOppTeam(olstTestProject2);
+    }
+    
 }

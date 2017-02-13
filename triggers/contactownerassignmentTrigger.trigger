@@ -1,4 +1,4 @@
-trigger contactownerassignmentTrigger on Contact (before insert, before update) {
+trigger contactownerassignmentTrigger on Contact (before insert, before update, After insert, After Update) {
 list<Contact> lstContacts= new list<Contact>();
  if(trigger.isbefore){
    if(Trigger.isInsert || Trigger.isUpdate){
@@ -9,7 +9,33 @@ list<Contact> lstContacts= new list<Contact>();
          lstContacts.add(conRec);
        }}}
      }
-      if(lstContacts!=null && lstContacts.size()>0){
+      if(lstContacts!=null && lstContacts.size()>0 &&UtilityClass.doNotRunTwiceContactOwnerAssignmt == true){
          contactOwnerAssignment.assignOwner(lstContacts);
+         UtilityClass.doNotRunTwiceContactOwnerAssignmt = false;
       }
+      
+      
+     /* if(Trigger.isAfter && (Trigger.isUpdate || Trigger.isInsert))
+      {
+       
+     set<Id> AccId = new set<Id>();
+     for( Contact c : trigger.new){
+         AccId.add(c.AccountId);
+        
+       }
+    
+    Account acc = [Select Id, Name , Cero__c  from account where id = :AccId ];
+    
+    for (Contact c1 : Trigger.new){
+         if(c1.CERO__C == True)
+         {
+           acc.CERO__c = True ;
+         }
+        
+       }
+       update acc; 
+      }*/
+       
+       
+      
 }

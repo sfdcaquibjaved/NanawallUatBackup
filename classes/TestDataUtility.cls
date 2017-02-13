@@ -67,6 +67,7 @@ public with sharing class TestDataUtility {
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '08619';
         con.MailingCountryCode = 'US';
+        con.Phone = '(123) 456-7890';
         conlist.add(con);  
         }
         return conlist ;
@@ -214,6 +215,21 @@ public with sharing class TestDataUtility {
             orderList.add(o);
         }
         return orderList;
+    }
+    
+    public static list<Installation__c> createInsTestData(){
+        
+                
+        list<Installation__c> insList = new list<Installation__c>();
+        
+        for(integer i=0; i < testDataSize; i++){
+            Installation__c ins = new Installation__c();
+            ins.Status__c = 'Accepted by Installer' ;
+            ins.Installation_Date__c = system.today() ;
+            //ins.Order__c = orderList[i].id;
+            insList.add(ins);
+        }
+        return insList;
     }
     
     public static list<Competitor_Detail__c> createcompDetailTestData(list < Opportunity > lstOpportunity, list < Project__c > lstProject) {

@@ -4,9 +4,22 @@ public with sharing class astech_OrderTrigger_Helper {
 	public static void handleBeforeInsert( list<Order> orders ) 
 	{
 		list<Order> oldOrdersToUpdate = new list<Order>();
+		
+		map<Id,Quote> quoteMap = new map<Id, Quote>();
+		list<Id> quoteIds = new list<Id>();		
+		for( Order o : orders )
+			quoteIds.add( o.QuoteID );
+			
+		for( Quote q : [SELECT Id, Dupe_Order__c, Order_Generated__c, AccountID, OpportunityID,Pricebook2Id, Name, ContactId,Order_Number__c,Subtotal,Tax,ShippingHandling,Expedited_Shipping__c,First_Threshold__c,Nana_Quote__c,GrandTotal,First_Threshold_Price__c,Drawing_Price__c,Packaging__c,Canada_Tax__c,Canada_Tax_Label__c,Ship_Label__c,Keyed_Alike__c,Grand_total__c,Shipping_Address__c,Shipping_Address_2__c, Shipping_City__c, Shipping_Country__c, Shipping_State__c, Shipping_Zip__c,Subtotal__c, Opportunity.AccountID, Opportunity.CloseDate, Opportunity.OwnerID, Opportunity.Project_Name__c, Opportunity.Account.BillingStreet, Opportunity.Account.BillingCity,Opportunity.Account.BillingState,Opportunity.Account.BillingPostalCode,Opportunity.Account.BillingCountry,Opportunity.Account.ShippingStreet,Opportunity.Account.ShippingCity,Opportunity.Account.ShippingState,Opportunity.Account.ShippingPostalCode,Opportunity.Account.ShippingCountry FROM Quote WHERE Id = :quoteIds ] )
+		{
+			quoteMap.put(  q.Id, q );
+		}
+		
+		
 		for( Order o : orders  )
 		{
-			Quote q = [SELECT Id, Dupe_Order__c, Order_Generated__c, AccountID, OpportunityID,Pricebook2Id, Name, ContactId,Order_Number__c,Subtotal,Tax,ShippingHandling,Expedited_Shipping__c,First_Threshold__c,Nana_Quote__c,GrandTotal,First_Threshold_Price__c,Drawing_Price__c,Packaging__c,Canada_Tax__c,Canada_Tax_Label__c,Ship_Label__c,Keyed_Alike__c,Grand_total__c,Shipping_Address__c,Shipping_Address_2__c, Shipping_City__c, Shipping_Country__c, Shipping_State__c, Shipping_Zip__c,Subtotal__c, Opportunity.AccountID, Opportunity.CloseDate, Opportunity.OwnerID, Opportunity.Project_Name__c, Opportunity.Account.BillingStreet, Opportunity.Account.BillingCity,Opportunity.Account.BillingState,Opportunity.Account.BillingPostalCode,Opportunity.Account.BillingCountry,Opportunity.Account.ShippingStreet,Opportunity.Account.ShippingCity,Opportunity.Account.ShippingState,Opportunity.Account.ShippingPostalCode,Opportunity.Account.ShippingCountry FROM Quote WHERE Id = :o.QuoteID ];
+//			Quote q = [SELECT Id, Dupe_Order__c, Order_Generated__c, AccountID, OpportunityID,Pricebook2Id, Name, ContactId,Order_Number__c,Subtotal,Tax,ShippingHandling,Expedited_Shipping__c,First_Threshold__c,Nana_Quote__c,GrandTotal,First_Threshold_Price__c,Drawing_Price__c,Packaging__c,Canada_Tax__c,Canada_Tax_Label__c,Ship_Label__c,Keyed_Alike__c,Grand_total__c,Shipping_Address__c,Shipping_Address_2__c, Shipping_City__c, Shipping_Country__c, Shipping_State__c, Shipping_Zip__c,Subtotal__c, Opportunity.AccountID, Opportunity.CloseDate, Opportunity.OwnerID, Opportunity.Project_Name__c, Opportunity.Account.BillingStreet, Opportunity.Account.BillingCity,Opportunity.Account.BillingState,Opportunity.Account.BillingPostalCode,Opportunity.Account.BillingCountry,Opportunity.Account.ShippingStreet,Opportunity.Account.ShippingCity,Opportunity.Account.ShippingState,Opportunity.Account.ShippingPostalCode,Opportunity.Account.ShippingCountry FROM Quote WHERE Id = :o.QuoteID ];
+			Quote q = quoteMap.get( o.QuoteId );
 	
 	
 			//assign the order fields
@@ -104,7 +117,8 @@ system.debug('astech_OrderTrigger_Helper: finished before insert ...');
 		
 		for( Order o : orders )
 		{
-system.debug('**ASTECH Order ' + o.Id + ' has ' +  Order_QuoteLineMap.get(o.Id).size() + ' line item'  );
+system.debug('**ASTECH Order ' + o.Id + ' has ' +  ( Order_QuoteLineMap.get(o.Id) != null ?  Order_QuoteLineMap.get(o.Id).size() : 0 ) + ' line items '  );
+			if(Order_QuoteLineMap.get(o.Id) == null ) continue;
 			for( QuoteLineItem qLineItem : Order_QuoteLineMap.get(o.Id) )
 			{
 				OrderItem oi = new OrderItem();
@@ -345,7 +359,7 @@ system.debug( '**ASTECH: setting quote__c '+ q.Id +' Order__c = ' + nanaQuoteToO
 			nanaQuotesToUpdate.add( q );
 		}
 				
-		
+		 
 		//now insert/update the objects
 		if( newOrderItems.size() > 0  )
 			insert newOrderItems;

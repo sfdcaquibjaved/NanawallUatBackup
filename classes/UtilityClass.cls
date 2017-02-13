@@ -6,6 +6,9 @@ Created Date: 27thMarch,2014
 ************************************/
 global with sharing class UtilityClass {
 
+public static Boolean doNotRunOnConverstionOfLead = true;
+public static Boolean doNotRunTwiceOfERDCode =true;
+public static Boolean doNotRunTwiceContactOwnerAssignmt =true;
 public static Boolean updateFromQuoteTrigger = false;
 public static Boolean updateFromInfluencer = false;
 public static Boolean runUpdateCorpAcc= true;
@@ -13,9 +16,22 @@ public static Boolean runUpdateResident= true;
 public static Boolean runUpdatePrelims= true;
 public static Boolean doNotRunOnRecTypeChange= true;
 public static Boolean doNotRunonTransfer= true;
+public static Boolean onlyRunOnce= true;
 public static Boolean runOppTrigger= true;
 public static Boolean doNotRun=false;
+public static Boolean firstRun = true ;
+public static Boolean updateOpportunityOwner = true ; 
 public static Boolean doNotRunOnOrderOppUpdate=true;
+public static Boolean syncOpportunityTeamMember =true ;
+public static Boolean syncOpportunityTeamMember2 =true ;
+public static Boolean UpdateERDDate3 = TRUE ; 
+public static Boolean UpdateOppList = TRUE ; 
+public static Boolean updateQuoteProj = TRUE ; 
+ public static Boolean opportunityCountFC1 = true ; 
+ public static Boolean opportunityCountFC2 = true ; 
+ public static Boolean opportunityCountFC3 = TRUE ; 
+  public static Boolean UpdateERDDate = true ; 
+   public static Boolean UpdateERDDate2 = true ; 
 public static String opportunityWonStatus = 'Closed/Won';
 public static string QuotOrderStage = 'Ordered';
 public static string Projectwonsignedstatus = 'Closed Won - Order Signed';
@@ -25,6 +41,7 @@ public static Boolean runQuoteTrigger = true;
 public static Boolean oppUpdateOppTeam = true;
 public static Boolean projSharingRecalOnInsertUpdate = true ; 
 public static Boolean updateProjectBidderSplit = true ; 
+public static string influencerOpportunityRecordTypeName = 'Influencer Opportunity' ; 
 
 /*********************************
 Method Name: getStringValue

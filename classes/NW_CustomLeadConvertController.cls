@@ -324,6 +324,7 @@ static {
         }
         mainLead.Is_Converting__c = true;
         update mainLead;
+        UtilityClass.doNotRunOnConverstionOfLead = false;
         Database.LeadConvertResult lcr;
         
         Database.Leadconvert lc = new Database.Leadconvert();

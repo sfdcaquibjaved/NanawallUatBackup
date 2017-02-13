@@ -90,7 +90,7 @@ public class KPIDashboardController_Test {
            tp.Nana_Quote__c =  QuoteList[0].id;
            tplist.add(tp);
        }
-         
+        
         TerritoryNames__c tn=new TerritoryNames__c();
         tn.Name='Eastern Sales';
        // tn.Regional_Manager__c=
@@ -116,8 +116,8 @@ public class KPIDashboardController_Test {
         kpf.name ='George Wiedenhofer';
         insert kpf;
         
-       
         Test.startTest(); 
+        
         KPIDashboardController kpi=new KPIDashboardController();
         kpi.usedCheck=FALSE;
         kpi.successCheck=FALSE;
@@ -145,13 +145,13 @@ public class KPIDashboardController_Test {
         kpi.regionname='Eastern Sales';
         kpi.salesrepname='Bill Leon';
         
-        //kpi.ChangeReport();
+        kpi.ChangeReport();
         kpi.getRegionlist();
        // kpi.redirectHome();
         kpi.regionname='Mid Eastern Sales';
         kpi.salesrepname='Paul Nalette';
         
-      //  kpi.ChangeReport();
+        kpi.ChangeReport();
         kpi.getRegionlist();
         // kpi.redirectHome();
         kpi.regionname='Midwest Sales';
@@ -165,21 +165,20 @@ public class KPIDashboardController_Test {
         
         kpi.ChangeReport();
         kpi.getRegionlist();
-        
        //  kpi.redirectHome();
-        // kpi.regionname='--None--';
-       // kpi.ChangeReport();
+         kpi.regionname='--None--';
+        kpi.ChangeReport();
         kpi.getRegionlist();
         kpi.regionname='Eastern Sales';
         kpi.salesrepname='Andy cook';
         kpi.regioncheck=TRUE;
         kpi.salesrepcheck=TRUE;
-      //  kpi.ChangeReport();
+        kpi.ChangeReport();
         kpi.getRegionlist();
         // kpi.redirectHome();
-       Test.stopTest();  
+       
         
-      
+      Test.stopTest();  
     }
     
     
@@ -328,7 +327,7 @@ public class KPIDashboardController_Test {
         
         //insert test Account records
         list<Account> olstAccount = TestDataUtility.createAccountTestData();
-        insert olstAccount[0];
+        insert olstAccount;
         
         List<Project__c> ProjectList = new list<Project__c>();
         For(integer i=0; i<10; i++){
@@ -347,10 +346,6 @@ public class KPIDashboardController_Test {
         
         ProjectList[0].RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Commercial Projects').getRecordTypeId();
         insert ProjectList[0];
-        ProjectList[1].amount__c = 12457;
-        
-        ProjectList[1].RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Commercial Projects').getRecordTypeId();
-        insert ProjectList[1];
        /* ProjectList[0].Ownerid=u.id;
         update ProjectList[0];
         Project__c pr = [select id, owner.name, ownerId from Project__c where id=:ProjectList[0].id];
@@ -368,10 +363,6 @@ public class KPIDashboardController_Test {
         OpportunityList[0].Name = 'Opplast';
         OpportunityList[0].Budget_Quote__c =FALSE;
         update OpportunityList[0];
-        OpportunityList[1].Budget_Quote__c=TRUE;
-        OpportunityList[1].AccountId = olstAccount[0].Id ;
-        OpportunityList[1].Project_Name__c = ProjectList[1].Id;
-        insert OpportunityList[1];
         test.startTest();
         list<Quote__c> QuoteList = TestDataUtility.createQuoteRecords(OpportunityList);
         QuoteList[0].order_Finalized_Date__c = System.today();
@@ -444,5 +435,5 @@ public class KPIDashboardController_Test {
     test.stoptest();        
                        
     }
-
+    
 }

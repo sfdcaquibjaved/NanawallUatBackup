@@ -8,73 +8,80 @@
     
 ******************************************************************************/
 public with sharing class QuoteTransferController {
-    public Quote__c Quo {
-        get;
-        set;
-    }
-    public Quote__c QuotQuery;
-    public Quote__c Quoterec;
-    public Opportunity opp {
-        get;
-        set;
-    }
+    public Quote__c quo {get;set;}
+    public Quote__c queryQuoteToUpdate;
+    public Quote__c quoteRec;
+    public Opportunity opp {get;set;}
     public nrOpportunityContactRole__c oppConRole;
     //public list<nrOpportunityContactRole__c> listConrl ;
 
     //Get the Quote Record
     public QuoteTransferController(ApexPages.StandardController std) {
-            Quo = new Quote__c(); //Create a new instance 
-            Opp = new Opportunity();
-            Quoterec = (Quote__c) std.getRecord();
+            quo = new Quote__c(); //Create a new instances 
+            opp = new Opportunity();
+            quoteRec = (Quote__c) std.getRecord();
             oppConRole = new nrOpportunityContactRole__c();
+           
         }
-    //query over opp and quote
+    //query over  Opportunity and Quote  to obtain  record information 
     public pagereference obtainDetails() {
-            if (Quo.Opportunity__c != null) {
-                opp = [select Id, AccountID, Name, Account.Name from Opportunity where Id = : Quo.Opportunity__c];
-                QuotQuery = [Select Id, Contact__r.AccountID, Opportunity__c, Contact__c from Quote__c where Id = : Quoterec.Id];
+            if (quo.Opportunity__c != null) {
+                opp = [select Id, AccountID, Name, Account.Name from Opportunity where Id = : quo.Opportunity__c];
+                queryQuoteToUpdate = [Select Id, Contact__r.AccountID, Opportunity__c, Contact__c,order__c from Quote__c where Id = : quoteRec.Id];
             }
             return null;
         }
-    //Transfer Quote  to opportunity
-    public pagereference Transfer() {
+    //Method to Transfer Quote  to opportunity and to validate before Transfer
+    public pagereference transfer() {
+        //Null Check 
         if (opp.id != null) {
-            if (QuotQuery.Contact__r.AccountID == opp.AccountID) {
-                QuotQuery.Opportunity__c = opp.ID;
-                UtilityClass.doNotRunonTransfer = false;
+        //Check  for Account on Quote rec and Account in opportunity rec to be  transferred are same or not
+            if (queryQuoteToUpdate.Contact__r.AccountID == opp.AccountID) {
+            // Do not Transfer Quotes with Orders
+                if(queryQuoteToUpdate.order__c ==null){
+                queryQuoteToUpdate.Opportunity__c = opp.ID;
+                 UtilityClass.doNotRunonTransfer = false;//Static Boolean to ensure that Trigger to vaildate the duplicate  Opportunities method doesn't invoke.
                 try {
-                        update QuotQuery;
+                
+                        update queryQuoteToUpdate;
+                //Display Success Message once quote got transferred successfully 
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Info, 'The Quote has been transferred successfully'));
+                   
                  }
                     Catch(exception e) {}
-
-                //Success Message 
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Info, 'The Quote has been transferred successfully'));
-
-                //create the contact role if not exists 
-                set < ID > conrolset = new set < ID > ();
+                
+                
+                //create the contact role if Doesn't exists in opportunity related list upon transfer  
+                set < ID > setConRolIds = new set < ID > ();
                 for (nrOpportunityContactRole__c oppConRole: [select Id, Contact__c, Opportunity__c from nrOpportunityContactRole__c WHERE Opportunity__c = : opp.Id]) {
-                    conrolset.add(oppConRole.Contact__c);
+                    setConRolIds.add(oppConRole.Contact__c);
                 }
-                if (!conrolset.Contains(QuotQuery.Contact__c)) {
+                if (!setConRolIds.Contains(queryQuoteToUpdate.Contact__c)) {
                     nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
-                    oppConRole.Contact__c = QuotQuery.Contact__c;
+                    oppConRole.Contact__c = queryQuoteToUpdate.Contact__c;
                     oppConRole.Opportunity__c = opp.Id;
                     try {
                         insert oppConRole;
                     }
                     Catch(exception e) {}
                 }
-
-            } else {
-                //Error Message 
+                }else
+                {
+                //Display Error Message When Quote having any orders before Quote transfer
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'You have an order in the quote so you cannot transfer the quote'));
+                }
+            }
+            else {
+                //Display Error Message when Quote and Opportunity Account Ids are diferent
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Please search Opportunity with Same Account '));
             }
         }
-        Else {
+        else {
+            //Display Error Message  when opportunity is not selected on Page
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Please select Opportunity '));
         }
 
-
+        
         return null;
     }
 }

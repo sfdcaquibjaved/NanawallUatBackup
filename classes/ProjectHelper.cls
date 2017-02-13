@@ -31,6 +31,8 @@ public class ProjectHelper {
     public static void updateCorpAccFrmProj(set<ID> prjIds){
         map<ID,Opportunity> oppMap= new map<Id,opportunity>();
         list<opportunity> listOpp=[Select id,chain_account__c from opportunity where project_name__c IN : prjIds];
+         System.debug('34-Number of Queries used in this apex code so far: ' + Limits.getQueries());
+
         for(opportunity oppToUpdate : listOpp){
             if(!oppToUpdate.chain_account__c){
                 oppToUpdate.chain_account__c=True;
@@ -51,6 +53,8 @@ public class ProjectHelper {
     public static void updateResidentialVerticalFrmProj(set<ID> prjIds2){
         map<ID,Opportunity> oppMap2= new map<Id,opportunity>();
         list<opportunity> listOpp=[Select id,Residential_Vertical__c from opportunity where project_name__c IN : prjIds2];
+         System.debug('56-Number of Queries used in this apex code so far: ' + Limits.getQueries());
+
         for(opportunity oppToUpdate2 : listOpp){
             if(!oppToUpdate2.Residential_Vertical__c){
                 oppToUpdate2.Residential_Vertical__c=True;
@@ -80,7 +84,8 @@ public class ProjectHelper {
         }
         
         list<Project_Split__c> splitToQuery = [Select Id,Project__c,Project_Rep__c,Role__c from Project_Split__c where Project__c =: projId ];
-        
+         System.debug('87-Number of Queries used in this apex code so far: ' + Limits.getQueries());
+
         for (Project_Split__c pSplit : splitToQuery){
             mapProjSplit.put(pSplit.Project__c + '#' + pSplit.Project_Rep__c + '#' + pSplit.Role__c,pSplit);
         }
@@ -129,7 +134,8 @@ public class ProjectHelper {
         list<Project__c> querylist = [Select Id,Architect_Account__c, Architect_Account__r.OwnerId from Project__c where Id =: projId];
         
         list<Project_Split__c> splitToQuery = [Select Id,Project__c,Account__c,Project_Rep__c,Role__c from Project_Split__c where Project__c =: projId ];
-        
+         System.debug('137-Number of Queries used in this apex code so far: ' + Limits.getQueries());
+
         for (Project_Split__c pSplit : splitToQuery){
             mapProjSplit.put(pSplit.Project__c + '#' + pSplit.Project_Rep__c + '#' + pSplit.Account__c + '#' + pSplit.Role__c,pSplit);
         }
@@ -154,29 +160,127 @@ public class ProjectHelper {
         }
         
     }
-        /****************************************************************************************************************************************
+    /****************************************************************************************************************************************
       Method Name: projCeroCheck
       Description: The method Checks the CERO Checkbox  whenever a Related Quote Detail is created/updated with an CERO  Model.
       Input Parameter: Set Ids of Quotes      
     *****************************************************************************************************************************************/
      public static void projCeroCheck(Set<ID> quoteIds){
-       List<Quote__c> quoList = [select id,Project__c,Opportunity__c from Quote__c where ID =:quoteIds ];
-         Set<ID> proIds = new Set<ID>();
-         list<Project__c> ProjUpdateList = new list<Project__c>();
-         for (Quote__c quo: quoList) {
+        List<Quote__c> quoList = [select id,Project__c,Opportunity__c from Quote__c where ID =:quoteIds ];
+           System.debug('170-Number of Queries used in this apex code so far: ' + Limits.getQueries());
+
+          Set<ID> proIds = new Set<ID>();
+          list<Project__c> ProjUpdateList = new list<Project__c>();
+          for (Quote__c quo: quoList) {
                 proIds.add(quo.Project__c);
            }
           if (proIds.size() >0){
             for (Project__c proj: [Select Id,CERO__c  from Project__c Where Id IN: proIds]) {
-              proj.CERO__c = true;
-              system.debug('ProjectCERO'+proj.CERO__c);
-              ProjUpdateList.add(proj);
+                proj.CERO__c = true;
+                system.debug('ProjectCERO'+proj.CERO__c);
+                ProjUpdateList.add(proj);
             }
             if(ProjUpdateList.size()>0){
-               Database.saveresult[] sr = Database.update(ProjUpdateList, False); 
+                 Database.saveresult[] sr = Database.update(ProjUpdateList, False); 
                  ErrorLogUtility.processErrorLogs(sr, ProjUpdateList, 'ProjectHelper', 'projCeroCheck', 'Project', 'Update');
             }
           }
      }
 
+     /****************************************************************************************************************************************
+      Method Name: createInfluencerOpportunity
+      Description: The method creates Influencer opportunity below Project 
+      Input Parameter: List of projects       
+    *****************************************************************************************************************************************/
+     public static void createInfluencerOpportunity (List<Project__c> lstPro) {
+
+        system.debug('I am here createInfluencerOpportunity');
+
+        map<ID , string > mapProjectArchitect = new map <ID,string> ();
+        List<opportunity> lstOppInsert = new List <opportunity> () ;
+
+        for(Project__c p : lstPro){
+
+            mapProjectArchitect.put(p.ID , p.Architect_Account__c) ; 
+        }
+        string InfluencerRecordTypeID = label.Influencer_Opportunity_RecordTypeId ; 
+        //To know if Project already have a Influencer opportunity or not
+
+     Integer count =   [SELECT count() From opportunity WHERE project_name__c in: mapProjectArchitect.keyset() AND recordTypeID =: InfluencerRecordTypeID ] ;
+     
+     // Project Doesn't have a Influencer Opp - Create one
+     if(count == 0){
+
+        system.debug('I am inside if') ; 
+
+        for(Project__c p : lstPro ){
+
+            Opportunity opp = new Opportunity () ; 
+            
+            opp.project_name__c = p.ID ; 
+            opp.AccountID = p.Architect_Account__c ; 
+            opp.Name = 'Fills Automatically' ;
+            opp.StageName = 'Drawings - Requested' ; 
+            opp.CloseDate = p.Close_Date__c ;
+            opp.ForecastCategoryName = 'Pipeline';
+            opp.recordTypeID = InfluencerRecordTypeID ; 
+            lstOppInsert.add(opp) ; 
+
+
+        }
+        system.debug('Value of lstOppInsert' +lstOppInsert) ; 
+     }
+     
+     else{
+
+        system.debug('I am inside else') ; 
+        // Influencer opp already exist , check if its account is same as Architect account, if not then create new
+
+        List<Opportunity> lstOpps = [SELECT AccountID , ID , Close_Date__c, project_name__c  FROM Opportunity WHERE project_name__c in: mapProjectArchitect.keyset() AND  recordTypeID =: InfluencerRecordTypeID ] ; 
+        
+        set<ID> setAccountID = new set<ID>() ; 
+        for(Opportunity opp : lstOpps){
+               setAccountID.add(opp.AccountID) ;  
+        }
+        
+       
+        for(Opportunity o : lstOpps){
+
+            if((!setAccountID.contains(mapProjectArchitect.get(o.project_name__c))) && (UtilityClass.onlyrunOnce == TRUE)) {
+            
+            system.debug('I am inside inner if' + lstOpps);
+            Opportunity opp = new Opportunity (); 
+            opp.project_name__c = o.project_name__c ; 
+            opp.Name = 'Fills Automatically' ; 
+            opp.AccountID = mapProjectArchitect.get (o.project_name__c) ; 
+            opp.StageName = 'Drawings - Requested' ; 
+            opp.CloseDate = o.Close_Date__c ; 
+             opp.recordTypeID = InfluencerRecordTypeID ;
+             opp.ForecastCategoryName = 'Pipeline';
+            lstOppInsert.add(opp) ; 
+            UtilityClass.onlyRunOnce = FALSE ;
+            }
+        }
+
+     }
+
+
+     try{
+                if(lstOppInsert.size() > 0 ){
+                    system.debug('Inside Try lstOppInsert' +lstOppInsert) ; 
+                     UtilityClass.firstRun = FALSE ;
+                Database.saveresult[] sr = Database.insert(lstOppInsert, False); 
+
+                  }
+        }
+
+    catch(exception e){
+
+        system.debug('Exception is:' +e.getMessage());
+
+    }
+     
+
+
+     }
 }

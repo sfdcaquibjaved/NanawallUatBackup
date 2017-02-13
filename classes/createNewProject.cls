@@ -35,7 +35,7 @@ public string selectedType {get; set;}
             } 
              return lstOptions;
          }
-         
+          
          public list<selectOption> getApplications()
          {   list <selectoption> lstApp = new List<selectOption>();
             if(!String.isblank(sAppIndus) && sAppIndus !='--None--'){
@@ -57,7 +57,7 @@ public string selectedType {get; set;}
            
            public void createproject() 
            
-               {
+               {	
                    system.debug('Chck for values::'+newproject);
                      newproject.recordTypeID = Schema.getGlobalDescribe().get('Project__c').getDescribe().getRecordTypeInfosByName().get(Record_type_assign__c.getinstance(selectedType).Project_record_type_name__c).getRecordTypeId();
                      if(sAppIndus!='--None--')

@@ -3,18 +3,18 @@
 <apex:pageMessages ></apex:pageMessages>
     <apex:pageBlock title="Quote Transfer" id="quoPageBlock" >       
         <apex:pageBlockSection title="Select the Opportunity" columns="1" collapsible="false" id="oppDetail">
-            <apex:pageBlockSectionItem id="quooppItem">
+            <apex:pageBlockSectionItem id="quoOppItem">
                 <apex:outputLabel value="Opportunity" />
-                <apex:inputField value="{!Quo.Opportunity__c}" required="true" id="quoopp">
-                    <apex:actionSupport event="onchange"  action="{!ObtainDetails}" rerender="Resoppdetails" status="loadingStatus"/> 
+                <apex:inputField value="{!quo.Opportunity__c}" required="true" id="quoOpp">
+                    <apex:actionSupport event="onchange"  action="{!obtainDetails}" rerender="resOppDetails" status="loadingStatus"/> 
                 </apex:inputField>
             </apex:pageBlockSectionItem>
         </apex:pageBlockSection>
     <apex:pageBlockButtons >
-        <apex:commandButton action="{!Transfer}" Value="Transfer" reRender="quoPageForm" status="loadingStatus"/>
+        <apex:commandButton action="{!transfer}" Value="Transfer" reRender="quoPageForm" status="loadingStatus"/>
         <apex:commandButton action="{!cancel}" value="Cancel"/>
     </apex:pageBlockButtons>
-    <apex:pageBlockSection title="Opportunity details" id="Resoppdetails" >
+    <apex:pageBlockSection title="Opportunity details" id="resOppDetails" >
         <apex:pageBlockSectionItem >
             <apex:outputLabel value="Opportunity Name" />
             <apex:outputText value="{!opp.Name}" />

@@ -1,5 +1,5 @@
 trigger Docusign_Recepiant_Status_on_Project on dsfs__DocuSign_Recipient_Status__c(before insert, after insert, after update) {
-    list < dsfs__DocuSign_Recipient_Status__c > drinsert = new list < dsfs__DocuSign_Recipient_Status__c > ();
+    /*list < dsfs__DocuSign_Recipient_Status__c > drinsert = new list < dsfs__DocuSign_Recipient_Status__c > ();
     dsfs__DocuSign_Recipient_Status__c drlist2;
     dsfs__DocuSign_Status__c dd;
     dsfs__DocuSign_Status__c dpro;
@@ -98,5 +98,5 @@ trigger Docusign_Recepiant_Status_on_Project on dsfs__DocuSign_Recipient_Status_
         if (drinsert.size() > 0) {
             insert drinsert;
         }
-    }
+    }*/
 }

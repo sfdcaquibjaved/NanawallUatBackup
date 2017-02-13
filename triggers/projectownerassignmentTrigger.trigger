@@ -1,6 +1,6 @@
 trigger projectownerassignmentTrigger on project__c (before insert, before update, after insert,after update) 
 {
-list<Project__c> lstProjects= new list<Project__c>();
+/*list<Project__c> lstProjects= new list<Project__c>();
  if(trigger.isbefore)
  {
      for(Project__c ProRec : trigger.New)
@@ -22,5 +22,5 @@ list<Project__c> lstProjects= new list<Project__c>();
 if (trigger.isafter)
     {
       projectOwnerAssignment.updateOppTeam(trigger.new);
-    }
+    }*/
 }

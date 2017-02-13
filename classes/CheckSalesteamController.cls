@@ -19,7 +19,15 @@ public with sharing class CheckSalesteamController {
 		public string RepName  { get; set; }
 	}
 
-	public list<MissingTeamMember> missingTeamMembers  {get {  if(missingTeamMembers == null ) missingTeamMembers = new List<MissingTeamMember>();  return missingTeamMembers; } set;}
+	public list<MissingTeamMember> missingTeamMembers{
+     get
+     {
+         if(missingTeamMembers == null ) 
+         missingTeamMembers = new List<MissingTeamMember>(); 
+         return missingTeamMembers;
+     }
+     set;
+    }
 
 	public PageReference runCheck() 
 	{

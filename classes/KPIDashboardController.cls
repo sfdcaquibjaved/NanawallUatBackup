@@ -312,7 +312,6 @@ public class KPIDashboardController {
         string themeName = UserInfo.getUiTheme();
         String userAgent = System.currentPageReference().getHeaders().get('User-Agent');
         if (themeName == 'Theme4t') {
-        	if(userAgent!=null){
             if(userAgent.contains('iPad'))
             {
                 chartHeight = 260;
@@ -331,8 +330,7 @@ public class KPIDashboardController {
                 legendName = 'bottom';
                 mobileCheck = true;
             }
-        	}
-        	} else {
+        } else {
             chartHeight = 260;
             chartWeight = 530;
             fname = 'only Non-Architects';

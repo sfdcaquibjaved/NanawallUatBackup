@@ -113,7 +113,7 @@ Created Date: 4th August,2016
         projectIdOnlyArchSet = new set<id>();
         //list<Opportunity> oppList = [select id, Budget_Quote__c, Project_Name__c, Quote_Count__c from Opportunity where Quote_Count__c>0 AND RecordType.Name!= 'Influencer Opportunity' AND CALENDAR_YEAR(convertTimezone(Project_Name__r.createdDate))>=2012];            
         
-        for(Opportunity opp: [select id, Budget_Quote__c, Project_Name__c, Quote_Count__c, RecordType.Name from Opportunity where Quote_Count__c>0 AND RecordType.Name='Influencer Opportunity' AND Project_Name__c IN: ProjectId AND Project_Name__r.Owner.Name=: SalesRepName AND CALENDAR_YEAR(convertTimezone(Project_Name__r.createdDate))>=2012])
+        for(Opportunity opp: [select id, Budget_Quote__c, Project_Name__c, Quote_Count__c, RecordType.Name from Opportunity where RecordType.Name='Influencer Opportunity' AND Project_Name__c IN: ProjectId AND Project_Name__r.Owner.Name=: SalesRepName AND CALENDAR_YEAR(convertTimezone(Project_Name__r.createdDate))>=2012])
         {
            
                projectIdArchSet.add(opp.Project_Name__c);

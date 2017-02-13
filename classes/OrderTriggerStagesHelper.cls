@@ -185,7 +185,7 @@ public with sharing class OrderTriggerStagesHelper{
    public static void updateOrderNumberBasedonManufacturing(list<Order> OrderNewValues){
        
 
-/*
+
        Decimal rd ;
        Decimal sd ;
        Decimal td ;
@@ -241,7 +241,7 @@ public with sharing class OrderTriggerStagesHelper{
                     td = oNew.Order_Number_Default__c;
                 }
                 
-            }*/
+            }
             
    }
     /*************************************************

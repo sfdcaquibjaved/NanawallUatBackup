@@ -234,16 +234,19 @@ public class InstallationTriggerHandler_Test {
        Pricebook2 pb2 = new Pricebook2();
        pb2.Name = 'Models';
        insert pb2;
-        
-        
-       
-       //Create test data for Orders
+        Quote q = new Quote();
+        //q.AccountId = accounts[0].id;
+        q.OpportunityId = olstOpportunity[0].id;
+        q.ContactId = con[0].id;
+       insert q;
+            //Create test data for Orders
        Order o = new Order(
             AccountId = accounts[0].id,
             EffectiveDate = system.today(),
             OpportunityId = olstOpportunity[0].id,
             Pricebook2Id = Test.getStandardPricebookId(),
             status='Draft',
+           QuoteId = q.id,
             Balance_Received_Date__c = system.today()       
         );
         insert o;

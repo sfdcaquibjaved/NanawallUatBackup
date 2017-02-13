@@ -8,7 +8,6 @@
 
 @isTest(SeeAllData=false)
 private class Territory_owner_change_controller_Test {
-	
 	public static List<Zip_Codes_Master__c> olstTerritoryMastereCode;
 
     static testMethod void myUnitTest() {
@@ -19,6 +18,7 @@ private class Territory_owner_change_controller_Test {
  	    insert olstTerritoryMastereCode ;
         
         territory_owner_change_controller testClass = new territory_owner_change_controller();
+        
         testClass.closePopup();
         testClass.dosort();
         testClass.updateZipOwner();

@@ -56,7 +56,7 @@ global without sharing class OrderFulfillmentShopify {
                     sq.Financial_Status__c = financialStatus;
                     for (wrapperObjectShopify.fulfillments ful: ord.fulfillments) {
                         sq.Freight_Tracking_Number__c = ful.tracking_number;
-                        sq.Shipping_Method__c = ful.tracking_company;
+                        sq.Tracking_Company__c = ful.tracking_company;
                     }
                     sqUpdate.add(sq);
                 }

@@ -12,6 +12,8 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
      Code and after insert for approval process. 
     *************************************************************************************************/
        //Added by Satish Lokinindi 
+       if(Limits.getQueries()<50){
+       System.debug('I am here with Limit in project'+Limits.getQueries());
        if(trigger.isUpdate && trigger.isAfter)
        {
             for(project__c pro: Trigger.new){
@@ -88,6 +90,25 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
     *************************************************************************************************/
     if (trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)) {
         
+       // To insert opportunity if Architect Account is filled on Project and related Opportunity is not there
+
+       List<Project__c> lstProject = new List <Project__c> () ;
+
+       for(Project__c p : Trigger.new){
+            if ((p.Architect_Account__c != null) ){
+              system.debug('I am here Inside Trigger IF');
+                lstProject.add(p) ; 
+            }
+       }
+
+       if((lstProject.size() > 0 ) && (utilityClass.FirstRun == TRUE )){
+            system.debug('I am here with lstProject' +lstProject) ; 
+            ProjectHelper.createInfluencerOpportunity(lstProject) ; 
+            UtilityClass.firstRun = FALSE ;
+       }
+      /*****END OF INFLUENCER OPPORTUNITY CREATION FUNCTIONALITY****/
+
+
         if(Trigger.isInsert){
             ProjectHelper.createProjSplitLocation(trigger.new);
             
@@ -209,5 +230,5 @@ trigger Project_Trigger on Project__c (before insert, before update,after insert
         }
      }
     /**************************************************************************************************************/
-    
+    }
 }

@@ -2,9 +2,9 @@
     @ Author        : Absyz Software Consulting Pvt. Ltd.
     @ Date          : June-2016
     @ Description   : Handler class for InstallationTrigger
-    @ Audit Trial   : Added comments
+    @ Audit Trial   : Added comments , Case Sharing with Installer
     @ Test Class    : InstallationTriggerHandler_Test
-    @ Last Modified Date : 02-July-2016
+    @ Last Modified Date : 02-January-2017
   
 ****************************************************************************/
 
@@ -113,7 +113,62 @@ public class InstallationTriggerHandler {
     }
     
     
-
+     /*  
+         Method Name    : updateTaskEventOwner
+         Purpose        : When Installer is manually changed , this method updates the task and event Owner to the new Installer
+         Input Parameter: List of Installation
+         Created Date   : January 2017
+         */
+    
+    public static void updateTaskEventOwner(List < Installation__c > newTrigger){
+            List <ID> lstInstallationId = new List<ID> () ;
+            List <Task> lstTaskUpdate = new List <Task> () ;
+            List <Event> lstEventUpdate = new List <Event> () ;
+        
+            for(Installation__c i : newTrigger ){
+                    lstInstallationId.add(i.ID) ; 
+                }
+        
+            Integer countActivity = [SELECT Count() FROM Task WHERE WhatID in : lstInstallationId] ; 
+            if(countActivity > 0){
+                        List <Task> lstRelatedTasks = [SELECT id , OwnerID  FROM Task WHERE WhatID in :  lstInstallationId ] ; 
+                for(Installation__c ins : newTrigger ){
+                    for(Task t : lstRelatedTasks){
+                                t.OwnerID = ins.Assigned_to__c ; 
+                                lstTaskUpdate.add(t);
+                        }
+                }
+            }
+                Integer countEvent = [SELECT Count() FROM Event WHERE WhatID in : lstInstallationId] ; 
+            if(countEvent > 0){
+                    List <Event> lstRelatedEvent = [SELECT id , OwnerID  FROM Event WHERE WhatID in :  lstInstallationId ] ;
+                    for(Installation__c ins : newTrigger ){
+                        for(Event e : lstRelatedEvent){
+                                e.OwnerID = ins.Assigned_to__c ; 
+                                lstEventUpdate.add(e);
+                        }
+                    } 
+            
+                }
+                
+                try{
+                    if(lstTaskUpdate.size() > 0){
+                        update lstTaskUpdate ; 
+                        
+                    }
+                    if (lstEventUpdate .size() > 0) {
+                            update lstEventUpdate ;
+                       }
+                    
+                }
+                catch(exception e){
+                    System.debug('Exception is:' +e.getMessage()) ;
+                }
+                
+                
+        
+    }
+    
     
     
      
@@ -127,69 +182,35 @@ public class InstallationTriggerHandler {
     public static void AssignInstaller(List < Installation__c > newTrigger)
     {
         
-      List<id> ProjectIdList = new List<id>() ;  
-      List<id> AccountList = new List<id>() ;
-      List<string> TerritoryList = new List<string>() ;
-      List<id> ContactIdList = new List <id>();
-      
-       system.debug('Inside AssignInstaller'); 
-      for(Installation__c p : newTrigger ){
-            string Projectid = p.Project__c ;
-            ProjectIdList.add(Projectid);
-        }
+        set <string> setZipCode = new set<string>() ; 
         
-        list < project__c > projects = [SELECT id, TerritoryName__c  FROM Project__c WHERE id IN: ProjectIdList Limit 1];
-        system.debug('Inside AssignInstaller projects' +projects); 
-        
-        if(projects.size() > 0){
-        for(project__c p  : projects){
-            string Territory = p.TerritoryName__c ; 
-            TerritoryList.add(Territory);
-            
+
+        for(Installation__C i : newTrigger){
+                 setZipCode.add(i.Project_Zip_Code__c);
         }
-        }
-        
-        list < account> acc = [SELECT id , Territory__c FROM Account WHERE Territory__c IN: TerritoryList AND Certified_Installer__c = TRUE AND IsPartner = TRUE LIMIT 1] ; 
-        system.debug('Inside AssignInstaller acc' +acc); 
-        if(acc.size()>0){
-            for(account a : acc ){
-                id i = a.id ;
-                AccountList.add(i)  ; 
+
+        List<Zip_Codes_Master__c> zipCodeList = [SELECT id ,Zip_Code__c ,Territory__c , Installer_Contact__c , Installer_Account__c , Installer_User__c FROM Zip_Codes_Master__c WHERE Zip_Code__c in: setZipCode ];
+
+
+        for(Installation__c i : newTrigger){
+            if(zipCodeList.size() > 0){
+                for(Zip_Codes_Master__c zip : zipCodeList){
+                    if((i.Project_Zip_Code__c == zip.Zip_Code__c)&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
+                            if(zip.Installer_Contact__c != null){
+                                    i.Installer_Contact__c = zip.Installer_Contact__c ; 
+                            }
+                            if(zip.Installer_Account__c != null){
+                                    i.Installer_Account__c = zip.Installer_Account__c ;
+                            }
+                            if(zip.Installer_User__c != null){
+                                    i.Assigned_to__c = zip.Installer_User__c ;
+                                    i.OwnerID = zip.Installer_User__c ;
+                            }
+                }
             }
         }
-        
-        list < contact> con = [SELECT id, Name FROM Contact WHERE AccountId in: AccountList AND Title = 'Certified Nana Installer'  LIMIT 1] ;
-        system.debug('Inside AssignInstaller con' +con);
-       if(con.size() > 0 ){
-            for(contact c : con){
-                
-                Id i = c.id ; 
-                ContactIdList.add(i);
-            }
         }
-        
-        list < user > userId = [SELECT id , ContactId FROM USER WHERE ContactId IN: ContactIdList Limit 1];
-        
-        
-        if((acc.size() >0 ) ){
-        for(Installation__c Ins : newTrigger){
-            ins.Installer_Account__c = acc[0].id ; 
-         
-        }
-        }
-        if(con.size() > 0){
-            for(Installation__c Ins : newTrigger) {
-                  ins.Installer_Contact__c = con[0].id ;
-            }
-        }
-        if(userId.size()>0){
-            for(Installation__c Ins : newTrigger){
-                ins.Assigned_to__c = userId[0].id ;
-                ins.OwnerId = ins.Assigned_to__c ;
-            }
-        }
-    
-        
+
     }
     
     
@@ -202,7 +223,7 @@ public class InstallationTriggerHandler {
              Created Date: August 2016
              */
     
-    public static void updateInstallerUser(List < Installation__c > newTrigger) {
+   /* public static void updateInstallerUser(List < Installation__c > newTrigger) {
         List<id> EmailAddress = new List<id>() ; 
       
         for(Installation__c s : newTrigger ){
@@ -212,7 +233,6 @@ public class InstallationTriggerHandler {
         }
          list < user > userId = [SELECT id, email, ContactId FROM USER WHERE ContactId IN: EmailAddress Limit 1];
                      system.debug('UserId'+userId);
-
         for(Installation__c Ins : newTrigger) {
             system.debug('Debug New' + Ins.Installer_Contact__c);
             if(ins.Installer_Contact__c != null ){
@@ -221,14 +241,15 @@ public class InstallationTriggerHandler {
                 for(User u : userId){
                     if(userId.size() > 0){
                 Ins.Assigned_to__c = u.id ;
-                    }
+                Ins.OwnerId = Ins.Assigned_to__c;
+                }
             }
             }
              
         }
        
         
-    }
+    } */
     
     /*
              Method Name: manualShareRead
@@ -245,6 +266,8 @@ public class InstallationTriggerHandler {
          List<Installation__Share> ShareInstallation = new List<Installation__Share>();
            List<OpportunityShare> OppToShare = new List<OpportunityShare>();
          List<CaseShare> ShareCase = new List<CaseShare>();
+         List<OrderShare> OrderToShare = new List<OrderShare> () ;
+         List<ContactShare> ContactToShare = new List<ContactShare> () ; 
          
          for (Installation__c ins : newTrigger) {
              //To share Account
@@ -277,7 +300,7 @@ public class InstallationTriggerHandler {
                  ShareCase.add(cs);
              }
              // To share Installation
-      /*       if(ins.Assigned_to__c != null){
+           /* if(ins.Assigned_to__c != null){
                  Installation__Share InsShare = new Installation__Share ();
                  InsShare.AccessLevel = 'Edit';
                  InsShare.ParentId = Ins.Id ; 
@@ -286,6 +309,28 @@ public class InstallationTriggerHandler {
 
                  ShareInstallation.add(InsShare);
              } */
+             
+              // To share Order
+            /*  if((ins.Order__c != null)&& (ins.Assigned_to__c != null)){
+                 OrderShare shareOrder = new OrderShare ();
+                shareOrder.OrderAccessLevel = 'Read';
+                 shareOrder.OrderID = Ins.Order__c ; 
+                 shareOrder.UserOrGroupId = ins.Assigned_to__c;
+                 
+                 OrderToShare.add(shareOrder); 
+             } */
+             
+               // To share Contact
+          /*    if((ins.Contact__c != null)&& (ins.Assigned_to__c != null)){
+                 ContactShare shareContact = new ContactShare ();
+                shareContact.ContactAccessLevel = 'Read';
+                 shareContact.ContactID = Ins.Contact__c ; 
+                 shareContact.UserOrGroupId = ins.Assigned_to__c;
+                 
+                 ContactToShare.add(shareContact); 
+             } */
+             
+             
              
              // To share Quote 
 
@@ -299,6 +344,9 @@ public class InstallationTriggerHandler {
                  OppToShare.add(OppShare);
              }          
          }
+         
+          if (!OrderToShare.isEmpty())
+                   //   insert OrderToShare;
          
          // do the DML to create shares
              if (!sharesToCreate.isEmpty())
@@ -333,12 +381,12 @@ public class InstallationTriggerHandler {
     public static void updateInstallationName(list<Installation__c> installList){
        system.debug('Inside updateInstallationName');
         set<id> setOrderId = new set<id>();
-		set<id> setQuoteId = new set<id>();
+        set<id> setQuoteId = new set<id>();
        List<Installation__c> InsList = new List<Installation__c>() ;  
         
         for(Installation__c i : InstallList){
                // Id ord = i.Order_Id__c ; 
-            if(i.Order_Number__c != null){			
+            if(i.Order_Number__c != null){          
                 setOrderId.add(i.Order_Id__c);
             }
             else if(i.Quote_Number__c != null){
@@ -348,17 +396,17 @@ public class InstallationTriggerHandler {
         }
         system.debug('The set is'+setOrderId);
         Integer count = [SELECT COUNT() FROM Installation__c Where Order__c IN: setOrderId ];
-		Integer countQuote = [SELECT COUNT() FROM Installation__c Where Quote_Name__c IN: setQuoteId ];
+        Integer countQuote = [SELECT COUNT() FROM Installation__c Where Quote_Name__c IN: setQuoteId ];
          system.debug('Value of count' + count);
      
         if((count > 0) && (countQuote == 0)){
             count = Count +1 ;
-			system.debug('I am here4' +countQuote);
+            system.debug('I am here4' +countQuote);
             system.debug('Inside if');
             for(Installation__c i : InstallList){
                 if(i.Order_Number__c != Null){
                 i.Name = 'INS'+ i.Order_Number__c +'_'+count ;
-				 i.Status__c = 'Assigned' ;
+                 i.Status__c = 'Assigned' ;
                    
                         
                     
@@ -368,7 +416,7 @@ public class InstallationTriggerHandler {
             }
         }
         else if((count == 0) && (countQuote == 0)){
-			system.debug('I am here3' +countQuote);
+            system.debug('I am here3' +countQuote);
             for(Installation__c i : InstallList){
               if(i.Order_Number__c != Null){
                 i.Name = 'INS'+ i.Order_Number__c  ;
@@ -386,11 +434,11 @@ public class InstallationTriggerHandler {
                 
             }
         }
-	
+    
         else if((count == 0) && (countQuote != 0)){
-			
-			 countQuote = countQuote +1 ;
-				system.debug('I am here' +countQuote);
+            
+             countQuote = countQuote +1 ;
+                system.debug('I am here' +countQuote);
             for(Installation__c i : InstallList) {
             i.Name = 'INS'+ i.Quote_Number__c +'_'+countQuote ;
                 i.Status__c = 'Assigned' ;
@@ -399,10 +447,10 @@ public class InstallationTriggerHandler {
             }
         }
 
-		else if((count != 0) && (countQuote != 0)){
-			countQuote = countQuote +1 ;
-			count = count+1 ; 
-			system.debug('I am here2' +countQuote);
+        else if((count != 0) && (countQuote != 0)){
+            countQuote = countQuote +1 ;
+            count = count+1 ; 
+            system.debug('I am here2' +countQuote);
             for(Installation__c i : InstallList){
               if(i.Order_Number__c != Null){
                 i.Name = 'INS'+ i.Order_Number__c +'_'+count  ;
@@ -419,7 +467,7 @@ public class InstallationTriggerHandler {
                 
             }
         }
-		 
+         
         
     }
     

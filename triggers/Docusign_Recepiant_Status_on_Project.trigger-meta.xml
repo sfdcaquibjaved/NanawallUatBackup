@@ -3,7 +3,7 @@
     <apiVersion>36.0</apiVersion>
     <packageVersions>
         <majorNumber>6</majorNumber>
-        <minorNumber>3</minorNumber>
+        <minorNumber>2</minorNumber>
         <namespace>dsfs</namespace>
     </packageVersions>
     <status>Inactive</status>
