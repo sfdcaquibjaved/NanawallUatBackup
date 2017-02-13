@@ -1,6 +1,6 @@
 public with sharing class GlobalStrings {
-    public static string HostName() { return 'na7.salesforce.com'; }
-    public static string NanaServerAddress() { return 'www.nanareps.com'; } 
+    public static string HostName() { return 'cs3.salesforce.com'; }
+    public static string NanaServerAddress() { return '66.209.91.78'; } 
     public static string RequiredProfileIDForSharePool() { return '00eA0000000Qn2V'; }
     public static string CatchallUserIDForAssignment() { return '005A0000000M8pi';  }
     public static string QuoteEmailTemplateID() { return '00XA0000000IFUt';  }

@@ -10,7 +10,12 @@ system.debug('astech_OrderTrigger: before insert');
 	{ 
 system.debug('astech_OrderTrigger: after insert');		
 		astech_OrderTrigger_Helper.handleAfterInsert(  trigger.new);
-		
+	} else if( trigger.isAfter && trigger.isUpdate ) 
+	{
+		astech_OrderTrigger_Helper.handleAfterUpdate( trigger.oldMap, trigger.new);	
+	} else if( trigger.isBefore && trigger.isUpdate )
+	{
+		astech_OrderTrigger_Helper.handleAfterUpdate( trigger.oldMap, trigger.new);	
 	}
    
     

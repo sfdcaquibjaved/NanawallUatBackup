@@ -315,7 +315,7 @@ system.debug('using Solarlux record type ' + recordTypes.get('Solarlux') );
 			} 
 		}			 
 
-/* this was causing exception during the port ;; need to rewrite 
+		//SOQL optimization -- this might be something we can optimize. not sure  though. - ks
 		if( mfoTypes.keySet().size() > 0 ) 
 		{
 			list<Order> orderUpdates = new list<Order>();
@@ -329,7 +329,7 @@ system.debug('using Solarlux record type ' + recordTypes.get('Solarlux') );
 				update orderUpdates;
 
 		}
-*/			
+
 			
 			
 			

@@ -37,7 +37,7 @@ public with sharing class NanaQuote_Create_Order_Controller {
         Quote thisq = null;
         for( Quote q : [SELECT Id, Ordered__c, Order__c,  Nana_Quote__r.Order__c, Dupe_Order__c, Opportunity.AccountId FROM Quote WHERE Nana_Quote__c = :this.thisQuote.Id] )
         {
-            thisq = q;
+            thisq = q; 
             break; 
         }
 
@@ -61,13 +61,11 @@ public with sharing class NanaQuote_Create_Order_Controller {
                 
         Order thiso = new Order();
         thiso.QuoteId = thisq.Id;
-		thiso.AccountID = thisq.Opportunity.AccountId;
-		thiso.EffectiveDate =  date.today();
-		thiso.Status = 'Draft'; //or Order Created
-
-        
-        
 		insert thiso;
+		
+		//we need to activate the order separately because the triggers wont allow you to activate the order during insert
+		thiso.Status = 'Order Created';
+		update thiso;
         
         Apexpages.addMessage( new Apexpages.Message( Apexpages.Severity.INFO, 'created.' ) );
 

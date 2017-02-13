@@ -18,6 +18,7 @@ public with sharing class astech_OrderTrigger_Helper {
 			o.BillingState = q.Opportunity.Account.BillingState; 
 			o.BillingPostalCode = q.Opportunity.Account.BillingPostalCode;
 			o.BillingCountry = q.Opportunity.Account.BillingCountry;
+			o.EffectiveDate =  date.today();
 			o.ShippingStreet =  ( q.Shipping_Address__c != null ? q.Shipping_Address__c : '' ) + ( q.Shipping_Address_2__c != null? '\n' + q.Shipping_Address_2__c : '');
 			o.ShippingCity = q.Shipping_City__c;
 			o.ShippingStateCode = q.Shipping_State__c;
@@ -42,6 +43,8 @@ public with sharing class astech_OrderTrigger_Helper {
 			o.Ship_Label__c = q.Ship_Label__c;
 			o.Bill_to_Contact__c = q.ContactId;
 			o.Status = 'Draft'; //or Order Created
+//            o.Status = 'Order Created';
+			
 			o.OpportunityId = q.OpportunityId;			
 			o.QuoteId = q.Id;		
 			
@@ -313,7 +316,7 @@ System.debug('**ASTECH: total items to insert: ' +newOrderItems.size() );
 		
 		//look up the quote to update 
 		list<Quote> quotesToUpdate = new list<Quote>();
-		map< Id, Id> nanaQuoteToOrderIDLookup = new map<Id,Id>();
+		map< Id, Order> nanaQuoteToOrderLookup = new map<Id,Order>();
 		list<Quote__c> nanaQuotesToUpdate = new list<Quote__c>();
 		list<Id> nanaQuoteIDs = new list<Id>();
 		for (Quote q : [SELECT Id, Order__c, Nana_Quote__c FROM Quote WHERE Id = :QuoteIds ] )
@@ -324,21 +327,24 @@ System.debug('**ASTECH: total items to insert: ' +newOrderItems.size() );
 	        q.Ordered__c = true;
 	        q.Order_Created__c = true;
 	        nanaQuoteIDs.add( q.Nana_Quote__c);
-	        nanaQuoteToOrderIDLookup.put( q.Nana_Quote__c, o.Id );
+	        nanaQuoteToOrderLookup.put( q.Nana_Quote__c, o );
 			
 			quotesToUpdate.add( q );
 system.debug( '**ASTECH: Fixing up quote '+ q.Id +' order flags. ');			
 		}
 		
 		//look up the NANA quotes to update
-		for (Quote__c q : [SELECT Id, Order__c  FROM Quote__c WHERE Id = :nanaQuoteIDs ] )
+		for (Quote__c q : [SELECT Id, Order__c,Order_Number__c  FROM Quote__c WHERE Id = :nanaQuoteIDs ] )
 		{
-system.debug( '**ASTECH: setting quote__c '+ q.Id +' Order__c = ' + nanaQuoteToOrderIDLookup.get(q.Id) );			
-			q.Order__c = nanaQuoteToOrderIDLookup.get(q.Id);
+system.debug( '**ASTECH: setting quote__c '+ q.Id +' Order__c = ' + nanaQuoteToOrderLookup.get(q.Id).Id );			
+			Order o = nanaQuoteToOrderLookup.get(q.Id);
+			q.Order__c = o.Id;
+			q.Order_Number__c = Decimal.valueOf(o.Hidden_Another_Auto_Number__c );
+            q.Ordered__c  = true;
+			
 			nanaQuotesToUpdate.add( q );
 		}
-		
-		
+				
 		
 		//now insert/update the objects
 		if( newOrderItems.size() > 0  )
@@ -352,4 +358,147 @@ system.debug( '**ASTECH: setting quote__c '+ q.Id +' Order__c = ' + nanaQuoteToO
 system.debug('astech_OrderTrigger_Helper: finished after insert ...');
 
 	}    
+	
+	public static void handleAfterUpdate( map<Id, Order> oldMap, list<Order> orders ) 
+	{
+       Contact dummyContact  = [SELECT Id FROM Contact WHERE LastName = 'CAD EMAIL RECIPIENT' LIMIT 1]; //SOQL opt -- we could stick this contact on the order when it is inserted, and then just refer to that field 
+        
+        list<Task> tasksToInsert = new list<Task>(); 
+        map< Id, Account> pipelineEmails = new map<id, Account>();
+
+        for( Order o : orders )
+        {
+            
+            if( o.Test_GUID__c != oldMap.get(o.Id).Test_GUID__c )
+            { //the order finalized date was set
+                
+                    if( 
+                    o == null
+                    || o.Installer_Email__c == null)
+                    {
+                        system.debug('No installer email found for order ' + o.Id );
+                        continue;
+                    }
+                    
+                system.debug('sending CAD email to  ' + pipelineEmails.get(o.Id) );
+				try
+				{
+	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+	                Task tsk = new Task();
+	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
+	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
+	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
+	                tsk.Description = '';
+	                
+	                tasksToInsert.add( tsk ); 
+	                
+				}catch (Exception ex )
+				{
+					system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+				}
+                
+            }
+           
+            system.debug('QuoteID: ' + o.QuoteId+'  ; NanaQuote: ' + o.Nana_Quote_ID__c);           
+                            
+        }
+        if( tasksToInsert.size() > 0 )
+            insert tasksToInsert;
+        		
+	}
+	
+	public static void handleBeforeUpdate( map<Id, Order> oldMap, list<Order> orders ) 
+	{
+        map<Id, list<Manufacturing_Order__c>> manufacturingOrderMap = new map<Id, list<Manufacturing_Order__c>>();
+        map<Id, list<Shipping_Order__c>> shippingOrderMap = new map<Id, list<Shipping_Order__c>>();
+        
+        integer totalmfs = 0;
+        for( Manufacturing_Order__c mo : [SELECT Id, Order__c, Factory_Completion_Date__c, Status__c, Work_Order_Sent__c,Work_Order_Received__c FROM Manufacturing_Order__c WHERE Order__c = :trigger.new ])
+        { 
+            if( !manufacturingOrderMap.containsKey( mo.Order__c) )
+            {
+                manufacturingOrderMap.put( mo.Order__c, new list<Manufacturing_Order__c>() );
+            }
+            manufacturingOrderMap.get(mo.Order__c).add( mo );
+            totalmfs++;
+        }
+        
+system.debug('ORDERTRIGGER: Got ' + manufacturingOrderMap.size() + ' orders with manufacturingorders and ' + totalmfs + ' total manufacturing orders'  );
+        
+        for( Shipping_Order__c so : [SELECT Id,Order__c,Actual_Delivery_Date__c, Actual_Pickup_Date__c, Status__c FROM Shipping_Order__c WHERE Order__c = :trigger.new ])
+        {
+            if( !shippingOrderMap.containsKey( so.Order__c) )
+            {
+                shippingOrderMap.put( so.Order__c, new list<Shipping_Order__c>() );
+            }
+            shippingOrderMap.get(so.Order__c).add( so );
+        }
+        
+        list<Shipping_Order__c> shippingOrdersToUpdate = new list<Shipping_Order__c>();
+        list<Manufacturing_Order__c> manufacturingOrdersToUpdate = new list<Manufacturing_Order__c>();      
+        list<Id> orderIdsToUpdate = new list<Id>();
+        
+        for( Order o : orders )
+        {
+System.debug('***ORDERTRIGGER: In the o loop:  ' + o.Quote_Name__c );
+            //pipeline updates 
+            Order_Trigger_Helper.OrderStageAggregate osa = new Order_Trigger_Helper.OrderStageAggregate();
+            osa.o = o;
+            osa.oldO = oldMap.get(o.Id);
+            osa.manufacturingOrders = manufacturingOrderMap.get( o.Id );
+            osa.shippingOrders = shippingOrderMap.get( o.Id );
+system.debug('setting stages for order ' + o.Id);
+            Order_Trigger_Helper.SetStages( osa );
+system.debug('done setting stages for order ' + o.Id);
+            
+            if( o.Stage__c != oldMap.get(o.Id).Stage__c )
+            {
+                osa.mfrOrdersNeedUpdating = true;
+                osa.shippingOrdersNeedUpdating = true;
+            }
+            
+            if(  osa.mfrOrdersNeedUpdating)
+            {
+                 manufacturingOrdersToUpdate.addAll( osa.manufacturingOrders);
+                 orderIdsToUpdate.add(o.Id);
+            }
+            if(  osa.shippingOrdersNeedUpdating)
+            {
+                 shippingOrdersToUpdate.addAll( osa.shippingOrders);
+                 orderIdsToUpdate.add(o.Id);
+            }
+            // end pipeline updates         
+            
+            if( 
+            	(o.Order_Finalized_Date__c != null && oldMap.get(o.Id).Order_Finalized_Date__c == null )
+				|| o.Regenerate_GUUID__c
+        	)
+            { //the order finalized date was set
+                 
+                //(1) update GUUID
+                Blob aes = Crypto.generateAesKey(128);
+                String hex = EncodingUtil.convertToHex(aes);                
+                
+                o.Test_GUID__c = hex;
+                o.Regenerate_GUUID__c = false;
+                                
+                //(2) Tell nana about the GUUID
+System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_Name__c );
+                
+                pp_EmailFlowUtility.doCallout(o.Quote_Name__c, hex);
+            }
+        }
+
+        //KS- i deleted the code that pushes the pipeline fields up to the nanaquote here.
+
+
+        //flag pipeline updates
+        if(manufacturingOrdersToUpdate.size() > 0 && !Order_Trigger_Helper.futureMethodRunning)
+            Order_Trigger_Helper.doMfrOrderUpdates(orderIdsToUpdate);
+
+        if(shippingOrdersToUpdate.size() > 0  && !Order_Trigger_Helper.futureMethodRunning)
+             Order_Trigger_Helper.doShippingOrderUpdates( orderIdsToUpdate );
+    
+	}
+	
 }
