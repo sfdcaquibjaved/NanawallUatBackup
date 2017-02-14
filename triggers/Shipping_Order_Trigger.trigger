@@ -52,32 +52,31 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
                 
 				// need to push the most recent dates for certain fields back up to the Order level because  ... we have no good reason and like to write code i guess
 				//this block detects if a change is needed, and tells the Order_Trigger_Helper to do it
-				boolean set_IN_Actual_Delivery_Date = true;
-				boolean set_IN_ETA_Jobsite = true;
-				boolean set_IN_Freight_ETA_Jobsite = true;
-				boolean set_IN_Freight_Tracking_Number = true;
-				boolean set_IN_Revised_ETA_Jobsite = true;
-				boolean set_IN_Actual_Pickup_Date  = true;
+				boolean set_IN_Actual_Delivery_Date = false;
+				boolean set_IN_ETA_Jobsite = false;
+				boolean set_IN_Freight_ETA_Jobsite = false;
+				boolean set_IN_Freight_Tracking_Number = false;
+				boolean set_IN_Revised_ETA_Jobsite = false;
+				boolean set_IN_Actual_Pickup_Date  = false;
 				for( Shipping_Order__c so : shippingOrderMap.get( o.Id ) ) 
 				{
-					if( so.Actual_Delivery_Date__c == null )
-						set_IN_Actual_Delivery_Date = false;
-					
-					if( so.ETA_Jobsite__c == null )
-						set_IN_ETA_Jobsite = false;
- 					
-					if( so.Freight_ETA_Jobsite__c == null )
-						set_IN_Freight_ETA_Jobsite = false;
- 					
-					if( so.Freight_Tracking_Number__c == null )
-						set_IN_Freight_Tracking_Number = false;
- 					
-					if( so.Revised_ETA_Jobsite__c == null )
-						set_IN_Revised_ETA_Jobsite = false;					
-						
-					if( so.Actual_Pickup_Date__c == null )
-						set_IN_Actual_Pickup_Date = false;					
-						
+					if( so.Actual_Delivery_Date__c != null )
+						set_IN_Actual_Delivery_Date = true;
+
+					if( so.ETA_Jobsite__c != null )
+						set_IN_ETA_Jobsite = true;
+
+					if( so.Freight_ETA_Jobsite__c != null )
+						set_IN_Freight_ETA_Jobsite = true;
+
+					if( so.Freight_Tracking_Number__c != null )
+						set_IN_Freight_Tracking_Number = true;
+
+					if( so.Revised_ETA_Jobsite__c != null )
+						set_IN_Revised_ETA_Jobsite = true;
+
+					if( so.Actual_Pickup_Date__c != null )
+						set_IN_Actual_Pickup_Date = true;
 				}
 
 				boolean ordersNeedUpdating  = ( set_IN_Actual_Delivery_Date || set_IN_ETA_Jobsite || set_IN_Freight_ETA_Jobsite || set_IN_Freight_Tracking_Number || set_IN_Revised_ETA_Jobsite || set_IN_Actual_Pickup_Date);

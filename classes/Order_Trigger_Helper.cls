@@ -176,12 +176,12 @@ global with sharing class Order_Trigger_Helper {
 				Date IN_Revised_ETA_Jobsite = null;
 				Date IN_Actual_Pickup_Date = null;
 				
-				boolean set_IN_Actual_Delivery_Date = true;
-				boolean set_IN_ETA_Jobsite = true;
-				boolean set_IN_Freight_ETA_Jobsite = true;
-				boolean set_IN_Freight_Tracking_Number = true;
-				boolean set_IN_Revised_ETA_Jobsite = true;
-				boolean set_IN_Actual_Pickup_Date = true;
+				boolean set_IN_Actual_Delivery_Date = false;
+				boolean set_IN_ETA_Jobsite = false;
+				boolean set_IN_Freight_ETA_Jobsite = false;
+				boolean set_IN_Freight_Tracking_Number = false;
+				boolean set_IN_Revised_ETA_Jobsite = false;
+				boolean set_IN_Actual_Pickup_Date = false;
 				
 				boolean ordersNeedUpdating = false;
 				for( Shipping_Order__c so : shippingOrderMap.get( o.Id ) ) 
@@ -198,7 +198,7 @@ system.debug('** SO: setting temp actual delivery date');
 						}
 					}  else 
 					{
-						set_IN_Actual_Delivery_Date = false;
+//						set_IN_Actual_Delivery_Date = false;
 					}
 
 /*					
@@ -212,31 +212,36 @@ system.debug('** SO: setting temp actual delivery date');
 					{
 						IN_ETA_Jobsite = so.ETA_Jobsite_2__c;
 						set_IN_ETA_Jobsite = true;
-					} else set_IN_ETA_Jobsite = false;
+					} 
+					//else set_IN_ETA_Jobsite = false;
 					
 					 					
 					if( so.Freight_ETA_Jobsite__c != null )
 					{
 						if( IN_Freight_ETA_Jobsite == null || so.Freight_ETA_Jobsite__c > IN_Freight_ETA_Jobsite )
 							IN_Freight_ETA_Jobsite = so.Freight_ETA_Jobsite__c;
-					}  else set_IN_Freight_ETA_Jobsite = false;
+					}  
+					//else set_IN_Freight_ETA_Jobsite = false;
  					
 					if( so.Freight_Tracking_Number__c != null )
 					{
 						IN_Freight_Tracking_Number = so.Freight_Tracking_Number__c;
-					}  else set_IN_Freight_Tracking_Number = false;
+					}  
+					//else set_IN_Freight_Tracking_Number = false;
  					
 					if( so.Revised_ETA_Jobsite__c != null )
 					{ 
 						if( IN_Revised_ETA_Jobsite == null || so.Revised_ETA_Jobsite__c > IN_Revised_ETA_Jobsite )
 							IN_Revised_ETA_Jobsite = so.Revised_ETA_Jobsite__c;
-					}  else set_IN_Revised_ETA_Jobsite = false;					
+					}  
+					//else set_IN_Revised_ETA_Jobsite = false;					
 				 
 					if( so.Actual_Pickup_Date__c != null )
 					{ 
 						if( IN_Actual_Pickup_Date == null || so.Actual_Pickup_Date__c > IN_Actual_Pickup_Date )
 							IN_Actual_Pickup_Date = so.Actual_Pickup_Date__c;
-					}  else set_IN_Actual_Pickup_Date = false;					
+					} 
+					// else set_IN_Actual_Pickup_Date = false;					
 				 
 				 
 				 //IN_Actual_Pickup_Date_c__c
