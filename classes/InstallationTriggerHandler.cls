@@ -311,7 +311,7 @@ public class InstallationTriggerHandler {
              } */
              
               // To share Order
-            /*  if((ins.Order__c != null)&& (ins.Assigned_to__c != null)){
+              /*if((ins.Order__c != null)&& (ins.Assigned_to__c != null)){
                  OrderShare shareOrder = new OrderShare ();
                 shareOrder.OrderAccessLevel = 'Read';
                  shareOrder.OrderID = Ins.Order__c ; 

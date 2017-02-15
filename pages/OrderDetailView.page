@@ -1,0 +1,25 @@
+<apex:page standardController="Order" >
+<style>
+    .bPageBlock .detailList .labelCol { width: 1%; min-width:180px; }
+    .bPageBlock .detailList .data2Col { width: 99%; }
+.oIcon {
+    
+    height: 36px;
+    width: 30px;
+}
+</style>
+<style>
+    h1 {
+    font-size: 38px;
+}
+</style>
+
+
+<apex:image value="/img/icon/orderBell16.png" style="vertical-align:middle" styleClass="oIcon" />
+
+<h1>
+{!Order.Name}
+</h1>
+
+   <apex:detail relatedList="true" title="false" inlineEdit="false" showChatter="true" relatedListHover="true" /> 
+</apex:page>

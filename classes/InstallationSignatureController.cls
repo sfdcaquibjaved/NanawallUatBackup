@@ -34,12 +34,12 @@ public class InstallationSignatureController {
         try{
              Blob signature = EncodingUtil.base64Decode(b64SignData);
             Attachment att = new Attachment();
-            att.body = signature;
+          /*  att.body = signature;
             att.ContentType = 'image/png';
             att.name = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
             att.IsPrivate = false;
             att.ParentId = id;
-            insert att;
+            insert att; */
             
             ContentVersion cont = new ContentVersion();
             cont.versionData = signature;
