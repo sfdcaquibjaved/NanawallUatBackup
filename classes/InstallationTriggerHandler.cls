@@ -268,7 +268,7 @@ public class InstallationTriggerHandler {
          List<CaseShare> ShareCase = new List<CaseShare>();
          List<OrderShare> OrderToShare = new List<OrderShare> () ;
          List<ContactShare> ContactToShare = new List<ContactShare> () ; 
-         
+        // List<OrderOwnerSharingRule> OrderToSharenew = new List<OrderOwnerSharingRule>();         
          for (Installation__c ins : newTrigger) {
              //To share Account
              if((ins.Account__c != null)&& (ins.Assigned_to__c != null)){
@@ -319,7 +319,14 @@ public class InstallationTriggerHandler {
                  
                  OrderToShare.add(shareOrder); 
              } */
-             
+             /*if((ins.Order__c != null) &&(ins.Assigned_to__c != null)){
+             OrderOwnerSharingRule rule = new OrderOwnerSharingRule();
+                 rule.OrderAccessLevel = 'Read';
+                 rule.OrderId = Ins.Order__c;
+                 rule.UserOrGroupId = Ins.Assigned_to__c;
+                 
+                 OrdertoSharenew.add(rule);
+             }*/
                // To share Contact
           /*    if((ins.Contact__c != null)&& (ins.Assigned_to__c != null)){
                  ContactShare shareContact = new ContactShare ();
