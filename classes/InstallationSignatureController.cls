@@ -43,7 +43,7 @@ public class InstallationSignatureController {
             
             ContentVersion cont = new ContentVersion();
             cont.versionData = signature;
-        	cont.title = 'testing upload';
+        	cont.title = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
        		cont.pathOnClient ='eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
             system.debug('Value of cont' +cont);
             try{

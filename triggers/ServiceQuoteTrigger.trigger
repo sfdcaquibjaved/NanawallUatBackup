@@ -27,6 +27,9 @@ if (trigger.isBefore && trigger.isInsert) {
     }
     if (sqList2.size() > 0) {
         CaseAddressToShopifyOnCreation.updateQuoteFromCase(sqList2);
+        //Method added by Harish 
+        //Method to find and avoid duplicate entries from shopify
+        CaseAddressToShopifyOnCreation.removeDupesFromShopify(sqList2);
     }
 
 }
