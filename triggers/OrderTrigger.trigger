@@ -1,14 +1,16 @@
 trigger OrderTrigger on Order (before update, after update, after insert) {
  
-
+/*
+KS i moved all of this code into astech_OrderTrigger_Helper and astech_OrderTrigger to try to do the SOQL aggregations and to make it clear that its astech code
+*/
     
     if( trigger.isAfter && trigger.isInsert )
-    {
-
+    { 
+/*
         map<Id, string> ordernumbermap = new map<Id, string>();
         map<Id, Id> orderidmap = new map<Id, Id>();
         list<Id> nanaquoteids = new list<Id>();         
-        list<Quote__c> nanaQuotesToUpdate = new list<Quote__c>();
+        list<Quote__c> nanaQuotesToUpdate = new list<Quote__c>(); 
         for( Order o : trigger.new )
         {
             nanaquoteids.add(o.Nana_Quote_ID__c);
@@ -21,7 +23,7 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
         }
         for( Quote__c nq: [SELECT Id, Order_Number__c FROM Quote__c WHERE Id = :nanaquoteids] )
         {
-            //turn off for backfill
+        	//turn off for backfill
             nq.Order_Number__c  = Decimal.valueOf(ordernumbermap.get(nq.Id) ); 
 
             nq.Ordered__c  = true;
@@ -35,10 +37,10 @@ System.debug('***ORDERTRIGGER:UPDATED!');
         //during data backfill this needs to be disabled 
         if( nanaQuotesToUpdate.size() > 0 )
             update nanaQuotesToUpdate;
-            
+*/
     } else  if( trigger.isAfter && trigger.isUpdate ) 
     {
-        
+ /*       
         Contact dummyContact  = [SELECT Id FROM Contact WHERE LastName = 'CAD EMAIL RECIPIENT' LIMIT 1];
         
         map<Id, Order> NanaQuotesIdsToUpdate = new map<Id,Order>();
@@ -51,10 +53,6 @@ System.debug('***ORDERTRIGGER:UPDATED!');
             if( o.Test_GUID__c != trigger.oldMap.get(o.Id).Test_GUID__c )
             { //the order finalized date was set
                 
-/*                if( !pipelineEmails.containsKey(o.Id) 
-                    || pipelineEmails.get(o.Id) == null
-                    || pipelineEmails.get(o.Id).Company_Email__c == null  )
-                    */
                     if( 
                     o == null
                     || o.Installer_Email__c == null)
@@ -64,23 +62,21 @@ System.debug('***ORDERTRIGGER:UPDATED!');
                     }
                     
                 system.debug('sending CAD email to  ' + pipelineEmails.get(o.Id) );
-//Quote.Nana_Quote__r.Installer__r.Company_Email__c             
-                try
-                {
-                    pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
-                    Task tsk = new Task();
-                    tsk.WhatId = pipelineEmails.get(o.Id).Id;
-                    tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
-                    tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
-                    tsk.Description = '';
-                    
-                    tasksToInsert.add( tsk ); 
-                    
-                }catch (Exception ex )
-                {
-                    system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
-                }
-//              pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ pipelineEmails.get(o.Id).Company_Email__c }, new string[]{}, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+				try
+				{
+	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+	                Task tsk = new Task();
+	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
+	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
+	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
+	                tsk.Description = '';
+	                
+	                tasksToInsert.add( tsk ); 
+	                
+				}catch (Exception ex )
+				{
+					system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+				}
                 
             }
            
@@ -116,9 +112,10 @@ System.debug('***ORDERTRIGGER:UPDATED!');
  
         }
 
-        
+        */
     } else  if( trigger.isBefore && trigger.isUpdate )
     {
+    	/*
         map<Id, list<Manufacturing_Order__c>> manufacturingOrderMap = new map<Id, list<Manufacturing_Order__c>>();
         map<Id, list<Shipping_Order__c>> shippingOrderMap = new map<Id, list<Shipping_Order__c>>();
         
@@ -180,9 +177,9 @@ System.debug('***ORDERTRIGGER: In the o loop:  ' + o.Quote_Name__c );
             // end pipeline updates         
             
             if( 
-                (o.Order_Finalized_Date__c != null && trigger.oldMap.get(o.Id).Order_Finalized_Date__c == null )
-                || o.Regenerate_GUUID__c
-                )
+            	(o.Order_Finalized_Date__c != null && trigger.oldMap.get(o.Id).Order_Finalized_Date__c == null )
+            	|| o.Regenerate_GUUID__c
+            	)
             { //the order finalized date was set
                  
                 //(1) update GUUID
@@ -241,18 +238,18 @@ System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_N
 
         if(shippingOrdersToUpdate.size() > 0  && !Order_Trigger_Helper.futureMethodRunning)
              Order_Trigger_Helper.doShippingOrderUpdates( orderIdsToUpdate );
-    
+    */
     } else if( trigger.isBefore && trigger.isInsert )
     {
+    	/*
         for( Order o : trigger.new )
         {
             //this needs to be commented out for backfill
             o.Status = 'Order Created';
         }
+        */
     }
     
-    
-   
     
        
     
