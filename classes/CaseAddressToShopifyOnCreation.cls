@@ -124,20 +124,18 @@ public class CaseAddressToShopifyOnCreation {
     //Method to avoid duplicates entries from the shopify
     public static void removeDupesFromShopify(list < Service_Quote__c > sqlist2) {
        //create instance of set to store SL order number of shopify
-        //map < string, integer> sqMap = new map < string, integer> ();
+        map < string, Service_Quote__c > sqMap = new map < string, Service_Quote__c > ();
        set<string> setSq = new set<string>();
         //Loop through bulk service quotes and validate by checking that same key contains in existing set or not 
         for (Service_Quote__c sq: sqlist2) {
        
         //Check the SL order number exists in set or not,  else if already contains display error
-        if(setSq.contains(sq.Shopify_Order_NO__c)==null){
-        //if not store it in set of strings
-           //sqMap.put(sq.Shopify_Order_NO__c,c);
-           setSq.add(sq.Shopify_Order_NO__c);
+        if(sqMap.containskey(sq.Shopify_Order_NO__c)){
+           sq.Shopify_Order_NO__c.addError('Already service quote created');
            }
            //Throw error if Same SL order is getting created
            else{
-           sq.Shopify_Order_NO__c.adderror('Already service quote created');
+           sqMap.put(sq.Shopify_Order_NO__c,sq);
            }
            
         }

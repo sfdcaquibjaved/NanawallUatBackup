@@ -1,5 +1,5 @@
 <apex:component controller="FileUploadController"> 
-    <apex:attribute name="parentId" description="The ID of the record uploaded documents will be attached to." type="String" required="true"/>
+    <apex:attribute name="parentId" description="The ID of the record uploaded documents will be attached to." type="ID" required="true"/>
     
     <link rel="stylesheet" type="text/css" href="{!$Resource.FileUploadCSS}"/>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
