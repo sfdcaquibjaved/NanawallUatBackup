@@ -138,7 +138,7 @@
 				                    <apex:param name="sortfield" value="OrderID" assignto="{!sortfield}"/>
 				                    </apex:commandlink>
 				                </apex:facet>
-				                <apex:outputlink value="/{!sqr.OrderID}" >{!sqr.OrderID}</apex:outputlink> 
+				                <apex:outputlink value="/{!sqr.OrderID_SFID}" >{!sqr.OrderID}</apex:outputlink> 
 			               </apex:column>
 
 			                <apex:column headerValue="City">

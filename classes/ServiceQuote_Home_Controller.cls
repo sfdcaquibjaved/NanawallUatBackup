@@ -85,6 +85,7 @@ public with sharing class ServiceQuote_Home_Controller {
     class ServiceQuoteSearchResult {
         public string QuoteID { get; set; }
         public string OrderID { get; set; }
+        public string OrderID_SFID { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
@@ -146,6 +147,7 @@ public with sharing class ServiceQuote_Home_Controller {
         res.State = sq.Quote__r.State__c;
         res.Zip = sq.Ship_To_Zip__c;
         res.OrderID = String.valueOf(sq.Quote__r.Order_Number__c);
+        res.OrderID_SFID = String.valueOf( sq.Quote__r.Order__c);
         res.ProjectID = sq.Quote__r.Opportunity__c;
         res.QuoteID = sq.Quote__c;
         res.QuoteNumber = String.valueOf(sq.Quote__r.Quote_ID__c);
@@ -182,7 +184,7 @@ public with sharing class ServiceQuote_Home_Controller {
         ||(SearchFields.LoServiceQuoteAmount != null &&  SearchFields.LoServiceQuoteAmount != '' )  
         ||(SearchFields.HiServiceQuoteAmount != null &&  SearchFields.HiServiceQuoteAmount != '' )  )   
         {
-            string soql = 'Select s.Ship_To_Zip__c, s.Case__c, s.Case__r.CaseNumber, s.Name, s.Quote__c,s.Quote__r.OpportunityName__c,s.Quote__r.OpportunityAddress__c, s.Quote__r.ContactName__c,   s.Quote__r.Order_Number__c, s.Quote__r.City__c, s.Quote__r.Opportunity__c, s.Quote__r.State__c, s.Quote__r.Zip__c, s.Quote__r.Quote_ID__c  FROM Service_Quote__c s  WHERE s.Id != null  ';
+            string soql = 'Select s.Ship_To_Zip__c, s.Case__c, s.Case__r.CaseNumber, s.Name, s.Quote__c,  s.Quote__r.Order__c, s.Quote__r.OpportunityName__c,s.Quote__r.OpportunityAddress__c, s.Quote__r.ContactName__c,   s.Quote__r.Order_Number__c, s.Quote__r.City__c, s.Quote__r.Opportunity__c, s.Quote__r.State__c, s.Quote__r.Zip__c, s.Quote__r.Quote_ID__c  FROM Service_Quote__c s  WHERE s.Id != null  ';
             if( (SearchFields.ServiceQuoteNumber != null &&  SearchFields.ServiceQuoteNumber != '' ) )
                 soql += ' AND s.Name = \''+SearchFields.ServiceQuoteNumber.trim()+'\' ';
                  
@@ -230,7 +232,7 @@ public with sharing class ServiceQuote_Home_Controller {
         } else {
             string configuration = '';
             
-            string soql = 'SELECT qd.Id, qd.Quote__c, qd.Quote__r.Shipping_Phone__c, qd.Quote__r.Order_Number__c, qd.Quote__r.City__c, qd.Quote__r.Opportunity__c, qd.Quote__r.OpportunityName__c,qd.Quote__r.OpportunityAddress__c, qd.Quote__r.ContactName__c, qd.Quote__r.State__c, qd.Quote__r.Zip__c, qd.Quote__r.Quote_ID__c FROM Quote_Detail__c qd WHERE qd.Id != null AND qd.Quote__r.Order_Number__c > 0 ';
+            string soql = 'SELECT qd.Id, qd.Quote__c, qd.Quote__r.Order__c, qd.Quote__r.Shipping_Phone__c, qd.Quote__r.Order_Number__c, qd.Quote__r.City__c, qd.Quote__r.Opportunity__c, qd.Quote__r.OpportunityName__c,qd.Quote__r.OpportunityAddress__c, qd.Quote__r.ContactName__c, qd.Quote__r.State__c, qd.Quote__r.Zip__c, qd.Quote__r.Quote_ID__c FROM Quote_Detail__c qd WHERE qd.Id != null AND qd.Quote__r.Order_Number__c > 0 ';
             
             set<Id> QuoteIds = new set<Id>();
 
@@ -348,6 +350,7 @@ System.debug(soql);
                 res.State = qd.Quote__r.State__c;
                 res.Zip = qd.Quote__r.Zip__c;
                 res.OrderID = String.valueOf(qd.Quote__r.Order_Number__c);
+                res.OrderID_SFID = String.valueOf( qd.Quote__r.Order__c);        
                 res.ProjectID = qd.Quote__r.Opportunity__c;
                 res.QuoteID = qd.Quote__c;
                 res.QuoteNumber = String.valueOf(qd.Quote__r.Quote_ID__c);
@@ -363,7 +366,7 @@ System.debug(soql);
 
 
             /*Now do a service quote pass for any service quotes that (1) match the quote found up there or (2) match the search criteria*/
-            soql = 'SELECT Id, Name, Quote__c, Quote__r.Order_Number__c,Quote__r.Opportunity__c,Quote__r.OpportunityName__c,Quote__r.Quote_ID__c,Ship_To_City__c,Ship_To_Zip__c,Ship_To_Phone__c, Ship_To_State__c FROM Service_Quote__c WHERE Quote__c in :QuoteIds ';
+            soql = 'SELECT Id, Name, Quote__c,Quote__r.Order__c, Quote__r.Order_Number__c,Quote__r.Opportunity__c,Quote__r.OpportunityName__c,Quote__r.Quote_ID__c,Ship_To_City__c,Ship_To_Zip__c,Ship_To_Phone__c, Ship_To_State__c FROM Service_Quote__c WHERE Quote__c in :QuoteIds ';
             string soqlWhere = '';
 //Quote__r.Order_Number__c, qd.Quote__r.City__c, qd.Quote__r.Opportunity__c
             if( SearchFields.City != null && SearchFields.City != '' )
@@ -411,6 +414,7 @@ System.debug(soql);
 //                  res.State = sq.Ship_To_State__c;
                     res.Zip = sq.Ship_To_Zip__c;
                     res.OrderID = String.valueOf(sq.Quote__r.Order_Number__c);
+                    res.OrderID_SFID = String.valueOf( sq.Quote__r.Order__c);
                     res.ProjectID = sq.Quote__r.Opportunity__c;
                     res.QuoteID = sq.Quote__c;
                     res.QuoteNumber = String.valueOf(sq.Quote__r.Quote_ID__c);
