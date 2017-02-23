@@ -12,7 +12,7 @@ global with sharing class Order_Trigger_Helper {
 		public list<Manufacturing_Order__c> manufacturingOrders;
 		public list<Shipping_Order__c> shippingOrders;
 	}
-	
+	 
 
   	@future 
  	public static void doShippingOrderUpdates( list<Id> orderids) 

@@ -68,6 +68,7 @@ public with sharing class NanaQuote_Create_Order_Controller {
 		update thiso;
         
         Apexpages.addMessage( new Apexpages.Message( Apexpages.Severity.INFO, 'created.' ) );
+   System.debug('**ASTECH NanaQuote_CreateOrderController 1: Total SOQL Queries: ' + Limits.getQueries() );
 
 
         if( thiso != null ) 

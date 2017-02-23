@@ -17,7 +17,7 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
                 manufacturingOrderMap.put( mo.Order__c, new list<Manufacturing_Order__c>() );
             }
             manufacturingOrderMap.get(mo.Order__c).add( mo ); 
-        } 
+        }  
 
           
         for( Shipping_Order__c so : [SELECT Id,Order__c, Status__c,  Actual_Pickup_Date__c,Actual_Delivery_Date__c, ETA_Jobsite__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c,Revised_ETA_Jobsite__c  FROM Shipping_Order__c WHERE Order__c = :orderIds ])

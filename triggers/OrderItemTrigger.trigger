@@ -12,7 +12,7 @@ trigger OrderItemTrigger on OrderItem (after insert) {
  
 	list<id> orderids = new list<id>();
 	for( OrderItem oi : trigger.new )
-	{
+	{ 
 		orderids.add( oi.OrderId );
 	}
 	

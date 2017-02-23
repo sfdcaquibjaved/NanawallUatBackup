@@ -41,6 +41,7 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
     // Added by Aquib Javed
       List < order > OrderList = new List < Order > ();
       List < order > updateInstallationList = new List < Order > ();
+    
       set< ID > newOrderID = new set <ID > () ;
     if((trigger.isUpdate && trigger.isAfter) || ((trigger.isInsert)&&(trigger.isAfter)) ){
         for(Order o : trigger.new){
@@ -55,9 +56,11 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
             }
             }
         }
-        if(OrderList.size() > 0 ){
+        if(OrderList.size() > 0  && OrderTriggerHandler.firstRun)
         //trigger this method to create installation if order finalized date is changed from null
+        {
             OrderTriggerHandler.CreateInstallation(OrderList);
+            OrderTriggerHandler.firstRun = false ; 
         }
         if((updateInstallationList.size() > 0)  && (newOrderID.size() > 0) ){
         //trigger this method to update installation if order finalized date is changed in value
@@ -95,7 +98,7 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
       //OrderTriggerStagesHelper.updateOrderNumber(trigger.new);
       //OrderTriggerStagesHelper.updateOrderNumberBasedonManufacturing(trigger.new);
       //OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModel(trigger.new);
-      OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
+     // OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
      
    }
    

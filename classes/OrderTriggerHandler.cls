@@ -14,10 +14,12 @@ public class OrderTriggerHandler {
          Input Parameter: List of Order
          Created Date   : August 2016
          */
-    
+     public static boolean firstRun = true ; 
     public static void CreateInstallation(List < Order > newTrigger){
+        
         list<Installation__c> lstInstallation = new list<Installation__c>();
         list <id> QuoteId = new list<id>();
+        
             system.debug('I am here Inside CreateInstallation');
            
      
@@ -59,10 +61,12 @@ public class OrderTriggerHandler {
          Input Parameter: List of Order
          Created Date   : January 2017
          */
-    
+   
     public static void UpdateInstallation (set< ID > orderID , List < Order > newTrigger) {
+        
        // List <ID> orderID = new List<ID> () ; 
-         list<Installation__c> lstInstallation = new list<Installation__c>();
+        
+        list<Installation__c> lstInstallation = new list<Installation__c>();
          list<Installation__c> lstInstallationInsert = new list<Installation__c> () ; 
         system.debug('I am here Inside UpdateInstallation');
         
@@ -126,6 +130,7 @@ public class OrderTriggerHandler {
         catch (exception e) {
             system.debug('Exception is: ' + e.getMessage());
         }
+       
     }
     
 }

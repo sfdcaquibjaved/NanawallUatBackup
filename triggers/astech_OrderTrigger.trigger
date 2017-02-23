@@ -18,5 +18,7 @@ system.debug('astech_OrderTrigger: after insert');
        astech_OrderTrigger_Helper.handleBeforeUpdate( trigger.oldMap, trigger.new); 
     }
    
+   
+   System.debug('**ASTECH: Total SOQL Queries: ' + Limits.getQueries() );
     
 }

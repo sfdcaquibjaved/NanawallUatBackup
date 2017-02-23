@@ -439,10 +439,13 @@ System.debug(soql);
                 Apexpages.addMessage( new ApexPages.message( apexpages.Severity.INFO,'A very large amount of records were returned. Only the first 500 will be shown.') );
             }
         }       
+        /*
            urlPass = true;
            PageReference pageRef= new PageReference('/apex/SerachresultsPageService');
            pageRef.setRedirect(true);       
            return pageRef; 
+           */
+           return null;
     }
     
    // ***** Unit Tests
