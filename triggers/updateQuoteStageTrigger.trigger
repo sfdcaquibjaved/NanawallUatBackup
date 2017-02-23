@@ -98,7 +98,7 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
       //OrderTriggerStagesHelper.updateOrderNumber(trigger.new);
       //OrderTriggerStagesHelper.updateOrderNumberBasedonManufacturing(trigger.new);
       //OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModel(trigger.new);
-     // OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
+      OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
      
    }
    

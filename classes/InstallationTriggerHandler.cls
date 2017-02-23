@@ -193,7 +193,7 @@ public class InstallationTriggerHandler {
                     setZipCode.add(zip.substring(0,3));
                     }
                }
-            else
+               else if(i.Project_Zip_Code__c!= null && i.Project_Zip_Code__c!='')
                  setZipCode.add(i.Project_Zip_Code__c);
         }
         system.debug(setZipCode);
