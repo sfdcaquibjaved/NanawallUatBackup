@@ -186,16 +186,24 @@ public class InstallationTriggerHandler {
         
 
         for(Installation__C i : newTrigger){
+            system.debug(i.Project_Country_Canada__c);
+            if(i.Project_Country_Canada__c){
+                if(i.Project_Zip_Code__c!= null && i.Project_Zip_Code__c!=''){
+                    string zip = i.Project_Zip_Code__c.ToUpperCase();
+                    setZipCode.add(zip.substring(0,3));
+                    }
+               }
+            else
                  setZipCode.add(i.Project_Zip_Code__c);
         }
-
+        system.debug(setZipCode);
         List<Zip_Codes_Master__c> zipCodeList = [SELECT id ,Zip_Code__c ,Territory__c , Installer_Contact__c , Installer_Account__c , Installer_User__c FROM Zip_Codes_Master__c WHERE Zip_Code__c in: setZipCode ];
 
-
+        system.debug(zipCodeList);
         for(Installation__c i : newTrigger){
             if(zipCodeList.size() > 0){
                 for(Zip_Codes_Master__c zip : zipCodeList){
-                    if((i.Project_Zip_Code__c == zip.Zip_Code__c)&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
+                    if(((i.Project_Country_Canada__c && i.Project_Zip_Code__c.toUppercase().substring(0,3) == zip.Zip_Code__c) ||(!i.Project_Country_Canada__c && i.Project_Zip_Code__c == zip.Zip_Code__c))&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
                             if(zip.Installer_Contact__c != null){
                                     i.Installer_Contact__c = zip.Installer_Contact__c ; 
                             }
@@ -229,7 +237,6 @@ public class InstallationTriggerHandler {
         for(Installation__c s : newTrigger ){
             string ContactEmail = s.Installer_Contact__c ;
             EmailAddress.add(ContactEmail);
-
         }
          list < user > userId = [SELECT id, email, ContactId FROM USER WHERE ContactId IN: EmailAddress Limit 1];
                      system.debug('UserId'+userId);
@@ -306,7 +313,6 @@ public class InstallationTriggerHandler {
                  InsShare.ParentId = Ins.Id ; 
                  
                  InsShare.UserOrGroupId =  Ins.Assigned_to__c;
-
                  ShareInstallation.add(InsShare);
              } */
              
