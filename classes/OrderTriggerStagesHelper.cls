@@ -419,11 +419,21 @@ public with sharing class OrderTriggerStagesHelper{
     *************************************************/ 
    public static void orderNumberBasedOnRangeAndModelNew(list<Order> orderList){
     //loop over all orders and store the quote ids
+    // addded new functionality by Praveen w.r.t. ticket 490
+    map<id,boolean> checkDupOrderfieldMap = new map<id,boolean>();
+
     set<id> qid = new set<id>();
        for(order o: orderList){
             qid.add(o.NanaQuote__c);
             
        }
+    // new functionality to check dupe order for ticket 490--Praveen
+    for(Quote qt : [select id, Nana_Quote__c,Dupe_Order__c from quote where Nana_Quote__c IN : qid]){
+        if(qt.Dupe_Order__c != null)
+            checkDupOrderfieldMap.put(qt.Nana_Quote__c,false);
+        else
+            checkDupOrderfieldMap.put(qt.Nana_Quote__c,true);
+    } //end --praveen 
     //string s;
     //map the quote and model and use them  to request the model manfacturer from custom settings
     map<string,string> mapQuoteModel = new map<string,string>();
@@ -512,6 +522,8 @@ public with sharing class OrderTriggerStagesHelper{
         
     //loop over the orders and assign order number and update the manufacturer on orders
      for(order oNew: orderList){
+        //ticket 490 check for dupe
+        if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c)){
        system.debug(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)));
        system.debug(mapQuoteModel.get(string.valueof(oNew.NanaQuote__c)));
                //check if manufacturing is from richmond and assign ordernumber with incremental value
@@ -589,7 +601,7 @@ public with sharing class OrderTriggerStagesHelper{
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                      counterW+=1;
                 }
-                
+             }   
             
         }
         if(counterR >0){

@@ -24,6 +24,36 @@ public class WarrantyUpdate_Test {
      Purpose: To create warranties for the glass products 
      *****/
     public static testMethod void unitTest1(){
+        
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
     
         //Creating test data for Territory Master
         territorymaster = TestDataUtility.getTerritoryMaster();
@@ -115,6 +145,17 @@ public class WarrantyUpdate_Test {
        pb2.Name = 'Models';
        insert pb2;
         system.assertequals('Models',pb2.Name);
+        
+        Quote q = new Quote();
+         q.Name = 'Test Quote';
+         q.OpportunityId = olstOpportunity[0].Id;
+         //q.Nana_Quote__c = qu.Id;
+         q.First_Threshold_Price__c = 1;
+        
+         q.ContactId = Con[0].id;
+         q.Tax = 1.0;
+         q.Order_Number__c = 12345;
+         insert q;
        
         //Create test data for Orders
        Order o = new Order(
@@ -163,6 +204,36 @@ public class WarrantyUpdate_Test {
      Purpose: To create warranties for the Roller positions
     *****/
     public static testMethod void unitTest2(){
+        
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
         //Creating test data for Territory Master
         territorymaster = TestDataUtility.getTerritoryMaster();
         try {
@@ -251,6 +322,18 @@ public class WarrantyUpdate_Test {
        Pricebook2 pb2 = new Pricebook2();
        pb2.Name = 'Models';
        insert pb2;
+        
+        
+        Quote q = new Quote();
+         q.Name = 'Test Quote';
+         q.OpportunityId = olstOpportunity[0].Id;
+         //q.Nana_Quote__c = qu.Id;
+         q.First_Threshold_Price__c = 1;
+        
+         q.ContactId = Con[0].id;
+         q.Tax = 1.0;
+         q.Order_Number__c = 12345;
+         insert q;
        
        //Create test data for Orders
        Order o = new Order(

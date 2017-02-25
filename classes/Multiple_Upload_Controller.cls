@@ -1,59 +1,41 @@
-public class Multiple_Upload_Controller {
-//Picklist of tnteger values to hold file count
-    public List<SelectOption> filesCountList {get; set;}
-    //Selected count
-    public String FileCount {get; set;}
-    
-    public List<Attachment> allFileList {get; set;}
-    
-    public Multiple_Upload_Controller(ApexPages.StandardController controller)
+global class Multiple_Upload_Controller {
+public string recrdId{get; set;}
+     
+    public Multiple_Upload_Controller()
     {
-        //Initialize  
-        filesCountList = new List<SelectOption>() ;
-        FileCount = '' ;
-        allFileList = new List<Attachment>() ;
-        
-        //Adding values count list - you can change this according to your need
-        for(Integer i = 1 ; i < 11 ; i++)
-            filesCountList.add(new SelectOption(''+i , ''+i)) ;
-    }
-    
-    public Pagereference SaveAttachments()
-    {
-        String accId = System.currentPagereference().getParameters().get('id');
-        if(accId == null || accId == '')
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'No record is associated. Please pass record Id in parameter.'));
-        if(FileCount == null || FileCount == '')
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select how many files you want to upload.'));
-
-        List<Attachment> listToInsert = new List<Attachment>() ;
-        
-        //Attachment a = new Attachment(parentId = accid, name=myfile.name, body = myfile.body);
-        for(Attachment a: allFileList)
-        {
-            if(a.name != '' && a.name != '' && a.body != null)
-                listToInsert.add(new Attachment(parentId = accId, name = a.name, body = a.body)) ;
-        }
-        
-        //Inserting attachments
-        if(listToInsert.size() > 0)
-        {
-            insert listToInsert ;
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, listToInsert.size() + ' file(s) are uploaded successfully'));
-            FileCount = '' ;
-        }
-        else
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select at-least one file'));
             
-        return null;
     }
-    
-    public PageReference ChangeCount()
-    {
-        allFileList.clear() ;
-        //Adding multiple attachments instance
-        for(Integer i = 1 ; i <= Integer.valueOf(FileCount) ; i++)
-            allFileList.add(new Attachment()) ;
-        return null ;
+    @RemoteAction
+    global static String attachBlob(String parentId, String attachmentId, String fileName, String contentType, String base64BlobValue){
+        /*
+        parentId: The sfdc object Id this file will be attached to
+        attachmentId: The record of the current Attachment file being processed
+        fileName: Name of the attachment
+        contentTye: Content Type of the file being attached
+        base64BlobValue: Base64 encoded string of the file piece currently processing
+        */
+               
+        //If recordId is blank this is the first part of a multi piece upload
+        if(attachmentId == '' || attachmentId == null){
+            Attachment att = new Attachment(
+                ParentId = parentId,
+                Body = EncodingUtil.Base64Decode(base64BlobValue),
+                Name = fileName,
+                ContentType = contentType
+            );
+            insert att;
+            
+            //Return the new attachment Id
+            return att.Id;
+            
+        }else{
+            for(Attachment atm : [select Id, Body from Attachment where Id = :attachmentId]){
+                //Take the body of the current attachment, convert to base64 string, append base64 value sent from page, then convert back to binary for the body
+                update new Attachment(Id = attachmentId, Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
+            }
+            
+            //Return the Id of the attachment we are currently processing
+            return attachmentId;
+        }
     }
 }

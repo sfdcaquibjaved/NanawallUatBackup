@@ -1,6 +1,6 @@
-<apex:page Controller="FileUploadController" standardStylesheets="false" sidebar="false"  tabStyle="Contact" docType="html-5.0" >
+<apex:page standardController="Installation__c" standardStylesheets="false" sidebar="false" docType="html-5.0" >
     <apex:form >
-		<!-- Replace parentId attribute with Id of an object that >supports attachments -->
-    	<c:fileUpload parentId="a4kQ00000006H3xIAE"/>   
+         
+        <c:fileUpload parentId="{!Installation__c.id}"/>
     </apex:form>
 </apex:page>

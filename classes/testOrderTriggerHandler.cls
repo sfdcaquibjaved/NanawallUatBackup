@@ -2,6 +2,36 @@
 public class testOrderTriggerHandler {
     static testmethod void method1(){
         
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+       // mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
+        
         list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
         
@@ -52,6 +82,16 @@ public class testOrderTriggerHandler {
          q.Project__c = p1.id;
          q.Shipping_Min__c = 12;
          insert q;
+        
+         Quote q1 = new Quote();
+         q1.Name = 'Test Quote';
+         q1.OpportunityId = o.Id;
+         q1.Nana_Quote__c = q.Id;
+         q1.First_Threshold_Price__c = 1;        
+         q1.ContactId = Co.id;
+         q1.Tax = 1.0;
+         q1.Order_Number__c = 12345;
+         insert q1;
          
          order ord = new order();
          ord.Status = 'draft';
@@ -68,6 +108,36 @@ public class testOrderTriggerHandler {
          
     }
     static testmethod void method2(){
+        
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
         
         list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
         insert tmList;
@@ -118,6 +188,16 @@ public class testOrderTriggerHandler {
          q.Project__c = p1.id;
          q.Shipping_Min__c = 12;
          insert q;
+        
+         Quote q1 = new Quote();
+         q1.Name = 'Test Quote';
+         q1.OpportunityId = o.Id;
+         q1.Nana_Quote__c = q.Id;
+         q1.First_Threshold_Price__c = 1;        
+         q1.ContactId = Co.id;
+         q1.Tax = 1.0;
+         q1.Order_Number__c = 12345;
+         insert q1;
          
          order ord = new order();
          ord.Status = 'draft';

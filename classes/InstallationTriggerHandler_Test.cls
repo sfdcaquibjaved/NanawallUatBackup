@@ -28,6 +28,35 @@ public class InstallationTriggerHandler_Test {
 
     public static testMethod void myUnitTest() {
         
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
          territorymaster = TestDataUtility.getTerritoryMaster();
         try {
             insert territorymaster;
@@ -69,6 +98,9 @@ public class InstallationTriggerHandler_Test {
        update instNew ;
        test.stopTest();
         
+        
+        
+        
       mOrderList = testDataUtility.createManufacturingOrder();
         try{
             insert mOrderList ; 
@@ -85,7 +117,7 @@ public class InstallationTriggerHandler_Test {
             system.debug('Exception is:' +e.getMessage());
         }
         
-	  sOrderList = testDataUtility.createShippingOrderData() ;  
+      sOrderList = testDataUtility.createShippingOrderData() ;  
         try{
             insert sOrderList ; 
         }
@@ -107,6 +139,35 @@ public class InstallationTriggerHandler_Test {
      Purpose: To cover the code coverage for Installation trigger
      *****/
     public static testMethod void myUnitTest2(){
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
         //creating test data for territorymaster
         territorymaster = TestDataUtility.getTerritoryMaster();
         try {
@@ -159,15 +220,15 @@ public class InstallationTriggerHandler_Test {
         
         //Creating test data for user
         User testUser1 = TestDataUtility.createUser('Partner Community Login User', 'testUserName@testing.com');
-        	testUser1.email='test123@noemail.com' ; 
-        	 testUser1.emailencodingkey='UTF-8' ; 
+            testUser1.email='test123@noemail.com' ; 
+             testUser1.emailencodingkey='UTF-8' ; 
                              testUser1.lastname='Testing' ;  
                              testUser1.languagelocalekey='en_US' ; 
-               				 testUser1.localesidkey='en_US' ; 
+                             testUser1.localesidkey='en_US' ; 
                              testUser1.country='United States' ; 
                              testUser1.IsActive =true ;
-               				 testUser1.ContactId = con[0].Id ; 
-               				 testUser1.timezonesidkey='America/Los_Angeles' ; 
+                             testUser1.ContactId = con[0].Id ; 
+                             testUser1.timezonesidkey='America/Los_Angeles' ; 
    
         try {
             insert testUser1;
@@ -192,19 +253,29 @@ public class InstallationTriggerHandler_Test {
         system.assert(olstOpportunity.size()>0);
            
         //Creating test data for Quote
-		list<quote__c> Quo = new list<Quote__c>() ; 
-			Quo = TestDataUtility.createQuoteRecords(olstOpportunity) ; 
-        	Quo[0].City__c = 'Test City';
+        list<quote__c> Quo = new list<Quote__c>() ; 
+            Quo = TestDataUtility.createQuoteRecords(olstOpportunity) ; 
+            Quo[0].City__c = 'Test City';
             Quo[0].Country__c='India';
             Quo[0].State__c = 'Test State';
-        	Quo[0].Address__c = 'Test Address' ; 
-        	Quo[0].Zip__c ='12345';
-    		insert quo[0] ; 
+            Quo[0].Address__c = 'Test Address' ; 
+            Quo[0].Zip__c ='12345';
+            insert quo[0] ; 
+        
+             Quote q1 = new Quote();
+             q1.Name = 'Test Quote';
+             q1.OpportunityId = olstOpportunity[0].Id;
+             q1.Nana_Quote__c = Quo[0].Id;
+             q1.First_Threshold_Price__c = 1;        
+             q1.ContactId = con[0].id;
+             q1.Tax = 1.0;
+             q1.Order_Number__c = 12345;
+             insert q1;
         
           list<Quote_Detail__c> QuoteDetailList = TestDataUtility.createQuoteDetailData();
-       	  QuoteDetailList[0].Quote__C=quo[0].id;
-        	insert QuoteDetailList[0] ; 
-	
+          QuoteDetailList[0].Quote__C=quo[0].id;
+            insert QuoteDetailList[0] ; 
+    
         
         //Creating test data for countrys
         countrys = TestDataUtility.getTestCountryCodes();
@@ -234,7 +305,9 @@ public class InstallationTriggerHandler_Test {
        Pricebook2 pb2 = new Pricebook2();
        pb2.Name = 'Models';
        insert pb2;
+        
         Quote q = new Quote();
+         q.Name = 'Test Quote';
         //q.AccountId = accounts[0].id;
         q.OpportunityId = olstOpportunity[0].id;
         q.ContactId = con[0].id;
@@ -307,6 +380,36 @@ public class InstallationTriggerHandler_Test {
      Purpose: To cover the code coverage for Entitlement part in Installation trigger
      *****/
     public static testMethod void myUnitTest3(){
+    
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
         //creating test data for territorymaster
         territorymaster = TestDataUtility.getTerritoryMaster();
         try {
@@ -455,6 +558,35 @@ public class InstallationTriggerHandler_Test {
     
     public static testMethod void myUnitTest4(){
        
+       Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='SL 35L';
+        mm.Manufacturer__c='Richmond';
+        insert mm;
+        
        
           territorymaster = TestDataUtility.getTerritoryMaster();
         try {
@@ -516,9 +648,19 @@ public class InstallationTriggerHandler_Test {
             q.Primary_Quote__c=True;
         insert q;
         
+        Quote q1 = new Quote();
+         q1.Name = 'Test Quote';
+         q1.OpportunityId =olstOpportunity[0].Id;
+         q1.Nana_Quote__c = q.Id;
+         q1.First_Threshold_Price__c = 1;        
+         q1.ContactId = Co.id;
+         q1.Tax = 1.0;
+         q1.Order_Number__c = 12345;
+         insert q1;
+        
         Quote_Detail__c qd = new Quote_Detail__c();
         qd.Quote__c = q.id ; 
-        qd.Model__c = 'WA63';  
+        qd.Model__c = 'SL 35L';  
         insert qd ; 
         
              Order o = new Order(
@@ -543,6 +685,36 @@ public class InstallationTriggerHandler_Test {
     }  
     
     public static testMethod void myUnitTest5(){
+    
+    Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
         //creating test data for territorymaster
         territorymaster = TestDataUtility.getTerritoryMaster();
         try {
@@ -595,15 +767,15 @@ public class InstallationTriggerHandler_Test {
         
         //Creating test data for user
         User testUser1 = TestDataUtility.createUser('Partner Community Login User', 'testUserName@testing.com');
-        	testUser1.email='test123@noemail.com' ; 
-        	 testUser1.emailencodingkey='UTF-8' ; 
+            testUser1.email='test123@noemail.com' ; 
+             testUser1.emailencodingkey='UTF-8' ; 
                              testUser1.lastname='Testing' ;  
                              testUser1.languagelocalekey='en_US' ; 
-               				 testUser1.localesidkey='en_US' ; 
+                             testUser1.localesidkey='en_US' ; 
                              testUser1.country='United States' ; 
                              testUser1.IsActive =true ;
-               				 testUser1.ContactId = con[0].Id ; 
-               				 testUser1.timezonesidkey='America/Los_Angeles' ; 
+                             testUser1.ContactId = con[0].Id ; 
+                             testUser1.timezonesidkey='America/Los_Angeles' ; 
    
         try {
             insert testUser1;
@@ -628,19 +800,29 @@ public class InstallationTriggerHandler_Test {
         system.assert(olstOpportunity.size()>0);
            
         //Creating test data for Quote
-		list<quote__c> Quo = new list<Quote__c>() ; 
-			Quo = TestDataUtility.createQuoteRecords(olstOpportunity) ; 
-        	Quo[0].City__c = 'Test City';
+        list<quote__c> Quo = new list<Quote__c>() ; 
+            Quo = TestDataUtility.createQuoteRecords(olstOpportunity) ; 
+            Quo[0].City__c = 'Test City';
             Quo[0].Country__c='India';
             Quo[0].State__c = 'Test State';
-        	Quo[0].Address__c = 'Test Address' ; 
-        	Quo[0].Zip__c ='12345';
-    		insert quo[0] ; 
+            Quo[0].Address__c = 'Test Address' ; 
+            Quo[0].Zip__c ='12345';
+            insert quo[0] ; 
+            
+            Quote q1 = new Quote();
+             q1.Name = 'Test Quote';
+             q1.OpportunityId = olstOpportunity[0].Id;
+             q1.Nana_Quote__c = quo[0].Id;
+             q1.First_Threshold_Price__c = 1;        
+             q1.ContactId = Con[0].id;
+             q1.Tax = 1.0;
+             q1.Order_Number__c = 12345;
+             insert q1;
         
           list<Quote_Detail__c> QuoteDetailList = TestDataUtility.createQuoteDetailData();
-       	  QuoteDetailList[0].Quote__C=quo[0].id;
-        	insert QuoteDetailList[0] ; 
-	
+          QuoteDetailList[0].Quote__C=quo[0].id;
+            insert QuoteDetailList[0] ; 
+    
         
         //Creating test data for countrys
         countrys = TestDataUtility.getTestCountryCodes();
@@ -737,6 +919,36 @@ public class InstallationTriggerHandler_Test {
    }
     
     public static testMethod void myUnitTest6(){
+    
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
         //creating test data for territorymaster
         territorymaster = TestDataUtility.getTerritoryMaster();
         try {
@@ -789,15 +1001,15 @@ public class InstallationTriggerHandler_Test {
         
         //Creating test data for user
         User testUser1 = TestDataUtility.createUser('Partner Community Login User', 'testUserName@testing.com');
-        	testUser1.email='test123@noemail.com' ; 
-        	 testUser1.emailencodingkey='UTF-8' ; 
+            testUser1.email='test123@noemail.com' ; 
+             testUser1.emailencodingkey='UTF-8' ; 
                              testUser1.lastname='Testing' ;  
                              testUser1.languagelocalekey='en_US' ; 
-               				 testUser1.localesidkey='en_US' ; 
+                             testUser1.localesidkey='en_US' ; 
                              testUser1.country='United States' ; 
                              testUser1.IsActive =true ;
-               				 testUser1.ContactId = con[0].Id ; 
-               				 testUser1.timezonesidkey='America/Los_Angeles' ; 
+                             testUser1.ContactId = con[0].Id ; 
+                             testUser1.timezonesidkey='America/Los_Angeles' ; 
    
         try {
             insert testUser1;
@@ -822,19 +1034,29 @@ public class InstallationTriggerHandler_Test {
         system.assert(olstOpportunity.size()>0);
            
         //Creating test data for Quote
-		list<quote__c> Quo = new list<Quote__c>() ; 
-			Quo = TestDataUtility.createQuoteRecords(olstOpportunity) ; 
-        	Quo[0].City__c = 'Test City';
+        list<quote__c> Quo = new list<Quote__c>() ; 
+            Quo = TestDataUtility.createQuoteRecords(olstOpportunity) ; 
+            Quo[0].City__c = 'Test City';
             Quo[0].Country__c='India';
             Quo[0].State__c = 'Test State';
-        	Quo[0].Address__c = 'Test Address' ; 
-        	Quo[0].Zip__c ='12345';
-    		insert quo[0] ; 
+            Quo[0].Address__c = 'Test Address' ; 
+            Quo[0].Zip__c ='12345';
+            insert quo[0] ; 
+            
+            Quote q1 = new Quote();
+             q1.Name = 'Test Quote';
+             q1.OpportunityId = olstOpportunity[0].Id;
+             q1.Nana_Quote__c = quo[0].Id;
+             q1.First_Threshold_Price__c = 1;        
+             q1.ContactId = Con[0].id;
+             q1.Tax = 1.0;
+             q1.Order_Number__c = 12345;
+             insert q1;
         
           list<Quote_Detail__c> QuoteDetailList = TestDataUtility.createQuoteDetailData();
-       	  QuoteDetailList[0].Quote__C=quo[0].id;
-        	insert QuoteDetailList[0] ; 
-	
+          QuoteDetailList[0].Quote__C=quo[0].id;
+            insert QuoteDetailList[0] ; 
+    
         
         //Creating test data for countrys
         countrys = TestDataUtility.getTestCountryCodes();
