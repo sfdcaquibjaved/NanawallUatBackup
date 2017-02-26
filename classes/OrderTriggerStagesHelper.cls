@@ -427,6 +427,7 @@ public with sharing class OrderTriggerStagesHelper{
             qid.add(o.NanaQuote__c);
             
        }
+       system.debug(qid);
     // new functionality to check dupe order for ticket 490--Praveen
     for(Quote qt : [select id, Nana_Quote__c,Dupe_Order__c from quote where Nana_Quote__c IN : qid]){
         if(qt.Dupe_Order__c != null)
@@ -438,7 +439,7 @@ public with sharing class OrderTriggerStagesHelper{
     //map the quote and model and use them  to request the model manfacturer from custom settings
     map<string,string> mapQuoteModel = new map<string,string>();
     //Query the first created model from the set of quote ids and store it in map
-     list<Quote_detail__c> qdlistAll = [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN:qid ORDER BY createdDate ASC]; 
+     list<Quote_detail__c> qdlistAll = [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN: qid ORDER BY createdDate ASC]; 
      
      for(order o: orderList){ 
      decimal x=0;
@@ -450,7 +451,7 @@ public with sharing class OrderTriggerStagesHelper{
      string sQuote;
      
      boolean f =true;
-        for(Quote_detail__c qdList : qdlistAll){
+        for(Quote_detail__c qdList : [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN: checkDupOrderfieldMap.keySet() ]){
         
         
             if(qdList.Quote__c==o.NanaQuote__c){

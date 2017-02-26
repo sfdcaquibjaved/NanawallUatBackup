@@ -21,7 +21,7 @@ public with sharing class astech_OrderTrigger_Helper {
 //			Quote q = [SELECT Id, Dupe_Order__c, Order_Generated__c, AccountID, OpportunityID,Pricebook2Id, Name, ContactId,Order_Number__c,Subtotal,Tax,ShippingHandling,Expedited_Shipping__c,First_Threshold__c,Nana_Quote__c,GrandTotal,First_Threshold_Price__c,Drawing_Price__c,Packaging__c,Canada_Tax__c,Canada_Tax_Label__c,Ship_Label__c,Keyed_Alike__c,Grand_total__c,Shipping_Address__c,Shipping_Address_2__c, Shipping_City__c, Shipping_Country__c, Shipping_State__c, Shipping_Zip__c,Subtotal__c, Opportunity.AccountID, Opportunity.CloseDate, Opportunity.OwnerID, Opportunity.Project_Name__c, Opportunity.Account.BillingStreet, Opportunity.Account.BillingCity,Opportunity.Account.BillingState,Opportunity.Account.BillingPostalCode,Opportunity.Account.BillingCountry,Opportunity.Account.ShippingStreet,Opportunity.Account.ShippingCity,Opportunity.Account.ShippingState,Opportunity.Account.ShippingPostalCode,Opportunity.Account.ShippingCountry FROM Quote WHERE Id = :o.QuoteID ];
 			Quote q = quoteMap.get( o.QuoteId );
 	
-			if( q == null ) continue;
+			if( q == null ) continue; // probably not a good idea, because we need the quote for basically everything, but it was needed to get through some of the offshore unit tests
 	
 			//assign the order fields
 			system.debug('Order acount =  ' + q.Opportunity.AccountId);
@@ -38,7 +38,7 @@ public with sharing class astech_OrderTrigger_Helper {
 			o.ShippingStateCode = q.Shipping_State__c;
 			o.ShippingPostalCode = q.Shipping_Zip__c;
 			o.ShippingCountryCode = ( q.Shipping_Country__c == null || q.Shipping_Country__c == 'US' || q.Shipping_Country__c == 'USA' || q.Shipping_Country__c == 'United States' || q.Shipping_Country__c == 'UNITED STATES' || q.Shipping_Country__c == 'united states' ? 'US' : 'CA' );
-			o.Name = string.valueOf(q.Order_Number__c);
+//			o.Name = string.valueOf(q.Order_Number__c);
 			o.Contact__c = q.ContactId;
 			o.OwnerId = q.Opportunity.OwnerId;
 			o.Subtotal__c = q.Subtotal__c;
@@ -66,6 +66,7 @@ public with sharing class astech_OrderTrigger_Helper {
 			//check if we are cloning an order -- 
 	        if( q.Dupe_Order__c != null )
 			{
+system.debug('got a dupe order: ' + q.Dupe_Order__c);				
 	        	Order oldOrder = [SELECT Id, Name,notes__c, Order_Confirmation_Started__c, Invoices_Sent_Date__c, Balance_Received_Date__c, Complete_Signoff_Date__c,Deposit_Date__c, Deposit_Received_Date__c, Order_Finalized_Date__c FROM Order WHERE Id = :q.Dupe_Order__c];
 	        	
 	        	o.Name = oldOrder.Name;
