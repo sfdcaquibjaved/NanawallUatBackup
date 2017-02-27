@@ -28,14 +28,18 @@ public class MultipleUploadController
             ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select how many files you want to upload.'));
 
         List<Attachment> listToInsert = new List<Attachment>() ;
-        
+        System.debug('File list'+allFileList);
         //Attachment a = new Attachment(parentId = accid, name=myfile.name, body = myfile.body);
+
         for(Attachment a: allFileList)
         {
             if(a.name != '' && a.name != '' && a.body != null)
                 listToInsert.add(new Attachment(parentId = insId , name = a.name, body = a.body)) ;
+                System.debug('body'+a.body);
+
         }
         allFileList.clear();
+        System.debug('the list'+listToInsert);
         //Inserting attachments
         if(listToInsert.size() > 0)
         {

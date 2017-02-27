@@ -67,7 +67,7 @@
                             <div class="slds-form-element__row">
                                 <div class="slds-form-element">
                                     <apex:repeat value="{!allFileList}" var="AFL">
-                                        <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" />
+                                        <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" accept="image/*;capture=camera" />
                                             
                                         <br/><br/>
                                     </apex:repeat>

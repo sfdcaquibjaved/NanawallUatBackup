@@ -442,16 +442,18 @@ public with sharing class OrderTriggerStagesHelper{
      list<Quote_detail__c> qdlistAll = [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN: qid ORDER BY createdDate ASC]; 
      
      for(order o: orderList){ 
-     decimal x=0;
-     decimal c=0;
-     decimal count=0; 
-     decimal count2=0; 
-     string sModel;
-     string s2Model;
-     string sQuote;
      
-     boolean f =true;
-        for(Quote_detail__c qdList : [select id,Quote__c,model__c from Quote_detail__c where Quote__c IN: checkDupOrderfieldMap.keySet() ]){
+             decimal x=0;
+             decimal c=0;
+             decimal count=0; 
+             decimal count2=0; 
+             string sModel;
+             string s2Model;
+             string sQuote;
+         
+             boolean f =true;
+             
+        for(Quote_detail__c qdList : qdlistAll){
         
         
             if(qdList.Quote__c==o.NanaQuote__c){
@@ -502,19 +504,19 @@ public with sharing class OrderTriggerStagesHelper{
        decimal td ;
        decimal wd ;
        //query to get the highest ordernumber for that respective manufacturer
-       /*list<order> ord = [select id,Name ,Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Richmond'  ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord = [select id,Name , Manufacturing__c from order where Manufacturing__c = 'Richmond' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord.size()>0){rd= decimal.valueOf(ord[0].Name);}
-       list<order> ord1 = [select id, Name ,Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Solarlux' ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord1 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Solarlux' ORDER BY Name DESC NULLS last limit 1 ];
          if(ord1.size()>0){sd= decimal.valueOf(ord1[0].Name);}
-       list<order> ord2 = [select id, Name ,Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Teuffel' ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord2 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Teuffel' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord2.size()>0){ td= decimal.valueOf(ord2[0].Name);}
-       list<order> ord3 = [select id, Name ,Order_Number_Default__c, Manufacturing__c from order where Manufacturing__c = 'Wizard' ORDER BY Name DESC NULLS last limit 1 ];
-        if(ord3.size()>0){ wd= decimal.valueOf(ord3[0].Name);}*/
+       list<order> ord3 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Wizard' ORDER BY Name DESC NULLS last limit 1 ];
+        if(ord3.size()>0){ wd= decimal.valueOf(ord3[0].Name);}
         
-        rd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c);
+        /*rd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c);
         sd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Solarlux').LatestOrderNumber__c);
         td = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Teuffel').LatestOrderNumber__c);
-        wd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Wizard').LatestOrderNumber__c);
+        wd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Wizard').LatestOrderNumber__c);*/
         
         integer counterR =0;
         integer counters =0;
@@ -605,7 +607,7 @@ public with sharing class OrderTriggerStagesHelper{
              }   
             
         }
-        if(counterR >0){
+        /*if(counterR >0){
         Manufacturer_OrderNb__c R = Manufacturer_OrderNb__c.getInstance('Richmond');
         R.LatestOrderNumber__c = string.valueOf(rd);
         update R;
@@ -625,7 +627,7 @@ public with sharing class OrderTriggerStagesHelper{
         Manufacturer_OrderNb__c W = Manufacturer_OrderNb__c.getInstance('Wizard');
         W.LatestOrderNumber__c = string.valueOf(wd);
         update W;
-        }
+        }*/
         
 
    }
@@ -633,7 +635,7 @@ public with sharing class OrderTriggerStagesHelper{
    // new functionality added by praveen -- to handle the zeroed out order numbers
     public static void updateZeroedOutOrderNumber(list<Order> orderListOld,map<id,order> newMap, map<id,order> oldMap){
     
-        string rd = Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c;
+       /* string rd = Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c;
         string sd = Manufacturer_OrderNb__c.getInstance('Solarlux').LatestOrderNumber__c;
         string td = Manufacturer_OrderNb__c.getInstance('Teuffel').LatestOrderNumber__c;
         string wd = Manufacturer_OrderNb__c.getInstance('Wizard').LatestOrderNumber__c;
@@ -678,7 +680,7 @@ public with sharing class OrderTriggerStagesHelper{
         Manufacturer_OrderNb__c W = Manufacturer_OrderNb__c.getInstance('Wizard');
         W.LatestOrderNumber__c = string.valueOf(wizrd);
         update W;
-        }
+        }*/
     }
     
 }
