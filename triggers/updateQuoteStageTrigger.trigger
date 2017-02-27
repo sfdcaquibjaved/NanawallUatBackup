@@ -101,6 +101,9 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
       OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
      
    }
+   if(trigger.isAfter && trigger.isUpdate){
+        OrderTriggerStagesHelper.updateZeroedOutOrderNumber(trigger.old,trigger.newMap,trigger.oldMap);
+    }
    
     
 }

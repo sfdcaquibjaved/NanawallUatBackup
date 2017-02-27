@@ -629,5 +629,56 @@ public with sharing class OrderTriggerStagesHelper{
         
 
    }
+   
+   // new functionality added by praveen -- to handle the zeroed out order numbers
+    public static void updateZeroedOutOrderNumber(list<Order> orderListOld,map<id,order> newMap, map<id,order> oldMap){
+    
+        string rd = Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c;
+        string sd = Manufacturer_OrderNb__c.getInstance('Solarlux').LatestOrderNumber__c;
+        string td = Manufacturer_OrderNb__c.getInstance('Teuffel').LatestOrderNumber__c;
+        string wd = Manufacturer_OrderNb__c.getInstance('Wizard').LatestOrderNumber__c;
+        decimal richmnd;
+        decimal solar;
+        decimal teuf;
+        decimal wizrd;
+    for(order ord : orderListOld){
+        if(ord.name !='0' && newMap.get(ord.id).name=='0'){
+            if (ord.Manufacturing__c == 'Richmond' && ord.name == rd){
+                richmnd = decimal.valueOf(ord.name) -1 ;
+            }
+            else if (ord.Manufacturing__c == 'Solarlux' && ord.name == sd){
+                solar = decimal.valueOf(ord.name) -1 ;
+            }
+            else if (ord.Manufacturing__c == 'Teuffel' && ord.name == td){
+                teuf = decimal.valueOf(ord.name) -1 ;
+            }
+            else if (ord.Manufacturing__c == 'Wizard' && ord.name == wd){
+                wizrd = decimal.valueOf(ord.name) -1 ;
+            }
+        }
+    }
+
+    if(richmnd != null && richmnd >0){
+        Manufacturer_OrderNb__c R = Manufacturer_OrderNb__c.getInstance('Richmond');
+        R.LatestOrderNumber__c = string.valueOf(richmnd);
+        update R;
+
+        }
+        if(solar != null && solar >0){
+        Manufacturer_OrderNb__c S = Manufacturer_OrderNb__c.getInstance('Solarlux');
+        S.LatestOrderNumber__c = string.valueOf(solar);
+        update S;
+        }
+        if(teuf!= null && teuf >0){
+        Manufacturer_OrderNb__c T = Manufacturer_OrderNb__c.getInstance('Teuffel');
+        T.LatestOrderNumber__c = string.valueOf(teuf);
+        update T;
+        }
+        if(wizrd!= null && wizrd >0){
+        Manufacturer_OrderNb__c W = Manufacturer_OrderNb__c.getInstance('Wizard');
+        W.LatestOrderNumber__c = string.valueOf(wizrd);
+        update W;
+        }
+    }
     
 }
