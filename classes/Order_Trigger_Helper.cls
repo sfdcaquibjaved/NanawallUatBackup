@@ -219,27 +219,38 @@ system.debug('** SO: setting temp actual delivery date');
 					if( so.Freight_ETA_Jobsite__c != null )
 					{
 						if( IN_Freight_ETA_Jobsite == null || so.Freight_ETA_Jobsite__c > IN_Freight_ETA_Jobsite )
+						{
 							IN_Freight_ETA_Jobsite = so.Freight_ETA_Jobsite__c;
+							set_IN_Freight_ETA_Jobsite = true;
+						}
 					}  
 					//else set_IN_Freight_ETA_Jobsite = false;
  					
 					if( so.Freight_Tracking_Number__c != null )
 					{
-						IN_Freight_Tracking_Number = so.Freight_Tracking_Number__c;
+system.debug('** ASTECH:  freight tracking number: ' + so.Freight_Tracking_Number__c );						
+						IN_Freight_Tracking_Number = ( IN_Freight_Tracking_Number != null ? IN_Freight_Tracking_Number + '; ' : '') +  so.Freight_Tracking_Number__c;
+						set_IN_Freight_Tracking_Number = true;
 					}  
 					//else set_IN_Freight_Tracking_Number = false;
  					
 					if( so.Revised_ETA_Jobsite__c != null )
 					{ 
 						if( IN_Revised_ETA_Jobsite == null || so.Revised_ETA_Jobsite__c > IN_Revised_ETA_Jobsite )
+						{
 							IN_Revised_ETA_Jobsite = so.Revised_ETA_Jobsite__c;
+							set_IN_Revised_ETA_Jobsite = true;
+						}
 					}  
 					//else set_IN_Revised_ETA_Jobsite = false;					
 				 
 					if( so.Actual_Pickup_Date__c != null )
 					{ 
 						if( IN_Actual_Pickup_Date == null || so.Actual_Pickup_Date__c > IN_Actual_Pickup_Date )
+						{
 							IN_Actual_Pickup_Date = so.Actual_Pickup_Date__c;
+							set_IN_Actual_Pickup_Date = true;
+						}	
 					} 
 					// else set_IN_Actual_Pickup_Date = false;					
 				 
