@@ -23,7 +23,7 @@ system.debug('***ORDERTRIGGER: Order number/name:  ' + o.Name  + ' ; ' + o.Hidde
         }
         for( Quote__c nq: [SELECT Id, Order_Number__c FROM Quote__c WHERE Id = :nanaquoteids] )
         {
-        	//turn off for backfill
+            //turn off for backfill
             nq.Order_Number__c  = Decimal.valueOf(ordernumbermap.get(nq.Id) ); 
 
             nq.Ordered__c  = true;
@@ -62,21 +62,21 @@ System.debug('***ORDERTRIGGER:UPDATED!');
                     }
                     
                 system.debug('sending CAD email to  ' + pipelineEmails.get(o.Id) );
-				try
-				{
-	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
-	                Task tsk = new Task();
-	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
-	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
-	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
-	                tsk.Description = '';
-	                
-	                tasksToInsert.add( tsk ); 
-	                
-				}catch (Exception ex )
-				{
-					system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
-				}
+                try
+                {
+                    pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+                    Task tsk = new Task();
+                    tsk.WhatId = pipelineEmails.get(o.Id).Id;
+                    tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
+                    tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
+                    tsk.Description = '';
+                    
+                    tasksToInsert.add( tsk ); 
+                    
+                }catch (Exception ex )
+                {
+                    system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+                }
                 
             }
            
@@ -115,7 +115,7 @@ System.debug('***ORDERTRIGGER:UPDATED!');
         */
     } else  if( trigger.isBefore && trigger.isUpdate )
     {
-    	/*
+        /*
         map<Id, list<Manufacturing_Order__c>> manufacturingOrderMap = new map<Id, list<Manufacturing_Order__c>>();
         map<Id, list<Shipping_Order__c>> shippingOrderMap = new map<Id, list<Shipping_Order__c>>();
         
@@ -177,9 +177,9 @@ System.debug('***ORDERTRIGGER: In the o loop:  ' + o.Quote_Name__c );
             // end pipeline updates         
             
             if( 
-            	(o.Order_Finalized_Date__c != null && trigger.oldMap.get(o.Id).Order_Finalized_Date__c == null )
-            	|| o.Regenerate_GUUID__c
-            	)
+                (o.Order_Finalized_Date__c != null && trigger.oldMap.get(o.Id).Order_Finalized_Date__c == null )
+                || o.Regenerate_GUUID__c
+                )
             { //the order finalized date was set
                  
                 //(1) update GUUID
@@ -241,7 +241,7 @@ System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_N
     */
     } else if( trigger.isBefore && trigger.isInsert )
     {
-    	/*
+        /*
         for( Order o : trigger.new )
         {
             //this needs to be commented out for backfill

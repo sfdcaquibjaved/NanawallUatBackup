@@ -88,7 +88,7 @@
     function prepareFileUploads(){
         //Get the file(s) from the input field
         files = document.getElementById('filesInput').files;
-        alert('files?'+files);
+        //alert('files?'+files);
         //Only proceed if there are files selected
         if(files.length == 0){
             alert('Please select a file!');
@@ -107,10 +107,10 @@
         for(i = 0; i < files.length; i++){
             //Determine file display size
             if(files[i].size < 1000000){
-                alert('inside if'+files[i].size);
+                // alert('inside if'+files[i].size);
                 var displaySize = Math.floor(files[i].size/1000) + 'K';
             }else{
-                alert('inside else'+files[i].size);
+                // alert('inside else'+files[i].size);
                 var displaySize = Math.round((files[i].size / 1000000)*10)/10 + 'MB';
             }
             
@@ -139,14 +139,14 @@
         if($upload.length != 0){
             //Based on index of the div, get correct file from files array
             currentFile = files[$upload.attr('data-index')];
-            alert('file?'+currentFile);
+            // alert('file?'+currentFile);
             /*Build the byteChunkArray array for the current file we are processing. This array is formatted as:
 		['0-179999','180000-359999',etc] and represents the chunks of bytes that will be uploaded individually.*/
         byteChunkArray = new Array();
         
         //First check to see if file size is less than the chunk size, if so first and only chunk is entire size of file
         if(currentFile.size <= CHUNK_SIZE){
-            alert('Size of file'+currentFile.size);   
+            // alert('Size of file'+currentFile.size);   
             byteChunkArray[0] = '0-' + (currentFile.size - 1);
         }else{
             //Determine how many whole byte chunks make up the file,
@@ -186,28 +186,28 @@
     
     //Uploads a chunk of bytes, if attachmentId is passed in it will attach the bytes to an existing attachment record
     function processByteChunkArray(attachmentId){
-        alert('byteChunkArray'+byteChunkArray.length);
+        // alert('byteChunkArray'+byteChunkArray.length);
         //Proceed if there are still values in the byteChunkArray, if none, all piece of the file have been uploaded
         if(byteChunkArray.length > 0){
             //Determine the byte range that needs to uploaded, if byteChunkArray is like... ['0-179999','180000-359999']
             var indexes = byteChunkArray[0].split('-'); //... get the first index range '0-179999' -> ['0','179999']
             var startByte = parseInt(indexes[0]); //0
             var stopByte = parseInt(indexes[1]); //179999
-            alert('stopByte'+stopByte);
-            alert('current file?'+currentFile);
+            // alert('stopByte'+stopByte);
+            //alert('current file?'+currentFile);
             //Slice the part of the file we want to upload, currentFile variable is set in checkForUploads() method that is called before this method
             var blobChunk = "";
             if (currentFile.mozSlice){
                 blobChunk = currentFile.mozSlice(startByte , stopByte + 1);
-                alert('mozilla');
+                //  alert('mozilla');
             }else {
                 blobChunk = currentFile.slice(startByte , stopByte + 1);
-                alert('chrome');
+                //    alert('chrome');
             }
             
             //Create a new reader object, part of HTML5 File API
             var reader = new FileReader();
-            alert('blobchunk'+blobChunk);
+            //alert('blobchunk'+blobChunk);
             //Read the blobChunk as a binary string, reader.onloadend function below is automatically called after this line
             reader.readAsBinaryString(blobChunk);
             
@@ -216,13 +216,13 @@
                 if(evt.target.readyState == FileReader.DONE){ //Make sure read was successful, DONE == 2
                     //Base 64 encode the data for transmission to the server with JS remoting, window.btoa currently on support by some browsers
                     var base64value = window.btoa(evt.target.result);
-                    alert('read successfull');
+                    //alert('read successfull');
                     //Use js remoting to send the base64 encoded chunk for uploading
                     Multiple_Upload_Controller.attachBlob(parentId,attachmentId,currentFile.name,currentFile.type,base64value,function(result,event){
                         
                         //Proceed if there were no errors with the remoting call
                         if(event.status == true){
-                            alert('successfull remoting');
+                            //alert('successfull remoting');
                             //Update the percent of the status bar and percent, first determine percent complete
                             var percentComplete = Math.round((stopByte / currentFile.size) * 100);
                             $upload.find(".percentComplete").text(percentComplete + '%');
@@ -270,7 +270,7 @@
     
     <script type="text/javascript">
     var parentId = '{!parentId}';
-    alert('I am here'+parentId);
+    //alert('I am here'+parentId);
     //Will be used by FileUploadJS.js but must be declared here. Static resources don't support dynamic values.
     </script>
     

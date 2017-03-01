@@ -147,7 +147,7 @@ public class OrderTriggerUnitTestClass {
         Sh.Manufacturing_Order__c = Mf[0].id;
         Sh.Order__c = od.id;
         So.add(Sh);
-        Insert So[0];
+        Insert So[0];   
         update So[0];
         //o[0].Status = 'Cancelled ';
         //o[0].PriceBook2Id = pb.id;
