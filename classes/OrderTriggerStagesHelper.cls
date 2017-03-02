@@ -504,13 +504,13 @@ public with sharing class OrderTriggerStagesHelper{
        decimal td ;
        decimal wd ;
        //query to get the highest ordernumber for that respective manufacturer
-       list<order> ord = [select id,Name , Manufacturing__c from order where Manufacturing__c = 'Richmond' ORDER BY Name DESC NULLS last limit 1 ];
+         list<order> ord = [select id,Name , Manufacturing__c from order where Manufacturing__c = 'Richmond' AND name >= '40000' AND name <'75000' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord.size()>0){rd= decimal.valueOf(ord[0].Name);}
-       list<order> ord1 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Solarlux' ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord1 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Solarlux' AND name >= '20000' AND name <'40000' ORDER BY Name DESC NULLS last limit 1 ];
          if(ord1.size()>0){sd= decimal.valueOf(ord1[0].Name);}
-       list<order> ord2 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Teuffel' ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord2 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Teuffel' AND name >= '75000' AND name <'90000' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord2.size()>0){ td= decimal.valueOf(ord2[0].Name);}
-       list<order> ord3 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Wizard' ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord3 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Wizard' AND name >= '90000'  ORDER BY Name DESC NULLS last limit 1 ];
         if(ord3.size()>0){ wd= decimal.valueOf(ord3[0].Name);}
         
         /*rd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c);
@@ -526,14 +526,15 @@ public with sharing class OrderTriggerStagesHelper{
     //loop over the orders and assign order number and update the manufacturer on orders
      for(order oNew: orderList){
         //ticket 490 check for dupe
-        if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c)){
+        //if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c)){
        system.debug(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)));
        system.debug(mapQuoteModel.get(string.valueof(oNew.NanaQuote__c)));
                //check if manufacturing is from richmond and assign ordernumber with incremental value
                //based  on model get the manufacturer from custom settings
                 if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000 && rd<75000)){
-                
-                    oNew.Name=string.valueof(rd+1);
+                    
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name=string.valueof(rd+1);
                     oNew.Manufacturing__c='Richmond';
                      //store incremental value 
                     rd =decimal.valueOf(oNew.Name);
@@ -541,7 +542,9 @@ public with sharing class OrderTriggerStagesHelper{
                     counterR+=1;
                 }
                 else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')){
-                    oNew.Name='40200';
+                    
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name='40200';
                     oNew.Manufacturing__c='Richmond';
                      //store incremental value 
                     rd =decimal.valueOf(oNew.Name);
@@ -551,9 +554,9 @@ public with sharing class OrderTriggerStagesHelper{
                 }
                 //check if manufacturing is from solarlux and assign ordernumber with incremental value
                 if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux') && (sd >=20000 && sd<40000)){
-                
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))  
+                        oNew.Name=string.valueof(sd+1);
                     oNew.Manufacturing__c='Solarlux';
-                    oNew.Name=string.valueof(sd+1);
                     //store incremental value 
                     sd = decimal.valueOf(oNew.Name);
                     system.debug('solardata'+ oNew.Manufacturing__c+oNew.Name+sd);
@@ -561,7 +564,8 @@ public with sharing class OrderTriggerStagesHelper{
                   
                 }
                 else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux')){
-                    oNew.Name='20000';
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name='20000';
                     oNew.Manufacturing__c='Solarlux';
                      //store incremental value 
                     sd = decimal.valueOf(oNew.Name);
@@ -572,7 +576,8 @@ public with sharing class OrderTriggerStagesHelper{
                 if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Teuffel') && (td>=75000 && td<90000)){
                 
                    oNew.Manufacturing__c='Teuffel';
-                    oNew.Name=string.valueof(td+1);
+                   if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name=string.valueof(td+1);
                      //store incremental value 
                     td = decimal.valueOf(oNew.Name);
                     system.debug('Rtueffeldata'+ oNew.Manufacturing__c+oNew.Name+td);
@@ -580,8 +585,9 @@ public with sharing class OrderTriggerStagesHelper{
                   
                 }
                 else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Teuffel')){
-                    oNew.name='75400';
-                    oNew.Manufacturing__c='Teuffel';
+                        if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                            oNew.name='75400';
+                        oNew.Manufacturing__c='Teuffel';
                      //store incremental value 
                     td = decimal.valueOf(oNew.Name);
                     system.debug('Rtueffeldata'+ oNew.Manufacturing__c+oNew.Name+td);
@@ -590,21 +596,23 @@ public with sharing class OrderTriggerStagesHelper{
                 if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard') && (wd>=90000)){
                 
                    oNew.Manufacturing__c='Wizard';
-                    oNew.Name=string.valueof(wd+1);
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name=string.valueof(wd+1);
                      //store incremental value 
                     wd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                    counterW+=1;
                 }
                 else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard')){
-                    oNew.Name='97000';
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name='97000';
                     oNew.Manufacturing__c='Wizard';
                      //store incremental value 
                     wd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                      counterW+=1;
                 }
-             }   
+            // }   
             
         }
         /*if(counterR >0){
@@ -681,6 +689,46 @@ public with sharing class OrderTriggerStagesHelper{
         W.LatestOrderNumber__c = string.valueOf(wizrd);
         update W;
         }*/
+    }
+    /*************************************************
+    Added by Satish Lokinindi
+    Method Name: validateDupeOrders
+    Description:  This Method is used to validate the dupe orders entering the system         
+    Input Parameter:  trigger.new values   
+    
+    *************************************************/     
+    Public static void validateDupeOrders(list<Order> OrderList){
+        //create instance for storing order number
+        set<string> orderNameSet= new set<string>();
+        //loop through orders
+        for(order ord : OrderList){
+            orderNameSet.add(ord.Name); 
+                   
+        }        
+        //Query over the orders database to find any existing order with name number
+        list<order> CheckDupeFromOrderDataBase = [select id,Name from Order where name IN:orderNameSet AND name !='' AND name !='0'];
+        set<string> dupeOrdSet = new set<string>();
+        
+        //enter the loop if any dupes exists
+        if(CheckDupeFromOrderDataBase.size()>0){
+            for(order ord : CheckDupeFromOrderDataBase){
+               dupeOrdSet.add(ord.Name);
+               system.debug('HelloOrderDupe'+dupeOrdSet); 
+            }
+        }
+        set<string> incomingDupeOrder = new set<string>();
+        //again loop through the orders and check if order exists in database and display error.
+        for(order ord : OrderList){
+        
+            if(dupeOrdSet!=null && (dupeOrdSet.contains(ord.Name)||incomingDupeOrder.contains(ord.name))){             
+            ord.addError('There is already a Order number exists with same Name');
+            }
+            else{
+            incomingDupeOrder.add(ord.name);
+            }
+            
+            
+         }
     }
     
 }

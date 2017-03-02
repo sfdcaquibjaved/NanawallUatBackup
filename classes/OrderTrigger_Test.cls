@@ -2,6 +2,11 @@
 public class OrderTrigger_Test {
     
     public static testMethod void UnitTest1() {
+    
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
 
         list < OrderOppStages__c > ods = new list < OrderOppStages__c > ();
         /*OrderOppStages__c odsv = new OrderOppStages__c();

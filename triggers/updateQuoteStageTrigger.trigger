@@ -1,4 +1,4 @@
-trigger updateQuoteStageTrigger on Order (before insert,after insert , after update) {
+trigger updateQuoteStageTrigger on Order (before insert,before update,after insert , after update) {
     
     /********************
     Added by satish Lokinindi
@@ -100,6 +100,18 @@ trigger updateQuoteStageTrigger on Order (before insert,after insert , after upd
       //OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModel(trigger.new);
       OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
      
+   }
+   //To validate the dupe orders 
+   if(trigger.isBefore && trigger.isUpdate){
+   list<order> newOrderValues = new list<order>();
+       for(order ord:trigger.new){
+           if((trigger.oldMap.get(ord.id).Name!=ord.Name) && (ord.name!='0') && ord.name!=''){
+           newOrderValues.add(ord);
+           }
+       }
+       if(newOrderValues.size()>0){
+       OrderTriggerStagesHelper.validateDupeOrders(newOrderValues);
+       }
    }
    if(trigger.isAfter && trigger.isUpdate){
         //OrderTriggerStagesHelper.updateZeroedOutOrderNumber(trigger.old,trigger.newMap,trigger.oldMap);
