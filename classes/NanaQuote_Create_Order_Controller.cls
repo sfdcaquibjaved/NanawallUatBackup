@@ -8,17 +8,17 @@ public with sharing class NanaQuote_Create_Order_Controller {
         
         
         Map<string,string> params = ApexPages.currentPage().getParameters();        
-        if( params.get('flushCache') != null && params.get('flushCache') == 'true')
+		if( params.get('flushCache') != null && params.get('flushCache') == 'true')
         {
         
-            System.debug('flushing the cache ...');
-            //tell nana to flush the cache 
-            HttpRequest  req = new HttpRequest();   
-            HttpResponse response = null;
-            Http http = new Http();
-            req.setEndpoint('http://www.nanareps.com/refreshorder.aspx?quoteid=' +  this.thisQuote.Id );
-            req.setMethod('GET') ;
-            response = http.send(req);
+        	System.debug('**ASTECH: flushing the cache ...');
+			//tell nana to flush the cache 
+	        HttpRequest  req = new HttpRequest();   
+	        HttpResponse response = null;
+	        Http http = new Http();
+	        req.setEndpoint('http://'+GlobalStrings.NanaServerAddress()+'/refreshorder.aspx?quoteid=' +  this.thisQuote.Id );
+	        req.setMethod('GET') ;
+	        response = http.send(req);
         
         }
     
@@ -61,19 +61,18 @@ public with sharing class NanaQuote_Create_Order_Controller {
                 
         Order thiso = new Order();
         thiso.QuoteId = thisq.Id;
-        thiso.NanaQuote__c = this.thisQuote.Id;
-        insert thiso;
-        
-        //we need to activate the order separately because the triggers wont allow you to activate the order during insert
-        thiso.Status = 'Order Created';
-        update thiso;
+		insert thiso;
+		
+		//we need to activate the order separately because the triggers wont allow you to activate the order during insert
+		thiso.Status = 'Order Created';
+		update thiso;
         
         Apexpages.addMessage( new Apexpages.Message( Apexpages.Severity.INFO, 'created.' ) );
    System.debug('**ASTECH NanaQuote_CreateOrderController 1: Total SOQL Queries: ' + Limits.getQueries() );
 
 
         if( thiso != null ) 
-        {           
+        {			
             PageReference pg = new PageReference('/apex/NanaQuote_Create_Order?scontrolCaching=1&id='+this.thisQuote.Id + '&flushCache=true' );
             return pg;
 
