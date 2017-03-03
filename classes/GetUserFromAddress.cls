@@ -318,15 +318,15 @@ else if (subzip>='33500' && subzip <='33899')
 }
 else if (subzip>='33900' && subzip <='33999') 
 {
-    return '005A0000000N1j6IAC';
+    return '005A0000000N1i8IAC'; //005A0000000N1j6IAC
 }
 else if (subzip>='34000' && subzip <='34100') 
 {
-    return '005A0000000MOItIAO';
+    return '005A0000000N1i8IAC'; //005A0000000MOItIAO
 }
 else if (subzip>='34100' && subzip <='34199') 
 {
-    return '005A0000000N1j6IAC';
+    return '005A0000000N1i8IAC'; //005A0000000N1j6IAC
 }
 else if (subzip>='34200' && subzip <='34299') 
 {
