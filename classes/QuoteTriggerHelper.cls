@@ -176,9 +176,13 @@ public with sharing class QuoteTriggerHelper{
     **********************************************************************************/
     public static void recalculateProjectAmount(Set <Id> projectIds) {
         List <Project__c> updateProjList = new List <Project__c> ();
+        map<ID,Decimal> recal = new map<ID,Decimal>();
         try{
+        list<Quote__c > quoList = [select id ,Project__c,Order_Number__c,SubTotal__c from Quote__c where Project__c IN : projectIds AND  Order_Number__c > 0];
+        List <Project__c> projList = [SELECT Id, Amount__c, (SELECT Id, Amount, AccountId, StageName FROM Opportunities__r) FROM Project__c WHERE Id IN: projectIds];
             //Query over Project with Related Opportunities
-            List <Project__c> projList = [SELECT Id, Amount__c, (SELECT Id, Amount, AccountId, StageName FROM Opportunities__r) FROM Project__c WHERE Id IN: projectIds];
+            if(!(quoList.size()>0)){
+            //List <Project__c> projList = [SELECT Id, Amount__c, (SELECT Id, Amount, AccountId, StageName FROM Opportunities__r) FROM Project__c WHERE Id IN: projectIds];
             System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
             //Loop over Project records
             for (Project__c prj: projList) {
@@ -200,7 +204,16 @@ public with sharing class QuoteTriggerHelper{
                 
                 updateProjList.add(prj);
             }
-    
+            }
+            else{
+            for(project__c p:projList){
+            recal.put(p.id,0);
+            }
+            if(recal.keyset().size()>0){
+            reCalculateProjectAmtOnOrders(recal);
+            }
+            
+            }
             if (updateProjList.size() > 0) {
                 //Updating the Project status and amount
                 Database.saveresult[] sr = Database.update(updateProjList, False); 
