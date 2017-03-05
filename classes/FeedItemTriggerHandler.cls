@@ -19,8 +19,14 @@ public class FeedItemTriggerHandler {
      public static void FeedVisiblity(List < FeedItem > newTrigger) {
 
         for (FeedItem NewFeed: newTrigger) {
+            
+            if(NewFeed.Body.contains('you have been assigned')){
+                NewFeed.CreatedById = label.Lee_User_ID ; 
+                NewFeed.Visibility = 'AllUsers';
+                
+            }
            
-                      NewFeed.Visibility = 'AllUsers';
+                      
                     
         }
     } 

@@ -44,7 +44,7 @@ public class OrderTriggerHandler {
             try{
                 if(lstInstallation.size() > 0 ) {
  
-          				 insert lstInstallation ; 
+                         insert lstInstallation ; 
                 }
         }
         catch(exception e){
@@ -74,7 +74,7 @@ public class OrderTriggerHandler {
    /*     for(Order o : newTrigger) {
             OrderID.add(o.Id) ; 
         } */
-       	System.debug('order ids'+ OrderID);
+        System.debug('order ids'+ OrderID);
         Integer installationCount = [SELECT Count() FROM Installation__c WHERE Order__c IN : OrderID ] ; 
         System.debug('My count'+ installationCount);
         if(installationCount == 0){
@@ -89,7 +89,8 @@ public class OrderTriggerHandler {
                         Installation_Date__c = ord.Order_Finalized_Date__c.addDays(Days),
                         Order__c = ord.id , 
                         Quote_Name__c = ord.NanaQuote__c , 
-                        Project__c = ord.Project__c 
+                        Project__c = ord.Project__c ,
+                        ownerId= label.Lee_User_ID 
                         
                  )) ; 
             }
@@ -105,10 +106,10 @@ public class OrderTriggerHandler {
             for(Order o : newTrigger){
                 if(i.Order__c == o.ID){
                       if(O.Shipping_Min_from_Quote__c != null && O.Order_Finalized_Date__c != null){
-                    		Decimal d = O.Shipping_Min_from_Quote__c * 7 ; 
-                   		    Integer Days = d.intValue();
-                          	
-                          	i.Installation_Date__c = O.Order_Finalized_Date__c.addDays(Days) ; 
+                            Decimal d = O.Shipping_Min_from_Quote__c * 7 ; 
+                            Integer Days = d.intValue();
+                            
+                            i.Installation_Date__c = O.Order_Finalized_Date__c.addDays(Days) ; 
                             lstInstallation.add(i)  ; 
                           
                       }
@@ -122,9 +123,9 @@ public class OrderTriggerHandler {
         try{
             //updating Installation records
             if(lstInstallation.size() >0 )
-            		update lstInstallation ; 
+                    update lstInstallation ; 
             if(lstInstallationInsert.size() >0 )
-            		insert lstInstallationInsert ;
+                    insert lstInstallationInsert ;
         }
         
         catch (exception e) {
