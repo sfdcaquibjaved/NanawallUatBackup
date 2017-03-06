@@ -1,0 +1,35 @@
+<apex:page showHeader="false"> 
+<!-- This script takes the endpoint URL parameter passed from the deployment page and makes it the action for the form -->
+<script type="text/javascript">
+     (function() { 
+     function handlePageLoad() {
+       var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+       document.getElementById('prechatForm').setAttribute('action',
+       decodeURIComponent(endpointMatcher.exec(document.location.search)[1]));
+     } if (window.addEventListener) {
+              window.addEventListener('load', handlePageLoad, false);
+   } else { window.attachEvent('onload', handlePageLoad, false);
+              }})(); 
+</script>
+<h1>Pre-chat Form</h1> 
+<form method='post' id='prechatForm'> 
+      Name: <input type='text' name='liveagent.prechat.name' id='prechat_field' /><br /> 
+      Email Address: <input type='text' name='liveagent.prechat:Email' /><br /> 
+      Department: <select name="liveagent.prechat.buttons"> 
+          <!-- Values are LiveChatButton IDs. -->
+          <option value="573a00000000001">Customer Service</option> 
+          <option value="573a00000000002">Technical Support</option> 
+          <option value="573a00000000001,573a00000000002">Customer Service if online, 
+          otherwise Technical Support</option> 
+      </select><br /> 
+      <!-- Creates an auto-query for a matching Contact record’s Email field based on the 
+      value of the liveagent.prechat:Email field -->    
+      <input type="hidden" name="liveagent.prechat.query:Email" 
+      value="Contact,Contact.Email" /> 
+      <input type="hidden" name="liveagent.prechat.save:Email" value="Email__c" /> 
+      <input type='submit' value='Request Chat' id='prechat_submit'/> 
+<style type="text/css"> 
+p {font-weight: bolder } 
+</style> 
+</form> 
+</apex:page>

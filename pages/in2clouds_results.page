@@ -1,0 +1,16 @@
+<apex:page >
+  <apex:pageBlock title="in2clouds Analytics">
+     <form id="n2c" method="post" action="https://cloud-analytics.appspot.com/org/{!$Organization.Id}/results" target='results'>
+         <input type='hidden' name='api' value='{!$Api.Partner_Server_URL_180}'/>
+         <input type='hidden' name='session' value='{!$Api.Session_ID}'/>
+         <input type='hidden' name='group' value='2'/>
+         <input type='hidden' name='mode' value='2'/>
+     </form>
+     <apex:iframe id="results" height="500" width="775">
+     </apex:iframe>
+     
+     <script>
+          document.getElementById('n2c').submit();
+      </script>     
+  </apex:pageBlock>
+</apex:page>

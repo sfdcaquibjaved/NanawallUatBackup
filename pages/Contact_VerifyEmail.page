@@ -1,0 +1,22 @@
+<apex:page standardcontroller="Contact" extensions="Contact_VerifyEmail" showHeader="false" sidebar="false">
+<style>
+	body{ background-color: #white; }
+</style>
+
+<script type='text/javascript'>
+	function refreshPage() 
+	{
+		document.location.href = '/apex/Contact_VerifyEmail?id={!Contact.id}';
+	}
+
+	if( '{!Contact.EmailVerificationStatus__c}' == 'VERIFYING' ) 
+	{
+		setTimeout('refreshPage()',5000);
+	
+	}
+</script>
+
+<apex:outputtext value="{!verifyemail}" style="font-weight: bold; color: {!fieldcolor}"  />
+<apex:outputtext value="{!Contact.email}" rendered="false" />
+<apex:outputtext value="{!Contact.EmailVerificationStatus__c}" rendered="false" />
+</apex:page>

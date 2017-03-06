@@ -1,0 +1,8 @@
+<apex:page tabstyle="Campaign_Member_Task__tab" title="Campaign Member Task Creation Exception" controller="CampaignMemberFollowUpController">
+<apex:form >
+    <apex:outputPanel id="pageMessage" rendered="{!showPageMessage}">
+		<apex:pageMessage title="{!pageMessageTitle}" detail="{!pageMessageDetail}" severity="{!pageMessageSeverity}" strength="{!pageMessageStrength}" escape="false"/>
+		<apex:commandLink action="{!showList}" value="...click here." /> (Might not work with all browser.)
+	</apex:outputPanel>
+</apex:form>
+</apex:page>

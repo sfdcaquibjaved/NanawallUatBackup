@@ -1,0 +1,39 @@
+<apex:page sidebar="false" showheader="false" standardcontroller="opportunity" extensions="Opportunity_dupefinder_controller">
+
+<apex:pageblock title="">
+	<apex:pageblocksection columns="2">
+	<apex:dataTable value="{!joins}" var="join" id="jointable" rowClasses="odd,even" styleClass="tableClass" width="500">
+     	
+		<apex:column rendered="{!opportunity.Is_A_Dupe__c}">
+			<apex:facet name="header">Master Project</apex:facet>
+			<apex:outputLink value="/{!join.Opportunity_1__c}" target="_blank">{!join.opportunity_1__r.name}</apex:outputLink>
+		</apex:column>
+		<apex:column rendered="{!opportunity.Is_A_Dupe__c}">
+			<apex:facet name="header">Quote Count</apex:facet>
+			{!join.opportunity_2__r.Quote_Count__c}
+		</apex:column>
+
+		<apex:column rendered="{!NOT(opportunity.Is_A_Dupe__c)}">
+			<apex:facet name="header">Related Projects</apex:facet>
+			<apex:outputLink value="/{!join.Opportunity_2__c}" target="_blank">{!join.opportunity_2__r.name}</apex:outputLink>
+		</apex:column>
+		<apex:column rendered="{!NOT(opportunity.Is_A_Dupe__c)}">
+			<apex:facet name="header">Quote Count</apex:facet>
+			{!join.opportunity_2__r.Quote_Count__c}
+		</apex:column>
+
+	</apex:dataTable>
+	
+	<apex:pageblocksection >
+		<apex:outputtext rendered="{!NOT(opportunity.Is_A_Dupe__c)}">
+			<a href='/apex/opportunity_dupefinder?id={!opportunity.id}' >find/manage related projects</a>
+		</apex:outputtext>
+		<apex:outputtext rendered="{!opportunity.Is_A_Dupe__c}">
+			<b>THIS PROJECT IS A DUPLICATE</b>
+		</apex:outputtext>
+		
+	</apex:pageblocksection>
+	
+	</apex:pageblocksection>	
+</apex:pageblock>
+</apex:page>

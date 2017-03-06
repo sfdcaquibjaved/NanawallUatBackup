@@ -1,0 +1,224 @@
+<apex:page controller="Rep_Commission_Report_Controller">
+
+	<apex:form >
+		<apex:pagemessages />
+		<table>
+			<tbody>
+				<tr>
+					<td>Rep</td>
+					<td>From</td>
+					<td>To</td> 
+				</tr>
+				<tr>
+					<td>
+						<apex:inputfield value="{!dummyopportunity.OwnerID}" required="false"/>
+					</td>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Create_Date__c}" required="false"/></td>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Edit_Date__c}" required="false" /></td>
+					<td><apex:inputfield value="{!dummyopportunity.NIS__c}" required="false" /></td>
+					<td>Hide '0' lines</td>
+				</tr>
+				<tr>
+					<td colspan='2'><apex:commandbutton value="Filter" action="{!refreshDataPoints}" /></td> 
+				</tr>
+			</tbody>
+		</table>
+	
+	
+		<style>
+			.dataTable thead tr { 
+				background-color: #f2f3f3;
+				font-size: .9em;
+			}
+			.dataTable thead tr th { 
+				border-color: #e0e3e5;				
+				padding: 6px;
+				white-space:nowrap;
+			}
+			.dataTable tfoot tr { 
+				font-weight: bold;
+				color: white;
+				background-color: #818290;
+				border-top: 1px solid #333;
+			}
+			.dataTable tfoot tr td { 
+				font-weight: bold;
+				color: white;
+				padding: 5px;
+				white-space:nowrap;
+			}
+			.dataTable tbody tr td 
+			{
+				padding: 5px; 
+				white-space:nowrap;
+			}
+			
+			.tblDataPoints_tr:nth-child(even)
+			{
+				background-color: #f5f7ff;
+			}
+			.DepositSum, .BalanceSum
+			{
+				float:right; 
+			}
+		
+			.dataTable tbody tr td:nth-child(2) {
+				 width: 175px!important; 
+				 white-space: normal; 
+			  }
+			  .RedRow 
+			  {
+			  	background-color: red; color: white;
+			  }
+		</style>
+		
+		<apex:dataTable width="100%" value="{!DataPoints}" var="point" id="tblDataPoints" rowClasses="tblDataPoints_tr "  styleClass="dataTable">
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>Row</div></apex:facet>
+		 		<a href='/{!point.Id}' target='_blank'>{!point.Index}</a>				
+		 		
+			</apex:column>
+
+			<apex:column width="140" >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Customer Name{!IF( thisSorter.column=='Opportunity__r.Name',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Opportunity__r.Name" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				</apex:facet>
+		 		<a href='/{!point.OppID}' target='_blank'><apex:outputtext value="{!point.ProjectName}"/></a>								
+			</apex:column>			
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Order #{!IF( thisSorter.column=='Order_Number__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Order_Number__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				
+				</apex:facet>
+		 		<div style="background-color: {!IF( OR( point.WeightedDiscount > 30, point.objQuote.Taha_Review__c, CONTAINS(point.Project.Name, 'showroom'), CONTAINS( point.Project.Name, 'Showroom'), CONTAINS(point.Project.Name, 'Chase Retail Banking Center'), ( point.DepositAmount ==  point.QuoteSubtotal ) ), 'yellow', 'transparent;'  )}; width: 100%; height: 25px;">
+					<a href="/{!point.QuoteId}" target="_blank">{!point.OrderNumber}</a>
+					<span style="display: {!IF( OR( point.WeightedDiscount > 30, point.objQuote.Taha_Review__c, CONTAINS(point.Project.Name, 'showroom'), CONTAINS( point.Project.Name, 'Showroom'), CONTAINS(point.Project.Name, 'Chase Retail Banking Center'), ( point.DepositAmount ==  point.QuoteSubtotal ) ), 'block', 'none'  )};">*</span>
+
+					<div style='display: {!IF(point.objQuote.Taha_Review__c, "block","none")}'>Taha Review</div>
+		 		</div>	
+			</apex:column>			
+
+			<apex:column > 
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Wtd. Dsct.{!IF( thisSorter.column=='Weighted_Discount__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Weighted_Discount__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				</apex:facet>
+				
+				<apex:outputText style="float:right;"  value="{0, number, ###,###,###,###.00}%"><apex:param value="{!point.WeightedDiscount}"/></apex:outputText>		
+			</apex:column>			
+
+
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Dep. Date{!IF( thisSorter.column=='Deposit_Date__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Deposit_Date__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				</apex:facet>
+				<apex:outputText value="{0,date,MM'/'dd'/'yyyy}" rendered='{!IF(point.DepositAmount > 0, true, false)}'>
+				    <apex:param value="{!point.DepositDate}" /> 
+				</apex:outputText>
+			</apex:column>			
+
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Bal. Date{!IF( thisSorter.column=='Balance_Received_Date__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Balance_Received_Date__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				
+				</apex:facet>
+
+				<apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+				    <apex:param value="{!point.BalanceDate}" /> 
+				</apex:outputText>
+			</apex:column>			
+
+
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Subtotal{!IF( thisSorter.column=='Quote_Subtotal__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Quote_Subtotal__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.QuoteSubtotal}"/></apex:outputText>		
+
+		        <apex:facet name="footer">
+		            <span class="SubtotalSum"></span>
+		        </apex:facet>
+
+			</apex:column>			
+
+			<apex:column >
+				<apex:facet name="header">
+					List
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.CalculatedListPrice}"/></apex:outputText>		
+			</apex:column>			
+
+
+			<apex:column >
+				<apex:facet name="header"> 
+					Base or Excess
+				</apex:facet>
+				<apex:outputText style="float:left; text-align: left;"  value="{!point.BaseOrExcessSummary}" escape="false" />		
+
+			</apex:column>			 
+
+			<apex:column > 
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Split{!IF( thisSorter.column=='Commission__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Commission__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="{0, number, ###,###,###,###.00}%"><apex:param value="{!point.Commission}"/></apex:outputText>		
+		 		
+			</apex:column>			
+
+			<apex:column >
+				<apex:facet name="header"> 
+					Commission
+				</apex:facet>
+				<apex:outputText style="float:left; text-align: left;"  value="{!point.OverageCommissionSummary}" escape="false" />		
+
+			</apex:column>			 
+
+
+			<apex:column rendered="false">
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Comm. Rate{!IF( thisSorter.column=='Commission_Rate__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Commission_Rate__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>				
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="{0, number, ###,###,###,###.00}%"><apex:param value="{!point.CommissionRate}"/></apex:outputText>		
+			</apex:column>			
+
+
+
+			
+			
+		</apex:dataTable>
+		<br />
+		
+		<div style='width: 200px; border: 1px solid black; padding: 10px; margin: 10px'>
+			Total Commission:
+			<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}">
+				<apex:param value="{!TotalCommissionToPay}"/>
+			</apex:outputText>		
+		</div>
+		<br />
+		<div>*  Weighted Discount &gt; 30, or 'Taha Review', or Project Name contains 'showroom' or 'Showroom', or  Project Name contains 'Chase Retail Banking Center', or  Deposit Amount = Quote Subtotal </div>
+		
+		<script>
+		    document.getElementsByClassName('SubtotalSum')[0].innerHTML = '<apex:outputText value="${0, number, ###,###,###,###.00}"><apex:param value="{!SubtotalSum}"/></apex:outputText>';
+		    document.getElementsByClassName('DepositSum')[0].innerHTML = '<apex:outputText value="${0, number, ###,###,###,###.00}"><apex:param value="{!DepositSum}"/></apex:outputText>';
+		    document.getElementsByClassName('BalanceSum')[0].innerHTML = '<apex:outputText value="${0, number, ###,###,###,###.00}"><apex:param value="{!BalanceSum}"/></apex:outputText>';
+		</script>
+		
+		
+	</apex:form>
+	
+</apex:page>

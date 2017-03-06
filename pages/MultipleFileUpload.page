@@ -1,0 +1,6 @@
+<apex:page standardController="Installation__c" standardStylesheets="false" sidebar="false" docType="html-5.0" >
+    <apex:form >
+         
+        <c:fileUpload parentId="{!Installation__c.id}"/>
+    </apex:form>
+</apex:page>

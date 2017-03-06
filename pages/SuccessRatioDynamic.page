@@ -1,0 +1,196 @@
+<apex:page controller="SuccessRatioDynamicController" sidebar="false" readOnly="true">
+
+<style>
+ #center {
+            margin-left: 10px;
+            margin-top: 50px;
+        }
+        #center2 {
+            margin-left: 10px;
+            margin-top: 30px;
+        }
+</style>
+ <script type="text/javascript"> 
+ function getsalesreps()
+ {
+     nRecords();
+ }
+ function changechart()
+ {
+     chartt();
+ }
+ </script>
+  <apex:form >
+ <!-- <apex:actionFunction name="nRecords" action="{!getSalesReps}" status="loadingStatus"/>-->
+  <apex:actionFunction name="chartt" action="{!ChangeReport}" status="loadingStatus"/> 
+  <apex:sectionHeader title="Success ratio" subtitle="By $ Value & Volume" />
+  <h style="font-size:15px;"><strong>Select any Category</strong></h><br/><br/>
+  <h> Time Period</h>&nbsp;&nbsp;
+  <apex:selectList value="{!ProjectChoice}" size="1" title="Select any Category">
+  <apex:selectOption itemValue="--None--"/>
+  <apex:selectOption itemValue="By Quarter"/>
+  <apex:selectOption itemValue="By Halfyear"/>
+  <apex:selectOption itemValue="By Year" />  
+  <apex:actionSupport event="onchange" rerender="theBlock" action="{!ChangeReport}" status="loadingStatus"/>
+  </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+  <h> Project Type</h>&nbsp;&nbsp;
+  <apex:selectList value="{!projecttype}" size="1" title="Type of Project">
+  <apex:selectOption itemValue="--None--"/>
+  <apex:selectOption itemValue="Commercial Projects"/>
+  <apex:selectOption itemValue="Residential Project"/> 
+  <apex:actionSupport event="onchange" rerender="theBlock" action="{!ChangeReport}" status="loadingStatus"/>
+  </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+  <h>Region</h>&nbsp;&nbsp;
+  <apex:selectList value="{!regionname}" size="1" title="Region" onchange="changechart()">
+  <apex:selectOptions value="{!Regionlist}"/>
+ <!-- <apex:actionSupport event="onchange" rerender="theBlock" action="{!ChangeReport}"/>  -->
+  <!--<apex:actionSupport event="onselect" action="{!getSalesReps}"/>-->
+   
+  </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+  <h>Sales Reps</h>&nbsp;&nbsp;
+  <apex:selectList value="{!salesrepname}" size="1" title="Sales Reps">
+  <apex:selectOptions value="{!salesreps}"/>
+  <apex:actionSupport event="onchange" rerender="theBlock" action="{!ChangeReport}" status="loadingStatus"/>
+  </apex:selectList><br/><br/><br/><br/>
+  </apex:form><br/> 
+  <apex:pageBlock id="theBlock">
+  <div id="center">
+  <h style="font-size:20px; margin-left:300px; margin-top:200px;"> By $ Value</h><br/>  
+    <apex:chart height="400" width="700" data="{!datalist}" theme="Sky">
+        <apex:legend position="right"/>
+        <apex:axis type="Numeric" position="left" fields="data1"
+            title="Success Ratio (By $ Value in millions)" dashSize="3" grid="true"/>   
+        <apex:axis type="Category" position="bottom" fields="name"
+            title="{!yaxis}">
+            <apex:chartLabel rotate="315"/>
+        </apex:axis>
+        <apex:barSeries title="{!titlename}" axis="bottom" orientation="vertical" xField="name" yField="data1">
+        <apex:chartTips height="30" width="120"/>
+        <apex:chartLabel field="data1" display="outside" orientation="horizontal"/>
+        </apex:barSeries>
+    </apex:chart>
+    </div>       
+    <div style="margin-left:800px; margin-top:-420px;">   
+    <h style="font-size:20px; margin-left:250px; margin-top:-750px;"> By Volume</h><br/>
+    <apex:chart height="400" width="700" data="{!dataVolumelist}" theme="Sky">
+        <apex:legend position="right"/>
+        <apex:axis type="Numeric" position="left" fields="data1"
+            title="Success Ratio (By Volume)" dashSize="3" grid="true"/>   
+        <apex:axis type="Category" position="bottom" fields="name"
+            title="{!yaxis}">
+            <apex:chartLabel rotate="315"/>
+        </apex:axis>
+        <apex:barSeries title="{!titlename}" axis="bottom" orientation="vertical" xField="name" yField="data1">
+        <apex:chartTips height="30" width="120"/>
+         <apex:chartLabel field="data1" display="outside" orientation="horizontal"/>
+        </apex:barSeries>
+    </apex:chart>
+    </div>
+    <br/><br/>
+    <html>
+<body>
+<div style="vertical-align:top;">
+<table  border="2" style="float: left;display:inline-block; border-width: 2px; border-collapse: collapse;width:50%;height:auto;text-align:center" id="myTable">
+<thead> 
+ <tr class="myHeader" height="15">
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-left: 50px;padding-right: 50px">Year</th>            
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Closed Won Amount</th>           
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Amount</th>
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">{!columnname}</th>
+</tr>
+</thead>
+
+<apex:repeat var="drt" value="{!wrapppertablelist}">
+<tr>
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drt.yearname}" />
+</td>
+
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="$ {!drt.totalOrderAmount}" />
+</td>
+
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="$ {!drt.projectamount}" />
+</td>
+
+<td width="2" bgcolor="#AFEEEE">
+<apex:outputText value="{!drt.successratio} %" />
+</td>
+</tr>
+</apex:repeat>
+</table>
+</div>
+<div style="margin-left:800px;">
+<table  border="2" style="float: left;display:inline-block; border-width: 2px; border-collapse: collapse;width:100%;height:auto;text-align:center" id="myTable">
+<thead> 
+ <tr class="myHeader" height="15">
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-left: 50px;padding-right: 50px">Year</th>            
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Won Projects</th>           
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Total Projects</th>
+ <th width="5%" style="text-align:center; color: white; background-color:#3333ff; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">{!columnname}</th>
+</tr>
+</thead>
+
+<apex:repeat var="drtv" value="{!wrappertablevolumelist}">
+<tr>
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drtv.yearname}" />
+</td>
+
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drtv.totalOrdervolume}" />
+</td>
+
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drtv.projectvolume}" />
+</td>
+
+<td width="2" bgcolor="#AFEEEE">
+<apex:outputText value="{!drtv.successratio} %" />
+</td>
+</tr>
+</apex:repeat>
+</table>
+</div>
+</body>
+</html> 
+<!--  
+<div>
+<table  border="2" style="float: left;display:inline-block; border-width: 2px; border-collapse: collapse;width:100%;height:auto;text-align:center" id="myTable">
+<apex:repeat var="drt" value="{!wrapppertablelist}">
+<tr>
+<td width="6" bgcolor="#E6E6FA">
+<apex:outputText value="{!drt.yearname}" />
+</td>
+<td width="6" bgcolor="#AFEEEE">
+<apex:outputText value="{!drt.successratio} %" />
+</td>
+<td width="6">
+<apex:image url="{!$Resource.ArrowsForCharting}" width="50" height="50" />
+</td>
+</tr>
+</apex:repeat>
+<apex:repeat var="drtv" value="{!wrappertablevolumelist}">
+<tr>
+<td width="2" bgcolor="#E6E6FA">
+<apex:outputText value="{!drtv.yearname}" />
+</td>
+</tr>
+</apex:repeat>
+</table>
+</div>-->   
+  </apex:pageBlock>
+  <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                    <div class="waitingHolder" style="top: 50%; width: 110px;">
+                        <img class="waitingImage" src="/img/loading.gif" />
+                        <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                    </div>
+                </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+</apex:page>

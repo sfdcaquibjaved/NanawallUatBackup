@@ -1,0 +1,11 @@
+<apex:page standardcontroller="OpportunityTeamMember" extensions="OpportunityTeamMember_Delete" action="{!doDelete}">
+<!-- Begin Default Content REMOVE THIS -->
+<h1>Delete Team Member</h1>
+
+
+<apex:outputtext value="{!OpportunityTeamMember.OpportunityId}" />
+<apex:outputtext value="{!OpportunityTeamMember.UserId}" />
+
+
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

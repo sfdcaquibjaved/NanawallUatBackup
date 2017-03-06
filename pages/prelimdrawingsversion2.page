@@ -1,0 +1,1880 @@
+<apex:page controller="prelimDrawingsV2" standardStylesheets="false" showHeader="true" readOnly="true">     
+    <link rel="stylesheet" href="{!URLFOR($Resource.Tablesorter,'/tablesorter-master/themes/blue/style.css')}" type="text/css" media="print, projection, screen" />
+    <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.Tablesorter,'/tablesorter-master/jquery-latest.js')}" ></script> 
+    <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.Tablesorter,'/tablesorter-master/jquery.tablesorter.js')}" ></script>
+   
+    <script type="text/javascript">                          
+        $j = jQuery.noConflict();        
+        $j(document).ready(function () {               
+        $j("[id$=myTable]").tablesorter({      
+        headers: {
+            0: {
+                sorter: false
+            },          
+                                     
+          }
+       });  
+       
+                      
+    }); 
+  </script>  
+  
+       
+                      
+   
+  <!---  /**********************************************************Order Process Started Stage**********************************************************/ --->
+        
+  
+  <apex:form >     
+   <apex:tabPanel switchType="client" selectedTab="" id="theTabPanel" style="width:100%;"  tabClass="activeTab" inactiveTabClass="inactiveTab" headerAlignment="center">
+     <apex:tab label="Order Process Started" name="name1" id="tabOne" style="width:100%;">
+      <apex:commandButton value="Records Count:{!count}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>      
+       <apex:commandButton value="Project Amount:{!Amount}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+       <html>
+        <body> 
+        <apex:outputPanel rendered="{!IF(wraplist1.size>0,true,false)}">  
+          <table border="1"  style="border-style: groove; border-width: 1px; border-collapse: collapse;width:100%;height:auto;text-align:right" class="tablesorter" id="myTable">                       
+           <thead>           
+            <tr class="myHeader" height="15">
+            <th width="3%" style="text-align:center; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;word-break:break-all">Action</th>            
+            <th width="2%" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Order #</th>           
+            <th width="10%" style="text-align:center; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <th width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>                         
+            <!--<th width="3%" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Quote #</th>-->
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Coordinator</th>
+              <th width="5%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System </th> 
+              
+            <th width="5%" style="text-align:center; border-right: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Rep</th>
+            <th width="5%" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Client Name</th>
+            <th width="10%" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Contact Email</th>
+            
+            <th width="8%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th> 
+                                                   
+        <!--     <th style="display:none;">Hide </th> -->
+             <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Conceptual Dwg</th>
+            
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Process Started Date</th>
+            <th width="3%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Initial Deposit Received Date</th> 
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;
+              text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-left: 0px">Initial Deposit Amount</th> 
+            <th width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Initial Deposit Description</th>          
+            <th width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Preliminary Order Sign-Off</th>
+
+            <!--<th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Customer Drawings Received</th>-->
+            <th width="20%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;display:none"> Notes </th>
+            
+          </tr> 
+        </thead> 
+        <apex:repeat var="prt" value="{!wraplist1}">  
+            
+            <body>      
+             <tr>
+             <td width="2">
+               <!-- <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->               
+               <!-- <apex:commandLink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" />  -->
+               <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+               </td>
+               <td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+               </td> 
+               <td style="word-break:break-all;text-align:left">
+                   <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank" >{!prt.ProjectName}</apex:outputLink>
+               </td>
+               <!--<td>
+                 <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+               </td>-->
+                <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td>        
+               <td style="text-align:left">{!prt.DrawingOwner}</td>
+               <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+               <td style="text-align:left">{!prt.QuoteOwner}</td>
+               <td style="text-align:left">
+               <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+               </td>
+               <td  style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+              
+               <td style="word-break:break-all;text-align:left">{!prt.ContactPhone}</td>
+                
+                 
+               <!---<td style="display:none;"> </td>-->
+               <!--   <td>{!prt.conceptualdwg}</td> -->
+               <td>
+               <apex:image url="/img/checkbox_checked.gif" rendered="{!IF(prt.conceptualdwg == TRUE, true,false)}" value="{!prt.conceptualdwg}">
+                     <span style="display: none;">Yes</span>
+                 </apex:image>                           
+               </td>
+               <td>
+               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderConfirmationStarted}" /> 
+                </apex:outputText>
+               </td>
+               <td>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.DepositReceivedDate}" /> 
+                </apex:outputText>                 
+               </td> 
+               <td>
+               <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.orderamount}"/>
+                 </apex:outputText> 
+               </td>
+                <td style="word-break:break-all;text-align:left">{!prt.IntialDescription}</td>                     
+               <td> 
+               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.SignOff}" /> 
+                </apex:outputText>                           
+               </td>
+               <!--<td style="overflow-wrap:break-word">            
+                 <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Specs}" /> 
+                </apex:outputText>                  
+               </td>-->
+               <!--<td style="word-break:break-all;text-align:left"></td> -->
+               <td style="display:none;"></td>         
+             </tr>
+           </body>  
+          </apex:repeat>          
+        </table> 
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!!IF(wraplist1.size>0,true,false)}">
+         <table border="1"  style="border-style: groove; border-width: 1px; border-collapse: collapse;width:100%;height:auto;text-align:right" id="myTable">                       
+                      
+            <tr class="myHeader" height="15">
+            <th width="3%" class="customHeader" style="text-align:center; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;word-break:break-all">Action</th>            
+            <th width="2%" class="customHeader" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Order #</th>           
+            <th width="10%" class="customHeader" style="text-align:center; border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <th class="customHeader" width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>                         
+            <!--<th width="3%" class="customHeader" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Quote #</th>-->
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 10px">Drawing Owner</th>
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 10px"> Project Coordinator</th>
+              <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 10px">Type of System</th>
+                       
+            <th width="5%" class="customHeader" style="text-align:center; border-right: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Rep</th>
+            <th width="5%" class="customHeader" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Client Name</th>
+            <th width="10%" class="customHeader" style="text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-right: 14px">Contact Email</th>
+            
+            <th width="8%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th> 
+                                                    
+         <!--<th class="customHeader" style="display:none;">Hide </th> -->
+             <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Conceptual Dwg</th>
+            
+              <th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Process Started Date</th>
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Initial Deposit Received Date</th>
+            <th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;
+              text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;padding-left: 0px">Initial Deposit Amount</th> 
+             <th width="2%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Initial Deposit Description</th>          
+            <th width="2%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center; border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Preliminary Order Sign-Off</th>
+
+            <!--<th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Customer Drawings Received</th>-->
+             <th width="20%" class="customHeader" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;display:none"> Notes </th> 
+
+          </tr> 
+        
+        <apex:repeat var="prt" value="{!wraplist1}">  
+            
+            <body>      
+             <tr>
+             <td width="2">
+               <!-- <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->               
+               <!-- <apex:commandLink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" />  -->
+               <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+               </td>
+               <td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+               </td> 
+               <td style="word-break:break-all;text-align:left">
+                   <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank" >{!prt.ProjectName}</apex:outputLink>
+               </td>
+               <!--<td>
+                 <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+               </td>-->
+               <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td>         
+               <td style="text-align:left">{!prt.DrawingOwner}</td>
+               <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+               <td style="text-align:left">{!prt.QuoteOwner}</td>
+               <td style="text-align:left">
+               <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+               </td>
+               <td  style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+              
+               <td style="word-break:break-all;text-align:left">{!prt.ContactPhone}</td>
+                
+                 
+               <td style="display:none;"> </td>  
+               <td>
+               <apex:image url="/img/checkbox_checked.gif" rendered="{!IF(prt.conceptualdwg == TRUE, true,false)}" value="{!prt.conceptualdwg}">
+                     <span style="display: none;">Yes</span>
+                 </apex:image>                           
+               </td>
+               
+               <td>
+               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderConfirmationStarted}" /> 
+                </apex:outputText>
+               </td>
+               <td>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.DepositReceivedDate}" /> 
+                </apex:outputText>                 
+               </td>
+               <td>
+               <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.orderamount}"/>
+                 </apex:outputText> 
+               </td>
+               <td style="word-break:break-all;text-align:left"></td>                       
+               <td> 
+               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.SignOff}" /> 
+                </apex:outputText>                           
+               </td>
+               <!--<td style="overflow-wrap:break-word">            
+                 <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Specs}" /> 
+                </apex:outputText>                  
+               </td>-->
+              <!-- <td style="word-break:break-all;text-align:left"></td>-->           
+            <td style="display:none;"></td>
+             </tr>
+           </body>  
+          </apex:repeat>          
+        </table>
+        </apex:outputPanel>
+    </body>
+    </html>
+  </apex:tab> 
+  
+      <!---  /**********************************************************Drawing Process Started Stage**********************************************************/ --->
+      
+ <apex:tab label="Drawing Process Started" name="name2" id="tabtwo">
+ <apex:commandButton value="Records Count:{!count1}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+   
+   <apex:commandButton value="Project Amount:{!Amount1}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+  <html>
+     <body>
+     <apex:outputPanel rendered="{!IF(wraplist2.size>0,true,false)}">
+       <table border="1" style="border-collapse: collapse;width:100%;word-wrap: break-word;" class="tablesorter" id="myTable">
+          <col>
+            <colgroup span="3"></colgroup>
+            <colgroup span="4"></colgroup>
+            <colgroup span="4"></colgroup>
+          </col>  
+        <thead> 
+          <tr class="myHeader" height="20">
+            <th width="3%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="2%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>           
+            <th width="10%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <th class="customHeader" width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+            <!--<th width="3%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+             <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>
+            <th width="5%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="5%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th>            
+            <th width="10%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="3%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+           <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Customer Drawings Received</th>
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Engineering Clarification</th>
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Complete</th>
+            <th style="display:none;">Hide </th>
+            <!--<th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Internally Approved</th>  --->
+            <!--<th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">First Submittal Drawings Sent</th>-->
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">First Submittal Drawings and Order Sent</th>
+          <!--<th style="display:none;">Hide </th>-->
+          <!--<th width = "25%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;display:none"> Notes </th>-->
+          
+              
+          </tr>
+        </thead>          
+          <apex:repeat var="prt" value="{!wraplist2}">
+           <tr> 
+           <td>
+              <!--  <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+             <!--- <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;"/> --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink> 
+             </td>
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td> 
+             <td style="text-align:left">
+                <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>               
+             </td>
+             <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+             <td style="text-align:left">{!prt.QuoteOwner}</td>
+             <td style="word-break:break-all;text-align:left">
+             <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>
+             <td style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+             <td>{!prt.ContactPhone}</td>
+             <td style="overflow-wrap:break-word">            
+                 <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Specs}" /> 
+                </apex:outputText>                  
+               </td>
+             <td>         
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Clarification}" /> 
+                </apex:outputText> 
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Complete}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td style="display:none;" ></td>          
+                <!----<apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Approved}" /> 
+                </apex:outputText> 
+                
+             </td>  ---->
+             <!--<td>
+               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.sent}" /> 
+                </apex:outputText>                          
+             </td>-->
+             <td>
+             <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.FirstSubmittalOrderSent}" /> 
+                </apex:outputText> 
+             </td>
+             <!--<td style="display:none;" ></td>
+             <td>
+             </td>-->
+             
+           </tr>
+         </apex:repeat>         
+       </table> 
+       </apex:outputPanel>
+       <apex:outputPanel rendered="{!!IF(wraplist2.size>0,true,false)}">
+         <table border="1" style="border-collapse: collapse;width:100%;word-wrap: break-word;" id="myTable">
+          <col>
+            <colgroup span="3"></colgroup>
+            <colgroup span="4"></colgroup>
+            <colgroup span="4"></colgroup>
+          </col>  
+        
+          <tr class="myHeader" height="20">
+            <th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="2%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th> 
+            <th width="10%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <th class="customHeader" width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+            <!--<th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+               <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>
+            <th width="5%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="5%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th>            
+            <th width="10%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+           <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Customer Drawings Received</th>
+            <th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Engineering Clarification</th>
+            <th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Complete</th>
+            <th class="customHeader" style="display:none;">Hide </th>
+    <!---        <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Internally Approved</th>  --->
+            <!--<th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">First Submittal Drawings Sent</th>-->
+            <th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">First Submittal Drawings and Order Sent</th>
+          <!--<th class="customHeader" style="display:none;">Hide </th>-->
+          <!--<th class="customHeader" width = "25%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px;display:none"> Notes </th>-->
+           
+          </tr>
+                  
+          <apex:repeat var="prt" value="{!wraplist2}">
+           <tr> 
+           <td>
+              <!--  <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+             <!--- <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;"/> --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink> 
+             </td>
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td> 
+             <td style="text-align:left">
+                <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>               
+             </td>
+             <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+             <td style="text-align:left">{!prt.QuoteOwner}</td>
+             <td style="word-break:break-all;text-align:left">
+             <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>
+             <td style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+             <td>{!prt.ContactPhone}</td>
+             <td style="overflow-wrap:break-word">            
+                 <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Specs}" /> 
+                </apex:outputText>                  
+               </td>
+             <td>         
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Clarification}" /> 
+                </apex:outputText> 
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Complete}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td style="display:none;" ></td>          
+                <!----<apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Approved}" /> 
+                </apex:outputText> 
+                
+             </td>  ---->
+             <!--<td>
+               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.sent}" /> 
+                </apex:outputText>                          
+             </td>-->
+             <td>
+             <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.FirstSubmittalOrderSent}" /> 
+                </apex:outputText> 
+             </td>
+             <!--<td style="display:none;" ></td>
+             <td>
+             </td>-->
+             
+           </tr>
+         </apex:repeat>         
+       </table> 
+       </apex:outputPanel>
+     </body>  
+   </html>
+  </apex:tab>
+  
+        <!---  /**********************************************************Order Finalization Process Started Stage**********************************************************/ --->
+
+ <apex:tab label="Order Finalization Process Started" name="name3" id="tabthree">
+  <apex:commandButton value="Records Count:{!count2}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+   <apex:commandButton value="Project Amount:{!Amount2}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+     <html>
+    <body>
+     <apex:outputPanel rendered="{!IF(wraplist3.size>0,true,false)}">
+      <table border="1" style="border-collapse: collapse;" class="tablesorter" id="myTable">
+         <col>
+           <colgroup span="3"></colgroup>
+           <colgroup span="4"></colgroup>
+           <colgroup span="4"></colgroup>
+         </col>      
+         <thead>
+           <tr class="myHeader" height="15">
+            <th width="3%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="2%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>            
+            <th width="10%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <!--<th width="3%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+            <th class="customHeader" width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+             <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>
+            <th width="5%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="5%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th>
+            <th width="10%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="3%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+            <th style="display:none;">Hide </th> 
+       <!---     <th style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Approved By</th>  
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Finalized Date</th>  --->
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">First Submittal Drawings and Order Sent</th>
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 1</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 2</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 3</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 4</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 5</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 6</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 7</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 8</th>
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Second Deposit Received Date</th>
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Second Deposit Amount</th>
+            
+            <th width="7%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Final Order Sign Off</th>
+            <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Final Drawing Sign Off</th>
+            <!--<th style="display:none;"> Hide </th>-->
+            <!--<th width="10%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000"> Notes </th>-->
+            
+           </tr>
+          </thead>                    
+         <apex:repeat var="prt" value="{!wraplist3}">
+           <tr> 
+           <td>
+              <!-- <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+             <!--- <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" /> --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+             </td> 
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td>
+             <td  style="word-wrap: break-word;white-space: normal;text-align:left">
+               <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>
+             </td>
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+             <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+             
+             <td width="3" style="word-break:break-all;text-align:left">{!prt.QuoteOwner}</td>
+             <td width="3" style="word-break:break-all;text-align:left">
+             <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>
+             <td width="3" style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+             
+             <td width="3" style="word-break:break-all;text-align:left">{!prt.ContactPhone}</td>
+            
+             <td style="display:none;"> </td>
+               
+      <!---       <td style="text-align:left">{!prt.ApprovedBy}</td>   
+             <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderFinalizedDate}" /> 
+                </apex:outputText>
+                   
+             </td> --->
+             <td>
+             <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.FirstSubmittalOrderSent}" /> 
+                </apex:outputText> 
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision1}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision2}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision3}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision4}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision5}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision6}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision7}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision8}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.AdditionalPayment}" /> 
+                </apex:outputText>
+                
+             </td> 
+             <td>
+             <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.ThirtyPercentDepositAmount}"/>
+                 </apex:outputText>
+             </td>
+             
+             <td>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderConfirmation}" /> 
+                </apex:outputText>
+                         
+             </td>
+             <td>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Signoff2}" /> 
+                </apex:outputText>
+                           
+             </td>
+             <!--<td></td>
+             <td style="display:none;" ></td>-->            
+          </tr>
+        </apex:repeat>  
+      </table> 
+      </apex:outputPanel>
+       <apex:outputPanel rendered="{!!IF(wraplist3.size > 0,true,false)}">
+         <table border="1" style="border-collapse: collapse;"  id="myTable">
+         <col>
+           <colgroup span="3"></colgroup>
+           <colgroup span="4"></colgroup>
+           <colgroup span="4"></colgroup>
+         </col>      
+            <tr class="myHeader" height="15">
+            <th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="2%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>            
+
+            <th width="10%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <th class="customHeader" width="2%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>
+            <!--<th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+            <th width="5%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="5%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th>
+            <th width="10%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+            <th class="customHeader" style="display:none;">Hide </th> 
+       <!---     <th style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Approved By</th>  
+          <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Finalized Date</th>  --->
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">First Submittal Drawings and Order Sent</th>
+          <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 1</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 2</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 3</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 4</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 5</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 6</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 7</th>
+              <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Drawing Revision 8</th>
+          <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Second Deposit Received Date</th>
+          <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Second Deposit Amount</th>
+            
+            <th width="7%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Final Order Sign Off</th>
+            <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Final Drawing Sign Off</th>
+            <!--<th class="customHeader" style="display:none;"> Hide </th>
+            <th width="10%" class="customHeader" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000"> Notes </th>-->
+            
+           </tr>
+                            
+         <apex:repeat var="prt" value="{!wraplist3}">
+           <tr> 
+           <td>
+              <!-- <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+             <!--- <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" /> --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+             </td>
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td> 
+             <td  style="word-wrap: break-word;white-space: normal;text-align:left">
+               <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>
+             </td>
+             <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+             
+             
+             <td width="3" style="word-break:break-all;text-align:left">{!prt.QuoteOwner}</td>
+             <td width="3" style="word-break:break-all;text-align:left">
+             <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>
+             <td width="3" style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+             
+             <td width="3" style="word-break:break-all;text-align:left">{!prt.ContactPhone}</td>
+            
+             <td style="display:none;"> </td>
+              
+      <!---       <td style="text-align:left">{!prt.ApprovedBy}</td>   
+             <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderFinalizedDate}" /> 
+                </apex:outputText>
+                   
+             </td> --->
+             <td>
+             <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.FirstSubmittalOrderSent}" /> 
+                </apex:outputText> 
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision1}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision2}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision3}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision4}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision5}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision6}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision7}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Revision8}" /> 
+                </apex:outputText>
+                
+             </td>
+             <td>          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.AdditionalPayment}" /> 
+                </apex:outputText>
+                
+             </td> 
+             <td>
+             <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.ThirtyPercentDepositAmount}"/>
+                 </apex:outputText>
+             </td>
+             
+             <td>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderConfirmation}" /> 
+                </apex:outputText>
+                         
+             </td>
+             <td>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.Signoff2}" /> 
+                </apex:outputText>
+                           
+             </td>
+             <!--<td></td>
+             <td style="display:none;" ></td>-->
+             
+            
+          </tr>
+        </apex:repeat>  
+      </table> 
+       </apex:outputPanel>
+     </body>  
+   </html>
+  </apex:tab>
+  
+  <!---  /**********************************************************Orders On Hold Stage**********************************************************/ --->
+  
+ <apex:tab label="Orders On-Hold" name="name4" id="tabfour">
+ <apex:commandButton value="Records Count:{!count3}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+  <apex:commandButton value="Project Amount:{!Amount3}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+     <html>
+     <body>
+     <apex:outputPanel rendered="{!IF(wraplist4.size>0,true,false)}">
+       <table border="1" style="border-collapse: collapse;width:100%;" class="tablesorter" id="myTable">
+          <col>
+            <colgroup span="3"></colgroup>
+            <colgroup span="4"></colgroup>
+            <colgroup span="4"></colgroup>
+          </col>  
+        <thead> 
+          <tr class="myHeader" height="20">
+            <th width="6%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="4%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>
+            <th width="15%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <!--<th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+             <th class="customHeader" width="3%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+              <th width="4%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+            <th width="4%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>          
+            <th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th>
+            <th width="10%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+            <th style="display:none;">Hide </th> 
+           <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Finalized Date</th>
+           
+           <th width="6%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">On Hold Till Date</th>
+           <th style="display:none;">Hide </th>
+           <th style="display:none;">Hide </th>
+           <th style="display:none;">Hide </th>
+           <th style="display:none;">Hide </th>
+           <th width = "20%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000"> Notes </th>
+           </tr>
+          
+        </thead>          
+          <apex:repeat var="prt" value="{!wraplist4}">
+           <tr> 
+           <td>
+             <!--   <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+          <!---   <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" />  --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+             </td>
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td>
+             <td style="text-align:left">
+                <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>               
+             </td>
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+                    
+             <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+               
+             <td style="text-align:left">{!prt.QuoteOwner}</td>
+             <td style="text-align:left">
+            <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>
+             <td style="text-align:left">{!prt.ContactEmail}</td>
+             <td>{!prt.ContactPhone}</td>
+              <td style="display:none;"> </td>
+             <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderFinalizedDate}" /> 
+                </apex:outputText>
+                   
+             </td>
+              <td>
+             <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OnHoldTillDate}" /> 
+                </apex:outputText>
+                </td>
+                <td style="display:none;" ></td>
+                <td style="display:none;" ></td>
+                <td style="display:none;" ></td>
+                <td style="display:none;" ></td>
+            <td style="word-break:break-all;text-align:left">{!prt.notes}</td>
+           </tr>
+         </apex:repeat>         
+       </table> 
+       </apex:outputPanel>
+       <apex:outputPanel rendered="{!!IF(wraplist4.size>0,true,false)}">
+           <table border="1" style="border-collapse: collapse;width:100%;" id="myTable">
+          <col>
+            <colgroup span="3"></colgroup>
+            <colgroup span="4"></colgroup>
+            <colgroup span="4"></colgroup>
+          </col>  
+        
+          <tr class="myHeader" height="20">
+            <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="4%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>
+            <th width="15%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <!--<th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+            
+            <th class="customHeader" width="3%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+              <th width="4%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+            <th width="4%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>           
+            <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th>
+            <th width="10%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+            <th style="display:none;">Hide </th> 
+           <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Finalized Date</th>
+           
+           <th width="6%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">On Hold Till Date</th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" width = "20%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000"> Notes </th>
+           </tr>
+          
+         
+        </table>
+       </apex:outputPanel>
+     </body>  
+   </html>
+  </apex:tab>
+  
+  
+  <!---  /**********************************************************Orders Finalized Stage**********************************************************/ --->
+  
+  <apex:tab label="Orders Finalized" name="name5" id="tabfive">
+ <apex:commandButton value="Records Count:{!count4}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+   <apex:commandButton value="Project Amount:{!Amount4}" style="font-weight: bold;border: 2px solid #000d1a;font-size: 100%;color: black" disabled="true"/>
+      <html>
+     <body>
+      <apex:outputPanel rendered="{!IF(wraplist5.size>0,true,false)}">
+       <table border="1" style="border-collapse: collapse;width:100%;" class="tablesorter" id="myTable">
+          <col>
+            <colgroup span="3"></colgroup>
+            <colgroup span="4"></colgroup>
+            <colgroup span="4"></colgroup>
+          </col>  
+        <thead> 
+          <tr class="myHeader" height="20">
+            <th width="3%" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="3%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>
+            <th width="10%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <!--<th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+            <th class="customHeader" width="4%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+              <th  width="4%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+            <th width="4%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>
+           
+            <th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th>
+            <th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Client Name</th> 
+         <!--     <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th> -->
+           <th width="10%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th> 
+            <th width="6%" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+            <th style="display:none;">Hide </th>
+           <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Finalized Date</th>
+           <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Balance Received Date</th>
+           <th width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Balance Received</th>
+           <th style="display:none;">Hide </th>
+           <th style="display:none;">Hide </th>
+           <th style="display:none;">Hide </th>
+           <th width = "40%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Notes </th>
+           </tr>
+          
+        </thead>          
+          <apex:repeat var="prt" value="{!wraplist5}">
+           <tr> 
+           <td>
+              <!--  <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+            <!---  <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" />  --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+             </td>
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td> 
+             <td style="text-align:left">
+                <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>               
+             </td>
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+                   
+             <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>
+             <td style="text-align:left">{!prt.QuoteOwner}</td>
+             <td style="text-align:left">
+             <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>             
+             <td style="word-break:break-all;text-align:left">{!prt.ContactEmail}</td>
+             <td>{!prt.ContactPhone}</td>
+             <td style="display:none;" ></td>
+              <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderFinalizedDate}" /> 
+                </apex:outputText>
+                   
+             </td>
+              <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.BalanceReceivedDate}" /> 
+                </apex:outputText>
+                   
+             </td>
+             <td>
+             <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.BalanceReceivedAmount}"/>
+                 </apex:outputText>
+             </td>
+             <td style="display:none;" ></td>
+             <td style="display:none;" ></td>
+             <td style="display:none;" ></td>
+             
+              <td style="word-break:break-all;text-align:left">{!prt.notes}</td>
+      
+           </tr>
+         </apex:repeat>         
+       </table>
+       </apex:outputPanel>
+       <apex:outputPanel rendered="{!!IF(wraplist5.size>0,true,false)}">
+        <table border="1" style="border-collapse: collapse;width:100%;" id="myTable">
+          <col>
+            <colgroup span="3"></colgroup>
+            <colgroup span="4"></colgroup>
+            <colgroup span="4"></colgroup>
+          </col>  
+         
+          <tr class="myHeader" height="20">
+            <th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000">Action</th>
+            <th width="3%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Order #</th>
+            <th width="10%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Project Name</th>
+            <!--<th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote #</th>-->
+           <th class="customHeader" width="3%"  style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" >Project Amount</th>
+              <th  width="4%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Drawing Owner</th>
+            <th width="4%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px"> Project Coordinator</th>
+               <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Type of System</th>
+          
+           <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Quote Owner</th> 
+         <!--   <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Rep</th> -->
+              <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Name</th> 
+         <!--     <th width="5%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th> -->
+            <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Email</th>
+            <th width="6%" class="customHeader" style="text-align:center;border-right: 1px solid #000;border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px">Contact Phone</th>
+            <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" width="3%" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Order Finalized Date</th>
+           <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Balance Received Date</th>
+           <th width="3%" class="customHeader" style="max-width: 150px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+              white-space: -pre-wrap;      /* Opera 4-6 */
+              white-space: -o-pre-wrap;    /* Opera 7 */
+              white-space: pre-wrap;       /* css-3 */
+              word-wrap: break-word;       /* Internet Explorer 5.5+ */          
+              white-space: normal;text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000;padding-right: 14px" scope="col">Balance Received</th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" style="display:none;">Hide </th>
+           <th class="customHeader" width = "30%" style = "text-align:center;border-right: 1px solid #000; border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000"> Notes </th>
+           </tr>
+          
+                  
+          <apex:repeat var="prt" value="{!wraplist5}">
+           <tr> 
+           <td>
+              <!--  <a href="/apex/URLTokenizer?url=http%3A%2F%2F66.209.91.78%2Flogin.aspx%3Fsfq%3D{!prt.QuoteName}%26u%3D{!$User.Id}" target="_blank">Edit</a> -->
+            <!---  <apex:commandlink value="Edit" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;" />  --->
+             <apex:outputLink value="/{!prt.QuoteId+'/e'}" id="theLink" target="_newtab" onclick="window.open('{!urlfor($Action.Quote__c.Edit,prt.QuoteId)}','EditQuote');return false;">Edit</apex:outputLink>
+             </td>
+             <td>
+             <apex:outputLink value="/{!prt.QuoteId}" id="eventLink2" target="_blank">{!prt.OrderNumber}</apex:outputLink>
+             </td>
+             <td style="text-align:left">
+                <apex:outputLink value="/{!prt.ProjectID}" id="eventLink" target="_blank">{!prt.ProjectName}</apex:outputLink>               
+             </td>
+             <!--<td>
+               <apex:outputLink value="/{!prt.QuoteId}" id="eventLink1" target="_blank">{!prt.QuoteName}</apex:outputLink>
+             </td>-->
+              <td>  
+                 <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.projectamount}"/>
+                 </apex:outputText>
+                                        
+               </td> 
+             
+              <td style="text-align:left">{!prt.DrawingOwner}</td>     
+             <td style="text-align:left">{!prt.ProjectCoordinator}</td>
+               <td style="word-break:break-all;text-align:left">{!prt.Modeltype}</td>      
+             
+             <td style="text-align:left">{!prt.QuoteOwner}</td>
+             <td style="text-align:left">
+             <apex:outputLink value="/{!prt.ContactId}" id="eventLink3" target="_blank">{!prt.ContactName}</apex:outputLink>
+             </td>             
+             <td style="text-align:left">{!prt.ContactEmail}</td>
+             <td>{!prt.ContactPhone}</td>
+             <td style="display:none;" ></td>
+              <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.OrderFinalizedDate}" /> 
+                </apex:outputText>
+                   
+             </td>
+              <td >          
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!prt.BalanceReceivedDate}" /> 
+                </apex:outputText>
+                   
+             </td>
+             <td>
+             <apex:outputText value="{0, number, #####0.00}">
+                    <apex:param value="{!prt.BalanceReceivedAmount}"/>
+                 </apex:outputText>
+             </td>
+             <td style="display:none;" ></td>
+             <td style="display:none;" ></td>
+             <td style="display:none;" ></td>
+             
+              <td style="word-break:break-all;text-align:left">{!prt.notes}</td>
+      
+           </tr>
+         </apex:repeat>         
+       </table>
+        </apex:outputPanel>
+     </body>  
+   </html>
+  </apex:tab>
+              <!--------------------Styling--------------------->
+ <style> 
+  .alignCenter{text-left;vertical-align:middle;}  
+  .ForCenterAlign{
+      width:100%;
+          height:auto;
+  text-align:right;  
+  }
+
+  .forOutTable{
+     width:100%;
+  }
+   td {
+     text-align: center; /* center checkbox horizontally */
+     vertical-align: middle; /* center checkbox vertically */
+     
+   }
+   .boldtable TH { 
+    font-family:sans-serif; 
+    font-size:12pt; 
+    color: Black; 
+    background-color: #C6D2D3; 
+    text-align: left; /* center checkbox horizontally */
+    vertical-align: middle; /* center checkbox vertically */
+    horizantal-align: middle;
+    word-wrap:break-word;
+    
+    
+   }
+   .myHeader{
+      background-color: #C6D2D3; 
+      border-bottom: 1px solid black;
+      font-size: 8pt;
+      color: black;
+      border-style: groove; 
+      border-width: 0px;
+     word-wrap:break-word;
+      
+    }  
+    .myHeader1{
+    text-align:center;
+    border-right: 1px solid #000;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+   word-wrap:break-word;
+    }  
+   .activeTab {background-color: #1798c1; color:white; background-image:none; font-size:12px;}
+   .inactiveTab { background-color: lightgrey; color:black; background-image:none; font-size:12px;}
+   td.wrappable,
+    table.data_table td.wrappable {
+    white-space: normal;
+    } 
+    .customHeader{
+     background-color:#e6EEEE;
+     font-size:8pt;
+     padding:4px;
+    }
+    
+    
+  </style>
+ </apex:tabpanel>
+ </apex:form>
+</apex:page>

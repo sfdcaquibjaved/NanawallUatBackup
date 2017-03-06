@@ -1,0 +1,72 @@
+<apex:page standardcontroller="Stock_Order__c"  extensions="StockOrder_CheckIn_Controller">
+
+<style>
+	.alertPanel 
+	{
+		border: 1px solid blue;
+		padding: 5px;
+		margin: 5px;
+		width: 80%;
+		height: 100px;
+		display: block;
+	}
+</style>
+
+<apex:form >
+	<apex:pagemessages />
+	<apex:outputpanel rendered="{!showQtyConfirmationScreen}" styleclass="alertPanel">
+		<h3>You are trying to check in more pieces than you ordered.</h3>
+		<p>Would you like to continue anyway?</p>
+		<apex:CommandButton action="{!doCheckIn_OverrideQty}" value="Continue With Check In" />	
+	</apex:outputpanel> 
+	   
+	<apex:dataTable width="100%" value="{!Details}" var="detail" id="tblStockOrder_Detail_Wrapper" rowClasses="odd,even"  styleClass="dataTable">
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Pos</div></apex:facet>
+	 		<apex:outputText value="{0,number,###}" style="text-align:right">
+			     <apex:param value="{!detail.stockOrderDetail.Position__c}" /> 
+			</apex:outputText>								 
+		</apex:column>			 
+
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Thumbnail</div></apex:facet>
+				<apex:image url="{!detail.stockOrderDetail.ThumbnailURL__c}"  width="40" rendered="{!NOT(ISBLANK(detail.stockOrderDetail.ThumbnailURL__c))}" />								
+		</apex:column>			
+
+
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Unit Price</div></apex:facet>
+	 		<apex:outputText value="{0,number,###}" style="text-align:right">
+			     <apex:param value="{!detail.stockOrderDetail.Unit_Price__c}" /> 
+			</apex:outputText>								
+		</apex:column>			 
+
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Qty Ordered</div></apex:facet>
+	 		<apex:outputText value="{0,number,###}" style="text-align:right">
+			     <apex:param value="{!detail.stockOrderDetail.Quantity__c}" /> 
+			</apex:outputText>								
+		</apex:column>			 
+
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Qty Rcvd</div></apex:facet> 
+	 		<apex:outputText value="{0,number,###}" style="text-align:right">
+			     <apex:param value="{!detail.stockOrderDetail.Checked_In_Quantity__c}" /> 
+			</apex:outputText>								
+		</apex:column>			 
+
+		<apex:column >
+			<apex:facet name="header"><div style='labelCell'>Check In</div></apex:facet>
+			<apex:inputtext value="{!detail.Quantity_CheckingIn}" size="5" />
+		</apex:column>			 
+	</apex:dataTable>
+
+
+	<apex:CommandButton action="{!doCheckIn}" value="Check In" />			
+	<apex:CommandButton action="{!backToStockOrder}" value="Cancel" />			
+	
+	
+	
+</apex:form>
+
+</apex:page>

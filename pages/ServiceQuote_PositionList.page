@@ -1,0 +1,172 @@
+<apex:page standardcontroller="Service_Quote__c" extensions="ServiceQuote_PositionList_Controller">
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+
+<apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+<apex:includeScript value="/support/console/26.0/integration.js"/>
+
+
+<apex:form >
+    <apex:pagemessages />
+    <style>
+#scrollWrapper::-webkit-scrollbar {
+    width: 12px;
+} 
+ 
+#scrollWrapper::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+#scrollWrapper::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+    </style>
+    <script>
+        function escID(myid) {
+            return myid.replace(/(:|\.)/g,'\\\\$1');
+        }
+        var console_activeTabId = null;
+        sforce.console.getFocusedPrimaryTabId(function(res){ console_activeTabId = res.id; });
+        
+        function NewPosition() {
+            if(sforce.console.isInConsole())
+            {
+                sforce.console.openSubtab(
+                    console_activeTabId,
+                    '/apex/Service_Quote_Detail_AddEdit?CF00NQ0000000sU0G=22&CF00NQ0000000sU0G_lkid={!Service_Quote__c.id}&scontrolCaching=1&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1',
+                    true,
+                    '{!Service_Quote__c.Name}'
+                );
+            } else
+            {
+                parent.location.href = '/apex/Service_Quote_Detail_AddEdit?CF00NQ0000000sU0G=22&CF00NQ0000000sU0G_lkid={!Service_Quote__c.id}&scontrolCaching=1&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1';
+            }
+        }
+        
+        $(document).ready(function() {
+            {!refreshCode}
+            
+        }); 
+    </script>
+    <table>
+        <tr>
+            <td>
+                <apex:CommandButton action="{!SetPositionOrders}" value="Save Ordering" />          
+            </td>
+            <td>
+                <apex:CommandButton action="{!AddNewPosition}" value="New Service Quote Detail" onclick="NewPosition()" />          
+            </td>
+        </tr>
+    </table>
+    
+    <apex:pagemessages />
+
+    <div id='scrollWrapper' style="overflow:auto;width:100%;height:100px" > 
+        <apex:dataTable width="100%" value="{!Details}" var="sqd" id="tblServiceQuoteDetails" rowClasses="tblServiceQuoteDetails_tr"  styleClass="dataTable">
+            <apex:column >
+                <apex:facet name="header">Action</apex:facet>
+                 <a id="scrollWrapper,tblServiceQuoteDetails" href="javascript:
+                 if(sforce.console.isInConsole())
+                    {
+                        sforce.console.openSubtab(
+                          console_activeTabId,
+                            ' /apex/Service_Quote_Detail_AddEdit?id={!sqd.id}&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1',true,'{!sqd.name}'
+                        );
+        
+                    } else
+                    {
+                        parent.location.href = '/apex/Service_Quote_Detail_AddEdit?id={!sqd.id}&retURL=%2F{!Service_Quote__c.id}&sfdc.override=1';
+                    }" >Edit</a>
+                | 
+                <!-- <a href='javascript: if( confirm("Are you sure that you would like to remove this position?") ) { parent.location.href = "/setup/own/deleteredirect.jsp?delID={!sqd.Id}&retURL=%2F{!sqd.Service_Quote__r.Id}&failRetURL=%2F{!sqd.Service_Quote__r.Id}&_CONFIRMATIONTOKEN={!ConfirmationToken}";}'>delete</a> -->
+                <apex:commandLink action="{!deletePosition}" onclick="if(confirm('Are you sure that you would like to remove this position??')) return true" value="Del">
+                    <apex:param name="delPosID" value="{!sqd.Id}" assignTo="{!delPosId}"/>
+                </apex:commandLink>
+            </apex:column>          
+
+
+            <apex:column >
+                <apex:facet name="header"><div style='labelCell'>Thumbnail</div></apex:facet>
+                <apex:image url="{!sqd.ThumbnailURL__c}"  width="40"  rendered="{!NOT(ISBLANK(sqd.ThumbnailURL__c))}"/>                             
+            </apex:column>          
+
+     
+            <apex:column >
+                <apex:facet name="header"><div style='labelCell'>Pos</div></apex:facet>
+                <apex:inputText value="{!sqd.Position__c}" style="text-align:right" size="5" />                             
+            </apex:column>          
+            
+            <apex:column >
+                <apex:facet name="header">Part #</apex:facet>
+                <apex:outputText value="{!sqd.Service_Part__r.Name}"/>
+            </apex:column>          
+    
+            <apex:column >
+                <apex:facet name="header">Description</apex:facet>
+                <apex:outputText value="{!sqd.Service_Part__r.Part_Name__c}"/>
+            </apex:column>          
+    
+            <apex:column >
+                <apex:facet name="header">Ship From Stock</apex:facet>
+                <apex:outputText value="{!sqd.Ship_From_Stock__c}"/>
+            </apex:column>           
+    
+            
+    
+            <apex:column >
+                <apex:facet name="header">Notes</apex:facet>
+                <apex:outputText value="{!sqd.Notes__c}"/>
+            </apex:column>          
+            <apex:column >
+                <apex:facet name="header">Qty</apex:facet>
+                <apex:outputText value="{!sqd.Quantity__c}" /> 
+                
+                <br />
+                <apex:commandLink action="{!fillInventory}" value="Add To Stock" rendered="{!sqd.Ship_From_Stock__c}">
+                    <apex:param name="InventoryFill_PositionID_Field"  id="InventoryFill_PositionID_Field" assignTo="{!InventoryFill_PositionID}" value="{!sqd.Id}" />
+                </apex:commandLink>
+            </apex:column>           
+            <apex:column >
+                <apex:facet name="header">Unit Price</apex:facet>
+                <apex:outputText value="{0,number,$#,###,###.00}" style="text-align:right">
+                     <apex:param value="{!sqd.Unit_Price__c}" /> 
+                </apex:outputText>                              
+            </apex:column>           
+            <apex:column >
+                <apex:facet name="header">Freight</apex:facet>
+                <apex:outputText value="{0,number,$#,###,###.00}" style="text-align:right">
+                     <apex:param value="{!sqd.Freight__c}" /> 
+                </apex:outputText>                              
+            </apex:column>           
+            <apex:column >
+                <apex:facet name="header">Discount</apex:facet>
+                <apex:outputText value="{!sqd.Discount__c}%"  />
+            </apex:column>           
+            <apex:column >
+                <apex:facet name="header">Subtotal</apex:facet>
+                <apex:outputText value="{0,number,$#,###,###.00}" style="text-align:right">
+                     <apex:param value="{!sqd.SubTotal__c}" /> 
+                </apex:outputText>                              
+            </apex:column>           
+
+        </apex:dataTable>
+    </div>
+
+    <table>
+        <tr>
+            <td>
+                <apex:CommandButton action="{!SetPositionOrders}" value="Save Ordering" />          
+            </td>
+            <td>
+                <apex:CommandButton action="{!AddNewPosition}" value="New Service Quote Detail" onclick="NewPosition()" />          
+            </td>
+        </tr>
+    </table>
+
+</apex:form>
+
+</apex:page>

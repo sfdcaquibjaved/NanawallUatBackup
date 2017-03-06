@@ -1,0 +1,27 @@
+<apex:page standardController="Account" extensions="Account_Org_Chart_Controller">
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load('visualization', '1', {packages:['orgchart']});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var i=0;
+            var sNode='';
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Account');
+            data.addColumn('string', 'Parent Account');
+            <apex:repeat value="{!Accounts}" var="account">
+                data.addRow([{v:'{!account.Id}', f:'{!account.name}<br/>${!account.Amount__c}'}, '{!account.ParentId}']);
+                i++;
+            </apex:repeat> 
+            var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+            chart.draw(data, {allowHtml:true});
+        }
+        setTimeout("drawChart();",200);
+    </script>
+    <apex:form >
+        <div id='chart_div'></div>
+    </apex:form>
+<apex:outputtext value="{!Account.name}" rendered="false" />
+<apex:outputtext value="{!Account.ParentID}" rendered="false" />
+<apex:outputtext value="{!Account.Amount__c}" rendered="false" />
+</apex:page>

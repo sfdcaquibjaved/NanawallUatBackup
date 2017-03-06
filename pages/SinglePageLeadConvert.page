@@ -1,0 +1,533 @@
+<apex:page controller="SinglePageLeadConvertController">
+   
+    <apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}" />
+    <style>
+        .requiredBlock {
+            background-color: #C00 !important;
+            width: 1.5px !important;
+            height: 20px !important;
+            display: block !important;
+            float: left !important;
+            color: transparent !important;
+        }
+    </style>
+    
+    <script type='text/javascript'>
+        jQuery.noConflict();
+
+        function getProbability(o) {
+            var res = 0;
+            if (o.value == 'Considered')
+                res = 10;
+            else if (o.value == 'Specified')
+                res = 20;
+            else if (o.value == 'Quote Requested')
+                res = 30;
+            else if (o.value == 'Budget Quote to Architect')
+                res = 50;
+            else if (o.value == 'Quote/Non-Architect')
+                res = 40;
+            else if (o.value == 'Quoted Architect and Non-Architect')
+                res = 60;
+            else if (o.value == 'Order Probably Coming')
+                res = 80;
+            else if (o.value == 'Order Process Started' || o.value == 'Ordered - Paid')
+                res = 100;
+            else res = 0;
+
+            jQuery('.opportunityProbability').val(res);
+
+        }
+
+
+        function toggleAccountFields(rbObj) {
+
+            if (rbObj.value == 'new') {
+                jQuery('#newAccountFields').show();
+                jQuery('#existingAccountFields').hide();
+                jQuery('#showPan').show();
+                jQuery('.existingAccountName').val('');
+            } else {
+                jQuery('#newAccountFields').hide();
+                jQuery('#existingAccountFields').show();
+                jQuery('#showPan').hide();
+            }
+        }
+        
+    function toggleProjectSection(rbObj) {
+
+            if (rbObj.value == 'new') {
+                jQuery('#newProjectFields').show();
+                jQuery('#existingProjectFields').hide();
+                jQuery('.existingProjectName').val('');
+                
+            } else {
+                jQuery('#newProjectFields').hide();
+                jQuery('#existingProjectFields').show();
+                
+
+            }
+        }
+    
+        
+        function toggleOpportunityFields(ckObj) {
+
+                if (ckObj.checked) {
+                    jQuery('#newOpportunityFields').show();
+                    jQuery('#noOpportunityMessage').hide();
+                } else {
+                    jQuery('#newOpportunityFields').hide();
+                    jQuery('#noOpportunityMessage').show();
+                }
+            }
+            <!-- new added for project-->
+
+        function toggleProjectFields(ckObj) {
+                if (ckObj == 'true') {
+                    jQuery('#selectDIV').show();
+                    jQuery('#noProjectMessage').hide();
+                    jQuery('.newOppCheckbox').attr('checked', true);
+                    jQuery('#newOpportunityFields').show();
+                    jQuery('#noOpportunityMessage').hide();
+                } else {
+                    jQuery('#selectDIV').hide();
+                    jQuery('#noProjectMessage').show();
+                    jQuery('.newOppCheckbox').attr('checked', false);
+                    jQuery('#newOpportunityFields').hide();
+                    jQuery('#noOpportunityMessage').show();
+                    jQuery('#pbProjectInformation').hide();
+                    //jQuery('#existingProjectFields').hide();
+                }
+            }
+            <!--end-->
+
+        function toggleTaskFields(ckObj) {
+
+            if (ckObj.checked) {
+                jQuery('#newTaskFields').show();
+                jQuery('#noTaskMessage').hide();
+            } else {
+                jQuery('#newTaskFields').hide();
+                jQuery('#noTaskMessage').show();
+            }
+        }
+
+        // -- hacky fix-up for the dependent picklists
+        //j_id0:j_id5:pbContactInformation:j_id69:j_id73
+        //j_id0:j_id5:pbContactInformation:j_id67:j_id71
+        //j_id0:j_id5:pbContactInformation:j_id66:j_id70
+        var contactState_ID = 'j_id0:j_id5:pbContactInformation:j_id66:j_id72:j_id74'.replace(/(:|\.)/g, '\\\\$1');
+
+
+        function autoFillAccount() {
+
+            jQuery('.accountAddress1').val(jQuery('.contactAddress1').val());
+            jQuery('.accountAddress2').val(jQuery('.contactAddress2').val());
+            jQuery('.accountCity').val(jQuery('.contactCity').val());
+            jQuery('.accountState').val(jQuery('.contactState').val());
+            jQuery('.accountZip').val(jQuery('.contactZip').val());
+            jQuery('.accountCountry').val(jQuery('.contactCountry').val());
+            jQuery('.accountPhone').val(jQuery('.contactPhone').val());
+            jQuery('.accountFax').val(jQuery('.contactFax').val());
+            jQuery('.accountEmail').val(jQuery('.contactEmail').val());
+
+        }
+
+        function fixTabOrder() {
+
+            // -- hacky fix-up for the dependent picklists
+            //j_id0:j_id5:pbContactInformation:j_id69:j_id73
+            //j_id0:j_id5:pbContactInformation:j_id67:j_id71
+            jQuery('#' + contactState_ID).attr("tabindex", 19);
+            // -- end hacky fix-up
+
+            jQuery('select').each(function() {
+
+                var classes = jQuery(this).attr('class');
+                if (classes != undefined && classes != '') {
+                    var classList = classes.split(/\s+/);
+                    var o = this;
+                    jQuery.each(classList, function(index, item) {
+                        if (item.indexOf("tabIndex") >= 0) {
+                            tabIndex = item.substr(item.indexOf("tabIndex") + 8, item.length);
+                            jQuery(o).attr("tabindex", tabIndex);
+                        }
+                    });
+                }
+            });
+
+        }
+
+        var tabIndex = 0;
+        jQuery(document).ready(function() {
+            jQuery('input:radio').each(function() {
+                if (this.checked) jQuery(this).click();
+            });
+			toggleProjectFields('{!createProject}');
+            //fix up the tab order with a dirrrrty hack - ks
+
+            jQuery('input, select, textarea').each(function() {
+
+                var classes = jQuery(this).attr('class');
+                if (classes != undefined && classes != '') {
+                    var classList = classes.split(/\s+/);
+                    var o = this;
+                    jQuery.each(classList, function(index, item) {
+                        if (item.indexOf("tabIndex") >= 0) {
+                            tabIndex = item.substr(item.indexOf("tabIndex") + 8, item.length);
+                            jQuery(o).attr("tabindex", tabIndex);
+                        }
+                    });
+                }
+            });
+
+
+
+            jQuery('.requiredField').parent().each(function() {
+                jQuery(this).attr('nowrap', 'true');
+            });
+            jQuery('.requiredField').before('<div class="requiredBlock">!</div>'); //show the required fields
+            //end tab order fix
+            fixTabOrder();
+            setTimeout("fixTabOrder()", 500);
+
+        });
+
+
+        jQuery('.newOppCheckbox').ready(function() {
+
+            toggleOpportunityFields({
+                'checked': jQuery('.newOppCheckbox').attr('checked')
+            }); //hack? why yes thank you!
+        });
+    </script>
+    <style>
+        .requiredField {}
+        
+        .requiredBlock {
+            background-color: #C00;
+            width: 1.5px;
+            height: 20px;
+            display: block;
+            float: left;
+            color: transparent;
+        }
+    </style>
+    <apex:form id="myFrm">
+        <apex:pagemessages escape="false" id="errMsg" />
+        <apex:outputpanel id="inputField" rendered="{!AND( NOT(showdupeblock),NOT(showsyncpanel))}">
+
+            <apex:sectionHeader title="Single Page Lead Conversion"></apex:sectionHeader>
+            <apex:actionRegion >
+                <apex:pageBlock id="pbContactInformation" title="New Contact" tabStyle="Contact">
+                    <apex:pageBlockSection columns="2" title="General Info">
+
+                        <apex:inputfield value="{!newContact.FirstName}" styleClass="requiredField tabIndex1" />
+                        <apex:inputfield value="{!newContact.Phone}" styleClass="tabIndex10 contactPhone" />
+
+                        <apex:inputfield value="{!newContact.LastName}" required="false" styleClass="requiredField tabIndex2" />
+                        <apex:inputfield value="{!newContact.Office_Ext__c}" styleClass="tabIndex11" />
+
+                        <apex:inputfield value="{!newContact.Title}" styleClass="tabIndex3" />
+                        <apex:inputfield value="{!newContact.MobilePhone}" styleClass="tabIndex12" />
+
+                        <apex:inputfield value="{!newContact.LeadType__c}" styleClass="tabIndex4" />
+                        <apex:inputfield value="{!newContact.Email}" styleClass="tabIndex13 contactEmail" />
+
+                        <apex:inputfield value="{!newContact.Reg_Number__c}" styleClass="tabIndex5" />
+                        <apex:inputfield value="{!newContact.Fax}" styleClass="tabIndex14 contactFax" />
+
+                        <apex:inputfield value="{!newContact.Interest__c}" styleClass="tabIndex6" />
+                        <apex:inputfield value="{!newContact.OtherPhone}" styleClass="tabIndex15" />
+
+                        <apex:inputfield value="{!newContact.Source_Date__c}" styleClass="tabIndex7" />
+                        <apex:outputtext value="" />
+
+                        <apex:inputfield value="{!newContact.Newsletter__c}" styleClass="tabIndex8" />
+                        <apex:outputtext value="" />
+
+                    </apex:pageBlockSection>
+
+                   <apex:pageBlockSection title="Address Information" columns="2">
+                        <apex:inputfield value="{!newContact.MailingStreet}" styleClass="tabIndex16 contactAddress1" />
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing Country" />
+                            <apex:inputfield value="{!newContact.MailingCountryCode}" styleClass="tabIndex18 contactCountry" />
+                        </apex:pageBlockSectionItem>
+                        <apex:inputfield value="{!newContact.MailingCity}" styleClass="tabIndex17 contactCity" />
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Mailing State" />
+                            <apex:inputfield value="{!newContact.MailingStateCode}" styleClass="tabIndex19 contactState" />
+                        </apex:pageblockSectionItem>
+                        
+                        <apex:outputText value="" />
+                        <apex:inputfield value="{!newContact.MailingPostalCode}" styleClass="requiredField tabIndex20 contactZip" />
+                         </apex:pageBlockSection>
+
+                    <apex:pageBlockSection title="Additional Information" columns="2">
+
+                        <apex:inputfield value="{!newContact.LeadSource}" styleClass="tabIndex22" />
+                        <apex:inputfield value="{!newContact.Mail_Info__c}" styleClass="tabIndex26" />
+
+                        <apex:inputfield value="{!newContact.How_did_you_hear_about_us__c}" styleClass="tabIndex23" />
+                        <apex:inputfield value="{!newContact.Email_Newsletter__c}" styleClass="tabIndex27" />
+
+                        <apex:inputfield value="{!newContact.Please_enter_questions_requests_or_comm__c}" styleClass="tabIndex24" />
+                        <apex:inputfield value="{!newContact.Send_Booklet__c}" styleClass="tabIndex28" />
+
+                        <apex:inputfield value="{!newContact.Target_Date_for_Project__c}" styleClass="tabIndex25" />
+                        <apex:inputfield value="{!newContact.Which_best_describes_role__c}" styleClass="tabIndex29" />
+
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection title="Description  Information" columns="1">
+                        <apex:inputfield value="{!newContact.Description}" style="width: 80%; height: 50px;" styleClass="tabIndex30" />
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+
+                <apex:selectRadio value="{!accounttype}" onclick="toggleAccountFields(this)" id="accountType" styleClass="tabIndex31">
+                    <apex:selectOptions value="{!items}" />
+                </apex:selectRadio>
+
+                <apex:pageBlock id="pbAccountInformation" title="Account" tabStyle="Account">
+                    <div id='existingAccountFields'>
+                        <apex:pageBlockSection columns="1" title="Existing Account">
+                            <apex:inputfield value="{!newcontact.accountid}" styleClass="requiredField tabIndex32 existingAccountName"/>
+                        </apex:pageBlockSection>
+                    </div>
+
+                    <div id="showPan">
+
+                        <apex:commandButton status="loadingStatus" value="Copy info from Contact" action="{!updateAddressNew}" rerender="errMsg,pbSectionNew2" />
+                        <!-- </apex:actionRegion> -->
+                    </div>
+
+                    <div id='newAccountFields'>
+                        <apex:pageBlockSection id="pbSectionNew" columns="2" title="General Info">
+
+                            <apex:inputfield value="{!newAccount.name}" required="false" styleClass="requiredField tabIndex33" />
+                            <apex:inputfield value="{!newAccount.phone}" styleClass="tabIndex37 accountPhone" />
+
+                            <apex:inputfield value="{!newAccount.Company_Email__c}" styleClass="tabIndex34 accountEmail" />
+                            <apex:inputfield value="{!newAccount.fax}" styleClass="tabIndex38 accountFax" />
+
+                            <apex:inputfield value="{!newAccount.Competitor__c}" styleClass="tabIndex35" />
+                            <apex:inputfield value="{!newAccount.website}" styleClass="tabIndex39" />
+
+
+                            <apex:inputfield value="{!newAccount.type}" styleClass="tabIndex36" />
+                            <apex:inputfield value="{!newAccount.description}" styleClass="tabIndex40" />
+
+                            <apex:outputtext value="" />
+                            <!-- styleClass="tabIndex46"  -->
+                            <apex:inputfield value="{!newAccount.Chain_Account__c}" styleClass="tabIndex41" />
+
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection id="pbSectionNew2" columns="2" title="Additional Information">
+                            <apex:inputfield value="{!newAccount.BillingStreet}" styleClass="tabIndex42 accountAddress1" />
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing Country" />
+                                <apex:inputfield value="{!newAccount.BillingCountryCode}" styleClass="tabIndex44 accountCountry"/>
+                            </apex:pageblocksectionItem>
+
+                            <apex:inputfield value="{!newAccount.BillingCity}" styleClass="tabIndex43 accountCity" />
+
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Billing State" />
+                                <apex:inputfield value="{!newAccount.BillingStateCode}" styleClass="tabIndex45 accountState" />
+                            </apex:pageblocksectionItem>
+
+                            <apex:outputText value="" />
+                            <apex:inputfield value="{!newAccount.BillingPostalCode}" styleclass="tabIndex46 requiredField" />
+                        </apex:pageBlockSection>
+
+                    </div>
+                </apex:pageBlock>
+            </apex:actionRegion>
+            <!-- added new-->
+            <apex:actionRegion >
+            <apex:inputcheckbox value="{!createProject}" id="chkNewProject" onclick="changeOpp('{!createProject}');" styleClass="newProjectCheckbox " /> 
+            <apex:actionFunction name="checkOppStatus" reRender="errMsg" status="loadingStatus" action="{!onProjectCheck}" oncomplete="toggleProjectFields('{!createProject}');" />
+            </apex:actionRegion>
+            Create project
+            <div id='noProjectMessage' style='display: none; margin: 15px; border: 1px solid blue; padding: 15px;'>
+                <h3>A project will not be created</h3>
+            </div>
+            <div id="selectDIV">
+                <apex:selectRadio value="{!projects}" onclick="toggleProjectSection(this);" id="protype" styleClass="tabIndex31">
+                    <apex:selectOptions value="{!pros}" />
+                </apex:selectRadio>
+            
+                <apex:pageBlock id="pbProjectInformation" title="Project Information" tabstyle="Project__c">
+                    
+                        <div id='existingProjectFields'>
+                        <apex:pageBlockSection columns="1" title="Existing Project" id="existingProjecrId">
+                            <apex:inputfield value="{!newopportunity.Project_Name__c}" styleClass="requiredField tabIndex48 existingProjectName" >
+                            <!--  <apex:actionSupport event="onchange" reRender="field"oncomplete="doSomething('{!newopportunity.Project_Name__c}');"/>-->
+                            </apex:inputfield>
+                        </apex:pageBlockSection>
+                    </div>
+        
+                    <div id='newProjectFields'>
+                    <apex:pageBlockSection title="Project Information" id="pbBasicInfo" columns="2">
+                       <apex:outputPanel >
+                            <apex:outputLabel styleClass="labelCol vfLabelColTextWrap  first"> Project Type </apex:outputLabel> &nbsp;&nbsp;
+                            <apex:actionRegion >
+                            <apex:selectList size="1" value="{!selectedType}">
+                                <apex:selectOptions value="{!recType }" />
+                                <apex:actionSupport status="loadingStatus" event="onchange" rerender="optPanNew"/>
+                            </apex:selectList>
+                            </apex:actionRegion>
+                        </apex:outputPanel> 
+                        
+                        <apex:outputPanel />
+                         
+                        <apex:inputField value="{!newproject.name}"  styleClass="requiredField tabIndex48" />
+                        <apex:inputField value="{!newproject.Bid_Date__c}" styleClass="tabIndex49" />
+                        <apex:outputtext value="" />
+
+                        <apex:inputField value="{!newproject.Award_Date__c}" required="false" styleClass="tabIndex50" />
+
+
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection title="Additional Information" id="pbSectNew5">
+                    <apex:pageBlocksectionItem >   
+                            <apex:outputLabel value="Application Industry" ></apex:outputLabel>
+                            <apex:outputPanel id="optPanNew" >
+                             <div class="requiredInput">
+                                 <div class="requiredBlock"/>
+                                <apex:selectList value="{!sAppIndus}" required="true" size="1" styleClass="tabIndex51">
+                                <apex:selectOptions value="{!AppItems}" />
+                                 
+                                <apex:actionSupport status="loadingStatus" event="onchange" rerender="optPanNew2"/>
+                                </apex:selectList>
+                             </div>
+                            </apex:outputPanel>
+                        </apex:pageBlocksectionItem>                                       
+                        <apex:pageBlocksectionItem >
+                         <apex:outputLabel value="Application"></apex:outputLabel>
+                        <apex:outputPanel id="optPanNew2">                        
+                        <div class="requiredInput">
+                                 <div class="requiredBlock"/>
+                        <apex:selectList value="{!sApplication}" size="1" styleClass="tabIndex52">
+                        <apex:selectOptions value="{!Applications}"/>
+                        </apex:selectList>
+                        </div>
+                        </apex:outputPanel>
+                       </apex:pageBlocksectionItem>                    
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection title="Project Site Address" columns="2">
+
+                        <apex:inputField value="{!newproject.Project_Street_Address__c}" styleClass="tabIndex53" />
+                        <apex:inputField value="{!newproject.Project_Country__c}" styleClass="tabIndex55" />
+                        <apex:inputField value="{!newproject.Project_City__c}" styleClass="tabIndex54" />
+                        <apex:inputField value="{!newproject.Project_State__c}" styleClass="tabIndex56" />
+
+                        <apex:outputText value="" />
+                        <apex:inputField value="{!newproject.Project_Zip_Code__c}" styleClass="requiredField tabIndex57"  />
+                    </apex:pageBlockSection>
+                    </div>
+                </apex:pageBlock>
+                </div>
+                        
+
+            <!--end-->
+            <apex:inputcheckbox disabled="true" value="{!createOpportunity}" id="chkNewOpp" styleClass="newOppCheckbox tabIndex58" /> Create opportunity
+            <div id='noOpportunityMessage' style='display: none; margin: 15px; border: 1px solid blue; padding: 15px;'>
+                <h3>An opportunity will not be created</h3></div>
+            <div id='newOpportunityFields'>
+                <apex:pageBlock id="pbOpportunityInformation" title="Opportunity Information" tabstyle="opportunity">
+                    <apex:pageBlockSection title="Project Information" id="pbBasicInfo" columns="2">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Opportunity Name" />
+                            <apex:inputText value="{!newopportunity.Name}" size="30" disabled="true" />
+                        </apex:pageBlockSectionItem>
+                        <!--<apex:inputField value="{!newopportunity.name}" required="false" styleClass="tabIndex48 required field" />
+                <apex:inputField value="{!newopportunity.Bid_Date__c}" styleClass="tabIndex50" />-->
+
+
+                        <apex:inputField value="{!newopportunity.CampaignId}" required="false" styleClass="tabIndex60" />
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel >Expected resolution date</apex:outputLabel>
+                            <apex:inputField value="{!newopportunity.closedate}" required="false" styleClass="tabIndex59" />
+                        </apex:pageBlockSectionItem>
+
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection title="Additional Information" columns="2">
+
+
+                        <apex:inputField value="{!newopportunity.NIS__c}" styleClass="tabIndex61" />
+
+                       <!--<apex:inputField value="{!newopportunity.LeadSource}" styleClass="tabIndex53" />-->
+                        <apex:inputField value="{!newopportunity.Chain_Account__c}" styleClass="tabIndex62" />
+
+                    </apex:pageBlockSection>
+
+
+                    <apex:pageBlockSection title="Description Information" columns="1">
+                        <apex:inputField value="{!newopportunity.Description}" style="width: 500px; height: 100px" styleClass="tabIndex63" />
+                    </apex:pageBlockSection>
+
+                </apex:pageBlock>
+            </div>
+
+            <apex:inputCheckbox value="{!createTask}" id="chkCreateTask" onclick="toggleTaskFields(this)" styleClass="newTaskCheckbox tabIndex64" /> Create a task
+            <div id='noTaskMessage' style='display: block; margin: 15px; border: 1px solid blue; padding: 15px;'>
+                <h3>Select the Checkbox to add a task</h3></div>
+            <div id='newTaskFields' style='display: none'>
+                <apex:pageBlock id="pbConversionObjects" title="Task Information" tabstyle="lead">
+                    <apex:pageBlockSection title="Task" columns="2">
+                        <apex:inputField value="{!newtask.Subject}" styleClass="tabIndex65" />
+                        <apex:inputField value="{!newtask.ActivityDate}" styleClass="tabIndex69" />
+
+                        <apex:inputField value="{!newtask.Description}" styleClass="tabIndex66" />
+                        <apex:inputField value="{!newtask.Type}" styleClass="tabIndex70" />
+
+                        <apex:inputField required="false" value="{!newtask.Status}" styleClass="tabIndex67" />
+                        <apex:inputField required="false" value="{!newtask.Priority}" styleClass="tabIndex71" />
+
+                        <apex:inputField value="{!newtask.IsReminderSet}" styleClass="tabIndex68" />
+                        <apex:inputField value="{!newtask.ReminderDateTime}" styleClass="tabIndex72" />
+
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </div>
+
+            <div style='width: 100%; text-align: center'>
+                <apex:commandbutton id="btnCreateObjects" value="Commit" action="{!CreateObjects}" styleClass="tabIndex73" />
+            </div>
+
+        </apex:outputpanel>
+
+        <apex:outputpanel rendered="{!showsyncpanel}">
+
+
+            <div style="margin: 15px; padding: 15px; border: 1px blue solid; width: 700px">
+                <h3>Synchronizing your data with Nanareps.com ... please wait.</h3>
+            </div>
+
+        </apex:outputpanel>
+        <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                    <div class="waitingHolder" style="top: 50%; width: 110px;">
+                        <img class="waitingImage" src="/img/loading.gif" />
+                        <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                    </div>
+                </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+    </apex:form>
+    <script>
+        function changeOpp() {
+            checkOppStatus();
+        }
+    </script>
+</apex:page>

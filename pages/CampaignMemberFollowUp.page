@@ -1,0 +1,186 @@
+<apex:page tabstyle="Campaign_Member_Task__tab" title="Campaign Member Mass Task Creator" controller="CampaignMemberFollowUpController" >
+
+<apex:form >
+<apex:sectionHeader title="Mass Creation Of Tasks Concerning Campaign Members" >
+<!-- <p align="center"><b><apex:outputtext id="message" value="Campaign ID: {!campaign}, showtask {!showtask},showCampaignSelection: {!showCampaignSelection}"/></b></p><br/> -->
+<apex:outputPanel >
+<apex:pageBlock title="For which campaign do you want to create task(s)?" rendered="{!showCampaignSelection}">
+    <apex:pageBlockSection columns="3">       
+       <apex:pageBlockSectionItem >
+       		<apex:outputLabel value="Filter by Status" for="CampaignStatus"/>
+        	<apex:selectList id="CampaignStatus" value="{!selectcampaignstatus}"  multiselect="false" size="1">
+            	<apex:selectOptions value="{!itemscampaignstatus}"/>
+            	<apex:actionSupport event="onchange" action="{!renderfollowupfalse}" rerender="CampaignList, FollowUp, CMresults, SelectButton, message"/>
+        	</apex:selectList>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+        	<apex:outputLabel value="Campaign" for="CampaignList"/>
+            <apex:selectList id="CampaignList" value="{!campaign}"  multiselect="false" size="1">
+                <apex:selectOptions value="{!campaigns}"/>
+                <apex:actionSupport event="onchange" action="{!renderFollowUpFalse}" rerender="FollowUp, CMresults, message"/>
+             </apex:selectList>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+             <apex:commandButton id="SelectButton" value="Select" action="{!renderfollowuptrue}" disabled="{!NOT(showSelectButton)}" rerender="pageMessage, FollowUp, CMresults, FollowUpButton, message"/>
+        </apex:pageBlockSectionItem>        
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="FollowUp">
+<apex:pageBlock rendered="{!showtask}">
+    <apex:pageBlockSection id="Task" title="Define you task(s)!" collapsible="false">
+    	<apex:pageBlockSectionItem helpText="If selected, a task for each lead and contact owner of the appropriated campaign member will be created.">
+    		<apex:outputLabel value="use Member's Owner"/>
+    		<apex:inputCheckbox id="cMOcheckbox" value="{!CMOwner}">
+    		<apex:actionSupport event="onclick" rerender="Task"/>
+    		</apex:inputCheckbox>
+    	</apex:pageBlockSectionItem>
+    	<apex:pageBlockSectionItem >
+    	</apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Assigned To" for="assigendField" rendered="{!NOT(CMOwner)}"/>
+            <apex:inputField value="{!ownertodo.ownerid}" id="assigendField" rendered="{!NOT(CMOwner)}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Status" for="StatusTask"/>
+            <apex:inputField id="StatusTask" value="{!ownertodo.status}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Due Date" for="TaskDate"/>
+            <apex:inputField value="{!ownertodo.activitydate}" id="TaskDate"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Campaign" for="relatedCampaign"/>
+            <apex:outputField id="relatedCampaign" value="{!ownertodo.whatid}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+             <apex:outputLabel value="Reminder" for="isReminder"/>
+            <apex:inputField id="isReminder" value="{!ownertodo.isReminderSet}">
+            <apex:actionSupport event="onclick" rerender="Task"/>
+            </apex:inputField>       	
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+               <apex:outputLabel value="Reminder Date" for="ReminderDate" rendered="{!ownertodo.isReminderSet}"/>
+            <apex:inputField id="ReminderDate" value="{!ownertodo.ReminderDateTime}" rendered="{!ownertodo.isReminderSet}"/>      
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Priority" for="Priority"/>
+            <apex:inputField id="Subject" value="{!ownertodo.priority}"/>
+        </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1">
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Subject" for="Subject"/>
+            <apex:inputField id="Priority" value="{!ownertodo.subject}" style="width:500px"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Description" for="description"/>
+            <apex:inputField id="description" value="{!ownertodo.description}" style="width:500px"/>
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection columns="3" collapsible="true" Title="Filter Campaign Member List">
+        <apex:pageBlockSectionItem helpText="if used: search for all titles starts with the phrase; implicit * after the phrase">
+            <apex:outputLabel value="Title" for="filterTitle"/>
+            <apex:inputText id="filterTitle" value="{!Title}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem helpText="if used: works as the lower threshold for number of employees">
+            <apex:outputLabel for="filterEmployeesFrom">
+            	<NOBR># Employees</NOBR></p>(from)
+            </apex:outputLabel>
+            <apex:inputText id="filterEmployeesFrom" value="{!EmployeesFrom}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem helpText="if used: works as the upper threshold for number of employees">
+            <apex:outputLabel for="filterEmployeesTo">
+            	<NOBR># Employees</NOBR></p>(to)
+            </apex:outputLabel>
+            <apex:inputText id="filterEmployeesTo" value="{!EmployeesTo}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem helpText="if used: search for all zip codes starts with the number; implicit * after the number">
+            <apex:outputLabel value="Zip" for="filterZip"/>
+            <apex:inputText id="filterZip" value="{!Zip}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Status" for="filterStatus"/>
+        	<apex:selectList id="filterStatus" value="{!selectedFilterStatus}"  multiselect="false" size="1">
+            	<apex:selectOptions value="{!FilterStatusItems}"/>
+        	</apex:selectList>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Type" for="filterType"/>
+        	<apex:selectList id="filterType" value="{!selectedFilterType}"  multiselect="false" size="1">
+            	<apex:selectOptions value="{!FilterTypeItems}"/>
+        	</apex:selectList>
+        </apex:pageBlockSectionItem>
+		 <apex:pageBlockSectionItem >        
+        	<apex:commandButton id="filterGo" value="Go" action="{!gofilter}" rerender="CMresults, FollowUp"/>
+        </apex:pageBlockSectionItem>
+	</apex:pageBlockSection>
+	<apex:outputPanel id="pageMessage" rendered="{!showPageMessage}">
+		<apex:pageMessage title="{!pageMessageTitle}" detail="{!pageMessageDetail}" severity="{!pageMessageSeverity}" strength="{!pageMessageStrength}" escape="false"/>
+	</apex:outputPanel>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="CMresults" >
+<apex:pageBlock title="Select these campaign members for which do you want to create a task!" rendered="{!IF(CMemberList_size > 0, true, false)}"> 
+<apex:actionStatus startText="Requesting..." id="SelectStatus"/>
+<apex:outputText id="Number" value="{!SelectedCM} selected, displaying {!pagenext} to {!pageuntil} of {!CMemberList_size}"/>
+    <apex:pageBlockButtons >
+    	<apex:commandButton id="FollowUpButton" value="Create Follow Up" action="{!generateTodos}" disabled="{!IF(selectedCM > 0, false, true)}"/>
+    	<apex:commandButton id="SelectMemberButton" value="(De)Select All Members" Status="SelectStatus" action="{!selectAllCMembers}" rerender="CMresults, FollowUpButton, selectMessage, pageMessage"/>
+        <apex:commandButton value="Prev" action="{!Prev}" disabled="{!NOT(showprev)}" status="PagingStatus" rerender="CMresults, selectMessage"/>
+        <apex:commandButton value="Next" action="{!Next}" disabled="{!NOT(shownext)}" status="PagingStatus" rerender="CMresults, selectMessage"/>
+        <apex:actionStatus startText="Requesting..." id="PagingStatus"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="Campaign Members" columns="1" collapsible="false">
+    	<apex:pageBlockTable value="{!cmemberlistnext}" var="cml">
+            <apex:column >
+                <apex:facet name="header">
+                <apex:inputCheckBox value="{!allCheckboxes}">
+               	<apex:actionSupport event="onclick" action="{!changecheckbox}" Status="SelectStatus" rerender="CMresults, FollowUpButton, pageMessage" />
+                </apex:inputCheckBox>
+                </apex:facet>
+              	<apex:inputCheckbox value="{!cml.checkedMember}" id="selectLine">
+              	<apex:actionSupport event="onclick" action="{!changeSingleCheckbox}" Status="SelectStatus" rerender="FollowUpButton, CMresults, pageMessage" />
+              	</apex:inputCheckbox>
+            </apex:column>
+            <apex:column value="{!cml.CMType}">  
+                <apex:facet name="header">Type</apex:facet>
+            </apex:column>
+            <apex:column value="{!cml.Title}">
+                <apex:facet name="header">Title</apex:facet>
+            </apex:column>                              
+    		<apex:column value="{!cml.FirstName} {!cml.LastName}">   
+                <apex:facet name="header">Name</apex:facet>
+            </apex:column>
+            <apex:column value="{!cml.Email}">
+                <apex:facet name="header">E-Mail</apex:facet>
+            </apex:column>   
+            <apex:column value="{!cml.Employer}">
+                <apex:facet name="header">Company</apex:facet>
+            </apex:column>
+            <apex:column value="{!cml.NumberOfEmployees}">
+                <apex:facet name="header">Employees</apex:facet>
+            </apex:column>
+            <apex:column value="{!cml.ZipCode}">
+                <apex:facet name="header">Zip</apex:facet>
+            </apex:column>       
+            <apex:column value="{!cml.City}">
+                <apex:facet name="header">City</apex:facet>
+            </apex:column>                                                                                                                                                                             
+            <apex:column value="{!cml.Status}">
+                 <apex:facet name="header">Status</apex:facet>
+            </apex:column>                                                      
+    	</apex:pageBlockTable>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:outputPanel>
+</apex:sectionHeader>       
+</apex:form>
+
+<!-- This section is used in order to init the date picker correct. This is a known issues. -->
+<div Style="Display: none">
+<apex:form >
+<apex:inputField value="{!ownertodo.activitydate}" id="test"/>
+</apex:form>
+</div>
+</apex:page>

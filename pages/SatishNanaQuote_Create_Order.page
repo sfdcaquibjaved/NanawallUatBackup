@@ -1,0 +1,37 @@
+<apex:page standardController="Quote__c" extensions="Satish_NanaQuote_Create_Order_Controller" action="{!CreateOrder}">
+
+    <script>
+    
+    /*
+    WHOEVER KEEPS EDITING THIS GOD-DAMNED PAGE, STOP IT! 
+    You keep breaking our code when our testers are working. If you are not me (which i am pretty sure you are not), 
+    DO NOT EDIT THIS PAGE!!!.
+
+
+    STOP! NO MORE COMMENTS! STOP IT!   
+    */ 
+    
+        var orderId='{!existingOrder}';
+//        alert(orderId);
+         
+        function doRedirect()
+        {
+            document.location.href = '/' + orderId;
+        }
+        
+        if( orderId != '' && orderId != null ) 
+        { 
+            setTimeout('doRedirect()', 2000);
+        }
+        else
+        { 
+            alert('Order not found');
+        }
+    </script>
+
+    <apex:Pagemessages /> 
+
+
+<apex:outputtext value="{!Quote__c.Quote_ID__c}" rendered="false" />
+<apex:outputtext value="{!Quote__c.Order__c}" rendered="false" />
+</apex:page>

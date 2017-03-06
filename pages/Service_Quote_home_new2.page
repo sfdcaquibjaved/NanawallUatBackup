@@ -1,0 +1,383 @@
+<apex:page controller="ServiceQuote_Home_Controller4" standardStylesheets="false">
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+
+<!-- Referencing Static Resource for jquery, bootstrap -->
+
+<apex:includeScript value="{!URLFOR($Resource.MultisearchBootstrap, '/jQuery/jquery.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.MultisearchBootstrap, '/jQuery/bootstrap.min.js')}" />
+<apex:stylesheet value="{!URLFOR($Resource.MultisearchBootstrap, '/CSS/bootstrap.min.css')}" />
+
+    
+
+<style>
+    .AdvField td{
+        width: 22%;
+    }
+    select 
+    {
+        width: 79px;
+    }
+    input[type='text'] 
+    { width: 70%; }
+    input {
+        font-size: 11px;
+    }
+    .LoadingMessage {
+        font-size: 16px;
+        background-color: green;
+        color: white;
+        font-weight: bold;
+    }
+    
+    h1 { 
+    display: block;
+    font-size: 1.7em;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+    .boot {
+    float: left;
+    width: 160%;
+    margin-bottom: 5px;
+}
+.label-text {
+    float: left;
+    width: 34%;
+    font-size:11px;
+    text-align: left;
+    padding-left: 0px;
+}
+.box {
+    float: left;
+    width:38%;
+}
+.simpleSearchfield{
+}
+ input.Searchbt{
+    border-color: #4a90e2;
+    
+    background-color: #0070d2;
+    color: #fff;
+  }
+  .btn{
+  display:inline;
+  }
+    
+</style>
+
+<script>
+
+
+    j$(document).ready(function() {
+    
+    });
+    
+</script>
+
+
+<!--  <apex:tabpanel>     
+   <apex:tab label="Multi-Search" name="ms" id="tabms"  disabled="true">  -->
+  <!--    <apex:outputPanel> -->
+   <div styleClass="myFormStyle" style="background-color: White">
+        
+        <apex:form id="theForm" >
+        
+          <!--  <apex:pageBlock title="Search Service Quotes"> -->
+    <!--       <apex:pageBlock > -->
+                <div style='display: block; line-height: 3px;' id='AdvancedFields' class="AdvField">
+                <h1> Project Multi Search </h1>
+                   <!--       <apex:panelGrid columns="4" width="100%">  -->
+                   <div class="container-fluid">   
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">   Order #: </div>
+                      <div class="box">  <apex:inputtext value="{!SearchFields.OrderNumber}" id="filterOrderNumber"  size="6" styleClass="simpleSearchField" /></div>
+                       </div>       
+                    </div> 
+                        <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">  Case #:  </div>
+             
+                     <div class="box">  <apex:inputtext value="{!SearchFields.CaseNumber}" id="filterCaseNumber"  size="6" styleClass="simpleSearchField" />    </div>
+                      </div>       
+                    </div>  
+                       <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">Service Quote#:</div>
+                     <div class="box"><apex:inputtext value="{!SearchFields.ServiceQuoteNumber}"  size="6" id="filterServiceQuoteNumber" styleClass="simpleSearchField" /> </div>
+                       </div> 
+                       </div>
+                       
+                        <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">Quote #:</div>
+                     <div class="box"><apex:inputtext value="{!SearchFields.QuoteNumber}"  size="6" id="filterQuoteNumber" styleClass="simpleSearchField" /> </div>
+                       </div> 
+                       </div>
+                       </div>
+                     <!--      </apex:panelGrid> -->
+                    <hr />
+                    <h1> Contact Search</h1>
+                 <!---   <apex:panelGrid columns="4" width="100%">  --->
+                  <div class="container-fluid">   
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"> First Name:</div>
+                     <div class="box"> <apex:inputtext value="{!SearchFields.FirstName}"  size="6" styleClass="simpleSearchField" /> </div>
+                     </div>       
+                    </div> 
+                     <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"> Project City:</div>
+                     <div class="box"> <apex:inputtext value="{!SearchFields.City}" size="6"   styleClass="simpleSearchField"/></div>
+                     </div>       
+                    </div> 
+                     <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"> Last Name:</div>
+                     <div class="box"><apex:inputtext value="{!SearchFields.LastName}"  size="6" styleClass="simpleSearchField" /> </div>
+                     </div>       
+                    </div> 
+                     <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">  Project State:</div>
+                     <div class="box">
+                       <apex:selectList value="{!SearchFields.state}" multiselect="false" size="1">
+                          <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+                              <apex:selectOptions value="{!states}"></apex:selectOptions>
+                                  </apex:selectList></div>
+                      </div>       
+                    </div> 
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">Project Country: </div> 
+                     <div class="box">
+                     <apex:selectList value="{!SearchFields.ProjectCountry}" multiselect="false"  size="1" >
+                                      <apex:selectOption itemValue="" itemlabel="-SELECT-" />
+                                      <apex:selectOptions value="{!Country}"></apex:selectOptions>
+                                      </apex:selectList>
+                     </div>       
+                    </div> 
+                    </div>
+                     <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">  Email:</div>
+                     <div class="box"> <apex:inputtext value="{!SearchFields.Email}" size="6" styleClass="simpleSearchField"/></div>
+                     </div>       
+                    </div> 
+                    
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">Phone:</div>
+                     <div class="box"><apex:inputtext value="{!SearchFields.Phone}" size="6" styleClass="simpleSearchField"/> </div>
+                     </div> 
+                    </div>
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">Project Zip:</div>
+                     <div class="box"><apex:inputtext value="{!SearchFields.Zip}" size="6" styleClass="simpleSearchField"/> </div>
+                     </div> 
+                    </div>
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text">Project Street:</div>
+                     <div class="box"><apex:inputtext value="{!searchFields.ProjectStreet}" size="6" styleClass="SimpleSearchField"/></div>
+                   </div> 
+                    </div>
+                   </div> 
+                  <!--   </apex:panelGrid>  -->
+                       <hr />
+                    <h1> Config Search </h1>
+                  <!--   <apex:panelGrid columns="4" width="100%"> -->
+                     <div class="container-fluid"> 
+                     <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"> Model: </div>
+                     
+                     <div class="box"><apex:selectList value="{!models}" multiselect="false" size="1"  id="ModelSelector" styleClass="modelSelector">
+                            <apex:selectOptions value="{!modeloptions}"/>
+                        </apex:selectList> 
+                        
+                      </div>
+                      </div>
+                      </div>
+                      <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"><apex:outputtext value="Panel Count" /> </div>
+                      <div class="box">  <apex:inputtext value="{!SearchFields.Panels_Count}"  size="6"/> </div>
+                      </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"><apex:outputtext value="# Panels (R)" /> </div>
+                      <div class="box"> <apex:inputtext value="{!SearchFields.Panels_Right}"  size="6"/> </div>
+                        </div>
+                        </div>
+                    <div class="col-md-6">
+                     <div class="boot">
+                     <div class="label-text"> <apex:outputtext value="# Panels (L)" /> </div>
+                      <div class="box"><apex:inputtext value="{!SearchFields.Panels_Left}" size="6"/> </div>
+                      </div>
+                      </div>
+                        
+                        </div>
+                        
+                 <!--      </apex:panelGrid> -->
+                        <hr />
+                    
+                        <apex:commandButton value="Search" status="loadingstatus" action="{!searchobjects}" reRender="op" style="background-color:#0070d2;background-image:none;color:#fff;font-size:11px;"/>
+               <!--       <apex:commandButton value="Create Case" action="{!createcase}" style="background-color:#0070d2;background-image:none;color:#fff;font-size:11px;"/> -->
+            <!--      <apex:commandLink value="Create Case" action="{!createcase}" onclick="openNewCaseInSubTab()"/>  -->
+                </div> 
+                
+                <apex:outputpanel id="op">
+                    <apex:actionstatus layout="block" startStyleClass="LoadingMessage" id="loadingstatus" starttext="Loading..." stoptext="{!resulttext}" />
+                    <apex:pagemessages ></apex:pagemessages>
+                  <apex:pageBlock >  
+                    <apex:pageBlockSection id="pbs" columns="1">
+                        <apex:pageBlockTable id="pbtSearchResults" var="sqr" value="{!searchResults}" width="100%" style="font-size:11px" >
+
+                           <!-- <apex:column headerValue="Select">
+                           <apex:inputCheckbox value="{!sqr.Selected}"/>
+                           </apex:column> -->
+                            <apex:column headerValue="Project">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ProjectName" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ProjectName" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.ProjectID}" >{!sqr.ProjectName}</apex:outputlink>
+                           </apex:column>
+                           <apex:column headerValue="Quote #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Quote #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="QuoteNumber" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.QuoteNumber}
+                           </apex:column>
+                            <apex:column headerValue="Order #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Order #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="OrderID" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.OrderID}" >{!sqr.orderNumber}</apex:outputlink> 
+                           </apex:column>
+                              <apex:column headerValue="Contact">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ContactName" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="contactId" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.contactId}" >{!sqr.contactName}</apex:outputlink>
+                           </apex:column>
+                           <apex:column headerValue="Contact Email">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Contact Email" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Email" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.ContactEmail}
+                           </apex:column>
+                            <apex:column headerValue="Contact Phone">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Contact Phone" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Phone" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.Phone}
+                           </apex:column>
+                           <apex:column headerValue="Case #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Case #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="CaseNumber" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.CaseId}" >{!sqr.CaseNumber}</apex:outputlink>
+                                
+                           </apex:column>
+                           
+                            <apex:column > 
+                            <apex:facet name="header">SQ#</apex:facet>
+                                <apex:repeat value="{!sqr.ServiceQuotes}" var="sq" id="theRepeat">
+                                    <apex:outputlink value="/{!sq.ID}" >{!sq.ServiceQuoteNumber}</apex:outputlink><br />
+                                </apex:repeat>                         
+                           </apex:column>
+                           <apex:column headerValue="Project Street">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Project Street" action="{!dosort}" reRender="op" >
+                                    
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.ProjectStreet}
+                           </apex:column>
+                        
+                            
+
+                                <apex:column headerValue="Project City">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Project City" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Project City" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.City}
+                           </apex:column>
+
+                            <apex:column headerValue="Project State">
+                                <apex:facet name="header"> 
+                                    <apex:commandlink value="Project State" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Project State" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.State}
+                           </apex:column>
+                            <apex:column headerValue="Project Country">
+                                <apex:facet name="header"> 
+                                    <apex:commandlink value="Project Country" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Project Country" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.ProjectCountry}
+                           </apex:column>
+                           
+
+                            <apex:column headerValue="Project Zip">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Project Zip" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Project Zip" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.Zip} 
+                           </apex:column>
+
+                            <apex:column headerValue="O" rendered="false">
+                                <apex:facet name="header">
+                                </apex:facet> 
+                                {!sqr.origin} 
+                           </apex:column>
+                           
+                          
+                           
+
+                        </apex:pageBlockTable>          
+                    </apex:pageBlockSection>        
+                  </apex:pageblock>  
+                </apex:outputpanel>
+      <!--      </apex:pageBlock>      -->  
+        </apex:form>
+        </div>
+ <!-- </apex:tab>
+    
+</apex:tabpanel> -->
+<!--</apex:outputPanel> -->
+
+
+</apex:page>

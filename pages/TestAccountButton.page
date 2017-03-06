@@ -1,0 +1,18 @@
+<apex:page StandardController="Account">
+
+ <script language="javascript" type="text/javascript">
+  
+    window.onload = function() {
+    var myUrl = "{!$Site.Prefix}/apex/newclonetest?accUrl={!Account.Id}";
+    if( (typeof sforce != 'undefined') && (sforce != null) ) {
+      // Salesforce1 navigation
+      sforce.one.navigateToURL(myUrl);
+    } else {
+      // Set the window's URL using a Visualforce expression for redirection in desktop
+     window.location.href =   myUrl;
+    }
+  }
+
+  
+</script>
+</apex:page>

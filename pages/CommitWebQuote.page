@@ -1,0 +1,72 @@
+<apex:page standardController="Web_Quote__c" extensions="CommitWebQuoteController" action="{!create}" >
+<apex:form >
+<apex:pagemessages />
+<apex:pageBlock id="dupeMatchesBlock" rendered="{!showdupeblock}" title="Duplicate Check">
+
+	<p>
+		<b>Project:</b> {!newopportunity.name}<br />
+		<b>City:</b> {!newopportunity.city__c}<br />
+		<b>State:</b> {!newopportunity.state__c}<br />
+	</p>
+	<p>If one of the projects below appears to be the same project you are trying to create, please click the "go to project" link and continue your work on the already exisitng project.</p>
+	<br /> 
+	<apex:dataTable value="{!duplicateOpps}" var="opportunity" id="dupetable" rowClasses="odd,even" styleClass="tableClass" width="100%">
+		<apex:column >
+		    <apex:facet name="header">Name</apex:facet>
+			<apex:outputText value="{!opportunity.name}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">City</apex:facet>
+			<apex:outputText value="{!opportunity.City__c}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">State</apex:facet>
+			<apex:outputText value="{!opportunity.State__c}"/>
+		</apex:column>
+
+		<apex:column >
+		    <apex:facet name="header">Created</apex:facet>
+			<apex:outputText value="{!opportunity.CreatedDate}"/>
+		</apex:column>
+
+		<apex:column >
+		    <apex:facet name="header">Last Quoted</apex:facet>
+			<apex:outputText value="{!opportunity.Max_Email_Date__c}"/>
+		</apex:column>
+		
+
+		<apex:Column >
+			<apex:facet name="header">Existing Project</apex:facet>
+			
+<!--  			<a href="/{!opportunity.ID}" >go to project</a> -->
+		  
+		  	<apex:commandLink action="{!UseProject}" value="Add to this project">
+		  		<apex:param id="pIdParam" name="pIdParam" value="{!opportunity.ID}" assignto="{!webQuoteProjectID}" />
+		  	</apex:commandLink>
+		  
+		</apex:Column>	
+	</apex:dataTable>
+
+
+	<p style='margin: 10px;'>	
+		No matches above ? Click below to save your new project<br />  <br />
+		<apex:commandButton value="Save as a new project" action="{!saveAnyway}"/>
+	</p>
+</apex:pageBlock>
+
+
+<apex:outputlabel value="{!Web_Quote__c.Name}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Contact__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_Name__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_Address__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_City__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_Zip__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_State__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_Country__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_Type__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Project_Comments__c}" rendered="false" />
+<apex:outputlabel value="{!Web_Quote__c.Committed__c}" rendered="false" />
+
+
+</apex:form>
+</apex:page>

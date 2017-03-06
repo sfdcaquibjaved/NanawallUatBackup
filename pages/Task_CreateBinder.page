@@ -1,0 +1,27 @@
+<apex:page controller="Task_CreateBinder_Controller" tabStyle="Task">
+
+	<apex:form >
+		<apex:pageMessages escape="false" /> 
+
+		<apex:sectionHeader title="New Binder Task" />
+		<apex:pageBlock >
+			<apex:pageBlockSection columns="1">
+				<apex:inputField value="{!newTask.OwnerId}" />    
+				
+				<apex:inputField value="{!newTask.Description}" style="width: 300px; height: 100px;" />    
+
+				 <apex:inputField value="{!newTask.IsReminderSet}" />    
+				 <apex:inputField value="{!newTask.ReminderDateTime}" />    
+
+				 <apex:inputField value="{!newTask.PhotoBooks_Selection__c}" rendered="true" />    
+
+				 
+			</apex:pageBlockSection>
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!save}" value="Save"/>
+			</apex:pageBlockButtons>
+			
+		</apex:pageBlock>
+			
+	</apex:form>
+</apex:page>

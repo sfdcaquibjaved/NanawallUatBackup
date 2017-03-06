@@ -1,0 +1,187 @@
+<apex:page Controller="CaseIntegrate" showHeader="false">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        .myFormStyle {
+            background-color: white;
+            height: 600px;
+        }
+        
+        #t1 {
+            -moz-tab-size: 4;
+            /* Code for Firefox */
+            -o-tab-size: 4;
+            /* Code for Opera 10.6-12.1 */
+            tab-size: 4;
+        }
+        
+        
+        table {
+            font-family: arial, sans-serif;
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 10%;
+            color: Black;
+            
+        }
+        
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 2px;
+        }
+        
+        
+        .buttong2y{
+                   border-top: 1px solid #90ae6a;
+                   background: #91af6a;
+                   background: -webkit-gradient(linear, left top, left bottom, from(#91af6a), to(#91af6a));
+                   background: -webkit-linear-gradient(top, #91af6a, #91af6a);
+                   background: -moz-linear-gradient(top, #91af6a, #91af6a);
+                   background: -ms-linear-gradient(top, #91af6a, #91af6a);
+                   background: -o-linear-gradient(top, #91af6a, #91af6a);
+                   padding: 5px 10px;
+                   -webkit-border-radius: 8px;
+                   -moz-border-radius: 8px;
+                   border-radius: 8px;
+                   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+                   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+                   box-shadow: rgba(0,0,0,1) 0 1px 0;
+                   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+                   color: #000000;
+                   font-size: 14px;
+                   font-family: Helvetica, Arial, Sans-Serif;
+                   text-decoration: none;
+                   vertical-align: middle;
+                   }
+                .buttong2y:hover {
+                   
+                   background: #a3d03e;
+                   color: #FFFFFF;
+                   }
+                .buttong2y:active {
+                   border-top-color: #91af6a;
+                   background: #91af6a;
+     }
+                    
+                    
+     p.ex1 {
+            margin-top: 20px;
+        }    
+        table#t01 { 
+        border: 2px solid black;
+        border-collapse: collapse;
+    background-color: #f1f1c1;
+}
+        
+       
+    }
+        
+    </style>
+    <apex:form styleClass="myFormStyle">
+    
+    <apex:pageMessages />
+    <center>
+        <br/>
+        <apex:image id="theImage" value="{!$Resource.Nanawall}" width="170" height="50" /><br/>
+        <br/>
+        <div style="font-size: large; font-family: sans-serif">
+        <B><p style="color: #a3d03e; width: 40%; background-color: #efefef">Check Your Case Status</p></B>
+        </div>
+        
+        <p class="ex1">
+        <B>Email:</B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <apex:inputText value="{!searchEmail}" label="Input" /><br/>
+        </p>
+        
+        <B>Case Number:</B>&nbsp;
+
+        <apex:inputText value="{!searchstring}" label="Input" /><br/>
+
+        <apex:outputText rendered="{!flag}">
+            <font color="red">
+                <B>Case Status:</B>
+            </font>&nbsp;
+            <div>
+                <table id="t01">
+                    <tr>
+                        <th>CaseNumber:</th>
+                        <th>Status:</th>
+
+                    </tr>
+
+                    <apex:repeat value="{!caseList}" var="c">
+                        <tr>
+                            <th>
+                                <font color="blue"></font>&nbsp;{!c.CaseNumber}</th>
+                            <th>
+                                <font color="blue"></font>&nbsp;{!c.status}<br/></th>
+                        </tr>
+
+
+                    </apex:repeat>
+                </table>
+            </div>
+        </apex:outputText> <br/>
+        <apex:commandButton value="Search case" action="{!search}" styleClass="buttong2y" style="height:30px;border-radius:9px;width:100px;text-align:center !important;"/>
+        <br/><br/>
+
+
+        
+        <div style="font-size: large; font-family: sans-serif">
+        <B><p style="color: #a3d03e; width: 40%; background-color: #efefef">Your Parts Order Status</p></B>
+        </div>
+
+        <p class="ex1">
+        <B>&nbsp;Email:</B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <apex:inputText value="{!searchEmail1}" label="Input" /><br/>
+        </p>
+        
+        <B>Service Quote:</B>&nbsp;
+
+        <apex:inputText value="{!searchServiceQuote}" label="Input" /><br/>
+
+        <apex:outputText rendered="{!flag1}">
+            <font color="red">
+                <B>Order Status:</B>
+            </font>&nbsp;
+            <div>
+                <table id="t01" width="50">
+                    <tr>
+                        <th>Service Quote:</th>
+                        <apex:outputPanel rendered="{!Shopifyflag}">
+                        <th>Shopify Quote:</th></apex:outputPanel>
+                        <th>Status:</th>
+
+                    </tr>
+
+                    <apex:repeat value="{!QuoteList}" var="c">
+                        <tr>
+
+                            <th>
+                                <font color="blue"></font>&nbsp;{!c.Name}<br/></th>
+                                <apex:outputPanel rendered="{!Shopifyflag}">
+                            <th>
+                                <font color="blue"></font>&nbsp;{!c.Shopify_Order_NO__c}<br/></th></apex:outputPanel>
+                            <th>
+                                <font color="blue"></font>&nbsp;{!c.Status__c}<br/></th>
+
+                        </tr>
+
+
+                    </apex:repeat>
+                </table>
+            </div>
+        </apex:outputText> <br/>
+       <apex:commandButton value="Search status" action="{!search1}" styleClass="buttong2y" style="height:30px;border-radius:9px;width:100px;text-align:center !important;"/>
+
+        
+        <br/><br/>
+
+</center>
+    </apex:form>
+
+</apex:page>

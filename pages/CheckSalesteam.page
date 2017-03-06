@@ -1,0 +1,40 @@
+<apex:page controller="CheckSalesteamController" showheader="true">
+
+<apex:form > 
+ 	<apex:pagemessages />
+		<table>
+			<tbody>
+				<tr>
+					<td>From</td>
+					<td>To</td> 
+				</tr> 
+				<tr>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Create_Date__c}" required="false"/></td>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Edit_Date__c}" required="false" /></td>
+				</tr>
+			</tbody>
+		</table>
+	
+
+
+	<apex:commandbutton action="{!runCheck}" value="Run Check" />
+<br /><br />
+
+
+		<apex:dataTable width="100%" value="{!missingTeamMembers}" var="member" id="tblDmissingTeamMembers" rowClasses="tblDataPoints_tr"  styleClass="dataTable">
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>Rep</div></apex:facet>
+		 		<a href='/{!member.RepID}'>{!member.RepName}</a>					
+			</apex:column>
+						 
+			<apex:column >
+				<apex:facet name="header"><div style='labelCell'>Opportunity</div></apex:facet>
+		 		<a href='/{!member.OpportunityID}'>{!member.OpportunityName}</a>					
+			</apex:column>
+						 
+
+
+		</apex:dataTable>	
+
+</apex:form>	
+</apex:page>

@@ -1,0 +1,97 @@
+<apex:page id="thePage" standardController="Account" extensions="CorporateAccountProjectListController" >
+    
+    <apex:form id="theForm">
+        <apex:pageBlock >
+            <apex:outputField value="{!Account.Name}" style="display: none;" />
+            <apex:pageBlockSection rendered="{!lstProject.size == 0}" >
+                <apex:outputText label="Sites Total" value="{!lstAccount.size}"></apex:outputText>
+                <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection rendered="{!lstProject.size > 0}" >
+                <apex:outputText label="Sites Total" value="{!lstAccount.size}"></apex:outputText>
+                <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
+                
+                <apex:outputText label="Projects Total" value="{!lstProject.size}" />
+                <apex:outputText label="Penetration" value="{0,Number,0}%" rendered="{!showPenetration}" >
+                    <apex:param value="{!(100*lstProject.size)/IF(lstAccount.size == 0, 1, lstAccount.size)}" />
+                </apex:outputText>
+                <apex:outputText label="Penetration" value="NA" rendered="{!NOT(showPenetration)}" />
+                
+                <apex:outputText label="Projects Won" value="{!intProjectWon}" />
+                <apex:outputText label="Closure" value="{0,Number,0}%" >
+                    <apex:param value="{!(100*intProjectWon)/IF(lstProject.size == 0, 1, lstProject.size)}" />
+                </apex:outputText>
+
+
+                <apex:outputText label="Amount Total" value="{0, Number, Currency}" >
+                    <apex:param value="{!dblAmountTotal}" />
+                </apex:outputText>
+                <apex:outputText label="Amount Won" >
+                    <apex:outputText value="{0, Number, Currency}" >
+                        <apex:param value="{!dblAmountWon}" />
+                    </apex:outputText>
+                    &nbsp;
+                    <apex:outputText value="({0,Number,0}%)" >
+                        <apex:param value="{!(100*dblAmountWon)/IF(dblAmountTotal == 0, 1, dblAmountTotal)}" />
+                    </apex:outputText>
+                </apex:outputText>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection rendered="{!lstProject.size > 0}" columns="1">
+                <apex:outputText label="Architects" value="{!str}"></apex:outputText>
+                <apex:outputText label="Purchasers" value="{!str2}"></apex:outputText>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockTable value="{!lstProject}" var="p" rendered="{!lstProject.size > 0}">
+                <apex:column >
+                    <apex:facet name="header">Type</apex:facet>
+                    <apex:outputText value="{!p.relType}"></apex:outputText>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Name.Label}</apex:facet>
+                    <apex:outputLink value="/{!p.proj.Id}" target="_top">
+                        <apex:outputField value="{!p.proj.Name}"></apex:outputField>
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Application__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Application__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Amount__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Amount__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Stage__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Stage__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Project_City__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Project_City__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Project_State__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Project_State__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Project_Zip_Code__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Project_Zip_Code__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Bid_Date__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Bid_Date__c}"></apex:outputField>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!$ObjectType.Project__c.fields.Close_Date__c.Label}</apex:facet>
+                    <apex:outputField value="{!p.proj.Close_Date__c}"></apex:outputField>
+                </apex:column>
+                
+            </apex:pageBlockTable>
+            <br />
+            <p>
+                <apex:outputText rendered="{!lstProject.Size == 0}">There are no projects associated with this account</apex:outputText>
+            </p>
+            <br />
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

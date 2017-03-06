@@ -1,0 +1,76 @@
+<apex:page controller="Mailbook_CreateTasks_Controller" >
+
+	<apex:form >
+		<apex:pageBlock title="Possible Mailbook Tasks">
+	
+			<apex:pagemessages />
+
+			<apex:commandbutton action="{!SelectAll}" value="Check All" />
+
+		
+			<apex:pageBlockTable value="{!mailbookItems}" var="mailbookItem" id="MailbookItemTable" rowClasses="odd,even" cellpadding="2" cellspacing="3" width="100%" >
+			
+				<apex:column >
+				    <apex:facet name="header" ></apex:facet> 
+					<apex:outputtext value="{!mailbookItem.recordNumber}" />
+				</apex:column>
+
+				<apex:column >
+				    <apex:facet name="header" >Make Task</apex:facet> 
+					<apex:inputCheckbox value="{!mailbookItem.MakeTask}"/>
+				</apex:column>
+			
+				<apex:column >
+				    <apex:facet name="header" >Contact</apex:facet> 
+					<a href='/{!mailbookItem.Contact.Id}' target='_blank'>{!mailbookItem.Contact.FirstName} {!mailbookItem.Contact.LastName}</a>
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header" >Address</apex:facet> 
+					{!mailbookItem.Contact.Address_1__c}  {!mailbookItem.Contact.City__c}, {!mailbookItem.Contact.State__c} &nbsp; {!mailbookItem.Contact.Zip__c}
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header" >Last Mailbook Sent</apex:facet> 
+					{!mailbookItem.Contact.Last_Mailbook_Sent__c}
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header" >Last Booklet Sent</apex:facet> 
+					{!mailbookItem.Contact.Last_Booklet_Sent__c}
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header" >Last Binder Sent</apex:facet> 
+					{!mailbookItem.Contact.Last_Binder_Sent__c}
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header" >Quote</apex:facet> 
+					
+					<a href='/{!mailbookItem.Quote.Id}' target='_blank'>
+						<apex:outputText value="{0, number, ########0}">
+						  <apex:param value="{!mailbookItem.Quote.Quote_ID__c}"/>
+						</apex:outputText>
+					</a>
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header" >Quote Date</apex:facet> 
+					<apex:outputText value="{!mailbookItem.Quote.CreatedDate}"/>
+				</apex:column>
+
+				<apex:column >
+				    <apex:facet name="header" >Project</apex:facet> 
+					<apex:outputText value="{!mailbookItem.Quote.OpportunityName__c}"/>
+				</apex:column>
+
+			</apex:pageBlockTable>
+
+			<apex:commandbutton action="{!MakeTasks}" value="Create Mailbook Tasks" />
+	
+		</apex:pageBlock>
+
+	</apex:form>
+	
+</apex:page>

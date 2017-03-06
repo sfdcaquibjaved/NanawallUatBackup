@@ -1,0 +1,28 @@
+<apex:page >
+<div id="liveagent_invite_button_573A0000000CbYF" style="display: none; position: fixed; border: 2px solid darkblue; border-radius: 5px; background-color: lightblue; height: 100px; width: 200px;">
+<div style="cursor: pointer; padding: 5px; right: 0px; position: absolute; color: darkred; font-weight: bold;" onclick="liveagent.rejectChat('573A0000000CbYF')">X</div>
+<div style="cursor: pointer; top: 42px; left: 65px; position: absolute; font-weight: bold; font-size: 16px;" onclick="liveagent.startChat('573A0000000CbYF')">Start Chat</div>
+</div>
+ 
+<script type='text/javascript' src='https://c.la1w1.salesforceliveagent.com/content/g/js/32.0/deployment.js'></script>
+<script type='text/javascript'>
+function buttonCallback(e) {
+    if (e == liveagent.BUTTON_EVENT.BUTTON_AVAILABLE) {
+        document.getElementById('liveagent_invite_button_573A0000000CbYF').style.display = '';
+        document.getElementById('liveagent_invite_button_573A0000000CbYF').style.left = '300px';
+        document.getElementById('liveagent_invite_button_573A0000000CbYF').style.top = '200px';
+    }
+    if (e == liveagent.BUTTON_EVENT.BUTTON_UNAVAILABLE) {
+        document.getElementById('liveagent_invite_button_573A0000000CbYF').style.display = 'none';
+    }
+    if (e == liveagent.BUTTON_EVENT.BUTTON_ACCEPTED) {
+        document.getElementById('liveagent_invite_button_573A0000000CbYF').style.display = 'none';
+    }
+    if (e == liveagent.BUTTON_EVENT.BUTTON_REJECTED) {
+        document.getElementById('liveagent_invite_button_573A0000000CbYF').style.display = 'none';
+    }
+}
+liveagent.addButtonEventHandler('573A0000000CbYF', buttonCallback);
+liveagent.init('https://d.la1w1.salesforceliveagent.com/chat', '572A0000000CbFx', '00DA0000000HA4l');
+</script>
+</apex:page>

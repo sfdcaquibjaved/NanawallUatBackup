@@ -1,0 +1,11 @@
+<apex:page sidebar="false" showheader="false" standardcontroller="opportunity" >
+<style>
+	body{ background-color: #f3f3ec; }
+</style>
+
+	<apex:outputtext rendered="{!opportunity.Is_A_Dupe__c}" >
+		<div style='color: red; font-weight: bold'>
+			THIS PROJECT IS A DUPLICATE - Saving is disabled.
+		</div>	
+	</apex:outputtext>
+</apex:page>

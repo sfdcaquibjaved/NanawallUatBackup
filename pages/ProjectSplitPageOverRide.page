@@ -1,0 +1,2 @@
+<apex:page StandardController="Project_Split__c" extensions="ProjectSplitPageControllerOverRide" action="{!redirect}">
+</apex:page>

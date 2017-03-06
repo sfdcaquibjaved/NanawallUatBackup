@@ -1,0 +1,53 @@
+<apex:page standardController="Quote__c" extensions="Quote_CaseComment_Controller">
+
+<script>
+	
+</script>
+
+<img src="/s.gif" alt="" class="relatedListIcon" title="" />
+<apex:form >
+	<apex:pageBlock title="Cases">
+	
+		<apex:pagemessages />
+		
+		<a href='/{!Quote__c.Id}'>&larr; Back to Quote</a>
+		<apex:pageBlockTable value="{!cases2}" var="case" id="casetable" rowClasses="odd,even" cellpadding="2" cellspacing="3" width="100%" >
+				<apex:column >
+				    <apex:facet name="header">Case Number</apex:facet> 
+				    <a href='javascript:goToCase("{!case.Id}")'>{!case.CaseNumber}</a>
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header">Subject</apex:facet> 
+					<apex:outputText value="{!case.Subject}"/>
+				</apex:column>
+				
+				<apex:column >
+				    <apex:facet name="header">Date/Time Opened</apex:facet> 
+					<apex:outputText value="{!case.CreatedDate}"/>
+				</apex:column>
+				
+				<apex:column >
+					<apex:facet name="header">                                        
+                         Case Comments                                                                               
+                    </apex:facet>
+                    <apex:pageblocktable value="{!case.CaseComments}" var="cc">
+                        <apex:column headerValue="Date" width="100">
+                               <apex:outputfield value="{!cc.CreatedDate}"/>
+                         </apex:column>
+                         <apex:column headerValue="Comment">
+                               <apex:outputfield value="{!cc.CommentBody}"/>
+                         </apex:column>                          
+                    </apex:pageblocktable>				
+                   </apex:column>
+				
+				
+				
+		</apex:pageBlockTable>
+		
+	</apex:pageBlock>
+</apex:form>
+
+
+
+</apex:page>

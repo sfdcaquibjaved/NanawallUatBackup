@@ -1,0 +1,10 @@
+<apex:page controller="FlexObjController">
+ 
+
+    
+    <apex:pageBlock title="Duplicate Reps">
+        <apex:flash src="{!$Resource.Flex_DupeRepChecker}" width="1000" height="800"
+            flashvars="sid={!MySessionId}&surl={!$Api.Partner_Server_URL_190}&noDebug=true"/>
+    </apex:pageBlock>
+ 
+</apex:page>

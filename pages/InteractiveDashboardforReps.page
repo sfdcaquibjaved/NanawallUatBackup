@@ -1,0 +1,928 @@
+<apex:page docType="html-5.0" showHeader="false" sidebar="false" controller="KPIDashboardController" readOnly="true">
+
+<apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <apex:image url="{!$Resource.LoadingImage}" width="100" height="100"/>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title style="font-color:'red';">KPI Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BootstrapTemplate,'/assets/css/bootstrap.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BootstrapTemplate,'/assets/css/main.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BootstrapTemplate,'/assets/css/font-style.css')}"/>
+   <!-- <apex:stylesheet value="{!$Resource.Hover}"/>-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <apex:stylesheet value="{!$Resource.GoogleApiCss}"/>
+        <apex:includeScript value="{!URLFOR($Resource.D3, 'd3.js')}"/>
+        <apex:includeScript value="{!$Resource.liquidFillGauge}"/>
+        <apex:includeScript value="{!$Resource.d3javascript}"/>
+        <apex:includeScript value="{!$Resource.D3Iopctrl}"/>
+        <apex:includeScript value="{!$Resource.pointerevents}"/>
+        <apex:includeScript value="{!$Resource.pointerguesters}"/>
+        <apex:includeScript id="a" value="https://www.google.com/jsapi" />
+    
+    <apex:stylesheet value="{!URLFOR($Resource.BootstrapTemplate,'/assets/css/table.css')}" />
+    
+
+    <!-- Google Fonts call. Font Used Open Sans & Raleway -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+      
+      [hidden], template
+    {
+        display:block !important;
+    }
+    </style> 
+    <style>
+        body {
+            font: 16px arial;
+            background-color: #515151;
+        }
+
+        .unselectable {
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* css formats for the gauge */
+        .gauge .domain {
+            stroke-width: 2px;
+            stroke: #fff;
+        }
+
+        .gauge .tick line {
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+        
+        .gauge line {
+            stroke: #fff;
+        }
+
+        .gauge .arc, .gauge .cursor {
+            opacity: 0;
+        }
+
+        .gauge .major {
+            fill: #fff;
+            font-size: 20px;
+            font-family: 'Play', verdana, sans-serif;
+            font-weight: normal;
+        }
+        
+        .gauge .indicator {
+            stroke: #EE3311;
+            fill: #000;
+            stroke-width: 4px;
+        }
+
+        /* css formats for the segment display */
+        .segdisplay .on {
+            fill: #00FFFF;
+
+        }
+
+        .segdisplay .off {
+            fill: #00FFFF;
+            opacity: 0.15;
+        }
+        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+
+        div.hidden{
+            display: none;
+        }
+        div.model {
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(249,249,249,0); /* Black w/ opacity */
+        }
+        .loader {
+          position: fixed;
+        left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background: url('https://c.cs50.visual.force.com/resource/1472540719000/LoadingImage') 50% 50% no-repeat;
+        }
+            
+            
+         .HoverPopup {
+            position: relative;
+            z-index: 0;
+            }
+         
+        .HoverPopup:hover {
+            background-color: #FFFDFD;
+            Text-decoration: none;
+            z-index: 50;
+            }
+         
+        .HoverPopup div {
+            position: absolute;
+            visibility: hidden;
+            }
+         
+        .HoverPopup:hover div {
+            visibility: visible;
+            top: 20px;
+            left: 0px;
+            border: 1px solid green;
+            background-color: #FFFDFD;
+            padding: 10px;
+            color: black;
+            Text-decoration: none;
+            white-space: pre;
+            }
+    </style>
+    <script type="text/javascript">
+        function changechart()
+        {
+            $("#extraControls").removeClass("hidden");
+            chartt();
+        }
+        function changeonsalesrep()
+        {
+
+
+          $("#extraControls").removeClass("hidden");
+            salesrepcal();
+        };
+        function axisFormat(value){
+       var num1 = String(value).split(".");
+       var lastnum = '$'+num1[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+       return lastnum
+      }
+      function hoverFormat(klass, item) {
+         var xField = item.xField;
+         var yField = item.yField;
+         var name = String(item['value']).split("-");
+         var amount = item.storeItem.get(yField);
+         
+         var num = amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+         var num1 = '$'+String(num).split(".");
+         
+         this.setTitle('Amount is'+' - '+ num1);
+        
+        }
+    </script>
+
+    <!-- <script type="text/javascript">   
+     var rows = JSON.parse('{!JSENCODE(gChartData)}');
+     alert(rows);
+      google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart);
+function drawChart() {
+
+  var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Stage');
+      data.addColumn('number', 'Amount');
+      data.addRow(rows);
+
+  var options = {
+    title: 'Company Performance',
+    hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}
+  };
+
+  var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+  chart.draw(data, options);
+
+}
+      </script>-->
+</head>
+    <body>
+    <apex:image url="{!$Resource.NanawallNewLogo}" height="95px" width="250px" style="margin-top: -70px;"/><br/><br/>
+        <div class="container">         
+        <apex:form styleClass="col-sm-5 col-lg-3 col-xs-6" style="float:right">
+         <apex:commandButton action="{!redirectHome}" value="Home" >
+         </apex:commandButton></apex:form>
+        <h style="font-size:30px; color: Red">KPI Dashboard</h><br/><br/>
+        <apex:outputPanel rendered="{!if(NOT(adminCheck), if(NOT(regionUser), if(NoAccessUser, true, false), false), false)}">
+        <h style="font-size:20px; color: white">Contact your Administrator to get access for this page</h>
+        </apex:outputPanel>
+        <apex:form rendered="{!if(NOT(communityuser), if(NOT(NoAccessUser), true, false), false)}">
+         <!-- <apex:actionFunction name="nRecords" action="{!getSalesReps}" status="loadingStatus"/> -->
+         <div class="row">
+              
+          <apex:actionFunction name="chartt" action="{!ChangeReport}" status="loadingStatus"/> 
+          <apex:actionFunction name="salesrepcal" action="{!ChangeReport}" status="loadingStatus"/>
+          
+        <!--  <h style="font-size:15px; color: white">Select Region and SalesRep</h><br/><br/>-->
+          <apex:outputPanel rendered="{!NOT(regionUser)}">
+          <div class="col-sm-5 col-lg-3 col-xs-8">
+              <h style="color: white">Select Region</h>&nbsp;&nbsp;<br/>
+          <apex:selectList value="{!regionname}" size="1" title="Region" onchange="changechart()" >
+          <apex:selectOptions value="{!Regionlist}"/>
+         <!-- <apex:actionSupport event="onchange" rerender="theBlock" action="{!ChangeReport}"/>  -->
+          <!--<apex:actionSupport event="onselect" action="{!getSalesReps}"/>-->
+           
+          </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+           </div></apex:outputPanel>
+           <div class="col-sm-5 col-lg-3 col-xs-8" style="margin-top:0px;">
+          <h style="color: white">Select Sales Representative</h>&nbsp;&nbsp;<br/>
+          <apex:selectList value="{!salesrepname}" size="1" title="Sales Reps" onchange="changeonsalesrep()">
+          <apex:selectOptions value="{!salesreps}"/>
+          <apex:actionSupport event="onchange" rerender="theBlock, theBlock2" action="{!ChangeReport}" status="loadingStatus"/>
+          </apex:selectList><br/><br/><br/><br/>
+         </div>
+         
+          </div>    
+
+          <div id="extraControls" class="loader hidden model"></div>     
+          </apex:form><br/> 
+          <apex:outputPanel id="theBlock" rendered="{!salesrepcheck}">
+          <!-- FIRST ROW OF BLOCKS -->      
+    <!-- Speedometer Chart-->
+    <div class="row">
+    <apex:outputPanel rendered="{!NOT(mobileCheck)}">
+            <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Goals - Actuals Vs Met </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>2016 Sales Goal:</u></b> Yearly Target
+                         <br/> <b><u>YTD sales Goal:</u></b> Prorated Target based on the number of 
+                         <br/> days completed till date in the current year
+                         <br/> <b><u>YTD Sales Actual:</u></b> Actual $ sold till date in the given year
+                         <br/> <b><u>Last 365 Days Sales:</u></b> Total $ Sold in last one year
+                         <br/> <b><u>Annual Goal Met:</u></b> YTD Sales Actual / Yearly Sales Goal
+                         <br/> <b><u>YTD Goal Met:</u></b>  YTD Sales Actual / YTD Sales Goal
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                    <hr>                              
+                            <div style="background-color: #515151; margin-top: -20px; height: 265px; width: 300px;">
+                            <span id="speedometer" style="margin-top: -50px;"></span>
+                            </div>
+                            <div style="margin-top: -270px; margin-left: 300px; height: 265px; width: 250px;">
+                                <div class="col-sm-12 col-lg-12">
+                                  <div id="hosting-table">
+                                    <div class="table_style4"> 
+                                      <div class="column">
+                                        <ul>
+                                          <li><strong>{!salesrepname}</strong></li>
+                                          <li style="text-align:left"> {!salesyear} Sales Goal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!yearsalesgoal} </li>
+                                          <li style="text-align:left"> YTD Sales Goal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!ytdsalesgoal} </li> 
+                                          <li style="text-align:left"> YTD Sales Actual&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!ytdsalesactual} </li> 
+                                          <li style="text-align:left"> Last 365 Days Sales&nbsp;&nbsp;&nbsp;$ {!fullyearsale} </li>
+                                          <li style="text-align:left"> Annual Goal Met&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!annualgoalsmet} %</li>
+                                          <li style="text-align:left"> YTD Goal Met&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!ytdgoalmet} %</li>
+                                        </ul>
+                                      </div><!--/ column-->
+                                    </div><!--/ Table Style-->
+                                  </div><!--/ Hosting Table-->  
+                                </div><!-- /span3 -->
+                        </div>
+                    </hr>
+                </div>
+            </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!mobileCheck}">
+            <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Goals - Actuals Vs Met </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>2016 Sales Goal:</u></b> Yearly Target
+                         <br/> <b><u>YTD sales Goal:</u></b> Prorated Target based on the number of 
+                         <br/> days completed till date in the current year
+                         <br/> <b><u>YTD Sales Actual:</u></b> Actual $ sold till date in the given year
+                         <br/> <b><u>Last 365 Days Sales:</u></b> Total $ Sold in last one year
+                         <br/> <b><u>Annual Goal Met:</u></b> YTD Sales Actual / Yearly Sales Goal
+                         <br/> <b><u>YTD Goal Met:</u></b>  YTD Sales Actual / YTD Sales Goal
+                         </p1>
+                         </div>
+                         </apex:image>
+                        </div>
+                        <div style="background-color: #515151; margin-top: 0px; height: 265px; width: 300px;">
+                          <span id="speedometer" style="margin-top: -50px;"></span>
+                            </div>
+                      </div>
+                   </div>                                                                           
+                        <div class="col-sm-10 col-lg-6 col-xs-12">
+                         <div class="dash-unit"> 
+                         <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>2016 Sales Goal:</u></b> Yearly Target
+                         <br/> <b><u>YTD sales Goal:</u></b> Prorated Target based on the number of 
+                         <br/> days completed till date in the current year
+                         <br/> <b><u>YTD Sales Actual:</u></b> Actual $ sold till date in the given year
+                         <br/> <b><u>Last 365 Days Sales:</u></b> Total $ Sold in last one year
+                         <br/> <b><u>Annual Goal Met:</u></b> YTD Sales Actual / Yearly Sales Goal
+                         <br/> <b><u>YTD Goal Met:</u></b>  YTD Sales Actual / YTD Sales Goal
+                         </p1>
+                         </div>
+                         </apex:image>
+                        </div>
+                                <div class="col-sm-12 col-lg-12">
+                                  <div id="hosting-table">
+                                    <div class="table_style4"> 
+                                      <div class="column">
+                                        <ul>
+                                          <li><strong>{!salesrepname}</strong></li>
+                                          <li style="text-align:left"> {!salesyear} Sales Goal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!yearsalesgoal} </li>
+                                          <li style="text-align:left"> YTD Sales Goal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!ytdsalesgoal} </li> 
+                                          <li style="text-align:left"> YTD Sales Actual&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!ytdsalesactual} </li> 
+                                          <li style="text-align:left"> Last 365 Days Sales&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ {!fullyearsale} </li>
+                                          <li style="text-align:left"> Annual Goal Met&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!annualgoalsmet} %</li>
+                                          <li style="text-align:left"> YTD Goal Met&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!ytdgoalmet} %</li>
+                                        </ul>
+                                      </div><!--/ column-->
+                                    </div><!--/ Table Style-->
+                                  </div><!--/ Hosting Table-->  
+                                </div><!-- /span3 -->
+                  
+                </div>
+            </div>
+            </apex:outputPanel>
+    <!-- Funnel Chart-->
+            <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Projected Pipeline By Stages </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;">Open Quoted Projects Total $ value by Stages</p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                    <hr>                              
+                           <div style="background-color:#FFFFFF; margin-top:-20px;" class="col-xs-12">
+                                 <apex:chart data="{!dataStagelist}" height="{!chartHeight}" width="{!chartWeight}" theme="Sky">
+                                    <apex:legend position="right"/>
+                                    <apex:axis type="Numeric" position="left" fields="data1"
+                                        title="Project Amount" dashSize="1" grid="true" >  
+                                        <apex:chartLabel rendererFn="axisFormat" />
+                                        </apex:axis> 
+                                    <apex:axis type="Category" position="bottom" fields="name"
+                                        title="Stages">
+                                        <apex:chartLabel rotate="360" display="over" font="9px Helvetica"/>
+                                    </apex:axis>
+                                    <apex:barSeries title="Project Amount" axis="left" orientation="vertical" xField="name" yField="data1">
+                                    <apex:chartLabel rendererFn="axisFormat" />
+                                     <apex:chartTips height="30" width="120" rendererFn="hoverFormat"/>     
+                                    </apex:barSeries>        
+                                    
+                                </apex:chart>
+                            </div> 
+                    </hr>
+                </div>
+            </div>
+    </div>  
+    <div class="row">
+              <div class="col-sm-5 col-lg-3 col-xs-12">
+
+            <!-- Success Ratio Comparison Sales Rep By Amount-->
+            <div class="half-unit">
+                <dtitle style="text-transform:uppercase">Success Ratio Sales Rep</dtitle> <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Success Ratio:</u></b> Displays your Closing rate on Projects 
+                         <br/>for the current and the previous year by Total Dollar 
+                         <br/> Amounts (Value) and Total Number (Volume).                         
+                         <br/>The arrow compares the current year closing rate to 
+                         <br/> the previous years and signifies your performance.
+                         <br/><b><u>Success RatioBy $ Value:</u></b> X÷Y 
+                         <br/> X = Total $ Value on Projects marked as Closed Won 
+                         <br/> in the Current Year.
+                         <br/> Y=Total $ Value on ProjectsCreated in the CurrentYear. 
+                         <br/>(Only Projects with atleast one or more Quotes sent to 
+                         <br/>Non-Architects are considered)
+                         <br/> <i>NOTE: Prorated $ Values are considered for X and Y, 
+                         <br/>based on commission split percentages, for the projects
+                         <br/>which are split between you and other Sales 
+                         <br/>Representatives.</i>
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                                              
+                <hr>
+                    <div style="margin-top:-20px;">
+                    <dtitle style="text-transform:uppercase">By $ Value</dtitle> 
+                    </div>
+                    <div class="cont" style="margin-top:3px;">                   
+                    <apex:repeat var="drt" value="{!wrappertablemetriclist}">
+                        <apex:outputPanel rendered="{!metriccheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                          <bold>{!drt.previoussuccessratio} </bold>% |  {!drt.PreviousYear}<br/>
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metriccheckdown}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                          <bold>{!drt.previoussuccessratio} </bold>% |  {!drt.PreviousYear}<br/>
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metriccheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                          <bold>{!drt.previoussuccessratio} </bold>% |  {!drt.PreviousYear}<br/>
+                          </p>
+                        </apex:outputPanel>
+                      </apex:repeat>
+                    </div>
+                </hr>   
+            </div>
+
+             <!-- Success Ratio Comparison Sales Rep By Volume-->
+            <div class="half-unit" style="margin-top:-35px;">
+                <dtitle style="text-transform:uppercase">By Volume</dtitle> <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Sucess Ratio By Volume:</u></b> X÷Y
+                         <br/> X= Total Number of Projects, owned by you,
+                         <br/> marked as Closed Won in the Current Year
+                         <br/> Y= Total Number of Projects Created, Owned
+                         <br/> by you, in the Current Year.
+                         <br/>(Only Projects with atleast one or more
+                         <br/> Quotes sent to Non-Architects are considered)
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                <hr>                   
+                    <div class="cont">
+                        <apex:repeat var="drtv" value="{!wrappertablevolumemetriclist}">
+                        <apex:outputPanel rendered="{!metricVolumeCheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                          <bold>{!drtv.previoussuccessratio} </bold>% |  {!drtv.PreviousYear}<br/>
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricVolumeCheckdown}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                          <bold>{!drtv.previoussuccessratio} </bold>% |  {!drtv.PreviousYear}<br/>
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricVolumeCheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                          <bold>{!drtv.previoussuccessratio} </bold>% |  {!drtv.PreviousYear}<br/>
+                          </p>
+                        </apex:outputPanel>
+                      </apex:repeat>
+                    </div>
+                </hr>
+            </div>
+        </div>
+        
+        <!-- Success Ratio Comparison with Region By Amount-->
+        <div class="col-sm-5 col-lg-3 col-xs-12" >
+            <div class="half-unit">
+                <dtitle style="text-transform:uppercase">Success Ratio Comparison with Region </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Success Ratio:</u></b> Displays Average Closing Rate of Sales Reps
+                         <br/> in your Region, for the current year, by Total Dollar
+                         <br/> Amounts (Value) and Total Number (Volume).
+                         <br/> The arrow compares your current year closing rate to
+                         <br/> the Regional average and signifies your performance.
+                         <br/> <b><u>Success RatioBy $ Value:</u></b> X÷Y
+                         <br/> X = Total $ Value on Projects marked as Closed Won 
+                         <br/> in the Current Year for all the Reps in your region
+                         <br/> Y =Total $ Value on Projects Created in the Current
+                         <br/> Year by all the Reps in your region 
+                         <br/>(Only Projects with atleast one or more Quotes sent 
+                         <br/> to Non-Architects are considered).
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                
+                <hr>
+                    <div style="margin-top:-20px;">
+                    <dtitle style="text-transform:uppercase">By $ Value</dtitle> 
+                    </div>
+                    <div class="cont" style="margin-top:3px;">
+                        <apex:repeat var="drt" value="{!wrappertableregionmetricsList}">
+                        <apex:outputPanel rendered="{!metricregioncheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricregioncheckdown}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricregioncheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                      </apex:repeat>
+                    </div>
+                </hr>   
+            </div>
+
+             <!-- Success Ratio Comparison with Region By Volume-->
+            <div class="half-unit" style="margin-top:-35px;">
+                <dtitle style="text-transform:uppercase">By Volume </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Sucess Ratio By Volume:</u></b> X÷Y
+                         <br/> X= Total Number of Projects marked as Closed Won in
+                         <br/> the Current Year owned by all the Reps in your region
+                         <br/> Y=Total Number of Projects Created in the CurrentYear
+                         <br/> by all the reps in your region 
+                         <br/>(Only Projects with atleast one or more Quotes sent 
+                         <br/> to Non-Architects are considered).
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                <hr>
+                    <div class="cont">
+                        <apex:repeat var="drtv" value="{!wrappertablevolumeregionmetricslist}">
+                        <apex:outputPanel rendered="{!metricregionvolumecheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricregionvolumecheckdown}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricregionvolumecheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                      </apex:repeat>
+                    </div>
+                </hr>
+            </div>
+        </div>
+        
+            <!-- Success Ratio Comparison with Company By Amount-->
+        <div class="col-sm-5 col-lg-3 col-xs-12" >
+            <div class="half-unit">
+                <dtitle style="text-transform:uppercase">Success Ratio Comparison with Company </dtitle> <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Success Ratio:</u></b> Displays Average Closing Rate of all  
+                         <br/>Sales Reps for the company, for the current year, by Total
+                         <br/>Dollar Amounts (Value) and Total Number (Volume).
+                         <br/> The arrow compares your current year closing rate to
+                         <br/> the Company average and signifies your performance.
+                         <br/> <b><u>Success RatioBy $ Value:</u></b> X÷Y
+                         <br/> X = Total $ Value on Projects marked as Closed Won 
+                         <br/> in the Current Year by all the Reps of Company.
+                         <br/> Y=Total $ Value on Projects Created in the CurrentYear
+                         <br/> by all the Reps of Company 
+                         <br/>(Only Projects with atleast one or more Quotes 
+                         <br/> sent to Non-Architects are considered)
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                
+                <hr>
+                    <div style="margin-top:-20px;">
+                    <dtitle style="text-transform:uppercase">By $ Value</dtitle> 
+                    </div>
+                    <div class="cont" style="margin-top:3px;">
+                        <apex:repeat var="drt" value="{!wrappertableyearmetricsList}">
+                        <apex:outputPanel rendered="{!metricyearcheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricyearcheckdown}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricyearcheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                      </apex:repeat>
+                    </div>
+                </hr>   
+            </div>
+
+             <!-- Success Ratio Comparison with Company By Volume-->
+            <div class="half-unit" style="margin-top:-35px;">
+                <dtitle style="text-transform:uppercase">By Volume</dtitle> <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Sucess Ratio By Volume:</u></b> X÷Y
+                         <br/> X= Total Number of Projects marked as Closed Won
+                         <br/> in the Current Year owned by all the Reps
+                         <br/> Y= Total Number of Projects Created in the Current 
+                         <br/> Year by all the reps 
+                         <br/>(Only Projects with atleast one or more Quotes 
+                         <br/> sent to Non-Architects are considered).
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                <hr>
+                    <div class="cont">
+                        <apex:repeat var="drtv" value="{!wrappertablevolumeyearmetricsList}">
+                        <apex:outputPanel rendered="{!metricvolumeyearcheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricvolumeyearcheckdown}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!metricvolumeyearcheckequal}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drtv.successratio} </bold> % | {!drtv.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>
+                      </apex:repeat>
+                    </div>
+                </hr>
+            </div>
+        </div>
+          
+        
+        <div class="col-sm-5 col-lg-3 col-xs-12">
+            <!-- Sie Visits-->
+            <div class="half-unit">
+                <dtitle style="text-transform:uppercase">Site Visits (Used)</dtitle> <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>Site Visits:</u></b>  Displays the number of  Projects  
+                         <br/> with Installer visit completed.
+                         <br/> <b><u>USED:</u></b> 
+                         <br/>(Total Number of Projects with Installer visit 
+                         <br/>completed) 
+                         <br/> ------------------------------------------------------
+                         <br/>(Total Number of Projects Created in current 
+                         <br/>year, owned by you).
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                                         
+                <hr>               
+                    <div class="cont">
+                        <apex:repeat var="vis" value="{!wrappertablesitevisitList}">
+                        <apex:outputPanel rendered="{!usedCheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!vis.siteVisitCount} / {!vis.totalOpportunityCount}</bold> | {!vis.siteUsedRatio} % <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(usedCheck)}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!vis.siteVisitCount} / {!vis.totalOpportunityCount}</bold> | {!vis.siteUsedRatio} % 
+                          <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <!--<apex:outputPanel rendered="{!metricyearcheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!drt.successratio} </bold> % | {!drt.yearname} <br/>  
+                          </p>
+                        </apex:outputPanel>-->
+                      </apex:repeat>
+                    </div>
+              </hr>  
+             </div> 
+            <div class="half-unit" style="margin-top:-35px;">
+                <dtitle style="text-transform:uppercase">Site Visits (Success) </dtitle>
+                <div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;"><b><u>SUCCESS Rate:</u></b> Percentage of Projects Won out of
+                         <br/> the total Number of Projects with Installer visit
+                         <br/> completed
+                         <br/> <i>NOTE: Setting up site visits early in the project 
+                         <br/> increases the probability of winning the Project. 
+                         <br/> Target 20% or above Used rate. </i>
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                <hr>
+                    <div class="cont">
+                        <apex:repeat var="vis" value="{!wrappertablesitevisitList}">
+                        <apex:outputPanel rendered="{!successCheck}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/up.png')}"/> 
+                          <bold>{!vis.siteSuccessRatio} </bold> % <br/>  
+                          </p>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(successCheck)}">
+                          <p><apex:image value="{!URLFOR($Resource.BootstrapTemplate,'/assets/img/down.png')}"/>
+                          <bold>{!vis.siteSuccessRatio} </bold> % <br/>  
+                          </p>
+                        </apex:outputPanel>
+                       <!-- <apex:outputPanel rendered="{!metricyearcheckEqual}">
+                          <p><apex:image url="{!$Resource.OrangeEqualArrow}" width="20" height="20"/> 
+                          <bold>{!vis.siteUsedRatio} </bold> % <br/>  
+                          </p>
+                        </apex:outputPanel>-->
+                      </apex:repeat>
+                    </div>                        
+                </hr>   
+            </div>          
+       </div>   
+    </div> 
+    <!-- Trend Charts -->
+        <div class="row">
+            <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Count of Quotes Created Month on Month (Last 3 Years) </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;">Number of Quotes Created Month on Month in the 
+                         <br/> current year compared to previous two years.
+                         <br/> (Only Quotes sent to Non-Architects are considered).</p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                    <hr>                              
+                            <div style="background-color:#FFFFFF; margin-top:-20px;">
+                                 <apex:chart height="{!chartHeight}" width="{!chartWeight}" data="{!datalist}" colorSet="#156F9E,#6BAE4A,#FF9123">
+                                    <apex:legend position="right"/>
+                                    <apex:axis type="Numeric" position="left" fields="data1,data2,data3"
+                                        title="Quote Created by YOY" dashSize="1" grid="true"/>   
+                                    <apex:axis type="Category" position="bottom" fields="name"
+                                        title="Months">
+                                        <apex:chartLabel rotate="315"/>
+                                    </apex:axis>
+                                    <apex:barSeries title="{!firstYearString},{!secondYearString},{!thirdYearString}" axis="bottom" orientation="vertical" xField="name" yField="data1,data2,data3">      
+                                   
+                                    </apex:barSeries>             
+                                </apex:chart>
+                            </div>
+                    </hr>
+                </div>
+            </div>
+            <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Count of Orders Created Month on Month (Last 3 Years) </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;">Number of Orders Created Month on Month in the 
+                         <br/>current year compared to previous two years.
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                    <hr>                              
+                           <div style="background-color:#FFFFFF; margin-top:-20px;">
+                            <apex:chart height="{!chartHeight}" width="{!chartWeight}" data="{!dataOrderlist}" colorSet="#156F9E,#6BAE4A,#FF9123">
+                                <apex:legend position="right"/>
+                                <apex:axis type="Numeric" position="left" fields="data1,data2,data3"
+                                    title="Order Created by YOY" dashSize="5" grid="true"/>   
+                                <apex:axis type="Category" position="bottom" fields="name"
+                                    title="Months">
+                                    <apex:chartLabel rotate="315"/>
+                                </apex:axis>
+                                <apex:barSeries title="{!firstYearString},{!secondYearString},{!thirdYearString}" axis="bottom" orientation="vertical" xField="name" yField="data1,data2,data3">      
+                                </apex:barSeries>             
+                            </apex:chart>
+                            </div>                           
+                    </hr>
+                </div>
+            </div>
+           </div>
+           <div class="row"> 
+           <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Project Count (Rolling 365 Days) - Quoted </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;">Rolling 12 month average count of Projects Created <br/> (with atleast one or more Quotes sent to Non-Architect).</p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                    <hr>                              
+                            <div style="background-color:#FFFFFF; margin-top:-20px;">
+                            <apex:chart height="{!chartHeight}" width="{!chartWeight}" data="{!DataRollingArchList}" colorSet="#156F9E,#6BAE4A,#FF9123">
+                                <apex:legend position="{!legendName}"/>
+                                <apex:axis type="Numeric" position="left" fields="data1,data3"
+                                    title="Project Count" dashSize="5" grid="true"/>
+                                    <apex:axis type="Numeric" position="right" fields="data2" title="Rolling 365 days" dashSize="5" grid="true"/>     
+                                <apex:axis type="Category" position="bottom" fields="name" title="Months">
+                                    <apex:chartLabel rotate="315"/>
+                                </apex:axis>
+                                <apex:barSeries title="{!fname},{!sname}" axis="bottom" orientation="vertical" xField="name" yField="data1,data3" stacked="True">
+                                </apex:barSeries>    
+                                <apex:lineSeries title="Rolling 365 Days" axis="right" xField="name" yField="data2" markerType="circle" markerSize="4" markerFill="#8E35EF"> 
+                                 </apex:lineSeries>
+                            </apex:chart>
+                            </div>
+                    </hr>
+                </div>
+            </div>
+            <div class="col-sm-10 col-lg-6 col-xs-12">
+                <div class="dash-unit">
+                    <dtitle style="text-transform:uppercase">Project Count - Quoted Only to Architects </dtitle><div class="HoverPopup" style="height:0px; width:0px; float:right;">
+                          <apex:image value="{!$Resource.informationIcon}" height="20px;" width="20px;"> 
+                         <div style="text-decoration: none; white-space: pre;">
+                         <p1 style="float:left; margin-top:-20px; font-family:Georgia; font-size:12px;">Count of Projects Created
+                         <br/>(Have been Quoted to only Architects so far).
+                         </p1>
+                         </div>
+                          </apex:image>
+                          </div>
+                          
+                    <hr>                              
+                            <div style="background-color:#FFFFFF; margin-top:-20px;">
+                            <apex:chart height="{!chartHeight}" width="{!chartWeight}" data="{!DataRollingList}" colorSet="#156F9E,#6BAE4A,#FF9123">
+                                <apex:legend position="{!legendName}"/>
+                                <apex:axis type="Numeric" position="left" fields="data1"
+                                    title="Project Count" dashSize="5" grid="true"/>
+                                   <!--  <apex:axis type="Numeric" position="right" fields="data2" title="Rolling 365 days" dashSize="5" grid="true"/>  -->    
+                                <apex:axis type="Category" position="bottom" fields="name" title="Months">
+                                    <apex:chartLabel rotate="315"/>
+                                </apex:axis>
+                                <apex:barSeries title="Project Count" axis="bottom" orientation="vertical" xField="name" yField="data1">
+                                </apex:barSeries>    
+                                <!--  <apex:lineSeries title="Rolling 365 Days" axis="right" xField="name" yField="data2" markerType="circle" markerSize="4" markerFill="#8E35EF"> 
+                                 </apex:lineSeries> -->
+                            </apex:chart>
+                            </div>
+                    </hr>
+                </div>
+            </div>
+            
+        </div>
+        </apex:outputPanel>         
+    </div>    
+    </body>
+   
+    <script>
+        var svg = d3.select("#speedometer")
+                .append("svg:svg")
+                .attr("width", 300)
+                .attr("height", 300);
+
+        var gauge = iopctrl.arcslider()
+                .radius(120)
+                .events(false)
+                .indicator(iopctrl.defaultGaugeIndicator);
+        gauge.axis().orient("in")
+                .normalize(true)
+                .ticks(12)
+                .tickSubdivide(3)
+                .tickSize(10, 8, 10)
+                .tickPadding(5)
+                .scale(d3.scale.linear()
+                        .domain([0, 100])
+                        .range([-3*Math.PI/4, 3*Math.PI/4]));
+
+        var segDisplay = iopctrl.segdisplay()
+                .width(80)
+                .digitCount(7)
+                .negative(false)
+                .decimals(0);
+
+        svg.append("g")
+                .attr("class", "segdisplay")
+                .attr("transform", "translate(130, 200)")
+                .call(segDisplay);
+
+        svg.append("g")
+                .attr("class", "gauge")
+                .call(gauge);
+
+
+                    segDisplay.value({!ytdSallesActualDecim});
+                    gauge.value({!annualgoalsmet});                 
+    
+    </script>
+</html>
+</apex:page>
