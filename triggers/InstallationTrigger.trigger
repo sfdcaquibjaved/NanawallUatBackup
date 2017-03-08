@@ -52,8 +52,7 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
    if (((trigger.isUpdate) || (trigger.isInsert)) && (trigger.isBefore ))  {
         List < Installation__c > InstallationTaskList = new List < Installation__c > ();
         for (installation__c i: trigger.new) {
-            if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
-                    .Installation_Date__c != i.Installation_Date__c)))) {
+            if ((Trigger.isBefore) && ((trigger.isInsert) )) {
                 InstallationTaskList.add(i);
             }
         }

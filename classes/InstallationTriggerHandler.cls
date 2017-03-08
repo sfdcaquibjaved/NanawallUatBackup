@@ -214,6 +214,7 @@ public class InstallationTriggerHandler {
                                     i.Assigned_to__c = zip.Installer_User__c ;
                                     i.OwnerID = zip.Installer_User__c ;
                             }
+                        i.Installer_Manager__c = i.Installer_Name__c	 ; 
                 }
             }
         }

@@ -209,10 +209,11 @@ public with sharing class QuoteTriggerHelper{
             for(project__c p:projList){
             recal.put(p.id,0);
             }
+            
+            
+            }
             if(recal.keyset().size()>0){
             reCalculateProjectAmtOnOrders(recal);
-            }
-            
             }
             if (updateProjList.size() > 0) {
                 //Updating the Project status and amount

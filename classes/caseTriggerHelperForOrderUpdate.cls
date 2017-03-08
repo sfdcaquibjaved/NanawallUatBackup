@@ -63,4 +63,27 @@ public class caseTriggerHelperForOrderUpdate{
             }
         }
     }
+    
+    public static void updateSLorderFromManufact(List<Case> casList,set<id> caseOrdIds){
+    //set<id> caseSet=new set<id>();
+    list<Manufacturing_Order__c> ManufOrderList=[select id,Order__c,Supplier_WO_Number__c from Manufacturing_Order__c where Order__c in :caseOrdIds AND Supplier_WO_Number__c !='' And Supplier_WO_Number__c!='0'];
+    
+    List<case> caseList =new List<case>();
+    //caseSet=[select id,Order__c,SL_Order_Id_Manuf__c from case where Order__c];
+    for(case c:casList){
+        integer count =0;
+          for(Manufacturing_Order__c mo:ManufOrderList){
+              if(c.order__c==mo.order__C){
+              c.SL_Order_Id_Manuf__c=mo.Supplier_WO_Number__c;
+              count+=1;
+              }
+          }
+          //on update if selected order has Sl order  blank,then overwrite the existing value with null
+          if(count==0){
+          c.SL_Order_Id_Manuf__c='';
+          }
+    
+    }
+    
+    }
 }

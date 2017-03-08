@@ -123,4 +123,18 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
         caseTriggerHelperForOrderUpdate.autoUpdateConTypeOnCase(Trigger.new,caseConIds);
     }
     
+    set<id> caseOrdIds = new set<id>();
+    for(case c:trigger.new){
+    if( trigger.isBefore && (trigger.isInsert || (trigger.isUpdate && (Trigger.oldMap.get(c.id).order__c != c.order__c)))){
+        if(c.order__c !=null){
+        caseOrdIds.add(c.order__c);
+        }  
+    }
+    
+        if(caseOrdIds.size()>0){    
+        caseTriggerHelperForOrderUpdate.updateSLorderFromManufact(Trigger.new,caseOrdIds);
+        }
+    }
+    
+    
 }

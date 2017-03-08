@@ -1,0 +1,42 @@
+<apex:page standardController="Quote__c" extensions="NanaQuote_Create_Order_Controller_Mobile" action="{!CreateOrder}">
+
+    <script>
+    
+   
+    
+        var orderId='{!existingOrder}';
+//        alert(orderId);
+        
+        function doRedirect()
+        {
+      if ((typeof sforce != 'undefined') && (sforce != null) ) {
+     // in SF1
+     console.log("here we're in sf1");
+     // navigate to the page
+     sforce.one.navigateToSObject('{!existingOrder}');
+    } else {
+     // not in Salesforce1
+
+     console.log("here we're in \'standard\' SF");
+     console.log('order id is: {!existingOrder}}');
+     window.location.href='/{!existingOrder}';
+    }
+    return false;
+        }
+        
+        if( orderId != '' && orderId != null ) 
+        { 
+            setTimeout('doRedirect()', 2000);
+        }
+        else
+        { 
+            alert('Order not found');
+        }
+    </script>
+
+    <apex:Pagemessages /> 
+
+
+<apex:outputtext value="{!Quote__c.Quote_ID__c}" rendered="false" />
+<apex:outputtext value="{!Quote__c.Order__c}" rendered="false" />
+</apex:page>

@@ -1,6 +1,5 @@
 <apex:page standardController="Installation__c" extensions="MultipleUploadController">
-
-    <apex:stylesheet value="{!URLFOR($Resource.SLDS221,'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+apex:stylesheet value="{!URLFOR($Resource.SLDS221,'assets/styles/salesforce-lightning-design-system-vf.css')}" />
     <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
 
     <head>
@@ -12,7 +11,20 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+.button{
+    height: 96px;
+    width: 88px;
+}
+</style>
+<style>
+input.remove-no-file-chosen
+{
+   width: 90px;
+   color: #fff;
+}
 
+</style>
     </head>
 
     <body>
@@ -66,11 +78,15 @@
                         <div class="form-element__group">
                             <div class="slds-form-element__row">
                                 <div class="slds-form-element">
+<div class="slds-grid slds-wrap slds-grid--pull-padded">
+
                                     <apex:repeat value="{!allFileList}" var="AFL">
-                                        <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" accept="image/*;capture=camera" />
-                                            
-                                        <br/><br/>
+  <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--5-of-6 slds-large-size--8-of-12">
+                                        <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" accept="image/*;capture=camera" styleclass="button"/>
+
+                                        </div>
                                     </apex:repeat>
+</div>
                                 </div>
                             </div>
                         </div>
