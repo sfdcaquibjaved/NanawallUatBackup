@@ -1,0 +1,30 @@
+<apex:page standardController="Quote__c" extensions="NewQuoteController">
+<apex:form >
+<head>
+<script type='text/javascript'>
+
+if( {!Opportunity.is_a_dupe__c} != true && {!projIsNull} != true )
+{
+  window.open('http://{!ServerAddress}/login.aspx?sfo={!OpportunityID}&u={!UserID}','Nana');
+  window.location.href = ( /\/Community\//.test(window.location) ? '/Community' : "" ) +  ( /\/reps\//.test(window.location) ? '/reps' : "" )    + '/{!ProjectId}';
+}
+</script>
+</head>
+
+<apex:outputtext rendered="{!Opportunity.Is_A_Dupe__c}">
+	<h3>This project is a duplicate.</h3>
+	<p>Quotes cannot be added to duplicate projects.</p>
+	
+	<a href='{!$CurrentPage.parameters.retURL}'>Back to opportunity</a>
+</apex:outputtext>
+
+<apex:outputtext rendered="{!projIsNull}">
+	<h1>There was a problem loading this opportunity.</h1>
+	<p>It looks like you may have hit the back button or have otherwise accessed this page in an invalid manner.</p>
+	
+	<a href='{!$CurrentPage.parameters.retURL}'>Try to go back</a>
+</apex:outputtext>
+
+
+  </apex:form>
+</apex:page>

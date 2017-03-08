@@ -1,0 +1,63 @@
+<apex:page standardController="Quote__c" extensions="Quote_AuditEventList_Controller">
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+
+<apex:form >
+
+	<apex:pagemessages />
+
+
+	<apex:commandbutton action="{!getevents}" value="Get Events" />
+
+	<div id='EventContainer'> 
+		
+	</div>
+
+</apex:form>
+
+
+
+<apex:outputtext rendered="false" value="{!Quote__c.Quote_ID__c}" />
+<script>
+	var jsonEvents = '{!jsonEvents}';
+	
+	var data = [];
+	if(jsonEvents != null && jsonEvents != '' )
+	{
+		data = JSON.parse(jsonEvents);
+	
+		var html = '<table width="75%">';
+			html += '<tr>';
+			html += '<td></td>';
+			html += '<td><b>Date/Time</b></td>';
+			html += '<td><b>Rep</b></td>';			
+			html += '<td><b>Contact</b></td>';			
+			html += '<td><b>Description</b></td>';
+			html += '</tr>';
+	
+		for( var i = 0; i<data.length; i++ )
+		{
+console.log( 'Related ID: ' + data.RelatedSalesforceID);		
+			var o = data[i];
+			var d = Date.parse
+			html += '<tr>';
+			html += '<td>'+(i+1)+'</td>';
+			html += '<td>'+o.TimeStamp+'</td>';
+			html += '<td>'+o.RepName+'</td>';			
+			html += '<td>'+( o.RelatedSalesforceID != null ? '<a href="/'+o.RelatedSalesforceID+'" target="_blank">'+o.Name+'</a>' : '')+'</td>';			
+			html += '<td>'+o.Description+'</td>';
+			html += '</tr>';
+		}
+		html += '</table>';
+
+		html += '<br><b>* Note: This list is only for activities greater than 60 days old.</b>';
+		
+		
+		
+		jQuery('#EventContainer').html(html);
+		
+	}
+</script>
+</apex:page>

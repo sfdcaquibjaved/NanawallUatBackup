@@ -1,0 +1,41 @@
+<apex:page standardController="Quote__c" extensions="QuoteTransferController" showHeader="true" id="quoPage" >
+<apex:form id="quoPageForm">
+<apex:pageMessages ></apex:pageMessages>
+    <apex:pageBlock title="Quote Transfer" id="quoPageBlock" >       
+        <apex:pageBlockSection title="Select the Opportunity" columns="1" collapsible="false" id="oppDetail">
+            <apex:pageBlockSectionItem id="quoOppItem">
+                <apex:outputLabel value="Opportunity" />
+                <apex:inputField value="{!quo.Opportunity__c}" required="true" id="quoOpp">
+                    <apex:actionSupport event="onchange"  action="{!obtainDetails}" rerender="resOppDetails" status="loadingStatus"/> 
+                </apex:inputField>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!transfer}" Value="Transfer" reRender="quoPageForm" status="loadingStatus"/>
+        <apex:commandButton action="{!cancel}" value="Cancel"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="Opportunity details" id="resOppDetails" >
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Opportunity Name" />
+            <apex:outputText value="{!opp.Name}" />
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Account Name" />
+            <apex:outputText value="{!opp.Account.Name}" />
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+        <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                    <div class="waitingHolder" style="top: 50%; width: 110px;">
+                        <img class="waitingImage" src="/img/loading.gif" />
+                        <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                    </div>
+                </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+</apex:form>
+</apex:page>

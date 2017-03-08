@@ -1,0 +1,22 @@
+<apex:page standardcontroller="Contact" extensions="Contact_Check_Showroom" showHeader="false" sidebar="false">
+<style>
+	body{ background-color: #white; }
+</style>
+
+<script type='text/javascript'>
+	function refreshPage() 
+	{
+		document.location.href = '/apex/Contact_Check_Showroom?id={!Contact.id}';
+	}
+
+	if( '{!Contact.Refresh_Showroom__c}' == 'true' ) 
+	{
+		setTimeout('refreshPage()',5000);
+	
+	}
+</script>
+
+<apex:outputtext value="{!Output}"   />
+<apex:outputtext value="{!Contact.ShowroomInfo__c}" rendered="false" />
+<apex:outputtext value="{!Contact.Refresh_Showroom__c}" rendered="false" />
+</apex:page>

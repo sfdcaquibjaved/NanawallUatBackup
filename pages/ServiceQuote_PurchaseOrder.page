@@ -1,0 +1,393 @@
+<apex:page standardcontroller="Service_Quote__c" renderAS="pdf" extensions="ServiceQuote_ReportController" cache="false">
+<head>
+    <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.service_quote_files, 'service_quote_files/report_styles.css')}" media="print" />
+</head>
+<body>
+
+<apex:form >
+<apex:pagemessages />
+
+    
+    <!--  po body wrapper -->
+    <apex:outputpanel rendered="{!POBody_Display_Rendered}">
+        <div class='header'>
+            <div style='width: 100%'>
+                <table width="100%">
+                    <tr>
+                        <td valign='top'><img src='{!URLFOR($Resource.service_quote_files, "service_quote_files/nanalogo.jpg")}' width='200px' /></td>
+                        <td valign='top' style='font-size: 10px'>
+                            Nana Wall Systems Inc. <br />
+                            100 Meadow Creek Drive<br />
+                            Suite 250<br /> 
+                            Corte Madera CA 94925<br />
+                            800-873-5673 x256<br />
+                            415-383-3148 x256<br /> 
+                            Fax 415-383-0312
+                        </td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td class='labelCell' style='font-size: 10px'>Date:</td>
+                                    <td style='font-size: 10px'>
+                                        <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                            <apex:param value="{!Service_Quote__c.CreatedDate}" /> 
+                                        </apex:outputText>                              
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' style='font-size: 10px'>Purchase Order #:</td>
+                                    <td style='font-size: 10px'>
+                                        <apex:outputText value="{!Service_Quote__c.name}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' style='font-size: 10px'>Service Rep:</td>
+                                    <td style='font-size: 10px'>{!Service_Quote__c.case__r.Responsible_Rep__c}</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' style='font-size: 10px'>Reference Order #:</td>
+                                    <td style='font-size: 10px'>{!Service_Quote__c.Order_Number_MF__c} / SL #: {!Service_Quote__c.SL_Order_Id__c}</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' style='font-size: 10px'>Project:</td>
+                                    <td style='font-size: 10px'>
+                                        {!Service_Quote__c.Case__r.ProjectName__r.Name}
+                                    </td> 
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr><td colspan='4'><hr width='100%' /></td></tr>
+                </table>    
+            </div>
+        </div>  
+        <div class="footer">        
+            <div>Page <span class="pagenumber"/> of <span class="pagecount"/></div> 
+        </div>  
+        
+        <div class='content'>
+        
+            <p>
+                <table cellspacing='3' cellpadding='3'>
+                    <tr>
+                        <td valign='top'>
+                            <table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
+                                <tr>
+                                    <td class = 'labelCell' colspan='2' style='font-weight: bold'>VENDOR</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' width='50'>Name</td>
+                                    <td>{!POVendor.Company}</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' width='50'>Email</td>
+                                    <td>{!POVendor.Email}</td> 
+                                </tr>
+                                <tr>
+                                    <td class='labelCell'>Address</td>
+                                    <td>{!POVendor.Address_1__c}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td class='labelCell' width='30'>City</td>
+                                                <td align='left' width='85'>{!POVendor.nrCity__c}</td>
+                
+                                                <td class='labelCell' width='30'>State</td>
+                                                <td align='left' width='80'>{!POVendor.nrState__c}</td>
+                
+                                                <td class='labelCell' width='30'>Zip</td>
+                                                <td align='left' width='45'>{!POVendor.Zip__c}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td class='labelCell'>Phone</td>
+                                                <td>{!POVendor.Phone}</td>
+                
+                                                <td class='labelCell'>Fax</td>
+                                                <td>{!POVendor.Fax}</td>
+                                            </tr>
+                                        </table> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell'><!-- Email --></td>
+                                    <td><!-- {!POVendor.Email} --></td>
+                                </tr>
+                                
+                            </table>                    
+                        
+                        </td>
+                        <td> 
+                        <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',false,true)}">
+
+                            <table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
+                                <tr>
+                                    <td class = 'labelCell' colspan='2' style='font-weight: bold'>To</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell'>Name</td>
+                                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell'>Care Of</td>
+                                    <td>{!Service_Quote__c.Care_Of__c}</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell' width='50'>Company</td> 
+                                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class='labelCell'>Address</td>
+                                    <td>{!Service_Quote__c.Ship_Too_Street__c}</td>
+                                </tr>
+                                <!--<tr>
+                                    <td class='labelCell'>Address 2</td>
+                                    <td>{!Service_Quote__c.Ship_To_Address_2__c}</td>
+                                </tr>-->
+                                <tr>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td class='labelCell' width='30'>City</td>
+                                                <td width='85'>{!Service_Quote__c.Ship_Too_City__c}</td>
+                
+                                                <td width='30' class='labelCell'>State</td>
+                                                <td width='80'>{!Service_Quote__c.Ship_To_State__c}</td>
+                                                
+                                                <td width='30' class='labelCell'>Country</td>
+                                                <td width='80'>{!Service_Quote__c.Ship_Too_Country__c}</td>
+                
+                                                <td width='30' class='labelCell'>Zip</td>
+                                                <td width='45'>{!Service_quote__c.Ship_Too_Zip__c}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td class='labelCell'>Phone</td>
+                                                <td>{!Service_Quote__c.Ship_Too_phone__c}</td>
+                
+                                                <td class='labelCell'>Fax</td>
+                                                <td>{!Service_Quote__c.Ship_To_Fax__c}</td>
+                                            </tr>
+                                        </table> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell'>Email</td>
+                                    <td>{!Service_Quote__c.Ship_Too_Email__c}</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelCell'>Shipping Method</td>
+                                    <td>{!PO_Shipmethod}</td>
+                                </tr>
+                                
+                            </table>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!IF(Service_Quote__c.RecordType.Name='Shopify Service Quote',true,false)}">
+        <p>
+             <table  style='border: 1px solid black; min-height: 200px' width='330' cellpadding='2' cellspacing='5'>
+                <tr>
+                    <td class = 'labelCell' colspan='2'>To</td>
+                </tr>
+                <tr>
+                    <td class='labelCell'>Name</td>
+                    <td>{!Service_Quote__c.Send_Quote_To_Contact__r.FirstName} {!Service_Quote__c.Send_Quote_To_Contact__r.LastName}</td>
+                </tr>
+                <tr>
+                    <td class='labelCell'>Care Of</td>
+                    <td>{!Service_Quote__c.Care_Of__c}</td>
+                </tr>
+                <tr>
+                    <td class='labelCell'>Company</td> 
+                    <td>{!Service_Quote__c.Ship_Too_Company_Name__c}</td>
+                </tr>
+                <tr>
+                    <td class='labelCell'>Address</td>
+                    <td>{!Service_Quote__c.Shopify_Ship_To_Street__c}</td>
+                </tr>
+                 <!-- <tr>
+                   <td class='labelCell'>Address 2</td>
+                    <td>{!Service_Quote__c.Ship_To_Address_2__c}</td>
+                </tr>  --> 
+                <tr>
+                    <td colspan='2'>
+                        <table>
+                            <tr>
+                                <td class='labelCell'>City</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_City__c}</td>
+
+                                <td class='labelCell'>State</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_State__c}</td>
+                                
+                                <td class='labelCell'>Country</td>
+                                <td>{!Service_Quote__c.Shopify_Ship_To_Country__c}</td>
+
+
+                                <td class='labelCell'>Zip</td>
+                                <td>{!Service_quote__c.Shopify_Ship_To_Zip__c}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2'>
+                        <table width='350'>
+                            <tr>
+                                <td class='labelCell'>Phone</td>
+                                <td width='150'>{!Service_Quote__c.Shopify_Ship_To_phone__c}</td>
+
+                                <td class='labelCell'>Fax</td>
+                                <td width='150'>{!Service_Quote__c.Ship_To_Fax__c}</td>
+                            </tr>
+                        </table> 
+                    </td>
+                </tr>
+                <tr>
+                    <td class='labelCell'>Email</td>
+                    <td>{!Service_Quote__c.Shopify_Ship_To_Email__c}</td>
+                </tr>
+                
+                <tr>
+                    <td class='labelCell'>Shipping Method</td>
+                    <td>{!PO_Shipmethod}</td>
+                </tr>
+                
+            </table>
+
+        </p>
+            </apex:outputpanel>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+    
+            <div>
+                <apex:dataTable width="100%" value="{!Details_POItems}" var="sqd" id="tblServiceQuoteDetails" rowClasses="odd,even"  styleClass="dataTable">
+                    <apex:column >
+                        <apex:facet name="header"><div style='labelCell'>Pos</div></apex:facet>
+                        <!-- <apex:outputText value="{!sqd.Position__c}"/> -->
+                        <apex:outputText value="{0,number,###}" style="text-align:right">
+                             <apex:param value="{!sqd.Position__c}" /> 
+                        </apex:outputText>                              
+                    </apex:column>          
+                    
+                    <apex:column >
+                        <apex:facet name="header"><div style='labelCell'>Thumbnail</div></apex:facet>
+                            <apex:image url="{!sqd.ThumbnailURL__c}"  width="40" rendered="{!NOT(ISBLANK(sqd.ThumbnailURL__c))}" />                             
+                    </apex:column>          
+    
+                    <apex:column >
+                        <apex:facet name="header">Qty</apex:facet>
+                        <!-- <apex:outputText value="{!sqd.Quantity__c}"/> -->
+                        <apex:outputText value="{0,number,#####}" style="text-align:right">
+                             <apex:param value="{!sqd.Quantity__c}" /> 
+                        </apex:outputText>                              
+                    </apex:column>          
+                    
+                    <apex:column rendered="{!servicepartcheck}">
+                        <apex:facet name="header">Part #</apex:facet>
+                        <apex:outputText value="{!sqd.Service_Part__r.Name}"/>
+                    </apex:column>
+                    
+                    <apex:column rendered="{!NOT(servicepartcheck)}">
+                        <apex:facet name="header">Part #</apex:facet>
+                        <apex:outputText value="{!sqd.name}"/>
+                    </apex:column> 
+                             
+                    
+                    <apex:column > 
+                        <apex:facet name="header">Description</apex:facet>
+                        <apex:outputText value="{!sqd.Service_Part__r.Part_Name__c}"/>
+                        <apex:outputText value=".  {!sqd.Notes__c}"  rendered="{!NOT( OR( sqd.Notes__c == '', sqd.Notes__c == null) )}" />
+                    </apex:column>          
+    
+                </apex:dataTable>
+                <br /> 
+            </div>
+    
+    
+            <apex:outputText value="Complaint: Yes"  rendered="{!OR(NOT(Service_Quote__c.NonStock_Complaint_Note__c == null), NOT(Service_Quote__c.Complaint_Note__c == null))}"/>                      <br />
+            <apex:outputText value="{!Service_Quote__c.NonStock_Complaint_Note__c}"  rendered="{!NOT(Service_Quote__c.NonStock_Complaint_Note__c == null)}"/>   <br />                  
+            <apex:outputText value="{!Service_Quote__c.Complaint_Note__c}"  rendered="{!NOT(Service_Quote__c.Complaint_Note__c == null)}"/>                     
+    
+            <p align='center'> 
+                <ol>
+                    <li>Enter this order in accordance with the prices, terms, delivery method and specifications listed above.</li>
+                    <li>Please notify us immediately if you are unable to ship as specified.</li>
+                    <li>Send all correspondence to Nana Wall Systems, Inc.</li>
+                    <li>Please send confirmation for this order.</li>
+                </ol>
+            </p>
+        </div>
+
+    </apex:outputpanel>     <!--  po body wrapper -->
+
+
+    <apex:outputpanel rendered="{!POBPositionSelector_Display_Rendered}">
+        <apex:dataTable width="100%" value="{!PurchaseOrder_Reconciliation_Positions}" var="position" id="tblPurchaseOrderReconciliationPositions" rowClasses="odd,even"  styleClass="dataTable">
+            <apex:column >
+                <apex:facet name="header"><div style='labelCell'>use</div></apex:facet>
+                <apex:inputcheckbox value="{!position.usePosition}" />                               
+            </apex:column>
+
+            <apex:column >
+                <apex:facet name="header"><div style='labelCell'>Pos</div></apex:facet>
+                <apex:outputText value="{0,number,###}" style="text-align:right">
+                     <apex:param value="{!position.detail.Position__c}" /> 
+                </apex:outputText>                              
+            </apex:column>          
+                    
+            <apex:column >
+                <apex:facet name="header"><div style='labelCell'>Thumbnail</div></apex:facet>
+                    <apex:image url="{!position.detail.ThumbnailURL__c}"  width="40" rendered="{!NOT(ISBLANK(position.detail.ThumbnailURL__c))}" />                             
+            </apex:column>          
+    
+            <apex:column > 
+                <apex:facet name="header">Qty</apex:facet>
+                <apex:outputText value="{0,number,#####}" style="text-align:right">
+                     <apex:param value="{!position.detail.Quantity__c}" /> 
+                </apex:outputText>                              
+            </apex:column>          
+                    
+            <apex:column >
+                <apex:facet name="header">Part #</apex:facet>
+                <apex:outputText value="{!position.detail.Service_Part__r.Name}"/>
+            </apex:column>          
+                    
+            <apex:column > 
+                <apex:facet name="header">Description</apex:facet>
+                <apex:outputText value="{!position.detail.Service_Part__r.Part_Name__c}"/>
+                <apex:outputText value=".  {!position.detail.Notes__c}"  rendered="{!NOT( OR( position.detail.Notes__c == '', position.detail.Notes__c == null) )}" />
+            </apex:column>          
+
+            
+        </apex:dataTable>
+        
+        <apex:commandbutton action="{!PurchaseOrder_SelectPositions}" value="Select Positions" />
+    </apex:outputpanel>
+    
+</apex:form>
+
+
+</body>
+
+<apex:outputtext value="{!Service_Quote__c.Tax_Exempt__c}" rendered="false" />
+<apex:outputtext value="{!Service_Quote__c.Payment_Type__c}" rendered="false" />
+<apex:outputtext value="{!Service_Quote__c.LastFourDigitsOfPaymentMedium__c}" rendered="false" />
+<apex:outputtext value="{!Service_Quote__c.Tax__c}" rendered="false" />
+<apex:outputtext value="{!Service_Quote__c.SubTotal__c}" rendered="false" />
+<apex:outputtext value="{!Service_Quote__c.Freight__c}" rendered="false" />
+</apex:page>

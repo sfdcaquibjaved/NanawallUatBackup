@@ -1,0 +1,45 @@
+<apex:page standardController="Opportunity" extensions="Opportunity_TeamSplit_New_Controller">
+
+
+<apex:pagemessages ></apex:pagemessages>
+
+<apex:form >
+	<apex:pageblock >
+		<table>
+			<tr>
+				<td colspan='2'><apex:commandButton action="{!Cancel}" value="Cancel" /></td>
+			</tr>
+			<tr>
+				<td>User:</td>
+				<td>
+					<apex:selectList value="{!SelectedUser}" multiselect="false" size="1"  required="true">
+						<apex:selectOptions value="{!userItems}"/>
+					</apex:selectList>
+				</td>
+			</tr>
+			<tr>
+				<td>Role:</td>
+				<td> 
+					<apex:inputField value="{!otm.TeamMemberRole}" required="true" />
+				</td>
+			</tr>
+			<!-- 
+			<tr>
+				<td>Opportunity Access Level:</td>
+				<td>
+					<apex:selectList value="{!SelectedAccessLevel}" multiselect="false" size="1" rendered="{!EditRoleOK}">
+						<apex:selectOptions value="{!AvailableAccessLevels}"/>
+					</apex:selectList>
+				</td>
+			</tr>
+			 -->
+			<tr>
+				<td colspan='2'><apex:commandButton action="{!UpdateRec}" value="Save" /></td>
+			</tr>
+		</table>
+
+	</apex:pageblock>
+
+</apex:form>
+
+</apex:page>

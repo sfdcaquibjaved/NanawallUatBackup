@@ -1,0 +1,166 @@
+<apex:page controller="Order_MultiSearch_Controller" tabStyle="Order"  >
+
+    <apex:tabpanel >     
+        <apex:tab label="Multi-Search" name="ms" id="tabms">
+            <apex:form id="theForm">
+			<apex:pageBlock title="Search Orders">
+			
+	        <apex:panelGrid columns="4" width="700px">
+		        Quote Number:<apex:inputtext value="{!QuoteNumber}" />
+		        Order Number:<apex:inputtext value="{!OrderNumber}" />
+				<!-- Model  <apex:inputtext value="{!Model}"/>
+				# Panels(L)  <apex:inputtext value="{!PanelsL}"/>
+				# Panels(R)  <apex:inputtext value="{!PanelsR}"/>
+				Panel Count  <apex:inputtext value="{!PanelsCount}"/> -->
+				Project Name <apex:inputtext value="{!ProjectName}"/>
+				Project State <apex:selectList value="{!ProjectState}" multiselect="false" size="1"> <apex:selectOption itemValue="" itemLabel="-SELECT-" /><apex:selectOptions value="{!states}"></apex:selectOptions></apex:selectList>
+				Project Zip <apex:inputtext value="{!ProjectZip}"/>
+				Contact First Name <apex:inputtext value="{!ContactFirstName}"/>
+				Contact Last Name <apex:inputtext value="{!ContactLastName}"/>
+				Contact Email <apex:inputtext value="{!ContactEmail}"/>
+				Contact Phone <apex:inputtext value="{!ContactPhone}"/>
+
+		        
+				1. Order Start Date Lo  <apex:inputfield value="{!dummyOrder.EffectiveDate}" required="false" /> 
+				1. Order Start Date Hi <apex:inputfield value="{!dummyOrder2.EffectiveDate}" required="false" />
+				5. Order finalized date Lo   <apex:inputfield value="{!dummyOrder.Order_Finalized_Date__c}" required="false" /> 
+				5. Order finalized date Hi <apex:inputfield value="{!dummyOrder2.Order_Finalized_Date__c}" required="false" />
+				11.a ETA Jobsite Lo    <apex:inputfield value="{!dummyOrder.IN_ETA_Jobsite_c__c}" required="false" /> 
+				11.a ETA Jobsite Hi <apex:inputfield value="{!dummyOrder2.IN_ETA_Jobsite_c__c}" required="false" />
+				Deposit Amount Lo <apex:inputtext value="{!DepositAmountLo}"/>
+				Deposit Amount Hi <apex:inputtext value="{!DepositAmountHi}"/> 
+				Balance Received Amount Lo  <apex:inputtext value="{!BalanceReceivedAmountLo}"/>
+				Balance Received Amount Hi  <apex:inputtext value="{!BalanceReceivedAmountHi}"/>
+				Freight Tracking #  <apex:inputtext value="{!FreightTrackingNumber}"/>
+
+		        
+	                  
+	            <apex:commandButton value="Search" status="loadingstatus" action="{!myaction}" reRender="op" />
+	        </apex:panelGrid>
+	        <apex:outputpanel id="op">
+	        <apex:pagemessages ></apex:pagemessages>
+
+
+			<apex:pageBlockSection id="pbs" >
+				<apex:toolbar width="700px" style="background-color:#8d8d8d;background-image:none" >			
+					<apex:outputlabel value="{!Total}" />
+					<apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+					<apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+					<apex:actionstatus id="loadingstatus" starttext="Loading..." stoptext="" />
+				</apex:toolbar>            
+				<br/>
+
+	            <apex:pageBlockTable id="search" var="o" value="{!myOrders}"  >
+	            
+	                <apex:column headerValue="">
+	                <apex:outputlink value="/{!o.id}" >view
+	                </apex:outputlink> 
+	               </apex:column>
+	
+	               
+	                <apex:column headerValue="Quote Number">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Quote Number" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Quote_Name__c" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Quote_Name__c}" /> 
+	               </apex:column>
+	               
+                   <apex:column headerValue="Order Number">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Order Number" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Name" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Name}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Project">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Project" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Project__r.Name" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Project__r.Name}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Project State">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Project State" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Project__r.Project_State__c" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Project__r.Project_State__c}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Project Zip">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Project Zip" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Project__r.Project_Zip_Code__c" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Project__r.Project_Zip_Code__c}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Contact First">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Contact First" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Contact__r.FirstName" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Contact__r.FirstName}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Contact Last">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Contact Last" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Contact__r.LastName" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Contact__r.LastName}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Contact Email">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Contact Email" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Contact__r.Email" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Contact__r.Email}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Contact Phone">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Contact Phone" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Contact__r.Phone" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Contact__r.Phone}" /> 
+	               </apex:column>
+	               
+	               
+	           </apex:pageBlockTable> 
+           
+			</apex:pageBlockSection>
+   
+        <apex:panelGrid columns="2"> 
+            <apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+            <apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+       </apex:panelGrid> 
+            </apex:outputpanel>
+
+    </apex:pageBlock>
+    </apex:form>
+    </apex:tab>
+    <apex:tab label="Filters" id="tabfilters" name="filters">
+<apex:outputpanel layout="block"> 
+       <apex:enhancedList customizable="true" height="300" id="list" type="Quote__c" />    
+</apex:outputpanel>
+
+    </apex:tab>
+    </apex:tabpanel>
+
+
+
+</apex:page>

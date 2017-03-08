@@ -1,0 +1,86 @@
+<apex:page StandardController="Project__c" extensions="ProjectSplitController">
+<style>
+.HoverPopup {
+    position: relative;
+    z-index: 0;
+    }
+ 
+.HoverPopup:hover {
+    background-color: #eeeeee;
+    Text-decoration: none;
+    z-index: 50;
+    }
+ 
+.HoverPopup div {
+    position: absolute;
+    visibility: hidden;
+    }
+ 
+.HoverPopup:hover div {
+    visibility: visible;
+    top: 20px;
+    left: 0px;
+    border: 1px solid black;
+    background-color: #eeeeee;
+    padding: 10px;
+    color: black;
+    Text-decoration: none;
+    white-space: pre;
+    }
+
+</style>
+<apex:form >
+ <img src="/img/icon/factory32.png" />
+        <apex:outputtext value="{!Project__c.Name}" style="font-family:Arial;font-size:22px;font-weight:normal;font-style:normal;text-decoration:none;color:#333333;"/>
+        <br/><br/>
+    <apex:pageBlock mode="maindetail">
+    <apex:pageblocksection title="Project Detail" columns="2">
+    <apex:outputfield value="{!Project__c.Name}" /> 
+    <apex:inputfield value="{!Project__c.Split_Stage__c}"/>   
+    </apex:pageblocksection>
+    </apex:pageBlock>
+ <apex:pageBlock title="Project Split" id="ps">
+ <apex:pageMessages />
+ <apex:variable var="rowNumber" value="{!0}"/>
+ <apex:pageblockSection columns="1">
+  <apex:pageBlockTable title="Update Project Split" var="pSplit" value="{!projSplitlst}">
+     <apex:column headerValue="No." style="width:20px; text-align:center;" headerClass="centertext">
+     <apex:outputText value="{0}" style="text-align:center;"> 
+     <apex:param value="{!rowNumber+1}" /> 
+     </apex:outputText>
+     </apex:column>
+      <apex:column headerValue="Account" >
+     <apex:inputField value="{!pSplit.Account__c}" />
+     <c:Helpicon helpText="{!addressMap[pSplit.Account__c]}"/>
+     </apex:column>
+     <apex:column headerValue="Project Rep" >
+     <apex:inputField value="{!pSplit.Project_Rep__c}" required="true"/>
+     </apex:column>
+     <apex:column headerValue="Role" >
+     <apex:inputField value="{!pSplit.Role__c}"/>
+     </apex:column> 
+     <apex:column headerValue="Split" >
+     <apex:inputField value="{!pSplit.Split__c}" />
+     </apex:column>
+     <apex:column headerValue="Amount" >
+     <apex:outputField value="{!pSplit.Amount__c}" />
+     </apex:column>
+     <apex:column headerValue="Notes" >
+     <apex:inputField value="{!pSplit.Notes__c}"/>
+     </apex:column> 
+      <apex:column headerValue="Action" >
+     <apex:commandButton value="Remove" action="{!deleteRow}" reRender="ps" immediate="true" rendered="{!IF((rowNumber+1) > totalCount, true,false)}">
+     <apex:param name="rowIndex" value="{!rowNumber}"/>
+     </apex:commandButton>
+     <apex:variable var="rowNumber" value="{!rowNumber+1}"/>
+     </apex:column> 
+     </apex:pageBlockTable>
+     <apex:commandButton action="{!addRow}" value="Add Project Split Row" reRender="ps"/>
+     </apex:pageblockSection>
+     <apex:pageBlockButtons >
+     <apex:commandButton value="Save" action="{!Save}" />
+     <apex:commandButton value="Cancel" action="{!cancel}"/>
+     </apex:pageBlockButtons>
+     </apex:pageBlock>
+     </apex:form> 
+</apex:page>

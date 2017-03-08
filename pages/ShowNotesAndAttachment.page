@@ -1,0 +1,161 @@
+<apex:page standardcontroller="Project__c"  extensions="ProjectsNotesAndAttachment">
+    <apex:form >
+    <img src="/img/icon/factory32.png" />
+        <apex:outputtext value="{!Project__c.Name}" style="font-family:Arial;font-size:22px;font-weight:normal;font-style:normal;text-decoration:none;color:#333333;"/>
+        <br/><br/>
+    <apex:pageBlock mode="maindetail">
+    <apex:pageblocksection title="Project Detail" columns="2">
+    <apex:outputfield value="{!Project__c.Name}" />
+    <apex:outputfield label="Owner Name" value="{!Project__c.Owner.Name}" />
+    <apex:outputfield value="{!Project__c.Architect_Account__c}" />
+    <apex:outputfield value="{!Project__c.Stage__c}" />
+    <apex:outputfield label="Record Type" value="{!Project__c.RecordType.Name}" />
+    <apex:outputfield value="{!Project__c.Amount__c}" />
+    </apex:pageblocksection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Notes & Attachments" >
+    <apex:pageMessages />  
+        <apex:pageBlockButtons >
+         <apex:commandButton action="{!redNewNoteUrl}" value="New Note"/>
+         <apex:commandButton action="{!redNewAttachmentUrl}" value="Attach File"/>
+         <apex:commandButton action="{!transferPage}" value="Transfer Notes And Attachment"/>
+          <apex:commandButton action="{!goback}" value="Back"/>
+        </apex:pageBlockButtons>
+              <apex:pageBlockTable value="{!notesAttaclst}" var="ntAtt">
+                    <!-- The pageBlockTable iterates through the list of the custom Class -->
+                    <apex:column headerValue="Action" width="15%"> 
+                    <apex:inputCheckbox value="{!ntAtt.isSelected}" />
+                     <apex:outputlink value="/{!ntAtt.note.Id}/e?retURL={!Project__c.Id}"  target="_self" rendered="{!IF(ntAtt.Type == 'Note' && NOT(isInRep), true,false)}" styleclass="actionLink" style="color: #015ba7;">
+                      Edit 
+                    </apex:outputlink>
+                    <apex:outputlink value="/{!ntAtt.attach.Id}/e?retURL={!Project__c.Id}"  target="_self" rendered="{!IF(ntAtt.Type == 'Attachment' && NOT(isInRep), true,false)}" styleclass="actionLink" style="color: #015ba7;">
+                     Edit
+                    </apex:outputlink>
+                     <apex:outputlink value="/{!ntAtt.note.Id}/e?retURL=reps/{!Project__c.Id}"  target="_self" rendered="{!IF(ntAtt.Type == 'Note' && (isInRep), true,false)}" styleclass="actionLink" style="color: #015ba7;">
+                      Edit 
+                    </apex:outputlink>
+                    <apex:outputlink value="/{!ntAtt.attach.Id}/e?retURL=reps/{!Project__c.Id}"  target="_self" rendered="{!IF(ntAtt.Type == 'Attachment' && (isInRep), true,false)}" styleclass="actionLink" style="color: #015ba7;">
+                     Edit
+                    </apex:outputlink>
+                    <apex:outputlink value="{!URLFOR($Action.Attachment.Download,
+                      ntAtt.attach.Id)}"  target="_blank" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}" styleclass="actionLink" style="color: #015ba7;">
+                    View 
+                    </apex:outputlink>
+                    <apex:commandLink value=" Delete" onclick="if(!confirm('Are you sure?')){return false;}" action="{!deleteRecord}" styleclass="actionLink" style="color: #015ba7;">
+                    <apex:param name="recordId" value="{!ntAtt.recordId}" assignTo="{!recordId}"/>   
+                    </apex:commandLink>                 
+                    </apex:column>
+                    
+                    <apex:column headerValue="Account Name" width="20%" >
+                    <apex:outputText value="{!ntAtt.AccountName}" rendered="{!IF(ntAtt.objectName == 'Opportunity' && ntAtt.Type == 'Note', true,false)}"  >
+                    </apex:outputText>
+                    <apex:outputText value="{!ntAtt.AccountName}"  rendered="{!IF(ntAtt.objectName == 'Opportunity' && ntAtt.Type == 'Attachment', true,false)}" >
+                    </apex:outputText>
+                    </apex:column>
+                    <apex:column headerValue="Created Date"  width="10%" >
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}" >
+                    <apex:param value="{!ntAtt.CreatedDate}" ></apex:param>
+                    </apex:outputText>
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                    <apex:param value="{!ntAtt.CreatedDate}" ></apex:param>
+                    </apex:outputText>
+                    </apex:column>
+                    <apex:column headerValue="Name" width="10%">
+                    <apex:outputlink value="/{!ntAtt.note.Id}"  target="_self" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                    <apex:outputText value="{!ntAtt.note.Title}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}"/>
+                    </apex:outputlink>
+                     <apex:outputlink value="/{!ntAtt.attach.Id}" target="_self" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                    <apex:outputText value="{!ntAtt.attach.Name}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}"/>  
+                    </apex:outputlink>  
+                    </apex:column>
+                    <apex:column headerValue="Type" value="{!ntAtt.Type}" width="10%"/>
+                     
+                     <apex:column headerValue="Opportunity Name" width="20%">
+                    <apex:outputlink value="/{!ntAtt.note.ParentId}"  target="_self" rendered="{!IF(ntAtt.objectName == 'Opportunity' && ntAtt.Type == 'Note', true,false)}">
+                    <apex:outputText value="{!ntAtt.ParentObjectName}" rendered="{!IF(ntAtt.objectName == 'Opportunity' && ntAtt.Type == 'Note', true,false)}"/>
+                    </apex:outputlink>
+                    <apex:outputlink value="/{!ntAtt.attach.ParentId}" target="_self" rendered="{!IF(ntAtt.objectName == 'Opportunity' && ntAtt.Type == 'Attachment', true,false)}">
+                    <apex:outputText value="{!ntAtt.ParentObjectName}" rendered="{!IF(ntAtt.objectName == 'Opportunity' && ntAtt.Type == 'Attachment', true,false)}"/>
+                    </apex:outputlink>
+                    </apex:column>
+                    <apex:column headerValue="Project Name" width="20%">
+                    <apex:outputlink value="/{!ntAtt.note.ParentId}"  target="_self" rendered="{!IF(ntAtt.objectName == 'Project' && ntAtt.Type == 'Note', true,false)}">
+                    <apex:outputText value="{!ntAtt.ParentObjectName}" rendered="{!IF(ntAtt.objectName == 'Project' && ntAtt.Type == 'Note', true,false)}"/>
+                    </apex:outputlink>
+                    <apex:outputlink value="/{!ntAtt.attach.ParentId}" target="_self" rendered="{!IF(ntAtt.objectName == 'Project' && ntAtt.Type == 'Attachment', true,false)}">
+                    <apex:outputText value="{!ntAtt.ParentObjectName}" rendered="{!IF(ntAtt.objectName == 'Project' && ntAtt.Type == 'Attachment', true,false)}"/>
+                    </apex:outputlink>
+                    </apex:column>
+                    <!--<apex:column headerValue="LastModified By" width="10%">
+                    <apex:outputlink value="/{!ntAtt.note.LastModifiedById}"  target="_self" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                    <apex:outputText value="{!ntAtt.note.LastModifiedBy.Name}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}"/>
+                    </apex:outputlink>
+                    <apex:outputlink value="/{!ntAtt.attach.LastModifiedById}" target="_self" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                    <apex:outputText value="{!ntAtt.attach.LastModifiedBy.Name}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}"/>
+                    </apex:outputlink>
+                    </apex:column>-->
+                    <apex:column headerValue="Created By" width="12%">
+                     <apex:outputlink value="/{!ntAtt.note.CreatedById}" target="_self" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                     <apex:outputText value="{!ntAtt.note.CreatedBy.Name}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}"/>
+                     </apex:outputlink>
+                     <apex:outputlink value="/{!ntAtt.attach.CreatedById}" target="_self" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                     <apex:outputText value="{!ntAtt.attach.CreatedBy.Name}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}"/>
+                     </apex:outputlink>
+                     </apex:column>
+                     <apex:column headerValue="Modified Date"  width="10%" >
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}" >
+                    <apex:param value="{!ntAtt.LastModifiedDate}" ></apex:param>
+                    </apex:outputText>
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                    <apex:param value="{!ntAtt.LastModifiedDate}" ></apex:param>
+                    </apex:outputText>
+                    </apex:column>
+                     
+                    </apex:pageBlockTable>
+
+     </apex:pageBlock>
+         <apex:pageBlock title="Activity History" >
+         <apex:pageBlockTable value="{!actytsk}" var="acthis">
+                    <!-- The pageBlockTable iterates through the list of the custom Class -->
+                    <apex:column headerValue="Action" width="15%"> 
+                    <apex:outputlink value="{!$Site.BaseUrl}/{!acthis.tsk.Id}" target="_blank" styleclass="actionLink" style="color: #015ba7;">
+                    View
+                    </apex:outputlink>
+                    </apex:column>
+                    <apex:column headerValue="Subject" width="20%" >
+                    <apex:outputText value="{!acthis.Subject}" >
+                    </apex:outputText>
+                    
+                    </apex:column>
+                    <apex:column headerValue="Name" width="20%" >
+                    <apex:outputText value="{!acthis.whoIdcon}" >
+                    </apex:outputText>                  
+                    </apex:column>
+                    
+                    <apex:column headerValue="Due Date" width="20%" >
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+                    <apex:param value="{!acthis.Acdate}" ></apex:param>
+                    </apex:outputText>
+                    
+                    </apex:column>
+                    <apex:column headerValue="Assigned to" width="30%" >
+                    <apex:outputText value="{!acthis.owId}" >
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Type" width="30%" >
+                    <apex:outputText value="{!acthis.typeoftask}" >
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Last Modified By" width="30%" >
+                    <apex:outputText value="{!acthis.lastmodified}" >
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    
+                    </apex:pageBlocktable>
+         </apex:pageBlock>
+    </apex:form>
+
+</apex:page>

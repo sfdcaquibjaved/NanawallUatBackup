@@ -1,0 +1,95 @@
+<apex:page standardcontroller="Project__c" extensions="CreateNewProjectExtension">
+
+<apex:form id="myFrm">
+    <apex:pagemessages ></apex:pagemessages>
+    
+    <apex:actionStatus id="loadingStatus">
+       <apex:facet name="start">
+           <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+               <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                   <div class="waitingHolder" style="top: 50%; width: 110px;">
+                       <img class="waitingImage" src="/img/loading.gif" />
+                       <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                   </div>
+               </div>
+           </apex:facet>
+       <apex:facet name="stop" />
+    </apex:actionStatus>
+    
+    <!-- Select whether the user has to create a New Project or use an Existing Project -->
+    <apex:outputPanel id="decisionPanel">
+        <apex:pageBlock id="decisionPanelBlock" title="Select the type of Project">
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    Project Type
+                    <apex:actionRegion >
+                        <apex:selectList multiselect="false" size="1" value="{!projectTypeSelected}">
+                            <apex:selectOptions value="{!projectType}"/>
+                            <apex:actionSupport action="{!projectTypeSelection}" status="loadingStatus" event="onchange" reRender="myFrm,projectSelectPanel,recordTypePanel,projectFields"/>
+                        </apex:selectList>
+                    </apex:actionRegion>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageblock>
+    </apex:outputPanel>
+    
+    <!-- If User selects the option 'Existing' then display the Project Lookup field -->
+    <apex:outputPanel id="projectSelectPanel" rendered="{!showProjectLookup}">
+        <apex:pageBlock id="projectSelectBlock" title="Select the Project">
+            <apex:pageBlockSection >
+               <apex:inputField value="{!opp.Project_Name__c}" required="true"/>
+            </apex:pageBlockSection>
+            <center><apex:commandButton action="{!saveProject}" value="Save & Continue" title="Save the Project record and continue"/>&nbsp;&nbsp;
+            <apex:commandButton action="{!Cancel}" value="Cancel" title=""/></center>
+        </apex:pageblock>
+    </apex:outputPanel>
+    
+    <!-- Select Project Type (Record Type) if the user decides to create a New Project -->
+    <apex:outputPanel id="recordTypePanel" rendered="{!showRecTypeSection}">
+        <apex:sectionheader title="Project Edit" subtitle="New Project"></apex:sectionheader>
+        <apex:pageBlock id="recordTypeBlock" title="Select Project Record Type">
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    Record Type of new record
+                    <apex:actionRegion >
+                        <apex:selectList multiselect="false" size="1" value="{!recTypeSelected}">
+                            <apex:selectOptions value="{!recType}"/>
+                            <apex:actionSupport action="{!recTypeSelection}" status="loadingStatus" event="onchange" reRender="myFrm,recordTypePanel,projectFields,additionalInformation"/>
+                        </apex:selectList>
+                    </apex:actionRegion>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageblock>
+    </apex:outputPanel>
+    
+    <!-- Once the Record Type is selected, display the required fields to create a New Project -->
+    <apex:outputPanel id="projectFields" rendered="{!showFields}">
+        
+        <apex:pageBlock id="projectInformationBlock" title="Project Information">
+            <apex:pageBlockSection id="projectInformation" title="Project Information">                     
+                <apex:inputField value="{!newproject.name}"  required="true" styleClass="requiredField tabIndex48" />
+                <apex:inputField value="{!newproject.Bid_Date__c}" styleClass="tabIndex49" />
+                <apex:pageblocksectionItem />
+                <apex:inputField value="{!newproject.Award_Date__c}" required="false" styleClass="tabIndex50" />
+            </apex:pageBlockSection>
+        
+            <apex:pageBlockSection id="additionalInformation" title="Additional Information">
+                <apex:inputField value="{!newProject.Application__c}" required="true"/>
+                <apex:inputField value="{!newProject.Application_2__c}" required="true"/>
+            </apex:pageBlockSection>
+        
+            <apex:pageBlockSection id="addressInformation" title="Project Site Address">
+                <apex:inputField value="{!newproject.Project_Street_Address__c}" styleClass="tabIndex53" />
+                <apex:inputField value="{!newproject.Project_Country__c}" styleClass="tabIndex55" />
+                <apex:inputField value="{!newproject.Project_City__c}" styleClass="tabIndex54" />
+                <apex:inputField value="{!newproject.Project_State__c}" styleClass="tabIndex56" />
+                <apex:pageblocksectionItem />
+                <apex:inputField value="{!newproject.Project_Zip_Code__c}" />
+            </apex:pageBlockSection>
+            <center><apex:commandButton action="{!saveProject}" value="Save & Continue" title="Save the Project record and continue"/>&nbsp;&nbsp;
+            <apex:commandButton action="{!Cancel}" value="Cancel" title=""/>&nbsp;&nbsp;
+            <apex:commandButton status="loadingStatus" action="{!CopyAddressFields}" rerender="addressInformation" immediate="true" value="Copy Address info from Contact" title=""/></center>
+        </apex:pageBlock>
+    </apex:outputPanel>
+</apex:form>
+</apex:page>

@@ -1,0 +1,5 @@
+<apex:page >
+    <apex:outputlink target="_top" value="/ui/massmail/MassMailStageManager?setupid=MassMailFilter&ftype=C" >Mass Email
+                </apex:outputlink><br/>
+
+</apex:page>

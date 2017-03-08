@@ -1,0 +1,11 @@
+<apex:page >
+
+<script> 
+
+  console.log( document.location.href );
+  parent.alert('Global JS loaded!');
+</script>
+
+
+
+</apex:page>

@@ -1,0 +1,4 @@
+<apex:page controller="ascent_AjaxResponseController"  action="{!doAjaxRequest}"
+contentType="application/x-JavaScript; charset=utf-8" showHeader="false" standardStylesheets="false" sidebar="false">
+{!result}
+</apex:page>

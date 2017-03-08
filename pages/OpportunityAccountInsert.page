@@ -1,0 +1,76 @@
+<apex:page standardController="nrOpportunity_Account__c" extensions="OpportunityAccountInsertController">
+
+<script>
+	var useCompetitorAccount = {!IF(useCompetitorAccount, "true","false")}
+
+</script> 
+
+<apex:form >
+        <apex:pageBlock title="New Opportunity Account"> 
+            <apex:pageMessages />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+
+			<apex:outputpanel id="pnAccountSelector">
+				
+	            <apex:pageBlockSection columns="1">
+	            
+						<apex:pageBlockSectionItem >
+		                    <apex:outputLabel value="Opportunity" for="opportunitySelector"/>
+			                <apex:inputField value="{!nrOpportunity_Account__c.Opportunity__c}" id="opportunitySelector" required="true" />
+						</apex:pageBlockSectionItem>
+
+					<apex:pageBlockSectionItem >
+						<apex:outputPanel >
+							<apex:outputPanel rendered="{!NOT(useCompetitorAccount)}">
+								 <apex:outputLabel value="Account" for="accountSelector"/>
+							</apex:outputPanel>
+							<apex:outputPanel rendered="{!useCompetitorAccount}">
+								<apex:outputLabel value="Competitor List" for="competitorAccount"/>
+							</apex:outputPanel>
+						</apex:outputPanel>
+						
+						<apex:outputPanel >
+							<table>
+								<tr>
+									<td>
+										<apex:outputPanel rendered="{!NOT(useCompetitorAccount)}">
+											<div class="requiredInput">
+												<div class="requiredBlock"></div>
+					                			<apex:inputField value="{!nrOpportunity_Account__c.Selector_Account__c}"  id="accountSelector"  />
+											</div>
+										</apex:outputPanel>
+									
+										<apex:outputPanel rendered="{!useCompetitorAccount}">
+											<div class="requiredInput">
+									          <div class="requiredBlock"></div>
+												<apex:selectList value="{!competitoraccount}" multiselect="false" size="1" id="competitorAccount">
+										        	<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+							            			<apex:selectOptions value="{!competitoraccounts}"></apex:selectOptions>
+												</apex:selectList>
+									        </div>
+										</apex:outputPanel>
+									</td>
+									<td>
+										<apex:outputPanel >
+						                    <apex:outputLabel value="Use Competitors" for="chkUseCompetitor" />
+							                <apex:inputcheckbox value="{!useCompetitorAccount}" id="chkUseCompetitor" >
+												<apex:actionSupport event="onchange" rerender="pnAccountSelector"/>			                
+							                </apex:inputcheckbox>
+										</apex:outputPanel>
+									</td>
+								</tr>
+							</table>
+						</apex:outputPanel>
+					</apex:pageBlockSectionItem>
+						
+	            </apex:pageBlockSection>
+			</apex:outputpanel>
+            
+        </apex:pageBlock>
+    </apex:form>
+
+
+</apex:page>

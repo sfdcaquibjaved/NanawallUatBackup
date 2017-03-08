@@ -1,0 +1,69 @@
+<apex:page renderas="pdf" standardcontroller="Quote__c">
+
+<apex:stylesheet value="{!URLFOR($Resource.OrderLetterToCustomerStyles)}" />
+
+<div class='letterBody'>
+	<p>TO: {!Quote__c.Contact__r.Account.Name}</p>
+	
+	<p>ATTN: {!Quote__c.Contact__r.name}</p>
+	
+	<p>REFERENCE #: PROJECT: {!Quote__c.Order_Number__c} {!Quote__c.Opportunity__r.name}</p>
+	
+	
+	<p>
+		GENERAL REMARKS: Thank you for the above order. It has been processed 
+		and is in production. Your _Estimated Time of Arrival_ to your job site 
+		is the WEEK of  &nbsp;<apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!Quote__c.ETA_Jobsite__c}" /> </apex:outputText>. If units are needed LATER than the 
+		ETA, please provide us with the needed date___________. Otherwise, 
+		storage charges may be applied.
+	</p>
+	
+	
+	<p>
+		Please note the Owner’s Manual included in the attachment. Please also 
+		provide the information requested below.
+	</p>
+	
+	<p>Will you be using an independent, NANA trained installer? [__]YES [__]NO</p>
+	
+	<p>Please provide installer’s name, if any:__________________________________</p>
+	
+	
+	<p>
+		If not, would you like to be contacted regarding installation? [__]YES  [__]NO
+	</p>
+	
+	
+	<p>Please provide us with information on the specifying architect, if any:*</p>
+	
+	<p>Name:______________________ Company:____________________________</p>
+	
+	<p>
+		Address and 
+		Phone#:__________________________________________________________________________________________________________________________
+	</p>
+
+</div>
+<br /><br />
+<div class='signature'>
+	<p>
+		Sincerely, <br />
+		<b>Jenna Majid </b>
+	</p>
+	 
+	<p>
+		<b>
+			707 Redwood Highway<br />
+			Mill Valley, CA 94941<br />
+			Phone # 800-873-5673 ext. 216<br />
+			Direct line: 415-380-2867<br />
+			Fax # 415-383-0312 <br />
+			www.nanawall.com<br />
+			Jenna@nanawall.com <br />
+			facebook.com/NanaWall<br />
+		</b>
+	</p>
+</div>
+
+
+</apex:page>

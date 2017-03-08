@@ -1,0 +1,141 @@
+<apex:page sidebar="true" standardController="Opportunity" extensions="OpportunityNewController" sidebar="true" tabStyle="Opportunity" >
+    <apex:sectionHeader title="New Opportunity" subtitle="{!opportunity.name}"/>
+    <apex:form >
+            <apex:pageMessages escape="false" /> 
+    
+<apex:pageBlock rendered="{!showinfoblock}" id="stageOneFields" rendered="{!showinfoblock}">    
+        <apex:pageBlock title="New Opportunity" id="thePageBlock" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Continue" action="{!checkdupes}"/>
+                <!--   <apex:commandButton value="Cancel" action="{!cancel}"/>  -->               
+            </apex:pageBlockButtons>
+
+            <apex:actionRegion > 
+                <apex:pageBlockSection title="Contact Information" columns="1"> 
+                    <apex:inputField value="{!nrOCR.Contact__c}"  required="true"/>                
+                </apex:pageBlockSection> 
+            </apex:actionRegion>
+            
+            <apex:actionRegion > 
+                <apex:pageBlockSection title="Project Information" id="pbBasicInfo" columns="2">
+
+                    <apex:outputText value="{!newopportunity.OwnerID}" rendered="false"/>
+                    <apex:inputField value="{!newopportunity.closedate}"  required="false" rendered="false"/>
+
+                    
+                    <apex:inputField value="{!newopportunity.name}" required="false"/>
+                    <apex:inputField value="{!newopportunity.stageName}" >
+                      <apex:actionSupport event="onchange"  rerender="pbBasicInfo" action="{!updateProbability}" />                       
+                    </apex:inputField> 
+
+                    <apex:inputField value="{!newopportunity.CampaignId}" required="false" />
+                    <apex:inputField value="{!newopportunity.amount}" required="false" />
+
+                    <apex:inputField value="{!newopportunity.Bid_Date__c}"/>
+                    <apex:inputField value="{!newopportunity.Probability}"/>
+
+
+                    <apex:inputField value="{!newopportunity.AccountID}"/>
+                    <apex:inputField value="{!newopportunity.Project_Name__c}" required="true"   />
+                    <apex:inputField value="{!newopportunity.Type}" rendered="false"/>
+
+                    <apex:inputField value="{!newopportunity.NIS__c}"/>
+
+
+                </apex:pageBlockSection>
+            </apex:actionRegion>
+
+
+
+
+            <apex:actionRegion >
+                <apex:pageBlockSection title="Additional Information" columns="2">
+                
+                    <apex:inputField value="{!newopportunity.Application__c}" required="true" />
+                    <apex:inputField value="{!newopportunity.Residential_Vertical__c}"/>
+                    <apex:inputField value="{!newopportunity.LeadSource}"/>
+                    <apex:inputField value="{!newopportunity.Chain_Account__c}"/>
+                    <apex:inputField value="{!newopportunity.Review_Code__c}"/>
+                    <apex:inputField value="{!newopportunity.Reason_Opportunity_Lost__c}" rendered="false" />
+                </apex:pageBlockSection>
+            </apex:actionRegion>
+
+
+            <apex:actionRegion > 
+                <apex:pageBlockSection title="Project Address" columns="2">
+                    <apex:inputField value="{!newopportunity.Site_Address__c}"/>
+                    <apex:inputField value="{!newopportunity.City__c}" required="true" />
+                    <apex:inputField value="{!newopportunity.State__c}" required="true" />
+                    <apex:inputField value="{!newopportunity.Postal_Code__c}" />
+                    <apex:inputField value="{!newopportunity.Country__c}" />
+
+
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection title="Competitor" columns="2">
+                
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Competitor Account" for="competitorAccount"/>
+    
+                        <apex:selectList value="{!competitoraccount}" multiselect="false" size="1" id="competitorAccount">
+                            <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+                            <apex:selectOptions value="{!competitoraccounts}"></apex:selectOptions>
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>                
+                
+                </apex:pageBlockSection>
+                
+                
+                <apex:pageBlockSection title="Description Information" columns="2">
+                    <apex:inputField value="{!newopportunity.Description}" style="width: 500px; height: 100px"/>
+
+
+                </apex:pageBlockSection>
+            </apex:actionRegion>
+
+
+
+
+        </apex:pageBlock>
+</apex:pageBlock>
+
+<apex:pageBlock id="dupeMatchesBlock" rendered="{!showdupeblock}" title="Duplicate Check">
+
+    <p>
+        <b>Project:</b> {!newopportunity.name}<br />
+        <b>City:</b> {!newopportunity.city__c}<br />
+        <b>State:</b> {!newopportunity.state__c}<br />
+    </p>
+    <p>If one of the projects below appears to be the same project you are trying to create, please click the "go to project" link and continue your work on the already exisitng project.</p>
+    <br />
+    <apex:dataTable value="{!duplicateOpps}" var="opportunity" id="dupetable" rowClasses="odd,even" styleClass="tableClass" width="500">
+        <apex:column >
+            <apex:facet name="header">Name</apex:facet>
+            <apex:outputText value="{!opportunity.name}"/>
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">City</apex:facet>
+            <apex:outputText value="{!opportunity.City__c}"/>
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">State</apex:facet>
+            <apex:outputText value="{!opportunity.State__c}"/>
+        </apex:column>
+
+        <apex:Column >
+            <apex:facet name="header">Use</apex:facet>
+            <a href="/{!opportunity.ID}" >go to project</a>
+        
+        </apex:Column>  
+    </apex:dataTable>
+
+
+    <p style='margin: 10px;'>   
+        No matches above ? Click below to save your new project<br />  <br />
+        <apex:commandButton value="Save" action="{!save}"/>
+    </p>
+</apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>

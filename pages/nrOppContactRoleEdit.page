@@ -1,0 +1,27 @@
+<apex:page standardController="nrOpportunityContactRole__c" extensions="OppContRoleEditController">
+<!-- Begin Default Content REMOVE THIS -->
+<apex:form >
+	<table>
+		<tr>
+			<td colspan='2'><apex:commandButton action="{!Cancel}" value="Cancel" /></td>
+		</tr>
+		<tr>
+			<td>Contact:</td>
+			<td>{!ContactName}
+			
+			</td>
+		</tr>
+		<tr>
+			<td>Role:</td>
+			<td><apex:inputField value="{!nrOpportunityContactRole__c.Role__c}" /></td>
+		</tr>
+		<tr>
+			<td colspan='2'><apex:commandButton action="{!Save}" value="Save" /></td>
+		</tr>
+	</table>
+<!--  the below makes sure that the necessary properties are bound to the incoming Lead object for the Controller  -->
+<apex:outputText value="{!nrOpportunityContactRole__c.Opportunity__c}" rendered="false" />
+<apex:outputText value="{!nrOpportunityContactRole__c.Contact__c}" rendered="false" />
+
+</apex:form>
+</apex:page>

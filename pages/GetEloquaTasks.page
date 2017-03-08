@@ -1,0 +1,37 @@
+<apex:page standardController="Contact" extensions="GetEloquaTasks_Controller">
+
+
+	<apex:form > 
+	   <apex:pageBlock title="">  
+	
+	
+			
+	
+		<apex:commandButton value="Get Tasks" status="loadingstatus" action="{!gettasks}" reRender="op" />
+	
+	
+		
+		<apex:outputpanel id="op">
+			<apex:actionstatus layout="block" startStyleClass="LoadingMessage" id="loadingstatus" starttext="Loading..." stoptext="{!resulttext}" />
+			<apex:pagemessages ></apex:pagemessages>
+		       
+			<apex:pageBlockSection id="pbs" columns="1">
+				<apex:pageBlockTable id="taskResults" var="task" value="{!taskList}" width="100%"  >
+			
+					<apex:column headerValue="Subject">
+						{!task.Subject}
+					</apex:column>
+					<apex:column headerValue="Date">
+						{!task.dateString} 
+					</apex:column>
+					
+				</apex:pageBlockTable>			
+			</apex:pageBlockSection>
+		</apex:outputpanel>
+		
+		</apex:pageBlock>
+	</apex:form>
+
+
+
+</apex:page>

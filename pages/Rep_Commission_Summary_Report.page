@@ -1,0 +1,259 @@
+<apex:page controller="Rep_Commission_Summary_Controller">
+
+
+	<apex:form >
+		<apex:pagemessages />
+		<table>
+			<tbody>
+				<tr>
+					<td>From</td> 
+					<td>To</td>   
+				</tr>
+				<tr> 
+
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Create_Date__c}" required="false"/></td>
+					<td><apex:inputfield value="{!dummyopportunity.Nana_Edit_Date__c}" required="false" /></td>
+				</tr>
+				<tr>
+					<td colspan='2'><apex:commandbutton value="Filter" action="{!refreshDataPoints}" /></td> 
+				</tr>
+			</tbody>
+		</table>
+	
+	
+		<style>
+			.dataTable thead tr { 
+				background-color: #f2f3f3;
+				font-size: .9em;
+			}
+			.dataTable thead tr th { 
+				border-color: #e0e3e5;				
+				padding: 6px;
+				white-space:nowrap;
+			}
+			.dataTable tfoot tr { 
+				font-weight: bold;
+				color: white;
+				background-color: #818290;
+				border-top: 1px solid #333;
+			}
+			.dataTable tfoot tr td { 
+				font-weight: bold;
+				color: white;
+				padding: 5px;
+				white-space:nowrap;
+			}
+			.dataTable tbody tr td 
+			{
+				padding: 5px; 
+				white-space:nowrap;
+			}
+			
+			.tblDataPoints_tr:nth-child(even)
+			{
+				background-color: #f5f7ff;
+			}
+			.DepositSum, .BalanceSum
+			{
+				float:right; 
+			}
+		
+			.dataTable tbody tr td:nth-child(2) {
+				 width: 175px!important;
+				 white-space: normal; 
+			  }
+		</style>
+		
+		<apex:dataTable width="100%" value="{!DataPoints}" var="point" id="tblDataPoints" rowClasses="tblDataPoints_tr"  styleClass="dataTable">
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="Rep{!IF( thisSorter.column=='User__r.LastName',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="User__r.LastName" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				{!point.RepName}
+			</apex:column>			
+		
+		
+			<apex:column >
+				<apex:facet name="header" >
+					<apex:commandLink action="{!refreshDataPoints}" value="NB Showroom{!IF( thisSorter.column=='Overage_First__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_First__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.OverageFirst_Showroom}"/></apex:outputText>		
+				
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NB_Showroom}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NS Showroom{!IF( thisSorter.column=='Overage_Second__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Second__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.OverageSecond_Showroom}"/></apex:outputText>		
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NS_Showroom}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NE Showroom{!IF( thisSorter.column=='Overage_Third__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Third__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.OverageThird_Showroom}"/></apex:outputText>		
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NE_Showroom}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+
+			<apex:column rendered="false">
+				<apex:facet name="header" >
+					<apex:commandLink action="{!refreshDataPoints}" value="NB Showroom Nana{!IF( thisSorter.column=='Overage_First__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_First__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.NanaOverageFirst_NoShowroom}"/></apex:outputText>		
+				
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NB_Showroom_Nana}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NS Showroom Nana{!IF( thisSorter.column=='Overage_Second__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Second__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<i><apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.NanaOverageSecond_Showroom}"/></apex:outputText></i>
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NS_Showroom_Nana}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NE Showroom Nana{!IF( thisSorter.column=='Overage_Third__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Third__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<i><apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.NanaOverageThird_Showroom}"/></apex:outputText></i>
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NE_Showroom_Nana}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+
+
+ 
+			<apex:column >
+				<apex:facet name="header" >
+					<apex:commandLink action="{!refreshDataPoints}" value="NB No Showroom{!IF( thisSorter.column=='Overage_First__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_First__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.OverageFirst_NoShowroom}"/></apex:outputText>		
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NB_NoShowroom}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NS No Showroom{!IF( thisSorter.column=='Overage_Second__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Second__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.OverageSecond_NoShowroom}"/></apex:outputText>	
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NS_NoShowroom}"/></apex:outputText>						
+				</apex:facet>
+
+			</apex:column>			
+		
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NE No Showroom{!IF( thisSorter.column=='Overage_Third__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Third__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.OverageThird_NoShowroom}"/></apex:outputText>		
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NE_NoShowroom}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+
+			<apex:column rendered="false">
+				<apex:facet name="header" >
+					<apex:commandLink action="{!refreshDataPoints}" value="NB No Showroom Nana{!IF( thisSorter.column=='Overage_First__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_First__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.NanaOverageFirst_NoShowroom}"/></apex:outputText>		
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NB_NoShowroom_Nana}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NS No Showroom Nana{!IF( thisSorter.column=='Overage_Second__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Second__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<i><apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.NanaOverageSecond_NoShowroom}"/></apex:outputText></i>
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NS_NoShowroom_Nana}"/></apex:outputText>						
+				</apex:facet>
+
+			</apex:column>			
+		
+		
+			<apex:column >
+				<apex:facet name="header">
+					<apex:commandLink action="{!refreshDataPoints}" value="NE No ShowroomNana{!IF( thisSorter.column=='Overage_Third__c',IF( thisSorter.sortDirection='ASC',' v',' ^'),'')}">
+						<apex:param value="Overage_Third__c" name="column" assignTo="{!thisSorter.column}" ></apex:param>
+					</apex:commandLink>
+				</apex:facet>
+				<i><apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.NanaOverageThird_NoShowroom}"/></apex:outputText></i>
+				<apex:facet name="footer">
+					<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!Sum_NE_NoShowroom_Nana}"/></apex:outputText>						
+				</apex:facet>
+				
+			</apex:column>			
+		
+			<apex:column >
+				<apex:facet name="header">
+					Rep. Comm.
+				</apex:facet>
+				<apex:outputText style="float:right;"  value="${0, number, ###,###,###,###.00}"><apex:param value="{!point.RepCommission}"/></apex:outputText>		
+				
+			</apex:column>			
+		
+
+		</apex:dataTable>		
+		
+	</apex:form>
+
+</apex:page>

@@ -1,0 +1,48 @@
+<apex:page standardController="Account" extensions="nrAccount_ProjectListController" >
+
+<style>
+
+body { background-color: #f3f3ec; }
+
+</style>
+
+<apex:form >
+
+
+
+
+<apex:pageblock >
+
+<apex:pagemessages />
+<apex:dataTable value="{!projects}" var="project" id="projecttable" rowClasses="odd,even" styleClass="tableClass" width="100%" >
+		<apex:column >
+		    <apex:facet name="header">view</apex:facet>
+			<a href="/{!project.Opportunity__r.ID}" target="_parent" >view</a>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">Project</apex:facet>
+			<apex:outputText value="{!project.Opportunity__r.Name}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">Contact</apex:facet>
+			<apex:outputText value="{!project.Contact__r.FirstName & ' ' & project.Contact__r.LastName}"/>
+		</apex:column>
+		<apex:column > 
+		    <apex:facet name="header">Date</apex:facet>
+			<apex:outputText value="{!project.Opportunity__r.CreatedDate}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">City</apex:facet>
+			<apex:outputText value="{!project.Opportunity__r.City__c}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">State</apex:facet>
+			<apex:outputText value="{!project.Opportunity__r.State__c}"/>
+		</apex:column>
+		
+</apex:dataTable>
+
+</apex:pageblock>
+
+</apex:form>
+</apex:page>

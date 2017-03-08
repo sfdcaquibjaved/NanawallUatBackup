@@ -1,0 +1,379 @@
+<apex:page standardStylesheets="false"
+    sidebar="false"
+    showHeader="false"
+    contentType="text/html" cache="true" controller="PositionEditor_Controller">
+<apex:outputText escape="false" value="{!"<!DOCTYPE html>"}"/>
+
+
+
+<html>
+    <head>
+		<style>
+		 	/* necessary HTML5 styles for compatibility with old browsers*/
+			header, nav, footer, article {display:block;} 
+			nav {float:left; width:20%;} 
+			article {float:right; width:79%;} 
+			footer {clear:both;} 
+		 	
+		 	
+		 	//basic styles necessary for all versions of the position editor
+			.Screen {
+			    padding: 10px;
+			    width: 100%;
+			    height: 100%;
+			}
+			.defaultOff {
+			    display: none;
+			}
+			.on { display: block; }
+			
+			.modelRadioColumn{
+			    float: left; 
+			}
+
+			#ModelsTable tbody tr td  {
+			    border-bottom: 1px solid black;
+			    vertical-align: top;
+			}
+			.errorField {
+			    color: #FF0000;
+			    display: none;
+			    font-weight:bold;
+			}
+			.optionGroup{
+			    width: 100%;
+			    clear: both;			
+			}
+			.modelField {
+			    width: 100%;
+			    clear: both;			
+			}
+			
+			
+			.colorSwatchPicker-window {
+				background-color: white;
+				color: darkolivegreen;
+				font-weight: bold;
+				padding: 10px;
+				font-family: sans-serif;
+			    box-shadow:3px 3px 3px #000000;
+			
+			    -moz-box-shadow:3px 3px 3px #000000;
+			    -webkit-box-shadow:3px 3px 3px #000000;
+			    border:1px solid lightseagreen;
+			    border-radius:6px;
+			    -moz-border-radius:6px;
+			    -webkit-border-radius:6px;    	
+			}		 	
+			.colorSwatchPicker-swatch {
+				width: 10px;
+				height: 10px;
+				padding: 2px;
+				float: left;
+				cursor: pointer;
+			}
+			.colorSwatchPicker-prevtext {
+				font-size: 10px;
+				font-weight: bold;
+			}
+		</style>
+		
+		
+<apex:outputText escape="false" value="{!CSSIncludes}"/>
+		
+
+		<apex:stylesheet value="{!URLFOR($Resource.position_builder_library, cssResource1)}" />
+		
+		<!--  fix up bad ie8 handling of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->    
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource1)}"/>
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource2)}"/>
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource3)}"/>
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource4)}"/>
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource5)}"/>
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource6)}"/>
+		 <apex:includeScript value="{!URLFOR($Resource.position_builder_library, scriptResource7)}"/>
+		 
+		<apex:outputText escape="false" value="{!JSIncludes}"/>
+		
+ 
+ 
+ 
+ 
+
+		               
+		<script>
+		
+		$(document).ready(function(){
+			var QuoteID = Utility.getParameterByName("QuoteID");
+			try { QuoteID = parseInt(QuoteID); } catch( e ){}
+			if( QuoteID == "" || QuoteDetailID == "null" ) QuoteID = "156148";
+			
+	
+			var Dupe = Utility.getParameterByName("Dupe");
+			var QuoteDetailID = "";
+			var duping = false;
+			if( Dupe == "true" )
+			{
+				QuoteDetailID = "{!Lookup_QuoteDetailFromSFID}";
+				duping = true;
+//				console.log("using dupe id");
+			} else
+			{
+				QuoteDetailID = Utility.getParameterByName("QuoteDetailID");
+				if( QuoteDetailID == "" || QuoteDetailID == "null" ) QuoteDetailID = "";			
+				try { if( QuoteDetailID != "" ) {  QuoteDetailID = parseInt(QuoteDetailID); } } catch( e ){
+					QuoteDetailID = "";
+				}
+			}
+			var RedirectURL = Utility.getParameterByName("RedirectURL");
+			if( RedirectURL == "" ) RedirectURL = "";
+			
+			var SFQuoteID = Utility.getParameterByName("SFQuoteID");
+			if( SFQuoteID == "" ) SFQuoteID = "";
+
+			
+			//005A0000000M8piIAC
+			//"{!UserID}"
+			
+			PositionEditor.NanaServerURL = "{!serverurl}";			
+	        PositionEditor.init("{!UserID}","",QuoteID, QuoteDetailID, "/"+SFQuoteID, duping, "{!proxyUrl}", {"action": "HandleProxyRequest"} ); //param1 = SFUserid, param 2 = nanauserid, param 3 = quoteid param 4 = QuoteDetailID / 322377 / param 5 = redirect URL
+//	        PositionEditor.init("","100",QuoteID, QuoteDetailID, "/"+SFQuoteID ); //param1 = SFUserid, param 2 = nanauserid, param 3 = quoteid param 4 = QuoteDetailID / 322377 / param 5 = redirect URL
+	        
+        });
+		</script>
+
+        <title>test</title>
+    </head>
+    <body>
+
+	<form>
+
+<div data-role="page" data-theme="e">
+
+	
+		<div id="LoadingScreen" class="Screen" data-role="content"> 
+
+		</div>
+
+		<div id="ModelSelection" class="Screen defaultOff" data-role="content">
+			<fieldset class='ui-grid-c'>
+				<div class="ui-block-a"><input type='button' value='Cancel' onclick='PositionEditor.Button_CancelClick("ModelSelection")'/></div>
+				<div class="ui-block-b"> &nbsp; </div>
+				<div class="ui-block-c"> &nbsp; </div>
+				<div class="ui-block-d"><input type='button' value='Next Step' id='btnModels_Next' onclick='PositionEditor.Button_NextClick("ModelSelection")' /></div>
+			</fieldset>
+		
+			<fieldset data-role="controlgroup">
+	                <table id='ModelsTable'>  
+	                	<tbody>
+		                    <tr>
+		                    	<td width='15%'></td>
+		                    	<td width='25%' align='center'><h3>Wood</h3></td>
+		                    	<td width='25%' align='center'><h3>Aluminum Clad</h3></td>
+		                    	<td width='35%' align='center'><h3>Aluminum</h3></td></tr> 
+		                    <tr>
+		                    	<td><h3>Folding Systems</h3></td>
+		                    	<td><div  id='vbFolding_Wood'></div></td>
+		                    	<td><div  id='vbFolding_AluminumClad'></div></td>
+		                    	<td><div  id='vbFolding_Aluminum'></div></td>
+		                   	</tr> 
+		                    <tr>
+		                    	<td><h3>Individual Panel Systems</h3></td>
+		                    	<td><div  id='vbIndividual_Wood'></div></td>
+		                    	<td><div id='vbIndividual_AluminumClad'></div></td>
+		                    	<td><div  id='vbIndividual_Aluminum'></div></td>
+		                   	</tr> 
+		                    <tr>
+		                    	<td><h3>Match Systems</h3></td>
+		                    	<td><div  id='vbMatch_Wood'></div></td>
+		                    	<td><div  id='vbMatch_AluminumClad'></div></td>
+		                    	<td><div  id='vbMatch_Aluminum'></div></td>
+		                   	</tr> 
+		                    <tr><td colspan='4'><hr width='100%' /></td></tr> 
+		                    <tr><td colspan='4'><div data-role="fieldcontain"  id='vbNanascreen'></div></td></tr> 
+		                    <tr><td colspan='4'><hr width='100%' /></td></tr> 
+	                    </tbody>
+	                </table> 
+				</fieldset>
+		</div>
+
+		<div id="SizeSelector" class="Screen defaultOff" data-role="content">
+			<fieldset class='ui-grid-c'>
+				<div class="ui-block-a"><input type='button' value='Cancel'  onclick='PositionEditor.Button_CancelClick("SizeSelector")'/></div>
+				<div class="ui-block-b"> &nbsp; </div>
+				<div class="ui-block-c" id="cellSizeBack"><input type='button' value='Prev. Step' id='btnSizeBack' onclick='PositionEditor.Button_BackClick("SizeSelector")' /></div>
+				<div class="ui-block-d"><input type='button' value='Next Step' onclick='PositionEditor.Button_NextClick("SizeSelector")'/></div>
+			</fieldset>
+			
+			<h1>Enter Dimensions</h1>
+			
+			<table>
+				<thead>
+					<tr>
+						<td colspan='7'>Opening Dimensions ( [d'd" d/d] d:digit ) </td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>Feet</td>
+						<td>Inches</td>
+						<td></td>
+						<td>Numer.</td>
+						<td></td>
+						<td>Denom.</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Width</td>
+						<td>
+							<input type='text' id='txtPositionWidth_Feet' />
+						</td>
+						<td><input type='text' id='txtPositionWidth_Inches' value='0' /></td>
+						<td> &nbsp; </td>
+						<td><input type='text' id='txtPositionWidth_Numerator' value='0' /></td>
+						<td>/</td>
+						<td><input type='text' id='txtPositionWidth_Denominator' value='1' /></td>
+					</tr>
+					<tr>
+						<td colspan='7'>
+							<span id='lblWidthError' class='errorField'>* Must be a number greater than 0&#xd;</span>
+						</td>
+					</tr>					
+					<tr>
+						<td>Height</td>
+						<td><input type='text' id='txtPositionHeight_Feet' /></td>
+						<td><input type='text' id='txtPositionHeight_Inches' value='0' /></td>
+						<td> &nbsp; </td>
+						<td><input type='text' id='txtPositionHeight_Numerator' value='0' /></td>
+						<td>/</td>
+						<td><input type='text' id='txtPositionHeight_Denominator' value='1' /></td>
+					</tr>
+					<tr>
+						<td colspan='7'>
+							<span id='lblHeightError' class='errorField'>* Must be a number greater than 0&#xd;</span>
+						</td>
+					</tr>					
+					<tr>
+						<td># Panels</td>
+						<td><input type='text' id='txtNumPanels' value='1' /></td>
+						<td></td>
+						<td> &nbsp; </td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan='7'>
+							<span id='lblPanelCountError' class='errorField'>* Must be a number greater than 0&#xd;</span>
+						</td>
+					</tr>										
+
+					<tr>
+						<td># Units</td>
+						<td><input type='text' id='txtUnits'  value='1'/></td>
+						<td></td>
+						<td> &nbsp; </td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan='7'>
+							<span id='lblUnitsError' class='errorField'>* Must be a number greater than 0&#xd;</span>
+						</td>
+					</tr>										
+					
+				</tbody>
+			</table>
+			
+		</div>		
+
+		<div id="ConfigRequiredOptions" class="Screen defaultOff" data-role="content">
+		
+			<fieldset class='ui-grid-c'>
+				<div class="ui-block-a"><input type='button' value='Cancel' onclick='PositionEditor.Button_CancelClick("ConfigRequiredOptions")'/></div>
+				<div class="ui-block-b"> &nbsp; </div>
+				<div class="ui-block-c"><input type='button' value='Prev. Step' onclick='PositionEditor.Button_BackClick("ConfigRequiredOptions")' /></div>
+				<div class="ui-block-d"><input type='button' value='Next Step' onclick='PositionEditor.Button_NextClick("ConfigRequiredOptions")'/></div>
+			</fieldset>
+		
+			<h1>Configuration Required Options</h1>
+			<fieldset data-role="controlgroup">		
+				<div id='container_ConfigRequiredOptions'></div>
+			</fieldset>
+		</div>
+		
+		<div id="ConfigurationSelection" class="Screen defaultOff" data-role="content">
+			<fieldset class='ui-grid-c'>
+				<div class="ui-block-a"><input type='button' value='Cancel' onclick='PositionEditor.Button_CancelClick("ConfigurationSelection")'/></div>
+				<div class="ui-block-b"> &nbsp; </div>
+				<div class="ui-block-c"><input type='button' value='Prev. Step' onclick='PositionEditor.Button_BackClick("ConfigurationSelection")' /></div>
+				<div class="ui-block-d"><input type='button' value='Next Step' onclick='PositionEditor.Button_NextClick("ConfigurationSelection")'/></div>
+			</fieldset>
+		
+			<h1>Configuration selection</h1>
+			<fieldset data-role="controlgroup">			
+				<div id='divConfigurationOverride'><input type='checkbox' id='chkConfigurationOverride' onclick='PositionEditor.doPostBack()' /> override.</div>	
+				<div id='container_ConfigurationSelection'></div>
+			</fieldset>
+			
+		</div>
+		
+		<div id="OtherOptions" class="Screen defaultOff" data-role="content">
+			<fieldset class='ui-grid-c'>
+				<div class="ui-block-a"><input type='button' value='Cancel' onclick='PositionEditor.Button_CancelClick("OtherOptions")'/></div>
+				<div class="ui-block-b"> &nbsp; </div>
+				<div class="ui-block-c"><input type='button' value='Prev. Step' onclick='PositionEditor.Button_BackClick("OtherOptions")' /></div>
+				<div class="ui-block-d"><input type='button' value='Next Step' onclick='PositionEditor.Button_NextClick("OtherOptions")'/></div>
+			</fieldset>
+
+			<h1>Other Options</h1>
+
+			<fieldset data-role="controlgroup">			
+				<div id='container_ConfigOtherOptions'></div>
+			</fieldset>
+			
+		</div>
+
+		<div id="ConfirmationPanel" class="Screen defaultOff" data-role="content">
+			<fieldset class='ui-grid-c'>
+				<div class="ui-block-a"><input type='button' value='Cancel' onclick='PositionEditor.Button_CancelClick("ConfirmationPanel")'/></div>
+				<div class="ui-block-b"> &nbsp; </div>
+				<div class="ui-block-c"><input type='button' value='Prev. Step' onclick='PositionEditor.Button_BackClick("ConfirmationPanel")' /></div>
+				<div class="ui-block-d"><input type='button' value='Save Position' onclick='PositionEditor.SavePosition()' /></div>
+			</fieldset>
+		
+			<h1>Confirmation</h1>
+
+			<fieldset data-role="controlgroup">			
+				<div id='container_Confirmation'></div>
+			</fieldset>
+			
+		</div>
+
+
+		<div id="Cancelled" class="Screen defaultOff" data-role="content">
+			<h1>Edit Cancelled</h1>
+		</div>
+		<div id="SaveConfirmation" class="Screen defaultOff" data-role="content">
+			<h1>Position Saved</h1>
+		</div>
+
+		<div id="PermissionsError" class="Screen defaultOff" data-role="content">
+			<h1>Permission Notice</h1>
+			<div id='PermissionsMessages'></div>
+		</div>
+
+
+</div>
+
+	</form>
+
+    </body>
+</html>
+</apex:page>

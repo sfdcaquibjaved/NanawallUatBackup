@@ -1,0 +1,10 @@
+<apex:page standardController="Lead" extensions="LeadConvertController"  action="{!handlePostConversion}">
+<!-- Begin Default Content REMOVE THIS -->
+<apex:pagemessages />
+Synchronizing Lead Conversion results
+<apex:outputText value="{!lead.Company}" rendered="false" />
+<apex:outputText value="{!lead.nrCity__c}" rendered="false" />
+<apex:outputText value="{!lead.nrState__c}" rendered="false" />
+
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

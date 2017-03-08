@@ -1,0 +1,100 @@
+<apex:page standardcontroller="Account" extensions="Account_PushDataToContact_Controller">
+
+<apex:includeScript value="{!$Resource.jquery}"/>
+
+<style>
+	.odd{ background-color: lightblue; } 
+	.even{ }
+</style>
+<apex:form >
+
+<apex:pagemessages />
+
+<apex:Pageblock id="fieldselecter" rendered="{!NOT(copyfinished)}">
+
+<a href='/{!account.id}'><b>&lt; &lt; Back to {!account.name}</b></a>
+
+	<apex:dataTable value="{!contacts}" var="contact" id="contacttable" rowClasses="odd,even" styleClass="tableClass" width="500">
+				<apex:Column >
+					<apex:facet name="header">Contact</apex:facet>
+					{!contact.FirstName} {!contact.lastname}
+				</apex:Column>
+				<apex:Column >
+					<apex:facet name="header">Available Fields</apex:facet> 
+					<apex:datatable width="100%" styleclass="{!contact.id}_fields" value="{!contact.availablefields}" var="field" id="fieldtable" >
+						<apex:column >
+							<apex:inputCheckbox styleclass="{!contact.id}_chk" value="{!field.useField}" />
+						</apex:column>
+
+						<apex:column >
+							<apex:facet name="header">Account Field</apex:facet>
+							{!field.label}
+						</apex:column>
+						
+						<apex:column >
+							<apex:facet name="header">Field Value to Copy</apex:facet>
+							<span style='color: gray; font-style:italic'>{!field.value}</span>
+						</apex:column>
+
+						<apex:column >
+							<apex:facet name="header">Target Contact Field</apex:facet>
+							<span style='color: gray; font-style:italic'>{!field.TargetLabel}</span>
+						</apex:column>
+
+						<apex:facet name="footer">
+							<a href='#' onclick='$(".{!contact.id}_chk").attr("checked","checked");'>check all</a>
+							| <a href='#' onclick='$(".{!contact.id}_chk").removeAttr("checked");'>uncheck all</a>
+							
+						</apex:facet> 
+						
+					</apex:datatable>
+				</apex:Column>
+	</apex:datatable>
+
+<apex:commandbutton action="{!CopyFields}" value="Copy Fields"  />
+
+</apex:Pageblock>
+
+<apex:pageblock id="copyfinished" rendered="{!copyfinished}">
+
+<h3>Copy Completed.</h3>
+<br /><br />
+<a href='/{!account.id}'>return to {!account.name}</a>
+
+</apex:pageblock>
+ 
+	<apex:pageblock rendered="false"> 
+<br />
+	--- DEBUG ---
+<br />
+
+<textarea rows='20' cols='100'>{!debugtext}</textarea>
+
+</apex:pageblock>
+
+<apex:outputtext rendered="false" value="{!account.billingstreet}" />
+<apex:outputtext rendered="false" value="{!account.shippingstreet}" />
+<apex:outputtext rendered="false" value="{!account.Address_1__c}" />
+<apex:outputtext rendered="false" value="{!account.Address_2__c}" />
+<apex:outputtext rendered="false" value="{!account.billingcountry}" />
+<apex:outputtext rendered="false" value="{!account.shippingcountry}" />
+<apex:outputtext rendered="false" value="{!account.Country__c}" />
+<apex:outputtext rendered="false" value="{!account.State__c}" />
+<apex:outputtext rendered="false" value="{!account.billingstate}" />
+<apex:outputtext rendered="false" value="{!account.shippingstate}" />
+<apex:outputtext rendered="false" value="{!account.Zip__c}" />
+<apex:outputtext rendered="false" value="{!account.billingpostalcode}" />
+<apex:outputtext rendered="false" value="{!account.shippingpostalcode}" />
+<apex:outputtext rendered="false" value="{!account.firstname}" />
+<apex:outputtext rendered="false" value="{!account.lastname}" />
+<apex:outputtext rendered="false" value="{!account.City__c}" />
+<apex:outputtext rendered="false" value="{!account.billingcity}" />
+<apex:outputtext rendered="false" value="{!account.shippingcity}" />
+<apex:outputtext rendered="false" value="{!account.Company_Email__c}" />
+<apex:outputtext rendered="false" value="{!account.phone}" />
+<apex:outputtext rendered="false" value="{!account.fax}" />
+
+
+</apex:form>
+
+</apex:page>

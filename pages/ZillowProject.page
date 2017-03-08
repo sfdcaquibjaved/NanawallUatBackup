@@ -1,0 +1,21 @@
+<apex:page showheader="false" sidebar="false" standardcontroller="Project__c" extensions="ZillowController">
+<apex:form >
+<style>
+.sfdcFormat{
+font-family:Arial,Helvetica,sans-serif;
+font-size:75%;
+}
+</style>
+<apex:actionStatus rendered="false" id="as" startText="Running" stopText="Done" />
+<apex:commandButton rendered="false" value="Update Info" action="{!MyEstimate}"  reRender="op" />
+<apex:outputpanel id="op" >
+<apex:outputlabel rendered="{!LocationValueString!=''}"  styleclass="sfdcFormat" value="Value: " /><apex:outputlabel value="{!LocationValueString}" styleclass="sfdcFormat"/>
+<br/>
+<apex:outputlink rendered="{!LocationDetailsLink!=''}" target="zillow" value="{!LocationDetailsLink}" styleclass="sfdcFormat">View Details</apex:outputlink> 
+</apex:outputpanel>
+</apex:form>
+
+<apex:outputlabel value="{!Project__c.Project_City__c}" rendered="false" />
+<apex:outputlabel value="{!Project__c.Project_Street_Address__c}" rendered="false" />
+<apex:outputlabel value="{!Project__c.Project_State__c}" rendered="false" />
+</apex:page>

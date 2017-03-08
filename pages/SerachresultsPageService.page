@@ -1,0 +1,101 @@
+<apex:page controller="ServiceQuote_Home_Controller" tabStyle="Service_Quote__c">
+  <!-- Begin Default Content REMOVE THIS -->
+   <apex:form > 
+                   
+                 <apex:pageBlock >  
+                    <apex:pageBlockSection id="pbs" columns="1">
+                        <apex:pageBlockTable id="pbtSearchResults" var="sqr" value="{!searchResults}" width="100%"  >
+
+                            <apex:column headerValue="Project">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ProjectName" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ProjectName" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.ProjectID}" >{!sqr.ProjectName}</apex:outputlink>
+                           </apex:column>
+                           
+                            <apex:column headerValue="Project Address">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ProjectAddress" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ProjectAddress" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.ProjectID}" >{!sqr.ProjectAddress}</apex:outputlink>
+                           </apex:column>
+                           
+                            <apex:column headerValue="Contact">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="ContactName" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="ContactName" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.ContactName}
+                           </apex:column>
+                           
+                           <apex:column > 
+                            <apex:facet name="header">Service Quotes</apex:facet>
+                                <apex:repeat value="{!sqr.ServiceQuotes}" var="sq" id="theRepeat">
+                                    <apex:outputlink value="/{!sq.ID}" >{!sq.ServiceQuoteNumber}</apex:outputlink><br />
+                                </apex:repeat>                         
+                           </apex:column>
+                        
+                            <apex:column headerValue="Quote #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Quote #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="QuoteID" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.QuoteID}" >{!sqr.QuoteNumber}</apex:outputlink> 
+                           </apex:column>
+
+                            <apex:column headerValue="Order #">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Order #" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="OrderID" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                <apex:outputlink value="/{!sqr.OrderID}" >{!sqr.OrderID}</apex:outputlink> 
+                           </apex:column>
+
+                            <apex:column headerValue="City">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="City" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="City" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.City}
+                           </apex:column>
+
+                            <apex:column headerValue="State">
+                                <apex:facet name="header"> 
+                                    <apex:commandlink value="State" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="State" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.State}
+                           </apex:column>
+
+                            <apex:column headerValue="Zip">
+                                <apex:facet name="header">
+                                    <apex:commandlink value="Zip" action="{!dosort}" reRender="op" >
+                                    <apex:param name="sortfield" value="Zip" assignto="{!sortfield}"/>
+                                    </apex:commandlink>
+                                </apex:facet>
+                                {!sqr.Zip} 
+                           </apex:column>
+
+                            <apex:column headerValue="O" rendered="false">
+                                <apex:facet name="header">
+                                </apex:facet> 
+                                {!sqr.origin} 
+                           </apex:column>
+
+                        </apex:pageBlockTable>          
+                    </apex:pageBlockSection>        
+                    
+                
+            </apex:pageBlock>              
+    </apex:form>                 
+                
+</apex:page>

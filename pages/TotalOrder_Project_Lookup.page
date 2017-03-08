@@ -1,0 +1,47 @@
+<apex:page docType="html-5.0" showHeader="false" sidebar="false">
+
+<apex:stylesheet value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/jquery/css/ui-lightness/jquery-ui-1.9.1.custom.min.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.Nana_TotalOrder_Project_UI, 'Nana_TotalOrder_Project_UI/totalorderlookup_main.css')}"/>
+
+
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/jquery/js/jquery-1.8.2.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/jquery/js/jquery-ui-1.9.1.custom.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/jquery/jquery.blockUI.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/jquery/jquery.tablescroll.js')}"/>
+
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/modernizr.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/Base64.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/Formatter.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/StorageManager.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/moment.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_Core_UI, 'Nana_Core_UI/forcetk.js')}"/>
+
+
+
+<apex:includeScript value="{!URLFOR($Resource.Nana_TotalOrder_Project_UI, 'Nana_TotalOrder_Project_UI/gauge.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.Nana_TotalOrder_Project_UI, 'Nana_TotalOrder_Project_UI/totalorderlookup_main.js')}"/>
+
+
+
+
+<script type="text/javascript">
+// initialize the force.com client access variables ; set these up IN the visualforce page 
+var PartnerURL = "{!$Api.Partner_Server_URL_260}";//Using API 26.0 ; https://nanawall.mobile.cs10.force.com/mobile/services/Soap/u/24.0/00DJ00000007ZEO
+var APINumber = "v24.0";
+var SFSessionID = '{!$Api.Session_ID}';
+
+_totalOrderReportVars.AjaxURL 		= '{!$Page.AjaxResponder}';
+_totalOrderReportVars.ProfileID 	= '{!$User.ProfileId}'; 
+_totalOrderReportVars.UserID 		= '{!$User.Id}';
+_totalOrderReportVars.SessionID 	= '{!$Api.Session_ID}';
+_totalOrderReportVars.PartnerURL 	= '{!$Api.Partner_Server_URL_260}';
+_totalOrderReportVars.Debug			= true;
+
+
+</script>
+
+
+<div id='TotalOrder_Container'></div>
+
+
+</apex:page>

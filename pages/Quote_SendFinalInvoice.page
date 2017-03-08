@@ -1,0 +1,7 @@
+<apex:page standardController="Quote__c" extensions="Quote_SendFinalInvoice" action="{!doSendFinalInvoice}">
+
+	
+	<apex:outputtext value="{!Quote__c.id}" rendered="false" />
+	<apex:outputtext value="{!Quote__c.Name}" rendered="false"  />
+	<apex:outputtext value="{!Quote__c.Calculated_Email__c}" rendered="false"  />
+</apex:page>

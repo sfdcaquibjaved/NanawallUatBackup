@@ -1,0 +1,75 @@
+<apex:page controller="Quote_AutoQuoteController" showHeader="false" sidebar="false" action="{!init}">
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-1.4.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_0, 'jquery-ui-1.8.6.custom/css/ui-lightness/jquery-ui-1.8.6.custom.css')}"/>
+
+<script type="text/JavaScript"> 
+	
+		
+
+	jQuery.noConflict();
+    jQuery(document).ready(function() {
+	
+	    	  if( {!AutoClose})
+	    	  {
+	    	  	parent.closeAutoQuoteDialog();
+//				window.close();
+	    	  }
+    });
+</script>
+ <apex:PageMessages />
+	<apex:form >
+	
+		<apex:outputtext value="{!messages}" escape="false" />
+	
+		<div style="padding: 10px;">
+
+			<h3>Quote Options</h3> 
+			
+			
+			<p>It is recommended that you preview the quote to ensure accuracy before sending to customers."</p>
+			<br />
+			
+			        
+
+					<h4>View Quote</h4>
+					<p>
+						View quote in popup window: <apex:inputCheckbox ID="chkAutoQuoteView" value="{!AutoQuoteView}" disabled="{!NOT(AutoQuoteViewEnabled)}"/>
+			        </p> 
+					        
+			        <h4>Email Quote</h4>			
+					<p>
+						Rep: <apex:inputCheckbox ID="chkAutoQuoteEmailRep" value="{!AutoQuoteEmailRep}" disabled="{!NOT(AutoQuoteEmailRepEnabled)}" />
+				         &nbsp; 
+						Contact: <apex:inputCheckbox ID="chkAutoQuoteEmailLead" value="{!AutoQuoteEmailLead}" disabled="{!NOT(AutoQuoteEmailLeadEnabled)}" />
+			        </p>
+			        
+			        
+			        <h4>Email Save Tips</h4>
+			        <p>
+						Rep: <apex:inputCheckbox ID="chkAutoQuoteEmailSaveTips" value="{!AutoQuoteEmailSaveTips}" disabled="{!NOT(AutoQuoteEmailSaveTipsEnabled)}" />
+			        </p>
+
+			        <h4>Email CAD</h4>
+			        <p>
+				        Rep: <apex:inputCheckbox ID="chkAutoQuoteEmailRepCAD"  value="{!AutoQuoteEmailRepCAD}" disabled="{!NOT(AutoQuoteEmailRepCADEnabled)}" />
+			        </p>
+			        <p>
+						Contact: <apex:inputCheckbox ID="chkAutoQuoteEmailLeadCAD" value="{!AutoQuoteEmailLeadCAD}" disabled="{!NOT(AutoQuoteEmailLeadCADEnabled)}"  />
+			        </p>
+			        <h4>Email Installer</h4>
+			        <p>
+				        <apex:inputCheckbox ID="chkAutoQuoteEmailInstaller"  value="{!AutoQuoteEmailInstaller}" disabled="{!NOT(AutoQuoteEmailInstallerEnabled)}" />
+			        </p>
+			        <br />
+					<apex:outputtext value="{!ExplanationOfChoices}" />
+			        <br />
+			        <apex:commandButton value="OK"  ID="btnOKAutoQuote"  action="{!TriggerAutoQuote}" />
+			        <apex:commandButton value="Cancel" ID="btnCancelAutoQuote" />
+			
+		</div>
+
+	</apex:form>
+
+</apex:page>

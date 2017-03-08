@@ -1,0 +1,144 @@
+<apex:page controller="ServicePart_Home_Controller">
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+
+
+<style>
+
+	.LoadingMessage {
+		font-size: 16px;
+		background-color: green;
+		color: white;
+		font-weight: bold;
+	}
+</style>
+	
+<apex:tabpanel >     
+	<apex:tab label="Multi-Search" name="ms" id="tabms">
+		<apex:form id="theForm">
+		
+		    <apex:pageBlock title="Search Service Parts">  
+
+				<div id='AdvancedFields'>
+			        <apex:panelGrid columns="4" width="100%">
+			          
+				        Part Name: <apex:inputtext value="{!SearchFields.PartName}"  size="10" id="filterPartName" styleClass="simpleSearchField" />
+				        Part Number: <apex:inputtext value="{!SearchFields.PartNumber}"  size="10" id="filterPartNumber" styleClass="simpleSearchField" />
+			            Location: <apex:inputtext value="{!SearchFields.Location}"  size="5" id="filterLocation" styleClass="simpleSearchField" />
+				        
+				        Vendor Cost: <apex:inputtext value="{!SearchFields.VendorCost}"  size="10" id="filterVendorCost" styleClass="simpleSearchField" />
+				        Retail Cost: <apex:inputtext value="{!SearchFields.RetailCost}"  size="10" id="filterRetailCost" styleClass="simpleSearchField" />
+				        # Stocked: <apex:inputtext value="{!SearchFields.NumberStocked}"  size="5" id="filterNumberStocked" styleClass="simpleSearchField" />
+				        Reorder Level: <apex:inputtext value="{!SearchFields.ReorderLevel}"  size="5" id="filterReorderLevel" styleClass="simpleSearchField" />
+
+			            Type:<apex:selectList value="{!SearchFields.Type}" multiselect="false" size="1">
+			            		<apex:selectOption itemValue="" itemLabel="-SELECT-" />
+		                		<apex:selectOptions value="{!types}"></apex:selectOptions>
+			            	</apex:selectList>
+
+			            <apex:commandButton value="Search" status="loadingstatus" action="{!searchparts}" reRender="op" />
+			        </apex:panelGrid>
+		        </div>  
+		        
+                <apex:outputpanel id="op">
+	                <apex:actionstatus layout="block" startStyleClass="LoadingMessage" id="loadingstatus" starttext="Loading..." stoptext="{!resulttext}" />
+			        <apex:pagemessages ></apex:pagemessages>
+			        
+			        <apex:pageBlockSection id="pbs" columns="1">
+			            <apex:pageBlockTable id="pbtSearchResults" var="part" value="{!searchResults}" width="100%"  >
+
+			                <apex:column headerValue="Name">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Part Name" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Part Name" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+				                <apex:outputlink value="/{!part.Id}" >{!part.Part_Name__c}</apex:outputlink>
+			               </apex:column>
+
+			                <apex:column headerValue="Location">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Location" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Location" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+								{!part.Location__c}
+			               </apex:column>
+			               
+			                <apex:column headerValue="Name">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Part Number" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Part Number" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+				                <apex:outputlink value="/{!part.Id}" >{!part.Name}</apex:outputlink>
+								
+			               </apex:column>
+
+			                <apex:column headerValue="Vendor Cost">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Vendor Cost" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Vendor Cost" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+								{!part.Vendor_Cost__c}
+			               </apex:column>
+			               
+			                <apex:column headerValue="Retail Cost">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Retail Cost" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Retail Cost" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+								{!part.Retail_Cost__c}
+			               </apex:column>
+
+			                <apex:column headerValue="# Stocked">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="# Stocked" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="# Stocked" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+								{!part.Number_Stocked__c}
+			               </apex:column>
+
+			                <apex:column headerValue="Reorder Level">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Reorder Level" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Reorder Level" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+								{!part.Reorder_Level__c}
+			               </apex:column>
+
+
+			                <apex:column headerValue="Stocked">
+				                <apex:facet name="header">
+				                    <apex:commandlink value="Stocked" action="{!dosort}" reRender="op" >
+				                    <apex:param name="sortfield" value="Stocked" assignto="{!sortfield}"/>
+				                    </apex:commandlink>
+				                </apex:facet>
+								{!part.Stocked__c}
+			               </apex:column>
+
+
+		
+						</apex:pageBlockTable>        	
+					</apex:pageBlockSection>        
+			        
+		        </apex:outputpanel>
+			</apex:pageBlock>		
+		</apex:form>
+	</apex:tab>
+	<apex:tab label="Filters" id="tabfilters" name="filters">
+		<apex:outputpanel layout="block"> 
+			<apex:enhancedList customizable="true" height="300" id="list" type="Service_Part__c" />    
+		</apex:outputpanel>
+	
+	</apex:tab>
+</apex:tabpanel>
+
+
+</apex:page>

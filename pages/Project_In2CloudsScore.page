@@ -1,0 +1,28 @@
+<apex:page standardcontroller="Opportunity" extensions="Project_In2CloudsScore" showHeader="false" sidebar="false">
+<style>
+    body{ background-color: #white; }
+</style>
+
+<script type='text/javascript'>
+    function refreshPage() 
+    {
+        document.location.href = '/apex/Project_In2CloudsScore?id={!Opportunity.id}';
+    }
+
+
+
+    if( '{!Opportunity.I2C_Prob_Score__c}' < 0  ) 
+    {
+        setTimeout('refreshPage()',5000);
+    
+    }
+</script>
+<span style='font-family: Arial, Helvetica, sans-serif'>
+<!-- I2C Probability: <apex:outputtext value="{!Opportunity.I2C_Prob_Score__c}" />-->
+&nbsp; I2C Rank: <apex:outputtext value="{!Opportunity.I2C_Rank__c}" />
+</span>
+
+
+
+
+</apex:page>

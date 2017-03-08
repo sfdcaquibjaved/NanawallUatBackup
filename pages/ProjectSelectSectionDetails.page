@@ -1,0 +1,353 @@
+<apex:page controller="ProjectSectionDetails" sidebar="false">
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj, receivedInputID) {
+            var inputCheckBox = document.getElementsByTagName("input");
+            for (var i = 0; i < inputCheckBox.length; i++) {
+                if (inputCheckBox[i].id.indexOf(receivedInputID) != -1) {
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+
+    <apex:form id="formId">
+        <apex:pageMessages ></apex:pageMessages>
+        <style>
+            .panelWrapper .mainTitle {
+                background-color: #1797c0 !important;
+                color: white !important;
+                padding: 10px 300px 20px !important;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            
+            .bread-table {
+                padding: 0px;
+                margin: 0px;
+                border-spacing: 0px !important;
+            }
+            
+            .bread-before {
+                background-color: #FFF;
+                margin: 0;
+                padding: 0;
+                border-top: 21px solid #3498db;
+                border-bottom: 21px solid #3498db;
+                border-left: 15px solid #fff;
+            }
+            
+            .bread {
+                width: 100%;
+                background-color: #3498db;
+                height: 30px;
+                margin: 0;
+                padding-top: 12px;
+                color: #FFF;
+                font-size: 8pt;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+            .bread a {
+                color: #FFF !important;
+                text-decoration: none
+            }
+            
+            .bread a:hover {
+                text-decoration: underline;
+            }
+            
+            .bread-after {
+                background-color: #FFF;
+                margin: 0;
+                padding: 0;
+                border-top: 21px solid #FFF;
+                border-bottom: 21px solid #FFF;
+                border-left: 15px solid #3498db;
+            }
+            
+            .bread-active {
+                width: 100%;
+                background-color: green;
+                height: 30px;
+                margin: 0;
+                padding-top: 12px;
+                color: #FFF;
+                font-size: 8pt;
+                text-align: center;
+            }
+            
+            .bread-before-active {
+                background-color: green;
+                margin: 0;
+                padding: 0;
+                border-top: 21px solid green;
+                border-bottom: 21px solid green;
+                border-left: 15px solid #fff;
+            }
+            
+            .bread-after-active {
+                background-color: #FFF;
+                margin: 0;
+                border-top: 21px solid #FFF;
+                border-bottom: 21px solid #FFF;
+                border-left: 15px solid green;
+            }
+            
+            .bread-inactive {
+                width: 100%;
+                background-color: #A59D9D;
+                height: 30px;
+                margin: 0;
+                padding-top: 12px;
+                color: #FFF;
+                font-size: 8pt;
+                text-align: center;
+            }
+            
+            .bread-before-inactive {
+                background-color: #A59D9D;
+                margin: 0;
+                padding: 0;
+                border-top: 21px solid #A59D9D;
+                border-bottom: 21px solid #A59D9D;
+                border-left: 15px solid #fff;
+            }
+            
+            .bread-after-inactive {
+                background-color: #FFF;
+                margin: 0;
+                border-top: 21px solid #FFF;
+                border-bottom: 21px solid #FFF;
+                border-left: 15px solid #A59D9D;
+            }
+            
+            .infoSection {
+                display: inline-block;
+                float: left;
+                height: 80px;
+                width: 95%;
+                background-color: #f8f8f8;
+                margin-top: 10px;
+                border-radius: 10px;
+            }
+            
+            .step1Section {
+                display: inline-block;
+                float: left;
+                width: 95%;
+                background-color: #f8f8f8;
+                margin-top: 5px;
+                border-radius: 10px;
+                border-top: 3px solid #3d8d8d;
+            }
+            
+            .boxStyle1 {
+                color: #fff;
+                ;
+                font-family: arial;
+                font-size: 13px;
+                text-decoration: none;
+            }
+            
+            .boxStyle {
+                color: #000;
+                font-family: arial;
+                font-size: 13px;
+                text-decoration: none;
+            }
+        </style>
+        <apex:outputPanel id="messagePanel">
+            <div id="allBar" style="width:95%">
+                <table width="100%">
+                    <tr>
+                        <td width="50%">
+                            <apex:outputpanel rendered="{!(oppSelected)}">
+                                <table class="bread-table" width="100%">
+                                    <tr>
+                                        <td class="bread-before-inactive"></td>
+                                        <td class="bread-inactive">
+                                            <apex:OutputText value="Select Project Details" styleclass="boxStyle1" />
+                                            <apex:outputText value="(Complete)" rendered="{!(oppSelected )}" styleclass="boxStyle1" />
+                                        </td>
+                                        <td class="bread-after-inactive"></td>
+                                    </tr>
+                                </table>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!((proSelected )&& NOT(oppSelected))}">
+                                <table class="bread-table" width="100%">
+                                    <tr>
+                                        <td class="bread-before-active"></td>
+                                        <td class="bread-active">
+                                            <apex:OutputText value="Select Project Details(You Are Here)" styleclass="boxStyle1" />
+                                        </td>
+                                        <td class="bread-after-active"></td>
+                                    </tr>
+                                </table>
+                            </apex:outputpanel>
+                        </td>
+                        <td width="50%">
+                            <apex:outputpanel rendered="{!(proSelected)}">
+                                <table class="bread-table" width="100%">
+                                    <tr>
+                                        <td class="bread-before-inactive"></td>
+                                        <td class="bread-inactive">
+                                            <apex:OutputText value="Select Opportunity Details" styleclass="boxStyle1" />
+                                            
+                                        </td>
+                                        <td class="bread-after-inactive"></td>
+                                    </tr>
+                                </table>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!((oppSelected )&& NOT(proSelected))}">
+                                <table class="bread-table" width="100%">
+                                    <tr>
+                                        <td class="bread-before-active"></td>
+                                        <td class="bread-active">
+                                            <apex:OutputText value="Select Opportunity Details(You Are Here)" styleclass="boxStyle1" />
+                                        </td>
+                                        <td class="bread-after-active"></td>
+                                    </tr>
+                                </table>
+                            </apex:outputpanel>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </apex:outputPanel>
+        <apex:pageBlock id="block">
+            <style>
+                body .bPageBlock .pbBody .red .pbSubheader {
+                    background-color: #c00000;
+                }
+                
+                body .bPageBlock .pbBody .grey .pbSubheader {
+                    background-color: #1797c0;
+                }
+            </style>
+            <apex:outputPanel styleClass="grey" layout="block" rendered="{!((proSelected )&& NOT(oppSelected))}" id="test" >
+                
+                <apex:pageBlockSection title="Select Project Information Section" columns="2" collapsible="false" id="pblock" >
+                    
+                    <apex:inputCheckbox id="SelectAll" label="Select All Sections" onclick="selectAll()" value="{!allSelected}"  >
+                        <apex:actionSupport action="{!selectAll}" rerender="test" event="onchange" status="loadingStatus"/>
+                    </apex:inputCheckbox>
+                    <apex:pageBlockSectionItem >
+                    
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:inputCheckbox label="Project Site Address Information" value="{!box1}"  required="true"></apex:inputCheckbox>
+                    <!--<apex:inputCheckbox label="Accounts Relationship Section" value="{!box2}" ></apex:inputCheckbox>-->
+                    <apex:inputCheckbox label="Description Information" value="{!box3}"  required="true"></apex:inputCheckbox>
+                    <apex:inputCheckbox label="Project Order Information" value="{!box4}" ></apex:inputCheckbox>
+                    <apex:inputCheckbox label="Project Milestones" value="{!box5}"  ></apex:inputCheckbox>
+                    <apex:inputCheckbox label="Project Detail" value="{!box6}" required="true"></apex:inputCheckbox>
+                    
+                </apex:pageBlockSection>
+                
+            </apex:outputPanel>
+
+
+            <apex:outputPanel rendered="{!((oppSelected )&& NOT(proSelected))}">
+
+                <apex:pageBlockTable value="{!oppList}" var="opp" id="blocky">
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')" />
+                        </apex:facet>
+                        <apex:inputCheckbox value="{!opp.isSelected1}" id="inputId" />
+                    </apex:column>
+
+
+                    <apex:column headerValue="Name" value="{!opp.name}" />
+                    <apex:column headerValue="AccountName" value="{!opp.AccountName}" />
+                    <apex:column headerValue="Primary Opportunity">
+                        <apex:inputCheckbox value="{!opp.Primary}" disabled="true" />
+                    </apex:column>
+                </apex:pageBlockTable>
+
+            </apex:outputPanel>
+
+        </apex:pageBlock>
+
+        <apex:pageBlock id="dblock" rendered="{!((proSelected )&& NOT(oppSelected))}" title="Select Notes and Attachments">
+            <style>
+                body .bPageBlock .pbBody .red .pbSubheader {
+                    background-color: #c00000;
+                }
+                
+                body .bPageBlock .pbBody .grey .pbSubheader {
+                    background-color: #1797c0;
+                }
+            </style>
+            <apex:outputPanel styleClass="grey" layout="block">
+
+
+                <apex:pageBlockTable value="{!notesAttachList}" var="ntAtt" columnsWidth="10%,10%,30%,30%,10%,10%">
+
+                    <apex:column width="10%">
+                        <apex:facet name="header">
+                            <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')" />
+                        </apex:facet>
+                        <apex:inputCheckbox value="{!ntAtt.isSelected2}" id="inputId" />
+                    </apex:column>
+                    <apex:column headerValue="Type" value="{!ntAtt.Type}" width="10%" colspan="20" />
+                    <apex:column headerValue="Created Date" width="30%">
+                        <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                            <apex:param value="{!ntAtt.CreatedDate}"></apex:param>
+                        </apex:outputText>
+                        <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                            <apex:param value="{!ntAtt.CreatedDate}"></apex:param>
+                        </apex:outputText>
+                    </apex:column>
+                    <apex:column headerValue="Name" width="30%">
+                        <apex:outputlink value="/{!ntAtt.note.Id}" target="_self" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                            <apex:outputText value="{!ntAtt.note.Title}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}" />
+                        </apex:outputlink>
+                        <apex:outputlink value="/{!ntAtt.attach.Id}" target="_self" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                            <apex:outputText value="{!ntAtt.attach.Name}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}" />
+                        </apex:outputlink>
+                    </apex:column>
+                    <apex:column headerValue="Created By" width="10%">
+                        <apex:outputlink value="/{!ntAtt.note.CreatedById}" target="_self" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                            <apex:outputText value="{!ntAtt.note.CreatedBy.Name}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}" />
+                        </apex:outputlink>
+                        <apex:outputlink value="/{!ntAtt.attach.CreatedById}" target="_self" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                            <apex:outputText value="{!ntAtt.attach.CreatedBy.Name}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}" />
+                        </apex:outputlink>
+                    </apex:column>
+                    <apex:column headerValue="Modified Date" width="10%">
+                        <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Note', true,false)}">
+                            <apex:param value="{!ntAtt.LastModifiedDate}"></apex:param>
+                        </apex:outputText>
+                        <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" rendered="{!IF(ntAtt.Type == 'Attachment', true,false)}">
+                            <apex:param value="{!ntAtt.LastModifiedDate}"></apex:param>
+                        </apex:outputText>
+                    </apex:column>
+
+                </apex:pageBlockTable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+
+        <div align="center" draggable="false">
+            <apex:commandButton value="Show Opportunities" Action="{!Next}" rendered="{!(hideNextButton)}" />
+            <apex:commandButton value="Clone Selected" Action="{!Selected}" rendered="{!(hideCloneButton)}" />
+            <apex:commandButton value="Back" Action="{!goback}" rendered="{!backButton}" />
+            
+        </div>
+        <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                    <div class="waitingHolder" style="top: 50%; width: 110px;">
+                        <img class="waitingImage" src="/img/loading.gif" />
+                        <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                    </div>
+                </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+        </apex:actionStatus>
+
+    </apex:form>
+</apex:page>

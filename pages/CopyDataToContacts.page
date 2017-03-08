@@ -1,0 +1,132 @@
+<apex:page standardcontroller="Account" extensions="CopyDataToContacts">  
+   <apex:form >
+   <a href='/{!account.id}'><b>&lt; &lt; Back to {!account.Name}</b></a>
+     <apex:pagemessages />
+   <apex:pageBlock rendered="{!failures}">
+   
+   <font color="red">{!Info}</font><br/>
+   <apex:repeat value="{!failureContacts}" var="fc">
+   
+   {!fc.LastName}
+   {!fc.FirstName}<br/>
+   </apex:repeat>
+  
+   </apex:pageBlock>
+   
+   
+
+   <div align="left" draggable="false" >
+  <!-- <apex:commandButton value="Submit" action="{!ButtonClicked}"/> -->
+   </div>
+   <style type="text/css">
+   .violetbg{
+            background-color: #0AAADC;
+            color: black;
+        }
+     .tableclass{
+
+        border: 1px solid black;
+
+        align: center;
+
+        text-align: center;
+
+        vertical-align: center;
+
+        font-size:10pt;
+
+        table-layout: fixed;
+
+        border-spacing: 0px;
+
+        width:60%;
+        colspan:2;
+
+}  
+.greybg{
+
+background-color: #D3D3D3;
+
+font-weight: bold;
+
+}
+        
+   </style>
+     <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID3){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID3)!=-1){                                     
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        } 
+        function selectAllCheckboxes(obj,receivedInputID4){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID4)!=-1){                                     
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+ 
+     <!-- <apex:pageBlock > -->
+  <!--   <apex:pageblock title="{!IF(wrapcontactList != NULL && wrapcontactList.size > 0,'Selected Contact','There are no contacts to display')}"  id="fieldselecter" rendered="{!NOT(copyfinished)}"> -->
+      <apex:pageblock id="fieldselecter" rendered="{!NOT(copyFinished)}"> 
+           <apex:outputPanel rendered="{!IF(wrapcontactList.size>0,true,false)}">
+            <div id="td">
+            
+                <table class="tableclass" style="width:60%;">
+                    <tr class="violetbg" style="font-size:12pt;text-align:center; vertical-align: middle;">
+                    <td><apex:inputCheckbox onclick="selectAllCheckboxes(this,'InputID3')"/></td> 
+                    
+                    <td>Contact Name</td>
+                    </tr>
+                     <apex:repeat value="{!wrapcontactList}" var="con">
+                     <tr>
+                    <td width="10%">           
+                    <apex:inputCheckbox value="{!con.isSelected}" id="InputID3"/>
+                    </td>
+                    <td class="greybg"> 
+                    <apex:outputLink value="/{!con.cons.id}" id="eventLink2" target="_blank">{!con.cons.Name}</apex:outputLink>
+                    </td>
+                
+                    </tr>
+                </apex:repeat>
+                </table>
+            </div>
+            <br> </br>
+            
+                <div>            
+                <table class="tableclass" style="width:60%;">
+                <tr class="violetbg">
+                <th style="font-size:12pt;text-align:center; vertical-align: middle;">
+                <apex:inputCheckbox onclick="selectAllCheckboxes(this,'InputID4')"/></th>
+                <th style="font-size:12pt;text-align:center; vertical-align: middle;">Account Fields to Copy</th>
+                </tr>
+                <apex:repeat value="{!wrapAccountFields}" var="wrap">
+                
+                <tr>
+                <td width="10%">           
+                <apex:inputCheckbox value="{!wrap.isSelected}" ID="InputID4"/>
+                </td>
+                <td class="greybg"> {!wrap.accn}</td>
+                
+                </tr>
+                </apex:repeat>
+                </table>
+                </div>
+            
+            <apex:commandButton value="Submit" action="{!buttonClicked}"/>
+            </apex:outputpanel>
+        </apex:pageBlock> 
+        
+       <apex:pageBlock id="copyFinished" rendered="{!copyFinished}">
+       <h3>Copy Completed.</h3>
+       <br /><br />
+      <!--  <a href='/{!account.id}'>return to {!account.name}</a> -->
+       </apex:pageBlock>
+                  
+   </apex:form>
+</apex:page>

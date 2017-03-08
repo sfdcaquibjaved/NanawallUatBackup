@@ -1,0 +1,2 @@
+<apex:page standardController="Contact"> <apex:iframe src="https://secure.eloqua.com/pp/pp.aspx?emailAddress={!contact.email}"/>
+</apex:page>

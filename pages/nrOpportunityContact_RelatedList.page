@@ -1,0 +1,53 @@
+<apex:page standardController="Opportunity" extensions="nrOppContact_RelatedList_Controller">
+
+<style>
+</style>
+
+<script>
+	function createNewRecord() {
+		window.top.location='{!NewOCRURL}';
+	}
+</script>
+
+<apex:form >
+	<apex:pagemessages />
+	<apex:commandbutton value="New Project Contact" onclick="createNewRecord()"/>
+	<apex:dataTable value="{!oppContacts}" var="oppContact" id="ocrtable" cellpadding="2" cellspacing="3" styleClass="nrOppContact_RelatedList_Controller_tableClass" width="100%" >
+	 
+			<apex:column >
+			    <apex:facet name="header">Action</apex:facet> 
+				<a href='/{!oppContact.Id}/e?retURL=%2F{!oppContact.Opportunity__c}'>edit</a> 
+				|  <apex:commandLink action="{!DoDelete}" value="delete" rendered="{!HasDeleteAccess}">
+					<apex:param name="deleteId" assignTo="{!ActionId}" value="{!oppContact.Id}" />
+					<apex:param name="deleteOppId" assignTo="{!DeleteOppId}" value="{!oppContact.Opportunity__c}" />
+					<apex:param name="deleteContactId" assignTo="{!DeleteContactId}" value="{!oppContact.Contact__c}" />
+				</apex:commandLink>
+			</apex:column>
+	
+			<apex:column >
+			    <apex:facet name="header">Contact</apex:facet> 
+				<apex:outputText value="{!oppContact.Contact__r.FirstName} {!oppContact.Contact__r.LastName}"/>
+			</apex:column>
+			
+			<apex:column >
+			    <apex:facet name="header">Contact Phone</apex:facet> 
+				<apex:outputText value="{!oppContact.Contact__r.Phone}"/>
+			</apex:column>
+			
+			<apex:column >
+			    <apex:facet name="header">Company Name</apex:facet> 
+				<apex:outputText value="{!oppContact.Contact__r.Account.Name}"/>
+			</apex:column>
+			
+			<apex:column >
+			    <apex:facet name="header">Role</apex:facet> 
+				<apex:outputText value="{!oppContact.Role__c}"/>
+			</apex:column>
+			
+			
+	</apex:dataTable>
+</apex:form>
+
+<apex:outputText rendered="false" value="{!Opportunity.Name}" />
+
+</apex:page>

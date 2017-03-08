@@ -1,0 +1,11 @@
+<apex:page standardController="Quote_Detail__c" extensions="Dispatcher_Edit_Controller" action="{!getredir}">
+
+	<apex:form >
+	
+		<apex:pagemessages />
+	</apex:form>
+
+		<apex:outputtext rendered="false" value="{!Quote_Detail__c.Quote__c}" />
+		<apex:outputtext rendered="false" value="{!Quote_Detail__c.Quote_Detail_ID__c}" />
+
+</apex:page>

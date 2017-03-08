@@ -1,0 +1,68 @@
+<apex:page standardcontroller="Installer_Order__c" extensions="installerorder_createssq_controller">
+
+
+	<apex:form >
+
+		<apex:sectionHeader title="Case" subtitle="New Case"/>
+		<apex:pageBlock >
+				<apex:pageBlockSection columns="2"  id="addressBlock" >
+					<apex:pagemessages />	<apex:outputlabel />
+					<apex:inputField value="{!newcase.Quote__c}">
+						<apex:actionSupport event="onchange" rerender="addressBlock" action="{!setaddress}" />
+					</apex:inputField> 
+					 
+					 
+					<apex:pageBlockSectionItem >
+						<apex:outputlabel for="addressSelect" style="color: #4A4A56;font-weight: bold;font-size: 91%;">Use Address</apex:outputlabel>
+						<apex:SelectList id="addressSelect" value="{!UseAddress}" size="1">
+							<apex:SelectOption itemLabel="-SELECT-" itemValue="-SELECT-"/>
+							<apex:SelectOption itemValue="-SELECT-" itemLabel="~~~~ Contacts ~~~~"/>
+							<apex:selectOptions value="{!contacts}"/>
+							<apex:SelectOption itemValue="-SELECT-" itemLabel="~~~~ Installers ~~~~"/>
+							<apex:selectOptions value="{!installers}"/>
+							<apex:SelectOption itemValue="-SELECT-" itemLabel="~~~~ Reps ~~~~"/>
+							<apex:selectOptions value="{!reps}"/>
+							<apex:actionSupport event="onchange" rerender="addressBlock" action="{!setaddress}" />
+						</apex:SelectList>
+					
+					</apex:pageBlockSectionItem>
+										 
+			
+					
+					<apex:inputField value="{!newcase.Other_First_Name__c}" /> 
+					<apex:inputField value="{!newcase.Other_Last_Name__c}" />
+					<apex:inputField value="{!newcase.Other_Phone__c}" />
+					<apex:inputField value="{!newcase.Other_Email__c}" />
+					
+					
+					<apex:inputField value="{!newcase.Responsible_Rep__c}" />
+					<apex:inputField value="{!newcase.Type}" />
+					
+					<apex:outputlabel for="casecomment" style="color: #4A4A56;font-weight: bold;font-size: 91%;">Resolution</apex:outputlabel>
+					<apex:inputTextarea id="casecomment" value="{!txtCaseComment}" rows="5" cols="50" />
+			
+				
+				</apex:pageBlockSection>
+	
+				<apex:pageBlockButtons >
+					<apex:commandbutton value="Create the case and service quote" action="{!docreate}" />
+					<apex:commandbutton value="Cancel" action="{!cancel}" />
+				</apex:pageBlockButtons>			
+			</apex:pageblock>			
+			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Shipping_Address__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Shipping_City__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Shipping_State__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Shipping_Zip__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Shipping_Phone__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Shipping_Method__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Billing_Address__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Billing_City__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Billing_State__c}" />			
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Billing_Zip__c}" />			
+
+<apex:outputfield rendered="false" value="{!Installer_Order__c.Project_State__c}" />			
+
+	</apex:form>
+
+</apex:page>

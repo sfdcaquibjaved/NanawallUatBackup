@@ -1,0 +1,1535 @@
+@isTest
+public class ServiceQuote_ReportController_Test {
+     public static list<Lead> olstTestLead;
+    public static list < Attachment > attachments;
+    public static list < case > cases;
+    static testMethod void testMethod1() {
+        
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
+        
+      profile prof = [select id from Profile where name = 'Standard User'];
+         
+         User user1 = new User ( alias = 'testme', email = 'testme@noemail.com', emailencodingkey = 'UTF-8', lastname = 'test',languagelocalekey = 'en_US', 
+         localesidkey = 'en_US', profileid = prof.Id, country = 'United Kingdom', timezonesidkey = 'Europe/London', username = 'testme@noemail.com');
+         insert user1;
+        
+        list<Zip_Codes_Master__c> lstzipCode = new list<Zip_Codes_Master__c>();
+         Zip_Codes_Master__c zipCode1 = new Zip_Codes_Master__c();
+         zipCode1.City__c = 'Stow';
+         zipCode1.Country__c = 'United States';
+         zipCode1.State__c = 'Maine';
+         zipCode1.Zip_Code__c = '12345' ;
+         lstzipCode.add(zipCode1);
+         insert  lstzipCode; 
+         
+         
+         
+         Account acc=new Account();
+         acc.Name='test';
+         acc.Phone='12345678';
+         acc.BillingState = 'New York';
+         acc.BillingCountry='United States';
+         acc.BillingPostalCode ='12345';
+         insert acc;
+         
+         contact con=new contact();
+         //con.Name='test contact';
+         con.Accountid=acc.id;
+         con.FirstName = 'john';
+         con.LastName = 'CAD EMAIL RECIPIENT';
+         con.MailingStreet = 'street';
+         con.MailingCity = 'city'; 
+         con.Mailingstate = 'Utah';
+         con.MailingPostalCode = '12345';
+         con.MailingCountryCode = 'US';
+         con.Address_1__c='hyderabad';
+         con.Address_2__c='hyder guda';
+         con.AIA_Lunch_and_Learn__c=true;
+         con.AssistantName='contact assistant';
+         con.Birthdate=system.today();
+         con.Fax='123456';
+         con.Email='abc@abc.com';
+         con.Phone='125869';
+         con.Country__c='Aruba';
+         insert con; 
+        
+        Case caseObj = new Case();
+        caseObj.Status = 'Working';
+        caseObj.Origin = 'Phone';
+        insert caseObj;  
+        
+        
+        
+        list<Project__c> projList=new list<Project__c>();
+         Project__c proj = new Project__c();
+         proj.Name='Test Project';
+         proj.OwnerId=user1.id;
+         //proj.IsDeleted=false;
+         proj.RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Residential Project').getRecordTypeId();
+         proj.Actual_Project_Need_Date__c=date.today();
+         proj.Amount__c=10;
+         proj.Architect_Account__c=acc.id;
+         proj.Architect_Considered__c=true;
+         proj.Architect_On_Project__c=true;
+         proj.Award_Date__c=date.today();
+         proj.Bid_Date__c=date.today();
+         proj.Budget_Quote_Provided__c=true;
+         proj.Choices__c='NoValue';
+         proj.Corporate_Account__c=true;
+         proj.Dodge_Number__c='123';
+         proj.End_Customer_Contact__c=con.id;
+         proj.Implicit_Contact__c=con.id;
+         proj.Installer_Email_Viewed__c=true;
+         proj.Lead_Source__c='cold';
+         proj.Model_Home__c=true;
+         proj.Nearby_Showrooms__c=12;
+         proj.Office_Interior__c=true;
+         proj.OldProjectId__c='abc';
+         proj.Opportunity_ID__c='test old';
+         //proj.Opportunity_Name__c=opp1.id;
+         proj.Estimated_Project_Need_Date__c=date.today();
+         proj.Expected_Install_Date__c=date.today();
+         proj.Expected_Open_Date__c=date.today();
+         proj.Explicit_Score__c='a';
+         proj.HighRise__c=true;
+         proj.How_Many_Models__c='4';
+         proj.Ordering_Account__c=acc.id;
+         proj.Preliminary_Drawings_Date__c=date.today();
+         proj.Preliminary_Drawings__c=true;
+         proj.Prizm_4__c=4;
+         proj.Project_City__c='city';
+         proj.Project_Coordinator__c=user1.id;
+         proj.Project_Country__c='United States';
+         proj.Project_Has_Competitor__c=true;
+         proj.Project_Implicit_Score__c=5;
+         proj.Project_State__c='Indiana';
+         proj.Project_Street_Address__c='street address';
+         proj.Project_Zip_Code__c='12345';
+         proj.Public_Spec_d_Job__c=true;
+         proj.Publicly_Specified_Jobs__c='Nana only';
+         proj.Purchasing_Method__c='Glass House';
+         proj.Reason_Project_Lost__c='Competitor';
+         proj.Residential_Vertical__c=true;
+         proj.Sale_Resulting_From_Model__c=true;
+         proj.Stage__c='Design';
+         proj.Use_Ordering_Account_Address__c=true;
+         proj.Use_Project_Address__c=true;
+         proj.Use_Shipping_Address__c=true;    
+         proj.Web_Project__c=true;
+         proj.Split_Stage__c='New Order';
+         proj.Influencer_Count__c=3;    
+         proj.Opportunity_Count__c=3;
+         proj.TerritoryName__c='territory';
+         proj.Application__c='Automotive';
+         proj.Application_2__c='Other';
+         proj.Project_Coordinator__c=user1.id;
+         proj.Project_Zip_Code__c='12345';
+         //proj.accountid=acc.id;
+         proj.Close_Date__c=Date.newInstance(2016, 12, 12);
+         projList.add(proj);
+         insert projList;
+                  
+         List< Opportunity > oppList = new list < Opportunity > ();
+         Opportunity opp=new Opportunity();
+         opp.Name='test opp';
+         opp.AccountId=acc.id;
+         opp.Amount=1000;
+         opp.Probability=20;
+         opp.Project_Name__c=proj.id;
+         opp.Stage_Detail__c='Considered';
+         opp.ForecastCategoryName='Pipeline';
+         opp.Expected_Resolution_Date_2__c=system.today();
+         opp.StageName='Need Analysis';
+         //opp.Application_Industry__c='test';
+         //opp.Application_Sub_Industry__c='test1';
+         opp.Award_Date__c=date.today();
+         opp.Bid_Date__c=date.today();
+         opp.Budget_Quote__c=true;
+         opp.Primary_Opportunity__c=true;
+         //opp.Close_Date__c=system.today()+10;
+         opp.CloseDate = Date.today()+10;
+         opp.OwnerId=user1.id;
+         opp.RecordTypeId=Label.Influencer_Opportunity_RecordTypeId;
+         opp.Project_Name__c=projList[0].Id;
+         
+         oppList.add(opp);
+         insert oppList;
+        
+        list < Quote__c > qList = new list < Quote__c > ();
+         Quote__c qt=new Quote__c();
+         qt.Name='test quote';
+         qt.AACO__c=true;
+         qt.Actual_Delivery_Date__c=date.today();
+         qt.Actual_Pickup_Date__c=date.today();
+         qt.Address__c='abc';
+         qt.Balanced_Received_Date__c=date.today();
+         qt.Balance_Received__c=20.66;
+         qt.CAD_Opened__c=system.now();
+         qt.CAD_Sent__c=system.now();
+         qt.CAD_Viewed__c=false;
+         qt.Canadian_Tax_Status__c='Company';
+         qt.Cancelled__c=true;
+         qt.City__c='abc';
+         qt.Complete_Signoff_Date__c=date.today();
+         qt.Contact__c=con.Id;
+         qt.Showroom__c=con.id;
+         qt.VisitedShowroom__c=con.id;
+         qt.Controlling_Account__c=acc.id;
+         qt.Country__c='india';
+         qt.Custom__c=true;
+         qt.Custom_Drawing__c=true;
+         qt.Deposit_Amount__c=5;
+         qt.Deposit_Date__c=date.today();
+         qt.Deposit_Received_Date__c=date.today();
+         qt.Drawing_Deposit_Amount__c=20;
+         qt.Drawing_Deposit__c=date.today();
+         qt.Drawing_Deposit_Amount__c=20;
+         qt.Drawing_Deposit__c=date.today();
+         qt.Drawing_Thirty_Percent_Deposit_Amount__c=30;
+         qt.Drawing_Additional_Payment_Received__c=date.today();
+         qt.Drawing_Approved_Contract__c=date.today();
+         qt.Drawing_As_Built_Drawings_Supplied__c=date.today();
+         qt.Drawing_Author__c='abc';
+         qt.Drawing_CAD_Files_Sent_To_Germany__c=date.today();
+         qt.Drawing_Complete__c=date.today();
+         qt.Drawing_Copy_Sent_To_Rep__c=date.today();
+         qt.Drawing_Cost_Discrepancy_Summary_Sent__c=date.today();
+         qt.Drawing_Customer_Drawings_Received__c=date.today();
+         qt.Drawing_Customer_Issues_Resolved__c=date.today();
+         qt.Drawing_Eng_Implemented_Corrections__c=date.today();
+         qt.Drawing_Eng_Clarification_Contact__c=date.today();
+         qt.Drawing_Engineering_Fee_Received__c=date.today();
+         qt.Drawing_Engineering_Technical_Meeting__c=date.today();
+         qt.Drawing_ETA__c=date.today();
+         qt.Drawing_Final_Signoff__c=date.today();
+         qt.Drawing_Final_Order_Confirmation__c=date.today();
+         qt.Drawing_Final_Documents_Sent__c=date.today();
+         qt.Drawing_First_Submittal_Order_Sent__c=date.today();
+         qt.Drawing_Followup_Letter_Sent__c=date.today();
+         qt.Drawing_Initial_Deposit_Description__c='50% only';
+         qt.Drawing_Internal_Approval__c=date.today();
+         qt.Drawing_Late_Approval_Rep_Notification__c=date.today();
+         qt.Drawing_Nana_Reps_Updated__c=date.today();
+         qt.Drawing_Notes__c='test drawing';
+         qt.Drawing_On_Hold_Till_Date__c=date.today();
+         qt.Drawing_Order_Released_For_Production__c=date.today();
+         qt.Drawing_PDFs_Put_In_Project_File__c=date.today();
+         qt.Drawing_Pipeline_Category_Name_2__c='abc';
+         qt.Drawing_PIpeline_Status_2__c='def';
+         qt.Drawing_Order_Confirmation_Signoff__c=date.today();
+         qt.Drawing_Price__c=10;
+         qt.Drawing_Project_Start_Date__c=date.today();
+         qt.Drawing_Requirements_Sent__c=date.today();
+         qt.Drawing_Review_Drawings__c=date.today();
+         qt.Drawing_Revision_1_Date__c=date.today();
+         qt.Drawing_Revision_2_Date__c=date.today();
+         qt.Drawing_Revision_3_Date__c=date.today();
+         qt.Drawing_Revision_4_Date__c=date.today();
+         qt.Drawing_Revision_5_Date__c=date.today();
+         qt.Drawing_Revision_6_Date__c=date.today();
+         qt.Drawing_Revision_7_Date__c=date.today();
+         qt.Drawing_Revision_8_Date__c=date.today();
+         qt.Drawing_Revision_Charge_Applied__c=date.today();
+         qt.Drawing_Revision_Reason__c='abc';
+         qt.Drawing_Revision_Received__c=date.today();
+         qt.Drawing_Revision_Submitted__c=date.today();
+         qt.Drawings__c='Standard';
+         qt.Drawing_Samples_Received__c=date.today();
+         qt.Drawing_Samples_Sent__c=date.today();
+         qt.Drawing_Supervisor_One_Checked_Drawings__c=date.today();
+         qt.Drawing_Supervisor_Two_Checked_Drawings__c=date.today();
+         qt.Drawing_Tracking_Number_Sent_To_Rep__c=date.today();
+         qt.Drawing_Version_Number__c=10;
+         qt.ELQ_Send_ETA_Letter__c=true;
+         qt.ELQ_Send_Revised_ETA_Letter__c=true;
+         qt.Print_Date__c=system.now();
+         qt.Email_sent_to_Service_Department__c=date.today();
+         qt.Estimated_Pickup_Date__c=date.today();
+         qt.ETA_Jobsite__c=date.today();
+         qt.ETA_Letter_Sent__c=true;
+         qt.ETA_Letter_Sent_Date__c=date.today();
+         qt.Expedited_Shipping__c=true;
+         qt.Extended_Warranty__c=true;
+         qt.Factory_Completion_Date__c=date.today();
+         qt.Final_Confirmation_Date__c=date.today();
+         qt.Final_Invoice_Amount__c=20;
+         qt.First_threshold__c=false;
+         qt.Followup__c=false;
+         qt.Followup_Status__c='Reviewing';
+         qt.Freight_ETA_Jobsite__c=date.today();
+         qt.Freight_ETA_Toggle__c=false;
+         qt.Freight__c=30;
+         qt.Freight_Tracking_Number__c='test123';
+         qt.Glass_Size_Sent__c=date.today();
+         qt.Hard_Copy_Date__c=system.now();
+         qt.Hardware_Actual_Jobsite__c=date.today();
+         qt.Hardware_Email_Details__c='abc';
+         qt.Hardware_Email_Sent__c=date.today();
+         qt.Hardware_ETA_Jobsite__c=date.today();
+         qt.Hardware_Ship_Date__c=date.today();
+         qt.Hardware_Tracking_Number__c='test';
+         qt.Incomplete_Order_Confirmation_Notes__c='test notes';
+         qt.Incomplete_Order_Confirmation_Paperwork__c=false;
+         qt.Install_Confirmed__c=false;
+         qt.Install_Date__c=date.today();
+         qt.Installer__c=acc.id;
+         qt.Installer_Email_Viewed__c=false;
+         qt.Installer_Notes__c='abc';
+         qt.Invoices_Sent_Date__c=date.today();
+         qt.Is_Local__c=false;
+         qt.Keyed_Alike__c=false;
+         qt.Nana_Added_By__c='abc';
+         qt.Nana_Create_Date__c=date.today();
+         qt.Nana_Edit_Date__c=date.today();
+         qt.NanaPDFID__c=123456789;
+         qt.On_Hold__c=false;
+         qt.Order_Acknowledged_Date__c=date.today();
+         qt.Order_Acknowledgement_2_Needed__c=false;
+         qt.Order_Confirmation_Opened__c=system.now();
+         qt.Order_Confirmation_Sent__c=system.now();
+         qt.Order_Confirmation_Started__c=date.today();
+         qt.Ordered__c=false;
+         qt.Order_Finalized_Date__c=date.today();
+         qt.Order_Notes__c='test 13';
+         qt.Order_Number__c=123;
+         qt.Packaging__c=30;
+         qt.PDF_URL__c='test pdf';
+         qt.Pipeline_Notes__c='pipeline';
+         qt.PO_Number__c='po num';
+         qt.Preview_Order__c='preview';
+         qt.Primary_Quote__c=true;
+         qt.Printed__c=true;
+         qt.Project__c=proj.id;
+         qt.Project_Coordinator__c=user1.id;
+         qt.QNO_Follow_Up__c=false;
+         qt.Discount__c=10;
+         qt.Quote_ID__c=10;
+         qt.Quote_Notes__c='test quote notes';
+         qt.Record_Type__c='Purchase';
+         qt.Revised_ETA_Jobsite__c=date.today();
+         qt.Revised_ETA_Jobsite_Reason__c='not intrested';
+         qt.Revised_ETA_Toggle__c=true;
+         qt.Screen_Actual_Jobsite__c=date.today();
+         qt.Screen_Actual_Mill_Valley__c=date.today();
+         qt.Screen_ETA_Jobsite__c=date.today();
+         qt.Screen_ETA_Mill_Valley__c=date.today();
+         qt.Screen_Notes__c='abc';
+         qt.Screen_Order_Placed__c=date.today();
+         qt.Screen_Ship_from_Mill_Valley__c=date.today();
+         qt.Screen_Supplier__c='Frehe';
+         qt.Screen_Tracking_Number__c='qwd';
+         qt.Sealy_Sent__c=false;
+         qt.Send_Tax_Certificate__c=false;
+         qt.Shipping_Company__c='test data';
+         qt.Shipping_Max__c=456;
+         qt.Shipping_Min__c=12;
+         qt.Shipping_Name__c='123';
+         qt.Shipping_Phone__c='456';
+         qt.SL_Order_Number__c='789';
+         qt.Stage__c='Open';
+         qt.State__c='ap';
+         qt.Taha_Review__c=false;
+         qt.Take_Off_Provided__c=false;
+         qt.Taxable__c=false;
+         qt.TaxRate__c=12;
+         qt.Tax_Total__c=23;
+         qt.Technical_Supervisor__c=user1.id;
+         qt.Total__c=50;
+         qt.Training_Actual__c=date.today();
+         qt.Training_ETA__c=date.today();
+         qt.Unglazed_Override__c=false;
+         qt.Unique_Models__c='HSW 50';
+         qt.Use_Controlling_Account__c=false;
+         qt.Van_Ness_Commission__c=true;
+         qt.Viewed__c=true;
+         qt.Web_Quote__c=true;
+         qt.Work_Order_Received__c=date.today();
+         qt.Work_Order_Sent__c=date.today();
+         qt.Zip__c='12345';
+         qt.Opportunity__c=oppList[0].id;
+         qList.add(qt);
+         insert qList;
+        
+         test.startTest();
+        
+         Quote q = new Quote();
+         q.Name = 'Test Quote';
+         q.OpportunityId = oppList[0].Id;
+         q.Nana_Quote__c = qList[0].Id;
+         q.First_Threshold_Price__c = 1;
+         q.ContactId = Con.id;
+         q.Tax = 1.0;
+         q.Order_Number__c = 12345;
+         insert q;
+        
+         order order1=new order();
+         order1.AccountId=acc.id;
+         order1.BillingState = 'New York';
+         order1.BillingCountry='United States';
+         order1.BillingPostalCode ='12345';
+         order1.EffectiveDate=date.today();
+         order1.Status='draft';
+         //order1.Order_Number__c=2.00;
+         order1.NanaQuote__c=qList[0].id;
+         order1.Name='test name';
+         order1.OpportunityId=opp.id;
+         order1.Project__c=projList[0].id;
+         insert order1;
+        
+         
+         Service_Quote__c sq=new Service_Quote__c();
+         sq.Case__c=caseobj.Id;
+         sq.Complaint__c=false;
+         sq.Nonstock_Company__c='Teufelbeschlage';
+         sq.Other_Bill_To_Email__c='abc@abc.com';
+         sq.Care_Of__c='test abc';
+         sq.Responsibility__c='Yellow Freight';
+         sq.ETA__c=system.today();
+         sq.NonStock_ETA__c=system.today();
+         sq.Shipping_Method__c='FedEx';
+         sq.NonStock_Shipping_Method__c='FedEx';
+         sq.Final_Payment_Amount__c=10.00;
+         sq.Deposit_Amount__c=10.00;
+        
+         insert sq;
+        
+         Quote_Detail__c qd=new Quote_Detail__c();
+         qd.Quote__c=qt.Id;
+         qd.Configuration__C='3L0R';
+         qd.Model__c='HSW 60';
+         qd.Panels__c = 09;
+         insert qd;
+        string billtype;
+         System.currentPageReference().getParameters().put('customer',billtype);
+        
+        ApexPages.StandardController sc = new ApexPages.StandardController(sq);
+        ServiceQuote_ReportController sqr=new ServiceQuote_ReportController(sc);
+        sqr.getBalanceDue();
+        sqr.getCalculatedShippingMethod();
+        sqr.getCustomerBillingAddress();
+        sqr.getDetails();
+        sqr.getDetails_NonStockItems();
+        sqr.getDetails_POItems();
+        sqr.getDetails_StockItems();
+        sqr.getFreight();
+        sqr.getinvoice_RenderAs();
+        sqr.getInvoice_ShippingMethod();
+        //sqr.getInvoiceAddress();
+        sqr.getInvoiceNumber();
+        sqr.getNanaBillingAddress();
+        sqr.getOrderNumber();
+        sqr.getOtherBillingAddress();
+        sqr.getpackinglist_RenderAs();
+        sqr.getpackinglist_ShippingMethod();
+        sqr.getPaymentType();
+        sqr.getPOBody_Display_Rendered();
+        sqr.getPOBPositionSelector_Display_Rendered();
+        sqr.getPOVendor();
+        sqr.getPurchaseOrder_Reconciliation_Positions();
+        sqr.getpurchaseOrder_RenderAs();
+        sqr.getRichmondBillingAddress();
+        sqr.getSolarluxBillingAddress();
+        sqr.getSubTotal();
+        sqr.getTax();
+        sqr.getTotal();
+        //sqr.getUPSBillingAddress();
+        //sqr.getYellowBillingAddress();
+        sqr.PurchaseOrder_SelectPositions();
+        //sqr.testPoVendor();
+          
+    
+    }
+    
+    static testMethod void testMethod2() {
+        
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
+        
+      profile prof = [select id from Profile where name = 'Standard User'];
+         
+         User user1 = new User ( alias = 'testme', email = 'testme@noemail.com', emailencodingkey = 'UTF-8', lastname = 'test',languagelocalekey = 'en_US', 
+         localesidkey = 'en_US', profileid = prof.Id, country = 'United Kingdom', timezonesidkey = 'Europe/London', username = 'testme@noemail.com');
+         insert user1;
+        
+        list<Zip_Codes_Master__c> lstzipCode = new list<Zip_Codes_Master__c>();
+         Zip_Codes_Master__c zipCode1 = new Zip_Codes_Master__c();
+         zipCode1.City__c = 'Stow';
+         zipCode1.Country__c = 'United States';
+         zipCode1.State__c = 'Maine';
+         zipCode1.Zip_Code__c = '12345' ;
+         lstzipCode.add(zipCode1);
+         insert  lstzipCode; 
+         
+         
+         
+         Account acc=new Account();
+         acc.Name='test';
+         acc.Phone='12345678';
+         acc.BillingState = 'New York';
+         acc.BillingCountry='United States';
+         acc.BillingPostalCode ='12345';
+         insert acc;
+         
+         contact con=new contact();
+         //con.Name='test contact';
+         con.Accountid=acc.id;
+         con.FirstName = 'john';
+         con.LastName = 'CAD EMAIL RECIPIENT';
+         con.MailingStreet = 'street';
+         con.MailingCity = 'city'; 
+         con.Mailingstate = 'Utah';
+         con.MailingPostalCode = '12345';
+         con.MailingCountryCode = 'US';
+         con.Address_1__c='hyderabad';
+         con.Address_2__c='hyder guda';
+         con.AIA_Lunch_and_Learn__c=true;
+         con.AssistantName='contact assistant';
+         con.Birthdate=system.today();
+         con.Fax='123456';
+         con.Email='abc@abc.com';
+         con.Phone='125869';
+         con.Country__c='Aruba';
+         insert con; 
+        
+        Case caseObj = new Case();
+        caseObj.Status = 'Working';
+        caseObj.Origin = 'Phone';
+        insert caseObj;  
+        
+        
+        
+        list<Project__c> projList=new list<Project__c>();
+         Project__c proj = new Project__c();
+         proj.Name='Test Project';
+         proj.OwnerId=user1.id;
+         //proj.IsDeleted=false;
+         proj.RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Residential Project').getRecordTypeId();
+         proj.Actual_Project_Need_Date__c=date.today();
+         proj.Amount__c=10;
+         proj.Architect_Account__c=acc.id;
+         proj.Architect_Considered__c=true;
+         proj.Architect_On_Project__c=true;
+         proj.Award_Date__c=date.today();
+         proj.Bid_Date__c=date.today();
+         proj.Budget_Quote_Provided__c=true;
+         proj.Choices__c='NoValue';
+         proj.Corporate_Account__c=true;
+         proj.Dodge_Number__c='123';
+         proj.End_Customer_Contact__c=con.id;
+         proj.Implicit_Contact__c=con.id;
+         proj.Installer_Email_Viewed__c=true;
+         proj.Lead_Source__c='cold';
+         proj.Model_Home__c=true;
+         proj.Nearby_Showrooms__c=12;
+         proj.Office_Interior__c=true;
+         proj.OldProjectId__c='abc';
+         proj.Opportunity_ID__c='test old';
+         //proj.Opportunity_Name__c=opp1.id;
+         proj.Estimated_Project_Need_Date__c=date.today();
+         proj.Expected_Install_Date__c=date.today();
+         proj.Expected_Open_Date__c=date.today();
+         proj.Explicit_Score__c='a';
+         proj.HighRise__c=true;
+         proj.How_Many_Models__c='4';
+         proj.Ordering_Account__c=acc.id;
+         proj.Preliminary_Drawings_Date__c=date.today();
+         proj.Preliminary_Drawings__c=true;
+         proj.Prizm_4__c=4;
+         proj.Project_City__c='city';
+         proj.Project_Coordinator__c=user1.id;
+         proj.Project_Country__c='United States';
+         proj.Project_Has_Competitor__c=true;
+         proj.Project_Implicit_Score__c=5;
+         proj.Project_State__c='Indiana';
+         proj.Project_Street_Address__c='street address';
+         proj.Project_Zip_Code__c='12345';
+         proj.Public_Spec_d_Job__c=true;
+         proj.Publicly_Specified_Jobs__c='Nana only';
+         proj.Purchasing_Method__c='Glass House';
+         proj.Reason_Project_Lost__c='Competitor';
+         proj.Residential_Vertical__c=true;
+         proj.Sale_Resulting_From_Model__c=true;
+         proj.Stage__c='Design';
+         proj.Use_Ordering_Account_Address__c=true;
+         proj.Use_Project_Address__c=true;
+         proj.Use_Shipping_Address__c=true;    
+         proj.Web_Project__c=true;
+         proj.Split_Stage__c='New Order';
+         proj.Influencer_Count__c=3;    
+         proj.Opportunity_Count__c=3;
+         proj.TerritoryName__c='territory';
+         proj.Application__c='Automotive';
+         proj.Application_2__c='Other';
+         proj.Project_Coordinator__c=user1.id;
+         proj.Project_Zip_Code__c='12345';
+         //proj.accountid=acc.id;
+         proj.Close_Date__c=Date.newInstance(2016, 12, 12);
+         projList.add(proj);
+         insert projList;
+                  
+         List< Opportunity > oppList = new list < Opportunity > ();
+         Opportunity opp=new Opportunity();
+         opp.Name='test opp';
+         opp.AccountId=acc.id;
+         opp.Amount=1000;
+         opp.Probability=20;
+         opp.Project_Name__c=proj.id;
+         opp.Stage_Detail__c='Considered';
+         opp.ForecastCategoryName='Pipeline';
+         opp.Expected_Resolution_Date_2__c=system.today();
+         opp.StageName='Need Analysis';
+         //opp.Application_Industry__c='test';
+         //opp.Application_Sub_Industry__c='test1';
+         opp.Award_Date__c=date.today();
+         opp.Bid_Date__c=date.today();
+         opp.Budget_Quote__c=true;
+         opp.Primary_Opportunity__c=true;
+         //opp.Close_Date__c=system.today()+10;
+         opp.CloseDate = Date.today()+10;
+         opp.OwnerId=user1.id;
+         opp.RecordTypeId=Label.Influencer_Opportunity_RecordTypeId;
+         opp.Project_Name__c=projList[0].Id;
+         
+         oppList.add(opp);
+         insert oppList;
+        
+        list < Quote__c > qList = new list < Quote__c > ();
+         Quote__c qt=new Quote__c();
+         qt.Name='test quote';
+         qt.AACO__c=true;
+         qt.Actual_Delivery_Date__c=date.today();
+         qt.Actual_Pickup_Date__c=date.today();
+         qt.Address__c='abc';
+         qt.Balanced_Received_Date__c=date.today();
+         qt.Balance_Received__c=20.66;
+         qt.CAD_Opened__c=system.now();
+         qt.CAD_Sent__c=system.now();
+         qt.CAD_Viewed__c=false;
+         qt.Canadian_Tax_Status__c='Company';
+         qt.Cancelled__c=true;
+         qt.City__c='abc';
+         qt.Complete_Signoff_Date__c=date.today();
+         qt.Contact__c=con.Id;
+         qt.Showroom__c=con.id;
+         qt.VisitedShowroom__c=con.id;
+         qt.Controlling_Account__c=acc.id;
+         qt.Country__c='india';
+         qt.Custom__c=true;
+         qt.Custom_Drawing__c=true;
+         qt.Deposit_Amount__c=5;
+         qt.Deposit_Date__c=date.today();
+         qt.Deposit_Received_Date__c=date.today();
+         qt.Drawing_Deposit_Amount__c=20;
+         qt.Drawing_Deposit__c=date.today();
+         qt.Drawing_Deposit_Amount__c=20;
+         qt.Drawing_Deposit__c=date.today();
+         qt.Drawing_Thirty_Percent_Deposit_Amount__c=30;
+         qt.Drawing_Additional_Payment_Received__c=date.today();
+         qt.Drawing_Approved_Contract__c=date.today();
+         qt.Drawing_As_Built_Drawings_Supplied__c=date.today();
+         qt.Drawing_Author__c='abc';
+         qt.Drawing_CAD_Files_Sent_To_Germany__c=date.today();
+         qt.Drawing_Complete__c=date.today();
+         qt.Drawing_Copy_Sent_To_Rep__c=date.today();
+         qt.Drawing_Cost_Discrepancy_Summary_Sent__c=date.today();
+         qt.Drawing_Customer_Drawings_Received__c=date.today();
+         qt.Drawing_Customer_Issues_Resolved__c=date.today();
+         qt.Drawing_Eng_Implemented_Corrections__c=date.today();
+         qt.Drawing_Eng_Clarification_Contact__c=date.today();
+         qt.Drawing_Engineering_Fee_Received__c=date.today();
+         qt.Drawing_Engineering_Technical_Meeting__c=date.today();
+         qt.Drawing_ETA__c=date.today();
+         qt.Drawing_Final_Signoff__c=date.today();
+         qt.Drawing_Final_Order_Confirmation__c=date.today();
+         qt.Drawing_Final_Documents_Sent__c=date.today();
+         qt.Drawing_First_Submittal_Order_Sent__c=date.today();
+         qt.Drawing_Followup_Letter_Sent__c=date.today();
+         qt.Drawing_Initial_Deposit_Description__c='50% only';
+         qt.Drawing_Internal_Approval__c=date.today();
+         qt.Drawing_Late_Approval_Rep_Notification__c=date.today();
+         qt.Drawing_Nana_Reps_Updated__c=date.today();
+         qt.Drawing_Notes__c='test drawing';
+         qt.Drawing_On_Hold_Till_Date__c=date.today();
+         qt.Drawing_Order_Released_For_Production__c=date.today();
+         qt.Drawing_PDFs_Put_In_Project_File__c=date.today();
+         qt.Drawing_Pipeline_Category_Name_2__c='abc';
+         qt.Drawing_PIpeline_Status_2__c='def';
+         qt.Drawing_Order_Confirmation_Signoff__c=date.today();
+         qt.Drawing_Price__c=10;
+         qt.Drawing_Project_Start_Date__c=date.today();
+         qt.Drawing_Requirements_Sent__c=date.today();
+         qt.Drawing_Review_Drawings__c=date.today();
+         qt.Drawing_Revision_1_Date__c=date.today();
+         qt.Drawing_Revision_2_Date__c=date.today();
+         qt.Drawing_Revision_3_Date__c=date.today();
+         qt.Drawing_Revision_4_Date__c=date.today();
+         qt.Drawing_Revision_5_Date__c=date.today();
+         qt.Drawing_Revision_6_Date__c=date.today();
+         qt.Drawing_Revision_7_Date__c=date.today();
+         qt.Drawing_Revision_8_Date__c=date.today();
+         qt.Drawing_Revision_Charge_Applied__c=date.today();
+         qt.Drawing_Revision_Reason__c='abc';
+         qt.Drawing_Revision_Received__c=date.today();
+         qt.Drawing_Revision_Submitted__c=date.today();
+         qt.Drawings__c='Standard';
+         qt.Drawing_Samples_Received__c=date.today();
+         qt.Drawing_Samples_Sent__c=date.today();
+         qt.Drawing_Supervisor_One_Checked_Drawings__c=date.today();
+         qt.Drawing_Supervisor_Two_Checked_Drawings__c=date.today();
+         qt.Drawing_Tracking_Number_Sent_To_Rep__c=date.today();
+         qt.Drawing_Version_Number__c=10;
+         qt.ELQ_Send_ETA_Letter__c=true;
+         qt.ELQ_Send_Revised_ETA_Letter__c=true;
+         qt.Print_Date__c=system.now();
+         qt.Email_sent_to_Service_Department__c=date.today();
+         qt.Estimated_Pickup_Date__c=date.today();
+         qt.ETA_Jobsite__c=date.today();
+         qt.ETA_Letter_Sent__c=true;
+         qt.ETA_Letter_Sent_Date__c=date.today();
+         qt.Expedited_Shipping__c=true;
+         qt.Extended_Warranty__c=true;
+         qt.Factory_Completion_Date__c=date.today();
+         qt.Final_Confirmation_Date__c=date.today();
+         qt.Final_Invoice_Amount__c=20;
+         qt.First_threshold__c=false;
+         qt.Followup__c=false;
+         qt.Followup_Status__c='Reviewing';
+         qt.Freight_ETA_Jobsite__c=date.today();
+         qt.Freight_ETA_Toggle__c=false;
+         qt.Freight__c=30;
+         qt.Freight_Tracking_Number__c='test123';
+         qt.Glass_Size_Sent__c=date.today();
+         qt.Hard_Copy_Date__c=system.now();
+         qt.Hardware_Actual_Jobsite__c=date.today();
+         qt.Hardware_Email_Details__c='abc';
+         qt.Hardware_Email_Sent__c=date.today();
+         qt.Hardware_ETA_Jobsite__c=date.today();
+         qt.Hardware_Ship_Date__c=date.today();
+         qt.Hardware_Tracking_Number__c='test';
+         qt.Incomplete_Order_Confirmation_Notes__c='test notes';
+         qt.Incomplete_Order_Confirmation_Paperwork__c=false;
+         qt.Install_Confirmed__c=false;
+         qt.Install_Date__c=date.today();
+         qt.Installer__c=acc.id;
+         qt.Installer_Email_Viewed__c=false;
+         qt.Installer_Notes__c='abc';
+         qt.Invoices_Sent_Date__c=date.today();
+         qt.Is_Local__c=false;
+         qt.Keyed_Alike__c=false;
+         qt.Nana_Added_By__c='abc';
+         qt.Nana_Create_Date__c=date.today();
+         qt.Nana_Edit_Date__c=date.today();
+         qt.NanaPDFID__c=123456789;
+         qt.On_Hold__c=false;
+         qt.Order_Acknowledged_Date__c=date.today();
+         qt.Order_Acknowledgement_2_Needed__c=false;
+         qt.Order_Confirmation_Opened__c=system.now();
+         qt.Order_Confirmation_Sent__c=system.now();
+         qt.Order_Confirmation_Started__c=date.today();
+         qt.Ordered__c=false;
+         qt.Order_Finalized_Date__c=date.today();
+         qt.Order_Notes__c='test 13';
+         qt.Order_Number__c=123;
+         qt.Packaging__c=30;
+         qt.PDF_URL__c='test pdf';
+         qt.Pipeline_Notes__c='pipeline';
+         qt.PO_Number__c='po num';
+         qt.Preview_Order__c='preview';
+         qt.Primary_Quote__c=true;
+         qt.Printed__c=true;
+         qt.Project__c=proj.id;
+         qt.Project_Coordinator__c=user1.id;
+         qt.QNO_Follow_Up__c=false;
+         qt.Discount__c=10;
+         qt.Quote_ID__c=10;
+         qt.Quote_Notes__c='test quote notes';
+         qt.Record_Type__c='Purchase';
+         qt.Revised_ETA_Jobsite__c=date.today();
+         qt.Revised_ETA_Jobsite_Reason__c='not intrested';
+         qt.Revised_ETA_Toggle__c=true;
+         qt.Screen_Actual_Jobsite__c=date.today();
+         qt.Screen_Actual_Mill_Valley__c=date.today();
+         qt.Screen_ETA_Jobsite__c=date.today();
+         qt.Screen_ETA_Mill_Valley__c=date.today();
+         qt.Screen_Notes__c='abc';
+         qt.Screen_Order_Placed__c=date.today();
+         qt.Screen_Ship_from_Mill_Valley__c=date.today();
+         qt.Screen_Supplier__c='Frehe';
+         qt.Screen_Tracking_Number__c='qwd';
+         qt.Sealy_Sent__c=false;
+         qt.Send_Tax_Certificate__c=false;
+         qt.Shipping_Company__c='test data';
+         qt.Shipping_Max__c=456;
+         qt.Shipping_Min__c=12;
+         qt.Shipping_Name__c='123';
+         qt.Shipping_Phone__c='456';
+         qt.SL_Order_Number__c='789';
+         qt.Stage__c='Open';
+         qt.State__c='ap';
+         qt.Taha_Review__c=false;
+         qt.Take_Off_Provided__c=false;
+         qt.Taxable__c=false;
+         qt.TaxRate__c=12;
+         qt.Tax_Total__c=23;
+         qt.Technical_Supervisor__c=user1.id;
+         qt.Total__c=50;
+         qt.Training_Actual__c=date.today();
+         qt.Training_ETA__c=date.today();
+         qt.Unglazed_Override__c=false;
+         qt.Unique_Models__c='HSW 50';
+         qt.Use_Controlling_Account__c=false;
+         qt.Van_Ness_Commission__c=true;
+         qt.Viewed__c=true;
+         qt.Web_Quote__c=true;
+         qt.Work_Order_Received__c=date.today();
+         qt.Work_Order_Sent__c=date.today();
+         qt.Zip__c='12345';
+         qt.Opportunity__c=oppList[0].id;
+         qList.add(qt);
+         insert qList;
+        
+         test.startTest();
+        
+        
+         Quote q = new Quote();
+         q.Name = 'Test Quote';
+         q.OpportunityId = oppList[0].Id;
+         q.Nana_Quote__c = qList[0].Id;
+         q.First_Threshold_Price__c = 1;
+         q.ContactId = Con.id;
+         q.Tax = 1.0;
+         q.Order_Number__c = 12345;
+         insert q;
+        
+         
+         order order1=new order();
+         order1.AccountId=acc.id;
+         order1.BillingState = 'New York';
+         order1.BillingCountry='United States';
+         order1.BillingPostalCode ='12345';
+         order1.EffectiveDate=date.today();
+         order1.Status='draft';
+         //order1.Order_Number__c=2.00;
+         order1.NanaQuote__c=qList[0].id;
+         order1.Name='test name';
+         order1.OpportunityId=opp.id;
+         order1.Project__c=projList[0].id;
+         insert order1;
+        
+        
+         List<Service_Quote__c> sqlist=new List<Service_Quote__c>();
+        
+         Service_Quote__c sq=new Service_Quote__c();
+         sq.Case__c=caseobj.Id;
+         sq.Complaint__c=false;
+         sq.Nonstock_Company__c='nanawall (mill valley)';
+         sq.Other_Bill_To_Email__c='abc@abc.com';
+         sq.Care_Of__c='test abc';
+         sq.Responsibility__c='Yellow Freight';
+         sq.ETA__c=system.today();
+         sq.NonStock_ETA__c=system.today();
+         sq.Shipping_Method__c='FedEx';
+         sq.NonStock_Shipping_Method__c='FedEx';
+         sq.Final_Payment_Amount__c=10.00;
+         sq.Deposit_Amount__c=10.00;
+         sq.NonStock_Responsibility__c='Production';
+         
+         sq.Other_Bill_To_First_Name__c='Test firstname';
+         sq.Other_Bill_To_Last_Name__c='Test lastname';
+         sq.Other_Bill_To_Company__c='Test company';
+         sq.Other_Bill_To_Address__c='Test Address';
+         sq.Other_Bill_To_Address_2__c='Test Address2';
+         sq.Other_Bill_To_City__c='Test city';
+         sq.Other_Bill_To_State__c='ALABAMA';
+         sq.Other_Bill_To_Zip__c='Test zip';
+         sq.Other_Bill_To_Phone__c='12345678';
+         sq.Other_Bill_To_Fax__c='123456789';
+         sq.Other_Bill_To_Email__c='abc@abc.com';
+         sq.Other_Bill_To_Country__c='United States';
+         sqlist.add(sq);
+        
+         Service_Quote__c sq1=new Service_Quote__c();
+         sq1.Case__c=caseobj.Id;
+         sq1.Complaint__c=false;
+         sq1.Nonstock_Company__c='Teufelbeschlage';
+         sq1.Other_Bill_To_Email__c='abc@abc.com';
+         sq1.Care_Of__c='test abc';
+         sq1.Responsibility__c='Yellow Freight';
+         sq1.ETA__c=system.today();
+         sq1.NonStock_ETA__c=system.today();
+         sq1.Shipping_Method__c='FedEx';
+         sq1.NonStock_Shipping_Method__c='FedEx';
+         sq1.Final_Payment_Amount__c=10.00;
+         sq1.Deposit_Amount__c=10.00;
+         sqlist.add(sq1);
+         insert sqlist;
+        
+         
+        Service_Part__c sp = new Service_Part__c();
+        sp.Is_Installer_Part__c = true;
+        sp.Location__c = 4.00;
+        sp.Part_Name__c = 'abcd';
+        insert sp;
+        
+        
+         Service_Quote_Detail__c sqd=new Service_Quote_Detail__c();
+         sqd.Discount__c=10.00;
+         sqd.Service_Quote__c=sq.id;
+         insert sqd;
+        
+         Quote_Detail__c qd=new Quote_Detail__c();
+         qd.Quote__c=qt.Id;
+         qd.Configuration__C='3L0R';
+         qd.Model__c='HSW 60';
+         qd.Panels__c = 09;
+         insert qd;
+        
+        /*lead l=new lead();
+        l.FirstName='nana';
+        l.LastName='';
+        l.PostalCode='12345';
+        insert l;*/
+        
+        olstTestLead = TestDataUtility.createLeadTestData();
+        olstTestLead[0].CountryCode = 'US' ;
+        olstTestLead[0].PostalCode='12345';
+        olstTestLead[2].CountryCode = 'IN' ;
+            
+            try{
+        insert olstTestLead ;
+            
+       olstTestLead[2].CountryCode = 'MX' ;
+        olstTestLead[2].StateCode='BC';
+        update olstTestLead;
+        }
+        Catch(Exception ex){}
+        
+        
+        Stock_Order__c so=new Stock_Order__c();
+        //so.Name='test name';
+        so.Care_Of__c='test';
+        insert so;
+        
+        Stock_Order_Detail__c sod =new Stock_Order_Detail__c();
+        sod.Checked_In_Quantity__c=0.00;
+        sod.Position__c=1.00;
+        sod.Quantity__c=2.00;
+        sod.Service_Part__c=sp.Id;
+        sod.Stock_Order__c=so.Id;
+        sod.Unit_Price__c=10;
+        sod.Discount__c=0.00;
+        insert sod;
+        sod.Unit_Price__c=0;
+        update sod;
+        
+        ApexPages.StandardController sc = new ApexPages.StandardController(sq);
+        ServiceQuote_ReportController sqr=new ServiceQuote_ReportController(sc);
+        sqr.EstimatedLeadTime='10';
+        sqr.getBalanceDue();
+        sqr.getCalculatedShippingMethod();
+        sqr.getCustomerBillingAddress();
+        sqr.getDetails();
+        sqr.getDetails_NonStockItems();
+        sqr.getDetails_POItems();
+        sqr.getDetails_StockItems();
+        sqr.getFreight();
+        sqr.getinvoice_RenderAs();
+        sqr.getInvoice_ShippingMethod();
+        //sqr.getInvoiceAddress();
+        sqr.getInvoiceNumber();
+        sqr.getNanaBillingAddress();
+        sqr.getOrderNumber();
+        sqr.getOtherBillingAddress();
+        sqr.getpackinglist_RenderAs();
+        sqr.getpackinglist_ShippingMethod();
+        sqr.getPaymentType();
+        sqr.getPOBody_Display_Rendered();
+        sqr.getPOBPositionSelector_Display_Rendered();
+        
+        sqr.getPurchaseOrder_Reconciliation_Positions();
+        sqr.getpurchaseOrder_RenderAs();
+        sqr.getRichmondBillingAddress();
+        sqr.getSolarluxBillingAddress();
+        sqr.getSubTotal();
+        sqr.getTax();
+        sqr.getTotal();
+        //sqr.getUPSBillingAddress();
+        //sqr.getYellowBillingAddress();
+        //sqr.testPoVendor();
+        sqr.PurchaseOrder_SelectPositions();
+        sqr.getPOVendor();
+    
+    }
+    
+    
+    
+    static testMethod void testMethod3() {
+        
+        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+        
+        
+        
+      profile prof = [select id from Profile where name = 'Standard User'];
+         
+         User user1 = new User ( alias = 'testme', email = 'testme@noemail.com', emailencodingkey = 'UTF-8', lastname = 'test',languagelocalekey = 'en_US', 
+         localesidkey = 'en_US', profileid = prof.Id, country = 'United Kingdom', timezonesidkey = 'Europe/London', username = 'testme@noemail.com');
+         insert user1;
+        
+        list<Zip_Codes_Master__c> lstzipCode = new list<Zip_Codes_Master__c>();
+         Zip_Codes_Master__c zipCode1 = new Zip_Codes_Master__c();
+         zipCode1.City__c = 'Stow';
+         zipCode1.Country__c = 'United States';
+         zipCode1.State__c = 'Maine';
+         zipCode1.Zip_Code__c = '12345' ;
+         lstzipCode.add(zipCode1);
+         insert  lstzipCode; 
+         
+         
+         
+         Account acc=new Account();
+         acc.Name='test';
+         acc.Phone='12345678';
+         acc.BillingState = 'New York';
+         acc.BillingCountry='United States';
+         acc.BillingPostalCode ='12345';
+         insert acc;
+         
+         contact con=new contact();
+         //con.Name='test contact';
+         con.Accountid=acc.id;
+         con.FirstName = 'john';
+         con.LastName = 'CAD EMAIL RECIPIENT';
+         con.MailingStreet = 'street';
+         con.MailingCity = 'city'; 
+         con.Mailingstate = 'Utah';
+         con.MailingPostalCode = '12345';
+         con.MailingCountryCode = 'US';
+         con.Address_1__c='hyderabad';
+         con.Address_2__c='hyder guda';
+         con.AIA_Lunch_and_Learn__c=true;
+         con.AssistantName='contact assistant';
+         con.Birthdate=system.today();
+         con.Fax='123456';
+         con.Email='abc@abc.com';
+         con.Phone='125869';
+         con.Country__c='Aruba';
+         insert con; 
+        
+        Case caseObj = new Case();
+        caseObj.Status = 'Working';
+        caseObj.Origin = 'Phone';
+        caseObj.SuppliedEmail = 'testUserName@gmail.com';
+        caseObj.ContactId = con.id;
+        caseObj.AccountId = acc.Id;
+        caseObj.Email_Address__c = 'testUserName@gmail.com';
+        caseObj.DummyEmailMessage__c = true;
+        caseObj.Responsible_Rep__c='Beau Shryock';
+        insert caseObj;  
+        
+       
+        
+        attachments = TestDataUtility.createAttachmentTestData();
+        attachments[0].parentId = caseObj.id;
+        attachments[1].parentId = caseObj.id;
+        //attachments[2].parentId = newEmail[0].id;
+        try{
+        insert attachments;        
+        }catch(Exception e){
+        system.debug('Exception is:' + e);
+        } 
+        
+        
+        
+        list<Project__c> projList=new list<Project__c>();
+         Project__c proj = new Project__c();
+         proj.Name='Test Project';
+         proj.OwnerId=user1.id;
+         //proj.IsDeleted=false;
+         proj.RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Residential Project').getRecordTypeId();
+         proj.Actual_Project_Need_Date__c=date.today();
+         proj.Amount__c=10;
+         proj.Architect_Account__c=acc.id;
+         proj.Architect_Considered__c=true;
+         proj.Architect_On_Project__c=true;
+         proj.Award_Date__c=date.today();
+         proj.Bid_Date__c=date.today();
+         proj.Budget_Quote_Provided__c=true;
+         proj.Choices__c='NoValue';
+         proj.Corporate_Account__c=true;
+         proj.Dodge_Number__c='123';
+         proj.End_Customer_Contact__c=con.id;
+         proj.Implicit_Contact__c=con.id;
+         proj.Installer_Email_Viewed__c=true;
+         proj.Lead_Source__c='cold';
+         proj.Model_Home__c=true;
+         proj.Nearby_Showrooms__c=12;
+         proj.Office_Interior__c=true;
+         proj.OldProjectId__c='abc';
+         proj.Opportunity_ID__c='test old';
+         //proj.Opportunity_Name__c=opp1.id;
+         proj.Estimated_Project_Need_Date__c=date.today();
+         proj.Expected_Install_Date__c=date.today();
+         proj.Expected_Open_Date__c=date.today();
+         proj.Explicit_Score__c='a';
+         proj.HighRise__c=true;
+         proj.How_Many_Models__c='4';
+         proj.Ordering_Account__c=acc.id;
+         proj.Preliminary_Drawings_Date__c=date.today();
+         proj.Preliminary_Drawings__c=true;
+         proj.Prizm_4__c=4;
+         proj.Project_City__c='city';
+         proj.Project_Coordinator__c=user1.id;
+         proj.Project_Country__c='United States';
+         proj.Project_Has_Competitor__c=true;
+         proj.Project_Implicit_Score__c=5;
+         proj.Project_State__c='Indiana';
+         proj.Project_Street_Address__c='street address';
+         proj.Project_Zip_Code__c='12345';
+         proj.Public_Spec_d_Job__c=true;
+         proj.Publicly_Specified_Jobs__c='Nana only';
+         proj.Purchasing_Method__c='Glass House';
+         proj.Reason_Project_Lost__c='Competitor';
+         proj.Residential_Vertical__c=true;
+         proj.Sale_Resulting_From_Model__c=true;
+         proj.Stage__c='Design';
+         proj.Use_Ordering_Account_Address__c=true;
+         proj.Use_Project_Address__c=true;
+         proj.Use_Shipping_Address__c=true;    
+         proj.Web_Project__c=true;
+         proj.Split_Stage__c='New Order';
+         proj.Influencer_Count__c=3;    
+         proj.Opportunity_Count__c=3;
+         proj.TerritoryName__c='territory';
+         proj.Application__c='Automotive';
+         proj.Application_2__c='Other';
+         proj.Project_Coordinator__c=user1.id;
+         proj.Project_Zip_Code__c='12345';
+         //proj.accountid=acc.id;
+         proj.Close_Date__c=Date.newInstance(2016, 12, 12);
+         projList.add(proj);
+         insert projList;
+                  
+         List< Opportunity > oppList = new list < Opportunity > ();
+         Opportunity opp=new Opportunity();
+         opp.Name='test opp';
+         opp.AccountId=acc.id;
+         opp.Amount=1000;
+         opp.Probability=20;
+         opp.Project_Name__c=proj.id;
+         opp.Stage_Detail__c='Considered';
+         opp.ForecastCategoryName='Pipeline';
+         opp.Expected_Resolution_Date_2__c=system.today();
+         opp.StageName='Need Analysis';
+         //opp.Application_Industry__c='test';
+         //opp.Application_Sub_Industry__c='test1';
+         opp.Award_Date__c=date.today();
+         opp.Bid_Date__c=date.today();
+         opp.Budget_Quote__c=true;
+         opp.Primary_Opportunity__c=true;
+         //opp.Close_Date__c=system.today()+10;
+         opp.CloseDate = Date.today()+10;
+         opp.OwnerId=user1.id;
+         opp.RecordTypeId=Label.Influencer_Opportunity_RecordTypeId;
+         opp.Project_Name__c=projList[0].Id;
+         
+         oppList.add(opp);
+         insert oppList;
+        
+        list < Quote__c > qList = new list < Quote__c > ();
+         Quote__c qt=new Quote__c();
+         qt.Name='test quote';
+         qt.AACO__c=true;
+         qt.Actual_Delivery_Date__c=date.today();
+         qt.Actual_Pickup_Date__c=date.today();
+         qt.Address__c='abc';
+         qt.Balanced_Received_Date__c=date.today();
+         qt.Balance_Received__c=20.66;
+         qt.CAD_Opened__c=system.now();
+         qt.CAD_Sent__c=system.now();
+         qt.CAD_Viewed__c=false;
+         qt.Canadian_Tax_Status__c='Company';
+         qt.Cancelled__c=true;
+         qt.City__c='abc';
+         qt.Complete_Signoff_Date__c=date.today();
+         qt.Contact__c=con.Id;
+         qt.Showroom__c=con.id;
+         qt.VisitedShowroom__c=con.id;
+         qt.Controlling_Account__c=acc.id;
+         qt.Country__c='india';
+         qt.Custom__c=true;
+         qt.Custom_Drawing__c=true;
+         qt.Deposit_Amount__c=5;
+         qt.Deposit_Date__c=date.today();
+         qt.Deposit_Received_Date__c=date.today();
+         qt.Drawing_Deposit_Amount__c=20;
+         qt.Drawing_Deposit__c=date.today();
+         qt.Drawing_Deposit_Amount__c=20;
+         qt.Drawing_Deposit__c=date.today();
+         qt.ETA_Jobsite__c=date.today();
+         qt.ETA_Letter_Sent__c=true;
+         qt.ETA_Letter_Sent_Date__c=date.today();
+         qt.Expedited_Shipping__c=true;
+         qt.Extended_Warranty__c=true;
+         qt.Factory_Completion_Date__c=date.today();
+         qt.Final_Confirmation_Date__c=date.today();
+         qt.Final_Invoice_Amount__c=20;
+         qt.First_threshold__c=false;
+         qt.Followup__c=false;
+         qt.Followup_Status__c='Reviewing';
+         qt.Freight_ETA_Jobsite__c=date.today();
+         qt.Freight_ETA_Toggle__c=false;
+         qt.Freight__c=30;
+         qt.Freight_Tracking_Number__c='test123';
+         qt.Glass_Size_Sent__c=date.today();
+         qt.Hard_Copy_Date__c=system.now();
+         qt.Hardware_Actual_Jobsite__c=date.today();
+         qt.Hardware_Email_Details__c='abc';
+         qt.Hardware_Email_Sent__c=date.today();
+         qt.Hardware_ETA_Jobsite__c=date.today();
+         qt.Hardware_Ship_Date__c=date.today();
+         qt.Hardware_Tracking_Number__c='test';
+         qt.Incomplete_Order_Confirmation_Notes__c='test notes';
+         qt.Incomplete_Order_Confirmation_Paperwork__c=false;
+         qt.Install_Confirmed__c=false;
+         qt.Install_Date__c=date.today();
+         qt.Installer__c=acc.id;
+         qt.Installer_Email_Viewed__c=false;
+         qt.Installer_Notes__c='abc';
+         qt.Invoices_Sent_Date__c=date.today();
+         qt.Is_Local__c=false;
+         qt.Keyed_Alike__c=false;
+         qt.Nana_Added_By__c='abc';
+         qt.Nana_Create_Date__c=date.today();
+         qt.Nana_Edit_Date__c=date.today();
+         qt.NanaPDFID__c=123456789;
+         qt.On_Hold__c=false;
+         qt.Order_Acknowledged_Date__c=date.today();
+         qt.Order_Acknowledgement_2_Needed__c=false;
+         qt.Order_Confirmation_Opened__c=system.now();
+         qt.Order_Confirmation_Sent__c=system.now();
+         qt.Order_Confirmation_Started__c=date.today();
+         qt.Ordered__c=false;
+         qt.Order_Finalized_Date__c=date.today();
+         qt.Order_Notes__c='test 13';
+         qt.Order_Number__c=123;
+         qt.Packaging__c=30;
+         qt.PDF_URL__c='test pdf';
+         qt.Pipeline_Notes__c='pipeline';
+         qt.PO_Number__c='po num';
+         qt.Preview_Order__c='preview';
+         qt.Primary_Quote__c=true;
+         qt.Printed__c=true;
+         qt.Project__c=proj.id;
+         qt.Project_Coordinator__c=user1.id;
+         qt.QNO_Follow_Up__c=false;
+         qt.Discount__c=10;
+         qt.Quote_ID__c=10;
+         qt.Quote_Notes__c='test quote notes';
+         qt.Record_Type__c='Purchase';
+         qt.Revised_ETA_Jobsite__c=date.today();
+         qt.Revised_ETA_Jobsite_Reason__c='not intrested';
+         qt.Revised_ETA_Toggle__c=true;
+         qt.Screen_Actual_Jobsite__c=date.today();
+         qt.Screen_Actual_Mill_Valley__c=date.today();
+         qt.Screen_ETA_Jobsite__c=date.today();
+         qt.Screen_ETA_Mill_Valley__c=date.today();
+         qt.Screen_Notes__c='abc';
+         qt.Screen_Order_Placed__c=date.today();
+         qt.Screen_Ship_from_Mill_Valley__c=date.today();
+         qt.Screen_Supplier__c='Frehe';
+         qt.Screen_Tracking_Number__c='qwd';
+         qt.Sealy_Sent__c=false;
+         qt.Send_Tax_Certificate__c=false;
+         qt.Shipping_Company__c='test data';
+         qt.Shipping_Max__c=456;
+         qt.Shipping_Min__c=12;
+         qt.Shipping_Name__c='123';
+         qt.Shipping_Phone__c='456';
+         qt.SL_Order_Number__c='789';
+         qt.Stage__c='Open';
+         qt.State__c='ap';
+         qt.Taha_Review__c=false;
+         qt.Take_Off_Provided__c=false;
+         qt.Taxable__c=false;
+         qt.TaxRate__c=12;
+         qt.Tax_Total__c=23;
+         qt.Technical_Supervisor__c=user1.id;
+         qt.Total__c=50;
+         qt.Training_Actual__c=date.today();
+         qt.Training_ETA__c=date.today();
+         qt.Unglazed_Override__c=false;
+         qt.Unique_Models__c='HSW 50';
+         qt.Use_Controlling_Account__c=false;
+         qt.Van_Ness_Commission__c=true;
+         qt.Viewed__c=true;
+         qt.Web_Quote__c=true;
+         qt.Work_Order_Received__c=date.today();
+         qt.Work_Order_Sent__c=date.today();
+         qt.Zip__c='12345';
+         qt.Opportunity__c=oppList[0].id;
+         qList.add(qt);
+         insert qList;
+        
+         test.startTest();
+        
+         Quote q = new Quote();
+         q.Name = 'Test Quote';
+         q.OpportunityId = oppList[0].Id;
+         q.Nana_Quote__c = qList[0].Id;
+         q.First_Threshold_Price__c = 1;
+         q.ContactId = Con.id;
+         q.Tax = 1.0;
+         q.Order_Number__c = 12345;
+         insert q;
+        
+         order order1=new order();
+         order1.AccountId=acc.id;
+         order1.BillingState = 'New York';
+         order1.BillingCountry='United States';
+         order1.BillingPostalCode ='12345';
+         order1.EffectiveDate=date.today();
+         order1.Status='draft';
+         //order1.Order_Number__c=2.00;
+         order1.NanaQuote__c=qList[0].id;
+         order1.Name='test name';
+         order1.OpportunityId=opp.id;
+         order1.Project__c=projList[0].id;
+         insert order1;
+        
+        
+         List<Service_Quote__c> sqlist=new List<Service_Quote__c>();
+        
+         Service_Quote__c sq=new Service_Quote__c();
+         sq.Case__c=caseobj.Id;
+         sq.Complaint__c=false;
+         sq.Nonstock_Company__c='teufelbeschlage';
+         sq.Other_Bill_To_Email__c='abc@abc.com';
+         sq.Care_Of__c='test abc';
+         sq.Responsibility__c='Yellow Freight';
+         sq.ETA__c=system.today();
+         sq.NonStock_ETA__c=system.today();
+         sq.Shipping_Method__c='FedEx';
+         sq.NonStock_Shipping_Method__c='FedEx';
+         sq.Final_Payment_Amount__c=10.00;
+         sq.Deposit_Amount__c=10.00;
+         sq.NonStock_Responsibility__c='Production';
+         
+         sq.Other_Bill_To_First_Name__c='Test firstname';
+         sq.Other_Bill_To_Last_Name__c='Test lastname';
+         sq.Other_Bill_To_Company__c='Test company';
+         sq.Other_Bill_To_Address__c='Test Address';
+         sq.Other_Bill_To_Address_2__c='Test Address2';
+         sq.Other_Bill_To_City__c='Test city';
+         sq.Other_Bill_To_State__c='ALABAMA';
+         sq.Other_Bill_To_Zip__c='Test zip';
+         sq.Other_Bill_To_Phone__c='12345678';
+         sq.Other_Bill_To_Fax__c='123456789';
+         sq.Other_Bill_To_Email__c='abc@abc.com';
+         sq.Other_Bill_To_Country__c='United States';
+         sqlist.add(sq);
+        
+         Service_Quote__c sq1=new Service_Quote__c();
+         sq1.Case__c=caseobj.Id;
+         sq1.Complaint__c=false;
+         sq1.Nonstock_Company__c='Teufelbeschlage';
+         sq1.Other_Bill_To_Email__c='abc@abc.com';
+         sq1.Care_Of__c='test abc';
+         sq1.Responsibility__c='Yellow Freight';
+         sq1.ETA__c=system.today();
+         sq1.NonStock_ETA__c=system.today();
+         sq1.Shipping_Method__c='FedEx';
+         sq1.NonStock_Shipping_Method__c='FedEx';
+         sq1.Final_Payment_Amount__c=10.00;
+         sq1.Deposit_Amount__c=10.00;
+         sqlist.add(sq1);
+         insert sqlist;
+        
+         
+        Service_Part__c sp = new Service_Part__c();
+        sp.Is_Installer_Part__c = true;
+        sp.Location__c = 4.00;
+        sp.Part_Name__c = 'abcd';
+        insert sp;
+        
+        
+         Service_Quote_Detail__c sqd=new Service_Quote_Detail__c();
+         sqd.Discount__c=10.00;
+         sqd.Service_Quote__c=sq.id;
+         insert sqd;
+        
+         Quote_Detail__c qd=new Quote_Detail__c();
+         qd.Quote__c=qt.Id;
+         qd.Configuration__C='3L0R';
+         qd.Model__c='HSW 60';
+         qd.Panels__c = 09;
+         insert qd;
+        
+        /*lead l=new lead();
+        l.FirstName='nana';
+        l.LastName='';
+        l.PostalCode='12345';
+        insert l;*/
+        
+        olstTestLead = TestDataUtility.createLeadTestData();
+        olstTestLead[0].CountryCode = 'US' ;
+        olstTestLead[0].PostalCode='12345';
+        olstTestLead[2].CountryCode = 'IN' ;
+            
+            try{
+        insert olstTestLead ;
+            
+       olstTestLead[2].CountryCode = 'MX' ;
+        olstTestLead[2].StateCode='BC';
+        update olstTestLead;
+        }
+        Catch(Exception ex){}
+        
+        
+        Stock_Order__c so=new Stock_Order__c();
+        //so.Name='test name';
+        so.Care_Of__c='test';
+        insert so;
+        
+        Stock_Order_Detail__c sod =new Stock_Order_Detail__c();
+        sod.Checked_In_Quantity__c=0.00;
+        sod.Position__c=1.00;
+        sod.Quantity__c=2.00;
+        sod.Service_Part__c=sp.Id;
+        sod.Stock_Order__c=so.Id;
+        sod.Unit_Price__c=10;
+        sod.Discount__c=0.00;
+        insert sod;
+        sod.Unit_Price__c=0;
+        update sod;
+        
+        
+            
+        
+        string reconciliationmode='reconciliationmode';
+         System.currentPageReference().getParameters().put('reconciliationmode',reconciliationmode);
+        
+        
+        ApexPages.StandardController sc = new ApexPages.StandardController(sq);
+        ServiceQuote_ReportController sqr=new ServiceQuote_ReportController(sc);
+        sqr.EstimatedLeadTime='10';
+        sqr.getBalanceDue();
+        sqr.getCalculatedShippingMethod();
+        sqr.getCustomerBillingAddress();
+        sqr.getDetails();
+        sqr.getDetails_NonStockItems();
+        sqr.getDetails_POItems();
+        sqr.getDetails_StockItems();
+        sqr.getFreight();
+        sqr.getinvoice_RenderAs();
+        sqr.getInvoice_ShippingMethod();
+        //sqr.getInvoiceAddress();
+        sqr.getInvoiceNumber();
+        sqr.getNanaBillingAddress();
+        sqr.getOrderNumber();
+        sqr.getOtherBillingAddress();
+        sqr.getpackinglist_RenderAs();
+        sqr.getpackinglist_ShippingMethod();
+        sqr.getPaymentType();
+        sqr.getPOBody_Display_Rendered();
+        sqr.getPOBPositionSelector_Display_Rendered();
+        
+        sqr.getPurchaseOrder_Reconciliation_Positions();
+        sqr.getpurchaseOrder_RenderAs();
+        sqr.getRichmondBillingAddress();
+        sqr.getSolarluxBillingAddress();
+        sqr.getSubTotal();
+        sqr.getTax();
+        sqr.getTotal();
+        //sqr.getUPSBillingAddress();
+        //sqr.getYellowBillingAddress();
+        sqr.PurchaseOrder_SelectPositions();
+        sqr.getPOVendor();
+        //sqr.testPoVendor();
+        
+    
+    }
+      
+
+}

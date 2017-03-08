@@ -1,0 +1,2 @@
+<apex:page standardController="Quote__c" extensions="newQuoteButtonOverRide" action="{!redirect}">
+</apex:page>

@@ -1,0 +1,395 @@
+<apex:page standardController="Lead" extensions="NW_CustomLeadConvertController">
+     
+    <apex:form id="theForm">
+        <style type="text/css">
+        .requiredBlock{
+            height: 16px;
+            left: -4px;
+            width: 3px;
+            bottom: 5px;
+        }
+        </style>
+        <apex:pageMessages id="errMsg"/>
+        <apex:pageBlock id="pageBlockMain" mode="edit">
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Convert" action="{!convertLead}" status="convertStatus" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+            <apex:actionStatus id="convertStatus">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                    <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                        <div class="waitingHolder" style="top: 150px; width: 110px;">
+                            <img class="waitingImage" src="/img/loading.gif" />
+                            <span class="waitingDescription" style="font-weight:bold; color:Black;">Converting Lead....</span>
+                        </div>
+                    </div>
+                </apex:facet>
+                <apex:facet name="stop" />
+            </apex:actionStatus>
+            <apex:pageblocksection columns="1" id="pgBlk" title="Convert Lead" collapsible="false">
+                <apex:pageblocksectionitem >
+                    <apex:outputlabel value="Record Owner" />
+                    <apex:inputfield value="{!mainLead.OwnerID}" id="oppNameInput1">
+                        <script>
+                            //Removing User/Queue picklist.
+                            var elementRemove = document.getElementById('{!$Component.oppNameInput1}_mlktp');
+                            elementRemove.parentNode.removeChild(elementRemove);
+                        </script>
+                    </apex:inputfield>
+                </apex:pageblocksectionitem>
+
+                <apex:pageBlockSectionItem id="projTypeField" rendered="{!IF(Lead.Project_Name__c==null || (projCheck), false, true)}">
+                   
+                    <apex:outputPanel id="projTypePanel1" >
+                        <apex:outputlabel value="Project Type" />
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel id="projTypePanel11" styleClass="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!mainLead.Type_of_record__c}" label="Type" id="rectype" required="false">
+                            <apex:actionSupport status="loadingStatus" event="onchange" rerender="optPanNew2"/>
+                        </apex:inputField>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Send e-mail to the owner" />
+                    <apex:inputCheckbox value="{!sendEmail}" id="sndChk" />
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    
+                    <apex:outputLabel value="Account Name" for="accName" />
+                    <apex:outputPanel id="accNamePan">
+                        <apex:actionFunction name="addingNewAccount" action="{!addingNewAccount}" rerender="fakePicklistAccountName" immediate="true" oncomplete="focusNewValue();">
+                            <apex:param id="accountToBeIncluded" name="accountToBeIncluded" value="{!accountToBeIncluded}" assignTo="{!accountToBeIncluded}" />
+                        </apex:actionFunction>
+                        <apex:inputField value="{!person.AccountId}" id="accName" />
+                        <apex:selectList value="{!selectedAccount}" id="fakePicklistAccountName" multiselect="false" size="1">
+                            <apex:selectOptions value="{!accountsList}" />
+                        </apex:selectList>
+                        <script>
+                            var accountSimpleField = document.getElementById('{!$Component.accName}');
+                            accountSimpleField.value = '';
+                            var accountSelectField = document.getElementById('{!$Component.fakePicklistAccountName}');
+                            var currentOptionsValueAccount = new Array();
+                            var currentOptionsTextAccount = new Array();
+                            mapSelectOptionToVariablesAccount(accountSelectField);
+                            if (accountSimpleField != null && accountSelectField != null) {
+                                accountSimpleField.style.display = 'none';
+                                accountSimpleField.parentNode.insertBefore(accountSelectField, accountSimpleField.parentNode.firstChild);
+                                var currentValue = accountSimpleField.value;
+                                var timer = setInterval(function () {
+                                    var newValue = document.getElementById('{!$Component.accName}').value;
+                                    if (currentValue != newValue) {
+                                        currentValue = newValue;
+                                        addingNewAccount(newValue);
+                                    }
+                                }, 100);
+                            }
+                            
+                            function mapSelectOptionToVariablesAccount(accountSelectField) {
+                                for (var i = 0; i < accountSelectField.length; i++) {
+                                    currentOptionsValueAccount[i] = accountSelectField.options[i].value;
+                                    currentOptionsTextAccount[i] = accountSelectField.options[i].text;
+                                }
+                            }
+
+                            /*
+                             * Method       :   focusNewValue
+                             * Description  :   Set Focus to the new value.
+                             * Return Type  :   -
+                             * Parameter    :   -
+                             */
+                            function focusNewValue() {
+                                var accountSelectField = document.getElementById('{!$Component.fakePicklistAccountName}');
+                                var alreadyExists = true;
+                                for (var i = 0; i < accountSelectField.length; i++) {
+                                    var isNewValue = accountSelectField.options[i].value;
+                                    var exists = false;
+                                    for (var j = 0; j < currentOptionsValueAccount.length; j++) {
+                                        if (currentOptionsValueAccount[j] == isNewValue) {
+                                            exists = true;
+                                        }
+                                    }
+                                    if (!exists) {
+                                        accountSelectField[i].selected = true;
+                                        alreadyExists = false;
+                                    }
+                                }
+                                if (alreadyExists) {
+                                    var newValue = document.getElementById('{!$Component.accName}').value;
+                                    for (var i = 0; i < accountSelectField.length; i++) {
+                                        if (accountSelectField.options[i].text.indexOf(newValue) !== -1) {
+                                            accountSelectField[i].selected = true;
+                                        }
+                                    }
+                                } else {
+                                    currentOptionsValueAccount = new Array();
+                                    currentOptionsTextAccount = new Array();
+                                    mapSelectOptionToVariablesAccount(accountSelectField);
+                                }
+                                accountSelectField.focus();
+                            }
+
+                            /*
+                             * Method       :   viewAccount
+                             * Description  :   Shows current selected Account details.
+                             * Return Type  :   -
+                             * Parameter    :   -
+                             */
+                            function viewAccount() {
+                                var selectObject = document.getElementById('{!$Component.fakePicklistAccountName}');
+                                var acc_id = selectObject.options[selectObject.selectedIndex].value;
+                                if (acc_id == null || acc_id == "" || acc_id == 000000000000000 || selectObject.selectedIndex == 0) {
+                                    alert("You can only view existing accounts.");
+                                } else {
+                                    var url = UserContext.getUrl('/' + acc_id);
+                                    printWin(url);
+                                }
+                            }
+                        </script>
+                        <a href="javascript: viewAccount();" title="View (New Window)">View</a>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+               
+                <apex:pageBlockSectionItem rendered="{!NOT(projCheckBlock) && NOT(projCheck)}" >
+                    <apex:outputLabel value="Project Name" for="projName" />
+                    <apex:outputPanel id="projNamePan">
+                        <apex:actionFunction name="addingNewProject" action="{!addingNewProject}" rerender="fakePicklistProjectName" immediate="true" onComplete="focusNewValueProj();" >
+                            <apex:param id="projectToBeIncluded" name="projectToBeIncluded" value="{!projectToBeIncluded}" assignTo="{!projectToBeIncluded}" />
+                        </apex:actionFunction>
+                        <!-- Added for Ticket # 109 by Himanshu -->
+                        <apex:inputField value="{!project.Project_Name__c}" id="projName"/>
+                        <apex:selectList value="{!selectedProject}" id="fakePicklistProjectName" multiselect="false" size="1" onfocus="disablePick();" onchange="disablePick();">
+                            <apex:selectOptions value="{!projectList}"/>
+                        </apex:selectList>
+                        <!-- Added for Ticket # 109 by Himanshu -->
+                        <script>
+                            function disablePick() {
+                                var selectObjectProj = document.getElementById('{!$Component.fakePicklistProjectName}');
+                                var pro_id = selectObjectProj.options[selectObjectProj.selectedIndex].value;
+                                if(pro_id == null || pro_id == "" || pro_id == 000000000000000 || selectObjectProj.selectedIndex == 0){
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appIndField:appPanelNew1}").style.display="block";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appField:appPanelNew2}").style.display="block";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appIndField:appPanelNew11}").style.display="block";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appField:appPanelNew22}").style.display="block";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:projTypeField:projTypePanel1}").style.display="block";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:projTypeField:projTypePanel11}").style.display="block";
+                                }
+                                else{
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appIndField:appPanelNew1}").style.display="none";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appField:appPanelNew2}").style.display="none";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appIndField:appPanelNew11}").style.display="none";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:appField:appPanelNew22}").style.display="none";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:projTypeField:projTypePanel1}").style.display="none";
+                                    document.getElementById("{!$Component.j_id0:theForm:pageBlockMain:pgBlk:projTypeField:projTypePanel11}").style.display="none";
+                                }
+                            }
+                        </script> 
+                        <!-- Added for Ticket # 109 by Himanshu -->
+                        
+                        <script>
+                            var projectSimpleField = document.getElementById('{!$Component.projName}');
+                            projectSimpleField.value = '';
+                            var projectSelectField = document.getElementById('{!$Component.fakePicklistProjectName}');
+                            var currentOptionsValueProj = new Array();
+                            var currentOptionsTextProj = new Array();
+                            mapSelectOptionToVariables(projectSelectField);
+                            if (projectSimpleField != null && projectSelectField != null) {
+                                projectSimpleField.style.display = 'none';
+                                projectSimpleField.parentNode.insertBefore(projectSelectField,projectSimpleField.parentNode.firstChild);
+                                var currentValueProj = projectSimpleField.value;
+                                var timer = setInterval(function () {
+                                    var newValueProj = document.getElementById('{!$Component.projName}').value;
+                                    if (currentValueProj != newValueProj) {
+                                        currentValueProj = newValueProj;
+                                        addingNewProject(newValueProj);
+                                    }
+                                }, 100);
+                            }
+
+                            /*
+                             * Method       :   mapSelectOptionToVariables
+                             * Description  :   Create arrays with select element values.
+                             * Return Type  :   -
+                             * Parameter    :   Select object.
+                             */
+                            function mapSelectOptionToVariables(projectSelectField) {
+                                for (var i = 0; i < projectSelectField.length; i++) {
+                                    currentOptionsValueProj[i] = projectSelectField.options[i].value;
+                                    currentOptionsTextProj[i] = projectSelectField.options[i].text;
+                                }
+                            }
+
+                            function focusNewValueProj() {
+                                var projectSelectField = document.getElementById('{!$Component.fakePicklistProjectName}');
+                                var alreadyExists = true;
+                                for (var i = 0; i < projectSelectField.length; i++) {
+                                    var isNewValueProj = projectSelectField.options[i].value;
+                                    var exists = false;
+                                    for (var j = 0; j < currentOptionsValueProj.length; j++) {
+                                        if (currentOptionsValueProj[j] == isNewValueProj) {
+                                            exists = true;
+                                        }
+                                    }
+                                    if (!exists) {
+                                        projectSelectField[i].selected = true;
+                                        alreadyExists = false;
+                                    }
+                                }
+                                if (alreadyExists) {
+                                    var newValueProj = document.getElementById('{!$Component.projName}').value;
+                                    for (var i = 0; i < projectSelectField.length; i++) {
+                                        if (projectSelectField.options[i].text.indexOf(newValue) !== -1) {
+                                            projectSelectField[i].selected = true;
+                                        }
+                                    }
+                                } else {
+                                    currentOptionsValueProj = new Array();
+                                    currentOptionsTextProj = new Array();
+                                    mapSelectOptionToVariables(projectSelectField);
+                                }
+                                projectSelectField.focus();
+                            }
+
+                            /*
+                             * Method       :   viewProject
+                             * Description  :   Shows current selected Project details.
+                             * Return Type  :   -
+                             * Parameter    :   -
+                             */
+                            function viewProject() {
+                                var selectObjectProj = document.getElementById('{!$Component.fakePicklistProjectName}');
+                                var pro_id = selectObjectProj.options[selectObjectProj.selectedIndex].value;
+                                if (pro_id == null || pro_id == "" || pro_id == 000000000000000 || selectObjectProj.selectedIndex == 0) {
+                                    alert("You can only view existing project.");
+                                } else {
+                                    var url = UserContext.getUrl('/' + pro_id);
+                                    printWin(url);
+                                }
+                            }
+                        </script>
+                        <a href="javascript: viewProject();" title="View (New Window)">View</a>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem rendered="{!NOT(projCheckBlock)}">
+                    <apex:outputPanel ></apex:outputPanel>
+                    <apex:outputPanel >
+                        <apex:inputCheckbox value="{!projCheck}">
+                            <apex:actionSupport event="onclick" status="CheckStatus" rerender="theForm" action="{!autoSelectOpp}"/>
+                        </apex:inputCheckbox>
+                        <apex:outputLabel value="Do Not Create a new Project upon Conversion" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                 
+                <apex:actionStatus id="CheckStatus">
+                    <apex:facet name="start">
+                        <div class="waitingSearchDiv waitingSearchDivOpacity" style="width: 100%; height: 100%; display: block; opacity: 0.89;"></div>
+                        <div id="00B80000007AEEH_searching" class="waitingSearchDiv" style="width: 100%; height: 100%; display: block;">
+                            <div class="waitingHolder" style="top: 150px; width: 110px;">
+                                <img class="waitingImage" src="/img/loading.gif" />
+                                <span class="waitingDescription" style="font-weight:bold; color:Black;">Loading....</span>
+                            </div>
+                        </div>
+                    </apex:facet>
+                    <apex:facet name="stop" />
+                </apex:actionStatus>
+                
+                <!-- Changes for ticket # 109 -->
+                <apex:pageBlockSectionItem id="appIndField" rendered="{!IF(Lead.Project_Name__c==null || (projCheck), false, true)}">
+                    <apex:outputPanel id="appPanelNew1">
+                        <apex:outputLabel value="Application Industry" />
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel id="appPanelNew11" styleClass="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!mainLead.Project_Application_Industry__c}" required="False" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                       
+                <apex:pageBlockSectionItem id="appField" rendered="{!IF(Lead.Project_Name__c==null || (projCheck), false, true)}">
+                    <apex:outputPanel id="appPanelNew2">
+                        <apex:outputLabel value="Application" />
+                       
+                    </apex:outputPanel>
+                    <apex:outputPanel id="appPanelNew22" styleClass="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!mainLead.Project_Application__c}" required="False"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <!-- Changes for ticket # 109 -->
+                 
+                <apex:pageBlockSectionItem rendered="{!NOT(projCheckBlock) && NOT(projCheck)}" >
+                    <apex:outputLabel value="Opportunity Name" />
+                    <apex:inputText value="{!opp.Name}" size="30" disabled="true" />
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="opCheck" rendered="{!NOT(projCheckBlock)}">
+                    <apex:outputPanel ></apex:outputPanel>
+                    <apex:outputPanel id="opCheck2">
+                        <apex:inputCheckbox disabled="{!IF(mainLead.Project_Name__c!=null,true,false)}" value="{!oppCheck}" />
+                        <apex:outputLabel value="Do Not Create a new Opportunity upon Conversion" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Converted Status" />
+                    <apex:outputField value="{!mainLead.Status}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageblocksection>
+
+            <apex:pageBlockSection columns="1" collapsible="false" title="Task Information">
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="Subject" />
+                    <apex:inputField required="false" value="{!tsk.Subject}" />
+                </apex:pageBlockSectionitem>
+
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="DueDate" />
+                    <apex:inputField value="{!tsk.ActivityDate}" />
+                </apex:pageBlockSectionitem>
+
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="FedexLabelCreated" />
+                    <apex:inputField value="{!tsk.FedexLabelCreated__c}" />
+                </apex:pageBlockSectionitem>
+
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="PhotoBooks Selection" />
+                    <apex:inputField value="{!tsk.PhotoBooks_Selection__c}" />
+                </apex:pageBlockSectionitem>
+
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="Comments" />
+                    <apex:inputField value="{!tsk.Description}" />
+                </apex:pageBlockSectionitem>
+                
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="Reminder"/>
+                  <apex:outputPanel >
+                    <apex:inputField value="{!tsk.IsReminderSet}" />
+                    <apex:inputField value="{!tsk.ReminderDateTime}"/>
+                   </apex:outputPanel>
+                </apex:pageBlockSectionitem>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection columns="1" collapsible="false" title="Additional Information">
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="Type" />
+                    <apex:inputField value="{!tsk.Type}" />
+                </apex:pageBlockSectionitem>
+
+                <apex:pageBlockSectionitem >
+                    <apex:outputLabel value="Status" />
+                    <apex:inputField value="{!tsk.Status}" />
+                </apex:pageBlockSectionitem>
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

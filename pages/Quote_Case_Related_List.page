@@ -1,0 +1,101 @@
+<apex:page standardController="Quote__c" extensions="Quote_Case_Related_List_Controller">
+
+<style>
+</style>
+
+<script>
+    function createNewRecord() {
+       <!-- window.top.location='https://{!BaseUrl}/apex/quotecase_add?qn={!Quote__c.Name}&qid={!Quote__c.Id}'; -->
+       window.top.location='../apex/quotecase_add?qn={!Quote__c.Name}&qid={!Quote__c.Id}';
+    }
+    
+    function closeCase(Id) {
+    
+        window.top.location = 'https://{!BaseUrl}/'+Id+'/s?retURL=%2F{!Quote__c.Id}';
+    }
+    function goToCase(Id) 
+    {
+        window.top.location = 'https://{!BaseUrl}/'+Id;
+    }
+    function editCase(Id){
+        window.top.location = 'https://{!BaseUrl}/'+Id+'/e?retURL=%2F{!Quote__c.Id}';
+    } 
+    function redirectToServiceQuote(Id)
+    {
+        window.top.location = 'https://{!BaseUrl}/'+Id;
+    } 
+    
+    function redirectToCaseComments() 
+    {
+       <!-- window.top.location='https://{!BaseUrl}/apex/Quote_CaseComments?id={!Quote__c.Id}';-->
+        window.top.location='../apex/Quote_CaseComments?id={!Quote__c.Id}';
+    
+    }
+    
+</script>
+
+
+<img src="/s.gif" alt="" class="relatedListIcon" title="" />
+<apex:form >
+    <apex:pageBlock title="Cases">
+    
+        <apex:pagemessages />
+        <apex:commandbutton value="Add Case" onclick="createNewRecord()"/>
+        <apex:commandbutton value="View Case Comments" onclick="redirectToCaseComments()"/>
+        <div style='height: 100px; overflow: auto'>
+        <apex:pageBlockTable value="{!cases}" var="case" id="casetable" rowClasses="odd,even" cellpadding="2" cellspacing="3" width="100%" >
+                <apex:column >
+                    <apex:facet name="header" >Action</apex:facet> 
+                    <a href='javascript:editCase("{!case.Id}")'>Edit</a> | <a href='javascript:closeCase("{!case.Id}");'>Cls</a>
+                </apex:column>
+        
+                <apex:column >
+                    <apex:facet name="header">Case Number</apex:facet> 
+                    <a href='javascript:goToCase("{!case.Id}")'>{!case.CaseNumber}</a>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Subject</apex:facet> 
+                    <apex:outputText value="{!case.Subject}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Date/Time Opened</apex:facet> 
+                    <apex:outputText value="{!case.CreatedDate}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Priority</apex:facet> 
+                    <apex:outputText value="{!case.Priority}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Type</apex:facet> 
+                    <apex:outputText value="{!case.Type}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Status</apex:facet>  
+                    <apex:outputText value="{!case.Status}"/>
+                </apex:column>
+
+                <apex:column >
+                    <apex:facet name="header">Contact</apex:facet> 
+                    <apex:outputText value="{!case.ContactName}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Service Quotes</apex:facet> 
+                    <apex:outputText value="{!case.ServiceQuoteList}" escape="false" />
+                </apex:column>
+                
+                
+        </apex:pageBlockTable>
+        </div>
+        
+    </apex:pageBlock>
+</apex:form>
+
+
+
+</apex:page>

@@ -1,0 +1,95 @@
+<apex:page standardcontroller="Task" extensions="PrintMailbook_Controller" 
+	renderAs="{!rendermode}" action="{!checkType}" >
+
+<style>
+
+	body { background-color: white; border: 0px; }
+	
+</style>
+
+<script>
+function _checkRedirect() {
+		var retURL =  '{!retURL}';
+		if( retURL != '' ) 
+		{
+			document.location.href = retURL;
+		}
+
+}
+
+	var mode = '{!rendermode}';
+	if( mode != 'pdf' )
+	{
+		window.open('/apex/PrintMailbook?id={!id}&mode=pdf');
+		setTimeout("_checkRedirect()",100 );
+	}
+
+</script> 
+
+<apex:outputtext rendered="{!renderContent}" style="background-color: white; border: 0px">
+<table cellpadding='5' cellspacing='5' style='background: url({!URLFOR($Resource.MailbookBackground)}); '>
+	<tr>
+		<td height='120'>&nbsp;&nbsp;</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>{!date}</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>		
+		<apex:outputtext rendered="{!hascompanyname}">{!companyname}<br /></apex:outputtext>		
+		{!contactstreet}<br /> 
+		<apex:outputtext rendered="{!hascontactstreet2}">{!contactstreet2}<br /></apex:outputtext>
+		{!contactcity}, {!contactstate} &nbsp;  {!contactzip}
+		</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>
+			Dear  {!contactname} 
+		</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>
+			RE: {!projectname}
+		</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>
+			<p>Thank you for considering NanaWall.  The enclosed photo book will help you understand the exciting features and benefits of the NanaWall product line:</p>
+			
+			<p>The exhilaration of a large exterior opening NanaWall</p>
+			  
+			<p>The joy of an elegant NanaWall </p> 
+			    
+			<p>The peace of mind of a weather tested NanaWall</p>
+			               
+			<p>Long-term satisfactory operation with a precision, engineered NanaWall</p>		
+		</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>
+			We hope you have had a chance to review the quote {!quotenumber}  with customized product drawings that we have sent you.  
+			Please contact your rep {!repname} at {!repphonenumber} or call us at 800-873-5673 should you have any questions.
+		</td>
+	</tr>
+	<tr>
+		<td style='font-family: Arial Unicode MS; font-size: 12px'>
+			<p>If you have not received our quote, contact us immediately.</p>
+			
+			<p>Sincerely,</p>
+			
+			<p>The NanaWall Team</p>		
+		</td>
+	</tr>
+	<tr>
+		<td align='right' style='font-family: Arial Unicode MS; font-size: 12px'>
+			{!MailbookCode}
+		</td>
+	</tr>
+</table>
+</apex:outputtext>
+
+<apex:outputtext value="{!Task.WhoID}" rendered="false" />
+<apex:outputtext value="{!Task.WhatID}" rendered="false" />
+<apex:outputtext value="(!Task.RecordTypeId)" rendered="false" />
+
+</apex:page>
