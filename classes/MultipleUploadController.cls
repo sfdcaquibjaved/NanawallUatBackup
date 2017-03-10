@@ -1,69 +1,67 @@
 public class MultipleUploadController
-<<<<<<< HEAD
-{
-   
-=======
 {   
->>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
     //Picklist of tnteger values to hold file count
-    public List<SelectOption> filesCountList {get; set;}
+   // public List<SelectOption> filesCountList {get; set;}
     //Selected count
-    public String FileCount {get; set;}
+    // the parent object it
+   public Id sobjId {get; set;}
     
-    public List<Attachment> allFileList {get; set;}
+    // list of existing attachments - populated on demand
+    public List<Attachment> attachments;
     
-    public MultipleUploadController(ApexPages.StandardController controller)
-    {
-        //Initialize  
-        filesCountList = new List<SelectOption>() ;
-        FileCount = '' ;
-        allFileList = new List<Attachment>() ;
-        
-        //Adding values count list - you can change this according to your need
-        for(Integer i = 0 ; i < 11 ; i++)
-            filesCountList.add(new SelectOption(''+i , ''+i)) ;
-    }
+    // list of new attachments to add
+    public List<Attachment> newAttachments {get; set;}
     
-    public Pagereference SaveAttachments()
-    {
-        String insId = System.currentPagereference().getParameters().get('id');
-        if(insId == null || insId == '')
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'No record is associated. Please pass record Id in parameter.'));
-        if(FileCount == null || FileCount == '')
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select how many files you want to upload.'));
-
-        List<Attachment> listToInsert = new List<Attachment>() ;
-        System.debug('File list'+allFileList);
-        //Attachment a = new Attachment(parentId = accid, name=myfile.name, body = myfile.body);
-
-        for(Attachment a: allFileList)
-        {
-            if(a.name != '' && a.name != '' && a.body != null)
-                listToInsert.add(new Attachment(parentId = insId , name = a.name, body = a.body)) ;
-                System.debug('body'+a.body);
-
-        }
-        allFileList.clear();
-        System.debug('the list'+listToInsert);
-        //Inserting attachments
-        if(listToInsert.size() > 0)
-        {
-            insert listToInsert ;
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, listToInsert.size() + ' file(s) are uploaded successfully'));
-            FileCount = '' ;
-        }
-        else
-            ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select at-least one file'));
+    // the number of new attachments to add to the list when the user clicks 'Add More'
+    public static final Integer NUM_ATTACHMENTS_TO_ADD=9;
+    // constructor
+    public MultipleUploadController()
+  {
+        // instantiate the list with a single attachment
+        newAttachments=new List<Attachment>{new Attachment(),new Attachment(),new Attachment(),new Attachment(),
+            new Attachment(),new Attachment(),new Attachment(),new Attachment(),new Attachment(),new Attachment()};
             
-        return null;
-    }
+       
+    }   
     
-    public PageReference ChangeCount()
+    // retrieve the existing attachments
+    public List<Attachment> getAttachments()
     {
-        allFileList.clear() ;
-        //Adding multiple attachments instance
-        for(Integer i = 1 ; i <= Integer.valueOf(FileCount) ; i++)
-            allFileList.add(new Attachment()) ;
-        return null ;
+        // only execute the SOQL if the list hasn't been initialised
+        if (null==attachments)
+        {
+            attachments=[select Id, ParentId, Name, Description from Attachment where parentId=:sobjId];
+        }
+        
+        return attachments;
+    }
+
+    // Add more attachments action method
+    
+    // Save action method
+    public void SaveAttachments()
+    {
+        List<Attachment> toInsert=new List<Attachment>();
+        for (Attachment newAtt : newAttachments)
+        {
+            if (newAtt.Body!=null)
+            {
+                newAtt.parentId=sobjId;
+                toInsert.add(newAtt);
+            }
+        }
+        if(toInsert.size() > 0){
+        insert toInsert;
+        ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, toInsert.size() + ' file(s) uploaded successfully'));
+        }
+        else{
+         ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select at-least one file'));  
+        }
+        newAttachments.clear();
+        for (Integer idx=0; idx<=NUM_ATTACHMENTS_TO_ADD; idx++){
+        newAttachments.add(new Attachment());
+        }
+        // null the list of existing attachments - this will be rebuilt when the page is refreshed
+        attachments=null;
     }
 }

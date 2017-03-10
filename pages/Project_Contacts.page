@@ -1,16 +1,7 @@
-<<<<<<< HEAD
 <apex:page standardController="Opportunity" extensions="OpportunityContactListController">
 <apex:pageBlock title="Project Contacts"> 
 <apex:pageBlockTable value="{!Contacts}" var="c"  >
 <apex:column value="{!c.Id}" />
 </apex:pageBlockTable>
 </apex:pageBlock>
-=======
-<apex:page standardController="Opportunity" extensions="OpportunityContactListController">
-<apex:pageBlock title="Project Contacts"> 
-<apex:pageBlockTable value="{!Contacts}" var="c"  >
-<apex:column value="{!c.Id}" />
-</apex:pageBlockTable>
-</apex:pageBlock>
->>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 </apex:page>

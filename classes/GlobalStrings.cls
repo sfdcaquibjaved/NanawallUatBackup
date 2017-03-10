@@ -4,6 +4,10 @@ public with sharing class GlobalStrings {
     public static string RequiredProfileIDForSharePool() { return '00eA0000000Qn2V'; }
     public static string CatchallUserIDForAssignment() { return '005A0000000M8pi';  }
     public static string QuoteEmailTemplateID() { return '00XA0000000IFUt';  }
+    public static string QuoteEmailTemplateName() { return 'Quote_Template_DO_NOT_DELETE';  }
+    public static string RepQuoteEmailTemplateName() { return 'Rep_Quote_Template_DO_NOT_DELETE';  }
+    
+    
     public static string NDGEmailEmailTemplateID() { return '00XA0000001hyeb';  }
         public static string NDGPublicEmailTemplateName() { return 'NDG_Public_Template_DO_NOT_DELETE';  }
     

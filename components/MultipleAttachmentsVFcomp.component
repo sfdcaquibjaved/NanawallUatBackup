@@ -1,0 +1,120 @@
+<apex:component controller="MultipleUploadController" allowDML="true">
+ <apex:attribute name="objId" type="String" description="The id of the object to manage attachments for" required="true" assignTo="{!sobjId}"/>
+ <apex:stylesheet value="{!URLFOR($Resource.SLDS221,'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS221, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+
+.button{
+width: 88px;
+height: 96px;
+}
+</style>
+<style>
+
+.fileType {
+    display: block;
+    position: relative;
+    width: 180px;
+    margin: auto;
+    cursor: pointer;
+    border: 0;
+    height: 150px;
+    border-radius: 5px;
+    outline: 0;
+    
+}
+.fileType:hover:after {
+    background: #00FFFF;
+}
+.fileType:after {
+
+    transition: 200ms all ease;
+    border-bottom: 3px solid rgba(0,0,0,0);
+    background: #FFFFFF;
+
+    color: #000;
+    font-size: 20px;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: block;
+    content: 'Upload File';
+    line-height: 50px;
+    border-radius: 5px;
+}
+</style>
+    </head>
+
+    <body>
+        <div class="Nanawallcustomcss">
+            <header class="slds-global-header_container">
+                <div class="slds-col slds-float--left slds-m-right--small">
+                    <div class="slds-icon slds-icon_container slds-icon-standard-file slds-icon--medium">
+                        <img src="{!URLFOR($Resource.SLDS221,'/assets/icons/standard/account_60.png')}" alt="" />
+                    </div>
+                </div>
+                <div class="slds-col ">
+                    <div class="slds-page-header__title slds-truncate">
+                        Multiple File Uploader
+                    </div>
+                </div>
+            </header>
+            <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound" aria-labelledby="newattachment">
+                <apex:form >
+
+                    <div class="slds-panel__section">
+                        <div class="slds-docked-form-footer slds-button-group slds-float--right" role="group">
+                            <apex:commandButton value="Upload" action="{!SaveAttachments}" styleClass="slds-button slds-button--neutral" />
+                            <span style="display:inline-block; width: 20px;"></span>
+                           <apex:commandButton value="Back" onclick="sforce.one.navigateToURL('/{!objId}')" styleClass="slds-button slds-button--brand" />
+                        </div>
+                    </div>
+                    <apex:pageMessages id="MSG" />
+                    
+
+                    <div class="slds-panel__section" >
+                    
+                        <legend class="slds-form-element__label slds-text-title--caps">SELECT FILES</legend>
+                        
+                        <div class="form-element__group">
+                            <div class="slds-form-element__row">
+                                <div class="slds-form-element">
+                                <apex:pageBlock >
+<div class="slds-grid slds-wrap slds-grid--pull-padded">
+
+<apex:repeat value="{!newAttachments}" var="newAtt">
+  <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--5-of-6 slds-large-size--8-of-12">
+                <apex:pageBlockSection columns="2">
+                   <apex:pageBlockSectionItem >
+                        <apex:outputLabel />                         
+                        <apex:inputFile value="{!newAtt.body}" filename="{!newAtt.name}" styleclass="fileType" id="file"/>
+
+                    </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                     </div>
+            </apex:repeat>
+
+</div>
+</apex:PageBlock>                                
+</div>
+                            </div>
+                        </div>
+                    </div>
+                </apex:form>
+            </div>
+        </div>
+    </body>                                      
+    </html>
+</apex:component>

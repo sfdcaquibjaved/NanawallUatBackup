@@ -1,6 +1,2 @@
-<<<<<<< HEAD
 <apex:page standardController="Contact"> <apex:iframe src="https://secure.eloqua.com/pp/pp.aspx?emailAddress={!contact.email}"/>
-=======
-<apex:page standardController="Contact"> <apex:iframe src="https://secure.eloqua.com/pp/pp.aspx?emailAddress={!contact.email}"/>
->>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 </apex:page>

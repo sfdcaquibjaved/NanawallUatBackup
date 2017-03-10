@@ -1,8 +1,3 @@
-<<<<<<< HEAD
 <apex:page standardController="Lead">
 <apex:iframe src="https://secure.eloqua.com/pp/pp.aspx?emailAddress={!lead.email}"/>
-=======
-<apex:page standardController="Lead">
-<apex:iframe src="https://secure.eloqua.com/pp/pp.aspx?emailAddress={!lead.email}"/>
->>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 </apex:page>

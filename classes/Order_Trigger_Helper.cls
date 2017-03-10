@@ -195,10 +195,7 @@ system.debug('** SO: got an actual delivery date');
 						{
 system.debug('** SO: setting temp actual delivery date');						
 							IN_Actual_Delivery_Date = so.Actual_Delivery_Date__c;
-<<<<<<< HEAD
 							set_IN_Actual_Delivery_Date = true;
-=======
->>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 						}
 					}  else 
 					{
