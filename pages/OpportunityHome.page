@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <apex:page controller="OpportunityHomeController" tabStyle="Opportunity"   >
 
 <apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
@@ -302,4 +303,310 @@
     </apex:tabpanel>
 
    
+=======
+<apex:page controller="OpportunityHomeController" tabStyle="Opportunity"   >
+
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.jquery_packaged_1_1, 'jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css')}"/>
+
+<apex:form >
+
+	    <script type="text/JavaScript">
+	
+	function _refreshModelSelector() {
+	
+		document.location.href='/apex/OpportunityHome?save_new=1&sfdc.override=1&{!OldModelsToggleValue}';
+	}
+	
+	
+	jQuery.noConflict(); 
+	    jQuery(document).ready(function() {
+
+			jQuery.ajaxSetup({ 
+				xhr: function() {
+					//return new window.XMLHttpRequest();
+					try{
+					    if(window.ActiveXObject)
+					        return new window.ActiveXObject("Microsoft.XMLHTTP");
+					} catch(e) { }
+					
+					return new window.XMLHttpRequest();
+				}
+			});
+	    
+
+	    
+	    	jQuery('.enterclick').keypress(function(e) {
+	    	
+		    	if( e.keyCode == 13 ) {  
+					A4J.AJAX.Submit('j_id0:theForm',event,{'status':'loadingstatus','similarityGroupingId':'j_id0:theForm:j_id11:btnSearch','parameters':{'j_id0:theForm:j_id11:btnSearch':'j_id0:theForm:j_id11:btnSearch'} } );return false;
+				}
+				
+	    	});
+			primeSearch();
+	    
+		    jQuery( ".lookupvalue" ).autocomplete({
+					minLength: 3,
+					select: function( event, ui ) {
+						document.location.href = ( /\/Community\//.test(window.location) ? '/Community' : "" )  + ( /\/reps\//.test(window.location) ? '/reps' : "" ) + '/' + ui.item.id;
+					
+					},
+					source: function(request, response) {
+						//ok
+						jQuery.ajax({
+						
+							url: "{!$Page.AjaxResponder}",
+							dataType: "json",
+							data: {
+					            "core.apexpages.devmode.url" :'1',
+					            "method": 'Opportunity_NameList',
+					            "lookupvalue": jQuery('.lookupvalue').val()
+							},
+							success: function( data ) {
+								response( jQuery.map( data.opportunities, function( item ) {
+									return {
+										label: item.name,
+										value: item.name,
+										id: item.id
+									}
+								}));
+							}
+						
+						});
+						
+					
+						//ok
+					}
+			});
+    });
+	</script>
+	<style>
+		.labelCell {	
+			text-align: right;
+			background-color: #F5F5EA;
+			border-left: solid 8px #ECECDE;
+			padding-right: 3px;
+			font-size: 12px;
+			width: 11%;
+			font-weight: bold;
+		}
+	</style>
+
+<apex:actionFunction name="jsDoSearch" action="{!myaction}" />
+    <apex:actionFunction name="primeSearch" action="{!primeSearch}" rerender="debug,errors">
+      </apex:actionFunction>
+
+
+</apex:form>
+    <apex:tabpanel >    
+    
+    
+        <apex:tab label="Multi-Search" name="ms" id="tabms">
+            <apex:form id="theForm">
+    <apex:pageBlock title="Search Opportunities"> 
+
+<table width='100%' cellpadding='5' bgcolor='white'>
+	<tr>
+		<td class='labelCell'>Project Name:</td>
+		<td colspan='5'><apex:inputtext value="{!Name}" styleClass="lookupvalue enterclick" style="width: 95%"/></td>
+	</tr>
+	
+	<tr>
+		<td class='labelCell'>Owner:</td>
+		<td colspan='3'>
+			<apex:inputfield value="{!dummyOpportunity.OwnerID}" required="false" />
+		</td>	
+		<td class='labelCell'>Account:</td>
+		<td colspan='3'>
+			<apex:inputfield value="{!dummyOpportunity.AccountID}" required="false" />
+		</td>	
+	
+	</tr>
+	
+	<tr>
+		<td class='labelCell'>Stage:</td>
+		<td>
+			<apex:selectList value="{!Stage}" multiselect="false" size="1">
+	        <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+	            <apex:selectOptions value="{!Stages}"></apex:selectOptions>
+	        </apex:selectList> 
+        </td>
+		<td class='labelCell'>Application:</td>
+		<td>
+			<apex:selectList value="{!Application}" multiselect="false" size="1">
+	        <apex:selectOption itemValue="" itemLabel="-SELECT-" />
+	            <apex:selectOptions value="{!Applications}"></apex:selectOptions>
+	        </apex:selectList>
+        </td>
+	</tr>
+
+	<tr>
+		<td class='labelCell'>Amount:</td>
+		<td >
+			<table>
+				<tr>
+					<td>From</td>
+					<td> <apex:inputtext value="{!AmountLow}"  styleClass="enterclick" size="10"/></td>
+					<td> to</td> 
+					<td><apex:inputtext value="{!AmountHigh}"  styleClass="enterclick" size="10"/></td>
+				</tr>
+			</table>			
+		</td>
+
+		<td class='labelCell'>Expected Resolution Date:</td>
+		<td colspan='3'>
+			From  <apex:inputfield value="{!dummyOpportunity.CloseDate}" required="false" /> to <apex:inputfield value="{!dummyOpp2.closedate}" required="false" />
+		</td>	
+
+	
+	</tr>
+	
+	
+	
+	<!-- break -->
+
+	
+	<tr>
+		<td colspan='3'></td>
+		<td>
+			<apex:commandButton value="Reset" styleclass="searchbutton" action="{!reset}" status="resetting"  />
+			 <apex:commandButton styleclass="searchbutton" id="btnSearch" value="Search" status="loadingstatus" action="{!myaction}" reRender="op" />
+		</td>
+	</tr>
+</table>
+
+        <apex:outputpanel id="op" >
+        <apex:pagemessages rendered="false"></apex:pagemessages>
+        <apex:pageBlockSection id="pbs" columns="1">
+	        <apex:toolbar width="700px"  style="background-color:#8d8d8d;background-image:none" >
+		        <apex:outputlabel value="{!Total}" />
+	            <apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+	            <apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+	            <apex:actionstatus id="loadingstatus" starttext="Loading..." stoptext="" />
+			</apex:toolbar>
+<br/>
+            <apex:pageBlockTable id="search" var="a" value="{!myOpportunitys}" width="100%"  >
+            
+                <apex:column headerValue="">
+                <apex:outputlink value="/{!a.id}" >view
+                </apex:outputlink>
+               </apex:column>
+
+               
+                <apex:column headerValue="Name">
+                <apex:facet name="header">
+                    <apex:commandlink value="Name" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="Name" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Name}" /> 
+               </apex:column>
+               
+                 <!--               <apex:column headerValue="Amount">
+                <apex:facet name="header">
+                    <apex:commandlink value="Amount" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="Amount" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                 <apex:outputLabel value="{!a.Amount}" /> 
+               </apex:column>-->
+               
+                <apex:column headerValue="Address">
+                <apex:facet name="header">
+                    <apex:commandlink value="Address" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="site_Address__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Site_Address__c}" /> 
+               </apex:column>
+                <apex:column headerValue="City">
+                
+                <apex:facet name="header">
+                    <apex:commandlink value="City" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="city__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.City__c}" /> 
+               </apex:column>
+               
+                <apex:column headerValue="State">
+                <apex:facet name="header">
+                    <apex:commandlink value="State" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="State__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.State__c}"/> 
+               </apex:column>
+               
+                <apex:column headerValue="Zip">
+                <apex:facet name="header">
+                    <apex:commandlink value="Zip" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="postal_code__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Postal_Code__c}" />   
+               </apex:column>
+               
+                <apex:column headerValue="Models">
+                <apex:facet name="header">
+                    <apex:commandlink value="Models" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="Models" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Models__c}"  />   
+               </apex:column>
+               
+                <apex:column headerValue="Won">
+                <apex:facet name="header">
+                    <apex:commandlink value="Won" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="IsWon" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.IsWon}"  />   
+               </apex:column>
+               
+                <apex:column headerValue="Max Email">
+                <apex:facet name="header">
+                    <apex:commandlink value="MaxEmail" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="Max_Email_Date__c" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.Max_Email_Date__c}"  />   
+               </apex:column>
+               
+                <apex:column headerValue="Created">
+                <apex:facet name="header">
+                    <apex:commandlink value="CreatedDate" action="{!dosort}" reRender="op" >
+                    <apex:param name="sortfield" value="CreatedDate" assignto="{!sortfield}"/>
+                    </apex:commandlink>
+                </apex:facet>
+                <apex:outputLabel value="{!a.CreatedDate}"  />   
+               </apex:column>
+               
+           </apex:pageBlockTable> 
+            
+</apex:pageBlockSection>  
+   
+        <apex:panelGrid columns="2"> 
+            <apex:commandLink action="{!previous}" rerender="op" rendered="{!hasprevious}">Previous</apex:commandlink> 
+            <apex:commandLink action="{!next}"  rerender="op" rendered="{!hasnext}">Next</apex:commandlink> 
+       </apex:panelGrid> 
+            </apex:outputpanel>
+
+    </apex:pageBlock>
+    </apex:form>
+    </apex:tab>
+    
+    <apex:tab label="Filters" id="tabfilters" name="filters">
+<apex:outputpanel layout="block"> 
+       <apex:enhancedList customizable="true" height="300" id="list" type="Opportunity" />    
+</apex:outputpanel>
+
+    </apex:tab>
+    
+    </apex:tabpanel>
+
+   
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 </apex:page>

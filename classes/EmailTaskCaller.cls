@@ -9,6 +9,7 @@ global class EmailTaskCaller {
 		return string.valueOf(i);
 	}
 
+<<<<<<< HEAD
 	WebService static boolean SendQuoteEmail4( string SalesforceQuoteID, integer PDFHistoryID,integer CADHistoryID, string ModelDescription, string ShowroomInfo, string NDGLink_OverrideURL, boolean SendToCustomer, boolean SendToRep ) {
 	
 
@@ -192,6 +193,12 @@ global class EmailTaskCaller {
 	
 
 		Quote__c q = [SELECT id, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
+=======
+	WebService static boolean SendQuoteEmail3( string SalesforceQuoteID, integer PDFHistoryID,integer CADHistoryID, string ModelDescription, string ShowroomInfo, string NDGLink_OverrideURL ) {
+	
+
+		Quote__c q = [SELECT id, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 				//need a workflow action when you print a quote, this method could be refactored
 		q.Followup_Status__c ='Reviewing';
 		q.Print_Date__c = DateTime.now();
@@ -199,11 +206,14 @@ global class EmailTaskCaller {
 		q.NanaPDFID__c = (double)PDFHistoryID;
 		update q;
 
+<<<<<<< HEAD
 
 		Opportunity o = [SELECT Id, Customer_Emailed__c FROM Opportunity WHERE Id = :q.Opportunity__c];
 		o.Customer_Emailed__c = true;
 		update o;
 
+=======
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 		//when this is all working we need to hook the contact's email to the SEND, not my email - ks	
 		Contact c = [SELECT id, Email, OwnerID FROM Contact WHERE id = :q.Contact__c ];
 

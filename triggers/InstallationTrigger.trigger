@@ -52,7 +52,12 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
    if (((trigger.isUpdate) || (trigger.isInsert)) && (trigger.isBefore ))  {
         List < Installation__c > InstallationTaskList = new List < Installation__c > ();
         for (installation__c i: trigger.new) {
+<<<<<<< HEAD
             if ((Trigger.isBefore) && ((trigger.isInsert) )) {
+=======
+            if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
+                    .Installation_Date__c != i.Installation_Date__c)))) {
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
                 InstallationTaskList.add(i);
             }
         }

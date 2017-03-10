@@ -1,6 +1,10 @@
 public class MultipleUploadController
+<<<<<<< HEAD
 {
    
+=======
+{   
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
     //Picklist of tnteger values to hold file count
     public List<SelectOption> filesCountList {get; set;}
     //Selected count

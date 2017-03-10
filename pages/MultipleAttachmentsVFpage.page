@@ -1,5 +1,10 @@
 <apex:page standardController="Installation__c" extensions="MultipleUploadController">
+<<<<<<< HEAD
 apex:stylesheet value="{!URLFOR($Resource.SLDS221,'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+=======
+
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS221,'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
     <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
 
     <head>
@@ -11,6 +16,7 @@ apex:stylesheet value="{!URLFOR($Resource.SLDS221,'assets/styles/salesforce-ligh
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<<<<<<< HEAD
 <style>
 .button{
     height: 96px;
@@ -25,6 +31,9 @@ input.remove-no-file-chosen
 }
 
 </style>
+=======
+
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
     </head>
 
     <body>
@@ -78,6 +87,7 @@ input.remove-no-file-chosen
                         <div class="form-element__group">
                             <div class="slds-form-element__row">
                                 <div class="slds-form-element">
+<<<<<<< HEAD
 <div class="slds-grid slds-wrap slds-grid--pull-padded">
 
                                     <apex:repeat value="{!allFileList}" var="AFL">
@@ -87,6 +97,13 @@ input.remove-no-file-chosen
                                         </div>
                                     </apex:repeat>
 </div>
+=======
+                                    <apex:repeat value="{!allFileList}" var="AFL">
+                                        <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" accept="image/*;capture=camera" />
+                                            
+                                        <br/><br/>
+                                    </apex:repeat>
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
                                 </div>
                             </div>
                         </div>

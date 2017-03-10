@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <apex:page standardController="Lead" extensions="LeadConvertController" action="{!checkConvertAction}">
  
 <apex:includeScript value="{!$Resource.jquery}"/>
@@ -270,4 +271,278 @@ $(document).ready(function() {
 
 </apex:form>
 
+=======
+<apex:page standardController="Lead" extensions="LeadConvertController" action="{!checkConvertAction}">
+ 
+<apex:includeScript value="{!$Resource.jquery}"/>
+  
+ <style>
+.requiredBlock {
+	background-color: #c00;
+	width: 3px;
+	float: left;
+}
+.requiredBlock_off {
+	width: 3px;
+	float: left;
+} 
+ </style>
+ 
+<script type='text/javascript'>
+
+	function projSelected(ctl)
+	{
+		
+//		var id =  jQuery('.ckCreateProject').attr('id') );
+	
+		if(jQuery('.ckCreateProject').is(':checked') )
+		{
+			jQuery('.projReqField').addClass('requiredBlock');
+			jQuery('.projReqField').removeClass('requiredBlock_off');
+		} else
+		{
+			jQuery('.projReqField').addClass('requiredBlock_off');
+			jQuery('.projReqField').removeClass('requiredBlock');
+		
+		}
+		
+		//requiredBlock
+	}
+
+    function checkAccountType( rbObj )
+    {
+        if( rbObj.value == "existing" )
+        {
+            $('#divAcctType_existing').css('display','block');
+            $('#divAcctType_new').css('display','none');
+        } else 
+        {
+            $('#divAcctType_existing').css('display','none');
+            $('#divAcctType_new').css('display','block');
+        
+        }
+    }
+
+
+$(document).ready(function() {
+	if( '{!useExistingAccount}' == 'new' )
+	{
+		$('#divAcctType_existing').css('display','none');
+		$('#divAcctType_new').css('display','block');
+	} else
+	{
+	
+		$('#divAcctType_existing').css('display','block');
+		$('#divAcctType_new').css('display','none');
+	}    
+
+});
+</script>
+
+<apex:sectionHeader title="Lead Convert" subtitle="{!lead.firstname & ' ' & lead.lastname}"/>
+ 
+<apex:form >
+    <apex:pagemessages ></apex:pagemessages>
+
+<apex:pageblock title="Back to Lead" rendered="{!ShowBackButton}">
+            <apex:commandbutton action="{!BackTolead}" value="<< Back to lead" id="btnConvertLead" />
+</apex:pageblock>
+    
+<apex:pageBlock id="alreadyConvertedBlock" rendered="{!showalreadyconvertedblock}" title="This lead has been converted">
+	This lead has already been converted into the following contact: <a href='/{!convertedContactID}'>{!convertedContactName}</a>
+	<br /><br /><br />
+	
+	<a href='/apex/Lead_Add?save_new=1&sfdc.override=1'>Click here to add a new lead</a>
+</apex:pageBlock>
+    
+<apex:pageBlock id="dupeMatchesBlock" rendered="{!showdupeblock}" title="Duplicate Check">
+
+	<p>
+		<b>Project:</b> {!NewOppName}<br />
+		<b>City:</b> {!newopportunity.City__c}<br />
+		<b>State:</b> {!newopportunity.State__c}<br />
+	</p>
+	<p></p>
+	<br />
+	<apex:dataTable value="{!duplicateOpps}" var="opportunity" id="dupetable" rowClasses="odd,even" styleClass="tableClass" width="500">
+		<apex:column >
+		    <apex:facet name="header">Name</apex:facet>
+			<apex:outputText value="{!opportunity.name}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">City</apex:facet>
+			<apex:outputText value="{!opportunity.City__c}"/>
+		</apex:column>
+		<apex:column >
+		    <apex:facet name="header">State</apex:facet>
+			<apex:outputText value="{!opportunity.State__c}"/>
+		</apex:column>
+
+		<apex:Column >
+			<apex:facet name="header">Use</apex:facet>
+			<apex:commandLink value="add to this project" action="{!addtoexistingproject}" id="addlink" >
+	            <apex:param name="dupeid"  value="{!opportunity.id}" assignTo="{!dupeprojectid}" />
+	        </apex:commandLink>  
+		</apex:Column>	
+	</apex:dataTable>
+
+
+	<p style='margin: 10px;'>	
+		<apex:commandbutton action="{!PreConvertLead}" value="convert lead and add to new project" id="btnConvertLead" />
+	</p>
+</apex:pageBlock>    
+      
+    <apex:pageblock title="Convert Lead" rendered="{!NOT(showdupeblock) && NOT(showalreadyconvertedblock)}">
+
+<table>
+    <tr>
+        <td colspan='2'>
+            <apex:selectRadio id="useExistingAccount" value="{!useExistingAccount}"  onchange="checkAccountType(this)">
+                <apex:selectOptions value="{!AccountOptions}"/>
+             </apex:selectRadio>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='2'>
+            <div id='divAcctType_new' style='display: block'>
+                    New Account Name: 
+                    <apex:inputText value="{!newAccName}" id="newAccName" />
+            </div>
+            <div id='divAcctType_existing' style='display:none'>
+                    Existing Account: 
+                    <apex:inputField value="{!contactLookUp.accountid}" /> 
+            </div>      
+        </td>
+    </tr>
+    <tr>
+        <td>Create a new project:</td>
+		<td><apex:inputCheckbox value="{!createNewOpp}" id="ckCreateProject" onclick="projSelected()" styleclass="ckCreateProject"/></td>
+    </tr>
+    <tr>
+        <td>New Project Name:</td>
+		<td><div class="requiredBlock projReqField">&nbsp;</div><apex:inputText value="{!newOppName}" /></td>
+    </tr>   
+    <tr>
+        <td>New Project City:</td>
+       	<td><apex:inputField value="{!newopportunity.City__c}" /></td>
+    </tr>   
+    <tr>
+        <td>New Project State:</td>
+        <td><apex:inputField value="{!newopportunity.State__c}" /></td>
+    </tr>   
+    <tr>
+    	<td>New Project Application:</td>
+		<td><apex:inputfield value="{!newopportunity.Application__c}"  /></td>
+    </tr>
+</table>    
+</apex:pageBlock>
+
+<apex:pageblock title="Task Information"  rendered="{!NOT(showdupeblock) && NOT(showalreadyconvertedblock)}">
+
+<table>
+	<tr>
+		<td>Create a task</td>
+		<td><apex:inputCheckbox value="{!createTask}" /></td>
+	</tr>
+    <tr>
+        <td>Subject</td>
+        <td><apex:inputField value="{!task.Subject}" /></td>        
+    </tr>
+    <tr>
+        <td>Due Date</td>
+        <td><apex:inputField value="{!task.ActivityDate}" /></td>       
+    </tr>
+    <tr>
+        <td>Comments</td>
+        <td><apex:inputField value="{!task.Description}" /></td>        
+    </tr>
+</table>
+
+</apex:pageblock>
+
+
+<apex:pageblock title="Additional Information"  rendered="{!NOT(showdupeblock) && NOT(showalreadyconvertedblock)}">
+
+<table>
+    <tr>
+        <td>Type</td>
+        <td><apex:inputField value="{!task.Type}" /></td>       
+    </tr>
+    <tr>
+        <td>Status</td>
+        <td><apex:inputField required="false" value="{!task.Status}" /></td>     
+    </tr>
+    <tr>
+        <td>Priority</td>
+        <td><apex:inputField required="false" value="{!task.Priority}" /></td>       
+    </tr>
+</table>
+
+</apex:pageblock>
+
+
+<apex:pageblock title="Reminder"  rendered="{!NOT(showdupeblock) && NOT(showalreadyconvertedblock)}">
+
+<table>
+    <tr>
+        <td>Reminder</td>
+        <td><apex:inputField value="{!task.IsReminderSet}" /> <apex:inputField value="{!task.ReminderDateTime}" /></td>     
+    </tr>
+</table>
+
+</apex:pageblock>
+
+<apex:pageblock title="Convert Lead" rendered="{!NOT(showdupeblock) && NOT(showalreadyconvertedblock)}">
+            <apex:commandbutton action="{!CheckDupes}" value="Continue" id="btnConvertLead" />
+</apex:pageblock>
+
+<!--  the below makes sure that the necessary properties are bound to the incoming Lead object for the Controller  -->
+<apex:outputText value="{!lead.Company}" rendered="false" />
+<apex:outputText value="{!lead.OwnerID}" rendered="false" />
+<apex:outputText value="{!lead.Address_1__c}" rendered="false" />
+<apex:outputText value="{!lead.Address_2__c}" rendered="false" />
+<apex:outputText value="{!lead.nrCity__c}" rendered="false" />
+<apex:outputText value="{!lead.nrState__c}" rendered="false" />
+<apex:outputText value="{!lead.Zip__c}" rendered="false" />
+<apex:outputText value="{!lead.nrCountry__c}" rendered="false" />
+<apex:outputText value="{!lead.CountryCode}" rendered="false" />
+<apex:outputText value="{!lead.Phone}" rendered="false" />
+
+<apex:outputText value="{!lead.LeadSource}" rendered="false" />
+<apex:outputText value="{!lead.MobilePhone__c}" rendered="false" />
+<apex:outputText value="{!lead.Reg_Number__c}" rendered="false" />
+<apex:outputText value="{!lead.Source_Date__c}" rendered="false" /> 
+<apex:outputText value="{!lead.Newsletter__c}" rendered="false" />
+<apex:outputText value="{!lead.Competitor__c}" rendered="false" />
+<apex:outputText value="{!lead.Office_Ext__c}" rendered="false" />
+<apex:outputText value="{!lead.HomePhone__c}" rendered="false" />
+<apex:outputText value="{!lead.OtherPhone__c}" rendered="false" />
+<apex:outputText value="{!lead.Interest__c}" rendered="false" />
+
+<apex:outputText value="{!lead.Please_Contact__c}" rendered="false" />
+<apex:outputText value="{!lead.How_did_you_hear_about_us__c}" rendered="false" />
+<apex:outputText value="{!lead.Mail_Info__c}" rendered="false" />
+<apex:outputText value="{!lead.Please_enter_questions_requests_or_comm__c}" rendered="false" />
+<apex:outputText value="{!lead.Email_Newsletter__c}" rendered="false" />
+<apex:outputText value="{!lead.Email}" rendered="false" />
+<apex:outputText value="{!lead.NanaWall_Applications_of_Interest_y__c}" rendered="false" />
+<apex:outputText value="{!lead.Send_Booklet__c}" rendered="false" />
+<apex:outputText value="{!lead.Which_best_describes_role__c}" rendered="false" />
+<apex:outputText value="{!lead.Name_of_Project__c}" rendered="false" />
+<apex:outputText value="{!lead.Description}" rendered="false" />
+<apex:outputText value="{!lead.Type__c}" rendered="false" /> 
+
+<apex:outputText value="{!lead.Showroom__c}" rendered="false" />
+<apex:outputText value="{!lead.Showroom_Territory__c}" rendered="false" />
+<apex:outputText value="{!lead.Photo_Book_Selection__c}" rendered="false" />
+<apex:outputText value="{!lead.isconverted}" rendered="false" />
+<apex:outputText value="{!lead.ConvertedContactId}" rendered="false" />
+<apex:outputText value="{!lead.CreatedDate}" rendered="false" />
+
+
+
+
+</apex:form>
+
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 </apex:page>

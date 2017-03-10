@@ -67,7 +67,11 @@ public with sharing class astech_OrderTrigger_Helper {
 	        if( q.Dupe_Order__c != null )
 			{
 system.debug('got a dupe order: ' + q.Dupe_Order__c);				
+<<<<<<< HEAD
 	        	Order oldOrder = [SELECT Id, Deposit_Amount__c, Name,notes__c, Order_Confirmation_Started__c, Invoices_Sent_Date__c, Balance_Received_Date__c, Complete_Signoff_Date__c,Deposit_Date__c, Deposit_Received_Date__c, Order_Finalized_Date__c FROM Order WHERE Id = :q.Dupe_Order__c];
+=======
+	        	Order oldOrder = [SELECT Id, Name,notes__c, Order_Confirmation_Started__c, Invoices_Sent_Date__c, Balance_Received_Date__c, Complete_Signoff_Date__c,Deposit_Date__c, Deposit_Received_Date__c, Order_Finalized_Date__c FROM Order WHERE Id = :q.Dupe_Order__c];
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 	        	
 	        	o.Name = oldOrder.Name;
 				o.Order_Confirmation_Started__c = oldOrder.Order_Confirmation_Started__c;
@@ -78,7 +82,10 @@ system.debug('got a dupe order: ' + q.Dupe_Order__c);
 				o.Deposit_Received_Date__c = oldOrder.Deposit_Received_Date__c;
 				o.Order_Finalized_Date__c = oldOrder.Order_Finalized_Date__c;
 				o.notes__c = oldOrder.notes__c;
+<<<<<<< HEAD
 				o.Deposit_Amount__C = oldOrder.Deposit_Amount__c;
+=======
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 				
 	        	oldOrder.Status = 'Cancelled';
 	        	oldOrder.Name = '0';
@@ -378,12 +385,16 @@ system.debug('astech_OrderTrigger_Helper: finished after insert ...');
 	
 	public static void handleAfterUpdate( map<Id, Order> oldMap, list<Order> orders ) 
 	{
+<<<<<<< HEAD
 system.debug('** ASTECH: running handleafterupdate');	                
+=======
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
        Contact dummyContact  = [SELECT Id FROM Contact WHERE LastName = 'CAD EMAIL RECIPIENT' LIMIT 1]; //SOQL opt -- we could stick this contact on the order when it is inserted, and then just refer to that field 
         
         list<Task> tasksToInsert = new list<Task>(); 
         map< Id, Account> pipelineEmails = new map<id, Account>();
 
+<<<<<<< HEAD
 
 		list<Id> oppIds = new list<Id>();
 		for( Order o : orders )
@@ -402,6 +413,11 @@ system.debug('** ASTECH: oppmap size: ' + oppMap.keyset().size() );
             
 system.debug('** ASTECH: GUUIDs: ' + o.Test_GUID__c + ' ?= ' + oldMap.get(o.Id).Test_GUID__c );	                
             
+=======
+        for( Order o : orders )
+        {
+            
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
             if( o.Test_GUID__c != oldMap.get(o.Id).Test_GUID__c )
             { //the order finalized date was set
                 
@@ -412,21 +428,32 @@ system.debug('** ASTECH: GUUIDs: ' + o.Test_GUID__c + ' ?= ' + oldMap.get(o.Id).
                         system.debug('No installer email found for order ' + o.Id );
                         continue;
                     }
+<<<<<<< HEAD
 //Quote.Nana_Quote__r.Installer__r                    
 //system.debug('** ASTECH: sending CAD email to  ' + pipelineEmails.get(o.Id) );
 system.debug('** ASTECH: sending CAD email to  ' + o.Quote.Nana_Quote__r.Installer__c );
+=======
+                    
+                system.debug('sending CAD email to  ' + pipelineEmails.get(o.Id) );
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 				try
 				{
 	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
 	                Task tsk = new Task();
+<<<<<<< HEAD
 //	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
 //	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
 	                tsk.WhatId = o.Quote.Nana_Quote__r.Installer__c;
 	                tsk.OwnerID = o.OwnerID;
+=======
+	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
+	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
 	                tsk.Description = '';
 	                
 	                tasksToInsert.add( tsk ); 
+<<<<<<< HEAD
 system.debug('** ASTECH: triggering email send');	                
 /*
 	                Opportunity opp = oppMap.get(o.OpportunityId);
@@ -441,6 +468,12 @@ system.debug('** ASTECH: setting customer emailed ...');
 				}catch (Exception ex )
 				{
 system.debug('** ASTECH Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+=======
+	                
+				}catch (Exception ex )
+				{
+					system.debug('** Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 				}
                 
             }
@@ -450,6 +483,7 @@ system.debug('** ASTECH Order Trigger: An exception occurred when trying to send
         }
         if( tasksToInsert.size() > 0 )
             insert tasksToInsert;
+<<<<<<< HEAD
             /*
         if( oppsToUpdate.size() > 0  )
     	{
@@ -457,6 +491,9 @@ system.debug('** ASTECH: updating opps');
     		update oppsToUpdate;
 		}		
 		*/
+=======
+        		
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 	}
 	
 	public static void handleBeforeUpdate( map<Id, Order> oldMap, list<Order> orders ) 

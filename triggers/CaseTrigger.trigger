@@ -123,6 +123,7 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
         caseTriggerHelperForOrderUpdate.autoUpdateConTypeOnCase(Trigger.new,caseConIds);
     }
     
+<<<<<<< HEAD
     set<id> caseOrdIds = new set<id>();
     for(case c:trigger.new){
     if( trigger.isBefore && (trigger.isInsert || (trigger.isUpdate && (Trigger.oldMap.get(c.id).order__c != c.order__c)))){
@@ -137,4 +138,6 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
     }
     
     
+=======
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 }

@@ -63,6 +63,7 @@ public class caseTriggerHelperForOrderUpdate{
             }
         }
     }
+<<<<<<< HEAD
     
     public static void updateSLorderFromManufact(List<Case> casList,set<id> caseOrdIds){
     //set<id> caseSet=new set<id>();
@@ -86,4 +87,6 @@ public class caseTriggerHelperForOrderUpdate{
     }
     
     }
+=======
+>>>>>>> 38d5474048e4349e5fb1b806274e5d38ea1dc1fc
 }
