@@ -1,0 +1,241 @@
+<apex:page standardController="Case" showHeader="true" sidebar="true">
+  
+    <script type="text/javascript"> 
+  function openLookup(baseURL, width, modified, searchParam){
+    var originalbaseURL = baseURL;
+    var originalwidth = width;
+    var originalmodified = modified;
+    var originalsearchParam = searchParam;
+
+    var lookupType = baseURL.substr(baseURL.length-3, 3);
+    if (modified == '1') baseURL = baseURL + searchParam;
+
+    var isCustomLookup = false;
+
+   
+    if(lookupType == "003"){
+
+      var urlArr = baseURL.split("&");
+      var txtId = '';
+      if(urlArr.length > 2) {
+        urlArr = urlArr[1].split('=');
+        txtId = urlArr[1];
+      }
+
+      
+      baseURL = "/apex/CustomContactLookup?txt=" + txtId;
+
+     
+      baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.myForm}");
+      if (modified == '1') {
+        baseURL = baseURL + "&lksearch=" + searchParam;
+      }
+
+    
+      if(txtId.indexOf('casContact') > -1 ){
+        isCustomLookup = true;
+      }
+    }
+
+
+    if(isCustomLookup == true){
+      openPopup(baseURL, "lookup", 350, 480, "width="+width+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+    }
+    else {
+      if (modified == '1') originalbaseURL = originalbaseURL + originalsearchParam;
+      openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+    } 
+  }
+</script>
+    
+    
+    
+    <apex:form id="myForm">
+        
+        <apex:sectionHeader title="Case Edit" subtitle="{!Case.CaseNumber}" />    
+        <apex:pageBlock id="pgBlock" mode="edit" title="Case Edit">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Save" action="{!Save}"/>
+                <apex:commandButton value="Cancel" action="{!Cancel}"/>
+            </apex:pageBlockButtons>
+        <apex:pageBlockSection id="pgBlockSectionAcctInfo" title="Case Information" collapsible="false" columns="2" >
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Category</apex:outputLabel>
+                <apex:inputField id="casCategory" value="{!Case.Category__c}" />
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Order</apex:outputLabel>
+                <apex:inputField id="casOrder" value="{!Case.Order__c}" />
+            </apex:pageBlockSectionItem>
+            
+            
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Sub Category</apex:outputLabel>
+                <apex:inputField id="casSubC" value="{!Case.Sub_Category__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Case Owner</apex:outputLabel>
+                <apex:outputField id="casOwner" value="{!Case.ownerid}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Sub Type</apex:outputLabel>
+                <apex:inputField id="casSubT" value="{!Case.Sub_Type__c }" />
+            </apex:pageBlockSectionItem>    
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Project Name</apex:outputLabel>
+                <apex:inputField id="casProject" value="{!Case.ProjectName__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Quote</apex:outputLabel>
+                <apex:inputField id="casQuote" value="{!Case.Quote__c}" />
+            </apex:pageBlockSectionItem>     
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Responsible Rep</apex:outputLabel>
+                <apex:inputField id="casRep" value="{!Case.Responsible_Rep__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Subject</apex:outputLabel>
+                <apex:inputField id="casSub" value="{!Case.Subject}" />
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Entitlement Name</apex:outputLabel>
+                <apex:inputField id="casEnt" value="{!Case.EntitlementID}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Type</apex:outputLabel>
+                <apex:inputField id="casType" value="{!Case.Type}" />
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Status</apex:outputLabel>
+                <apex:inputField id="casStat" value="{!Case.Status}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Priority</apex:outputLabel>
+                <apex:inputField id="casPriority" value="{!Case.Priority}" />
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Case Origin</apex:outputLabel>
+                <apex:inputField id="casOrigin" value="{!Case.Origin}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Description</apex:outputLabel>
+                <apex:inputField id="casDescription" value="{!Case.Description}" />
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >SL Order Id</apex:outputLabel>
+                <apex:inputField id="casSLId" value="{!Case.SL_Order_Id_Manuf__c}" />
+            </apex:pageBlockSectionItem>
+          
+        </apex:pageBlockSection>
+            
+        <apex:pageBlockSection id="pgBlockSectionContactInfo" title="End Customer Contact & Account Information" collapsible="false" columns="2">
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Contact Name</apex:outputLabel>
+                <apex:inputField id="casContact" value="{!case.ContactID}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Contact Type</apex:outputLabel>
+                <apex:inputField id="casConType" value="{!Case.I_am_requesting_service_as__c}" />
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Account Name</apex:outputLabel>
+                <apex:inputField id="casAccount" value="{!Case.AccountID}" />
+            </apex:pageBlockSectionItem>
+            
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection id="pgBlockSectionWebToCase" title="Web to Case" collapsible="false" columns="2">
+           <apex:pageBlockSectionItem >
+                <apex:outputLabel >Email Address</apex:outputLabel>
+                <apex:inputField id="casEmail" value="{!Case.Email_Address__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Model</apex:outputLabel>
+                <apex:inputField id="casModel" value="{!Case.Model__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Company Name</apex:outputLabel>
+                <apex:inputField id="casCompany" value="{!Case.Company_Name__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Case type (Web)</apex:outputLabel>
+                <apex:inputField id="casTypeWeb" value="{!Case.Case_type__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >City</apex:outputLabel>
+                <apex:inputField id="casCity" value="{!Case.Project_Site_City__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Street Address</apex:outputLabel>
+                <apex:inputField id="casAddr" value="{!Case.Project_Site_Street_Address__c}" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >State</apex:outputLabel>
+                <apex:inputField id="casState" value="{!Case.Project_Site_State__c}"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Country</apex:outputLabel>
+                <apex:inputField id="casCountry" value="{!Case.Project_Site_Country__c}"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Zip/Postal Code</apex:outputLabel>
+                <apex:inputField id="casZip" value="{!Case.Project_Site_Zip_Postal_Code__c}"/>
+            </apex:pageBlockSectionItem>
+
+
+        </apex:pageBlockSection>
+
+         <apex:pageBlockSection id="pgAdditionalInfo" title="Additional Information" collapsible="false" columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Other Email</apex:outputLabel>
+                <apex:inputField id="casOtherEmail" value="{!Case.Other_Email__c}"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Milestone Status</apex:outputLabel>
+                <apex:inputField id="casMilestoneStatus" value="{!Case.MilestoneStatus}"/>
+            </apex:pageBlockSectionItem>
+
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Other Phone</apex:outputLabel>
+                <apex:inputField id="casOtherPhone" value="{!Case.Other_Phone__c}"/>
+            </apex:pageBlockSectionItem>
+
+            
+
+         </apex:pageBlockSection>
+
+
+
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

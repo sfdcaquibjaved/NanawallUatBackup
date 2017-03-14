@@ -83,6 +83,9 @@ height: 96px;
                     </div>
                     <apex:pageMessages id="MSG" />
                     
+                    <apex:outputpanel id="newcss" style="background:#ffffff">
+                  jhijh
+                    </apex:outputpanel>     
 
                     <div class="slds-panel__section" >
                     
@@ -96,13 +99,15 @@ height: 96px;
 
 <apex:repeat value="{!newAttachments}" var="newAtt">
   <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--5-of-6 slds-large-size--8-of-12">
+                <div rerender="newcss">
                 <apex:pageBlockSection columns="2">
                    <apex:pageBlockSectionItem >
-                        <apex:outputLabel />                         
+
                         <apex:inputFile value="{!newAtt.body}" filename="{!newAtt.name}" styleclass="fileType" id="file"/>
 
                     </apex:pageBlockSectionItem>
                     </apex:pageBlockSection>
+                    </div>
                      </div>
             </apex:repeat>
 
@@ -115,6 +120,7 @@ height: 96px;
                 </apex:form>
             </div>
         </div>
+
     </body>                                      
     </html>
 </apex:component>
