@@ -1,6 +1,23 @@
 <apex:page controller="CustomContactLookupController"  title="Search" showHeader="false" sideBar="false"  tabStyle="Contact" id="pg">
 
-  <apex:form >
+    <script>
+            function openLookup(baseURL, width, modified, searchParam){
+            var originalbaseURL = baseURL;
+            var originalwidth = width;
+            var originalmodified = modified;
+            var originalsearchParam = searchParam;
+            var lookupType = baseURL.substr(baseURL.length-3, 3);
+         
+            baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.myForm}");
+            if (modified == '1') {
+            baseURL = baseURL + "&lksearch=" + searchParam;
+            }
+            if (modified == '1') originalbaseURL = originalbaseURL + originalsearchParam;
+            openPopup(originalbaseURL, "MsgWindow", 350, 480, "width="+700+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+            } 
+</script>
+	    
+  <apex:form id="myForm">
   <apex:outputPanel id="page" layout="block" style="margin:5px;padding:10px;padding-top:2px;">
     <apex:tabPanel switchType="client" selectedTab="name1" id="tabbedPanel">
 
@@ -19,9 +36,15 @@
               <apex:pageBlockTable value="{!results}" var="a" id="tblResults">
                 <apex:column >
                   <apex:facet name="header">
-                    <apex:outputPanel >Name</apex:outputPanel>
+                    <apex:outputPanel >Name &nbsp; &nbsp; &nbsp; Email &nbsp; &nbsp; &nbsp; Account Name </apex:outputPanel>
+                     
                   </apex:facet>
-                   <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.Id}','{!a.Name}', false)" rendered="{!NOT(ISNULL(a.Id))}">{!a.Name}</apex:outputLink>     
+                   <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.Id}','{!a.Name}', false)" rendered="{!NOT(ISNULL(a.Id))}">{!a.Name}</apex:outputLink>   
+                   &nbsp; &nbsp; &nbsp;
+                    <apex:outputLabel >{!a.Email}</apex:outputLabel>
+                     &nbsp; &nbsp; &nbsp;
+                    <apex:outputLabel >{!a.Account.Name}</apex:outputLabel>
+                    
                 </apex:column>
               </apex:pageBlockTable>
             </apex:pageBlock>
@@ -43,6 +66,7 @@
           <apex:pageBlockSection columns="2">
             <apex:repeat value="{!$ObjectType.Contact.FieldSets.CustomContactLookup}" var="f">
               <apex:inputField value="{!Contact[f]}"/>
+               
             </apex:repeat>
           </apex:pageBlockSection> 
         </apex:pageBlock>

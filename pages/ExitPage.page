@@ -1,0 +1,8 @@
+<apex:page controller="CustomContactLookupController" action="{!exitAction}">
+   
+     <apex:form id="myForm">
+  <script type="text/javascript"> 
+top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!ContactInfo.id}','{!JSENCODE(ContactInfo.name)}', false);
+  </script>
+   </apex:form> 
+  </apex:page>

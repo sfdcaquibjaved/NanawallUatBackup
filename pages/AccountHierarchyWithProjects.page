@@ -1,0 +1,29 @@
+<apex:page standardController="Account" extensions="HierarchyController" sidebar="false">
+ <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="acc" value="{!Account}" >
+             <apex:column value="{!acc.Name}" />
+             <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
+             <apex:column value="{!siz}" headerValue="Project Count"/>
+         </apex:pageBlockTable>
+     </apex:pageBlockSection>
+   </apex:pageBlock>
+  <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="pr" value="{!ProjectList}" >
+             <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" />
+                <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/>
+                <apex:column headerValue="Project Status" value="{!pr.status}" />
+                 <apex:column headerValue="Project Amount" value="{!pr.amount}" />
+              <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
+                 <apex:column headerValue="Application Industry" value="{!pr.applicationIndustry}" />
+                 <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>
+                 <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" />
+                 <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" />
+                 <apex:column value="{!pr.projectCity}" headerValue="Project City" />
+                 <apex:column value="{!pr.projectState}" headerValue="Project State" />
+                 <apex:column value="{!pr.projectZipCode}" headerValue="Project ZipCode" /> 
+         </apex:pageBlockTable>
+     </apex:pageBlockSection> 
+   </apex:pageBlock>
+</apex:page>

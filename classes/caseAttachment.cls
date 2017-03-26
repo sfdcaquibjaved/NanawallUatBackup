@@ -303,7 +303,7 @@ Trigger associated with: emailMessageTrigger
             system.debug('Inside future 2');
         }
         try {
-            insert caseCommentInsert;
+           // insert caseCommentInsert;
         } catch (exception e) {
             system.debug('Exception is:' + e);
         }
@@ -330,14 +330,14 @@ Trigger associated with: emailMessageTrigger
                 
                 
                 cc.ParentId = emailmessageMap.get(cs.id).ParentId;
-                cc.isPublished = True;
+                cc.isPublished = FALSE;
                 caseCommentList.add(cc);
             }
         }
 
         if (caseCommentList.size() > 0) {
             try {
-                insert caseCommentList;
+               // insert caseCommentList;
             } catch (exception e) {
                 system.debug('Exception is:' + e);
             }

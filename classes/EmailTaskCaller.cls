@@ -12,7 +12,7 @@ global class EmailTaskCaller {
 	WebService static boolean SendQuoteEmail4( string SalesforceQuoteID, integer PDFHistoryID,integer CADHistoryID, string ModelDescription, string ShowroomInfo, string NDGLink_OverrideURL, boolean SendToCustomer, boolean SendToRep ) {
 	
 
-		Quote__c q = [SELECT id,Responsible_Rep__r.Email, Opportunity__r.Owner.Email, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
+		Quote__c q = [SELECT id,Cleaned_Discount__c, Cleaned_Quote_ID__c, Discount__c, Responsible_Rep__r.Email, Opportunity__r.Owner.Email, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
 				//need a workflow action when you print a quote, this method could be refactored
 		q.Followup_Status__c ='Reviewing';
 		q.Print_Date__c = DateTime.now();
@@ -28,16 +28,16 @@ global class EmailTaskCaller {
 		//when this is all working we need to hook the contact's email to the SEND, not my email - ks	
 		Contact c = [SELECT id, Email, OwnerID FROM Contact WHERE id = :q.Contact__c ];
 
-		User u = [SELECT Email, FirstName, LastName, OrgWideEmailAddressID__c FROM user WHERE id = :c.OwnerId];
+		User u = [SELECT Email, FirstName, LastName, OrgWideEmailAddressID__c,Email2__c,Email3__c,Email4__c FROM user WHERE id = :c.OwnerId];
 		EmailTemplate template;
 		EmailTemplate template_rep;
 		try 
 		{
-			if( SendToRep ) 
+//			if( SendToRep ) 
 			{
 				template_rep = [SELECT Body, HtmlValue, id, Subject FROM EmailTemplate WHERE DeveloperName = :GlobalStrings.RepQuoteEmailTemplateName() ];			
 			} 
-			if(SendToCustomer )
+//			if(SendToCustomer )
 			{
 				template = [SELECT Body, HtmlValue, id, Subject FROM EmailTemplate WHERE DeveloperName = :GlobalStrings.QuoteEmailTemplateName() ];
 			}
@@ -63,7 +63,34 @@ global class EmailTaskCaller {
 
 	
 	
+		// replace Cleaned_Discount__c, ,
+		HTMLBody = HTMLBody.replace( '{!Quote__c.Cleaned_Discount__c}',string.valueof(q.Cleaned_Discount__c) );
+		PlainTextBody = PlainTextBody.replace('{!Quote__c.Cleaned_Discount__c}',string.valueof(q.Cleaned_Discount__c) );
+		Subject = Subject.replace('{!Quote__c.Cleaned_Discount__c}',string.valueof(q.Cleaned_Discount__c) );
 		
+		HTMLBody_rep = HTMLBody_rep.replace( '{!Quote__c.Cleaned_Discount__c}',string.valueof(q.Cleaned_Discount__c) );
+		PlainTextBody_rep = PlainTextBody_rep.replace('{!Quote__c.Cleaned_Discount__c}',string.valueof(q.Cleaned_Discount__c) );
+		Subject_rep = Subject_rep.replace('{!Quote__c.Cleaned_Discount__c}',string.valueof(q.Cleaned_Discount__c) );
+		
+		// replace Cleaned_Quote_ID__c, ,
+		HTMLBody = HTMLBody.replace( '{!Quote__c.Cleaned_Quote_ID__c}',string.valueof(q.Cleaned_Quote_ID__c) );
+		PlainTextBody = PlainTextBody.replace('{!Quote__c.Cleaned_Quote_ID__c}',string.valueof(q.Cleaned_Quote_ID__c) );
+		Subject = Subject.replace('{!Quote__c.Cleaned_Quote_ID__c}',string.valueof(q.Cleaned_Quote_ID__c) );
+		
+		HTMLBody_rep = HTMLBody_rep.replace( '{!Quote__c.Cleaned_Quote_ID__c}',string.valueof(q.Cleaned_Quote_ID__c) );
+		PlainTextBody_rep = PlainTextBody_rep.replace('{!Quote__c.Cleaned_Quote_ID__c}',string.valueof(q.Cleaned_Quote_ID__c) );
+		Subject_rep = Subject_rep.replace('{!Quote__c.Cleaned_Quote_ID__c}',string.valueof(q.Cleaned_Quote_ID__c) );
+		
+		// replace Discount__c
+		HTMLBody = HTMLBody.replace( '{!Quote__c.Discount__c}',string.valueof(q.Discount__c) );
+		PlainTextBody = PlainTextBody.replace('{!Quote__c.Discount__c}',string.valueof(q.Discount__c) );
+		Subject = Subject.replace('{!Quote__c.Discount__c}',string.valueof(q.Discount__c) );
+		
+		HTMLBody_rep = HTMLBody_rep.replace( '{!Quote__c.Discount__c}',string.valueof(q.Discount__c) );
+		PlainTextBody_rep = PlainTextBody_rep.replace('{!Quote__c.Discount__c}',string.valueof(q.Discount__c) );
+		Subject_rep = Subject_rep.replace('{!Quote__c.Discount__c}',string.valueof(q.Discount__c) );
+		
+		 
 		// replace {!Quote__c.Quote_ID__c}
 		HTMLBody = HTMLBody.replace( '{!Quote__c.Quote_ID__c}',string.valueof(q.Quote_ID__c) );
 		PlainTextBody = PlainTextBody.replace('{!Quote__c.Quote_ID__c}',string.valueof(q.Quote_ID__c) );
@@ -137,16 +164,16 @@ global class EmailTaskCaller {
 		string link='';
 		string link_rep='';
 
-		link = 'http://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?rep=true&ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '%26k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
-		link_rep = 'http://now.eloqua.com/e/f2.aspx?elqFormName=QuoteLink&elqSiteID=1745&Description=View&e=' + c.Email + '&QuoteSFID=' + q.Id + '&url=http://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '%26k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
+		link_rep = 'http://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?rep=true&ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '&k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
+		link = 'http://now.eloqua.com/e/f2.aspx?elqFormName=QuoteLink&elqSiteID=1745&Description=View&e=' + c.Email + '&QuoteSFID=' + q.Id + '&url=http://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '%26k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
 				
 		HTMLBody = HTMLBody.replace('{!QuoteLink}', link);
 		PlainTextBody = PlainTextBody.replace('{!QuoteLink}',link);
 		Subject = Subject.replace('{!QuoteLink}',link );
 
-		HTMLBody_rep = HTMLBody.replace('{!QuoteLink}', link_rep);
-		PlainTextBody_rep = PlainTextBody.replace('{!QuoteLink}',link_rep);
-		Subject_rep = Subject.replace('{!QuoteLink}',link_rep );
+		HTMLBody_rep = HTMLBody_rep.replace('{!QuoteLink}', link_rep);
+		PlainTextBody_rep = PlainTextBody_rep.replace('{!QuoteLink}',link_rep);
+		Subject_rep = Subject_rep.replace('{!QuoteLink}',link_rep );
 
 		
 		string cadlink= '';
@@ -226,7 +253,7 @@ global class EmailTaskCaller {
 
 		string emailAdd = '';
 		string emailAdd_rep = '';
-		if(SendToRep )
+//		if(SendToRep )
 		{
 			if(q.Responsible_Rep__r != null && q.Responsible_Rep__r.Email != null && q.Responsible_Rep__r.Email != '' )
 				emailAdd_rep = q.Responsible_Rep__r.Email;
@@ -234,7 +261,7 @@ global class EmailTaskCaller {
 			
 		}
 		
-		if(SendToCustomer)
+//		if(SendToCustomer)
 		{
 			emailAdd = q.Calculated_Email__c;
 			if( emailAdd == null || emailAdd == '' ) emailAdd = c.Email;
@@ -244,7 +271,7 @@ global class EmailTaskCaller {
 		
 		//set up the user email
 		Messaging.Singleemailmessage email = new Messaging.Singleemailmessage();		
-		email.setCcAddresses(new string[]{'quotes@nanawall.com' } );
+		email.setCcAddresses(new string[]{'quotes@nanawall.com', 'gabe@paulsonit.com' } );
 		if (c.Email == 'spamcheck@sitesell.net')
 			email.setSubject('TEST');
 		else
@@ -258,12 +285,25 @@ global class EmailTaskCaller {
 
 		//set up the rep email
 		Messaging.Singleemailmessage email_rep = new Messaging.Singleemailmessage();		
-		email_rep.setCcAddresses(new string[]{'quotes@nanawall.com' } );
+		//Email2__c,Email3__c,Email4__c
+		list<string> rep_ccs = new list<string>(); // new string[] {'quotes@nanawall.com', 'gabe@paulsonit.com'};
+		rep_ccs.add('quotes@nanawall.com');
+		rep_ccs.add('gabe@paulsonit.com');
+		if(u.Email2__c != null && u.Email2__c != '' )
+			rep_ccs.add(  u.Email2__c);
+		if(u.Email3__c != null && u.Email3__c != '' )
+			rep_ccs.add(  u.Email3__c);
+		if(u.Email4__c != null && u.Email4__c != '' )
+			rep_ccs.add(  u.Email4__c);
+			
+		email_rep.setCcAddresses(rep_ccs );
+		
 		if (c.Email == 'spamcheck@sitesell.net')
 			email_rep.setSubject('TEST');
 		else
 			email_rep.setSubject( Subject_rep );
 		email_rep.setHtmlBody( HTMLBody_rep );
+system.debug('** ASTECH: body_rep: '+ HTMLBody_rep);
 		
 		email_rep.setPlainTextBody(PlainTextBody_rep);
 		email_rep.setToAddresses( new String[]{ emailAdd_rep } );
@@ -278,17 +318,23 @@ global class EmailTaskCaller {
 			
 			Messaging.SendEmailResult [] r = null;
 			if( SendToCustomer)
+			{
+				system.debug('** ASTECH: sending customer email');
 				r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
-				
-			if( SendToRep )
-				r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email_rep}); 
+			}
 			
+			if( SendToRep )
+			{
+				system.debug('** ASTECH: sending rep email');
+				r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email_rep}); 
+				system.debug(r);				
+			}
 			
 		} catch( Exception ex) {
 			Utility.JimDebug(ex, 'caught a sendquoteemail4 error');
 			
-			email.setOrgWideEmailAddressId( GlobalStrings.DefaultOrgWideEmailAddressID() );
-			Messaging.SendEmailResult [] r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
+//			email.setOrgWideEmailAddressId( GlobalStrings.DefaultOrgWideEmailAddressID() );
+//			Messaging.SendEmailResult [] r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
 		}
 
 		Task t = new Task();

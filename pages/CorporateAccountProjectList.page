@@ -1,4 +1,4 @@
-<apex:page id="thePage" standardController="Account" extensions="CorporateAccountProjectListController" >
+<apex:page id="thePage" standardController="Account" extensions="CorporateAccountProjectListController">
     
     <apex:form id="theForm">
         <apex:pageBlock >

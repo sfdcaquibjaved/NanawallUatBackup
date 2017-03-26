@@ -34,9 +34,10 @@ public class CopyDataToContacts {
      Map<String, SObjectField> m = SObjectType.Account.fields.getMap();
      Map<String, SObjectField> c=SObjectType.Contact.fields.getMap();
      
+     public CopyDataToContacts(){}
      //Constructor
      public CopyDataToContacts(ApexPages.StandardController controller) {
-     //updateContactList.clear();
+     updateContactList.clear();
          copyFinished =false;
         Info ='';
         failures=false;
@@ -50,7 +51,8 @@ public class CopyDataToContacts {
         actsList = [select id,Name,ShippingCity,ShippingCountry,ShippingPostalCode,ShippingState,ShippingStreet,BillingCity,BillingCountry,BillingPostalCode,BillingState,BillingStreet,Phone,Fax,BillingCountryCode,ShippingCountryCode from account where id=:accId];
         wrapAccountFields=new list<wrapAccountDetails>();
         String type='Account';
-        Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
+        wrapcontactList =new list<wrapContact>();
+        /*Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
         Schema.SObjectType AccountSchema = schemaMap.get(type);
         Map<String, Schema.SObjectField> fieldMap = AccountSchema.getDescribe().fields.getMap();
 
@@ -78,8 +80,12 @@ public class CopyDataToContacts {
           if(wrapContactList.size() == 0){
               ApexPages.addMessage( new ApexPages.message(ApexPages.Severity.Error, 'There are no contacts associated with this Account')); 
           }
+          */
     }
-    
+    //testing wid dummy method
+    public void testDummy(){
+        system.debug('hi');
+        }
     //Action method for Buttonclicked
     public void buttonClicked(){
     updateContactList.clear();

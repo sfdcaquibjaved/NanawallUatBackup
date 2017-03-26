@@ -8,10 +8,6 @@
 	        <apex:panelGrid columns="4" width="700px">
 		        Quote Number:<apex:inputtext value="{!QuoteNumber}" />
 		        Order Number:<apex:inputtext value="{!OrderNumber}" />
-				<!-- Model  <apex:inputtext value="{!Model}"/>
-				# Panels(L)  <apex:inputtext value="{!PanelsL}"/>
-				# Panels(R)  <apex:inputtext value="{!PanelsR}"/>
-				Panel Count  <apex:inputtext value="{!PanelsCount}"/> -->
 				Project Name <apex:inputtext value="{!ProjectName}"/>
 				Project State <apex:selectList value="{!ProjectState}" multiselect="false" size="1"> <apex:selectOption itemValue="" itemLabel="-SELECT-" /><apex:selectOptions value="{!states}"></apex:selectOptions></apex:selectList>
 				Project Zip <apex:inputtext value="{!ProjectZip}"/>
@@ -19,7 +15,7 @@
 				Contact Last Name <apex:inputtext value="{!ContactLastName}"/>
 				Contact Email <apex:inputtext value="{!ContactEmail}"/>
 				Contact Phone <apex:inputtext value="{!ContactPhone}"/>
-
+				Freight Tracking #  <apex:inputtext value="{!FreightTrackingNumber}"/>
 		        
 				1. Order Start Date Lo  <apex:inputfield value="{!dummyOrder.EffectiveDate}" required="false" /> 
 				1. Order Start Date Hi <apex:inputfield value="{!dummyOrder2.EffectiveDate}" required="false" />
@@ -31,7 +27,7 @@
 				Deposit Amount Hi <apex:inputtext value="{!DepositAmountHi}"/> 
 				Balance Received Amount Lo  <apex:inputtext value="{!BalanceReceivedAmountLo}"/>
 				Balance Received Amount Hi  <apex:inputtext value="{!BalanceReceivedAmountHi}"/>
-				Freight Tracking #  <apex:inputtext value="{!FreightTrackingNumber}"/>
+				Model <apex:selectList value="{!Model}" multiselect="false" size="1"><apex:selectOption itemValue="" itemLabel="-SELECT-" /><apex:selectOptions value="{!Models}"></apex:selectOptions></apex:selectList>
 
 		        
 	                  
@@ -93,7 +89,7 @@
 	                </apex:facet>
 	                <apex:outputLabel value="{!o.Project__r.Project_State__c}" /> 
 	               </apex:column>
-	               
+	                
 	                <apex:column headerValue="Project Zip">
 	                <apex:facet name="header">
 	                    <apex:commandlink value="Project Zip" action="{!dosort}" reRender="op" >
@@ -121,23 +117,54 @@
 	                <apex:outputLabel value="{!o.Contact__r.LastName}" /> 
 	               </apex:column>
 	               
-	                <apex:column headerValue="Contact Email">
+	                <apex:column headerValue="Start Date">
 	                <apex:facet name="header">
-	                    <apex:commandlink value="Contact Email" action="{!dosort}" reRender="op" >
-	                    <apex:param name="sortfield" value="Contact__r.Email" assignto="{!sortfield}"/>
+	                    <apex:commandlink value="Start Date" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="EffectiveDate" assignto="{!sortfield}"/>
 	                    </apex:commandlink>
 	                </apex:facet>
-	                <apex:outputLabel value="{!o.Contact__r.Email}" /> 
+	                <apex:outputLabel value="{!o.EffectiveDate}" /> 
 	               </apex:column>
 	               
-	                <apex:column headerValue="Contact Phone">
+	                <apex:column headerValue="Finalized Date">
 	                <apex:facet name="header">
-	                    <apex:commandlink value="Contact Phone" action="{!dosort}" reRender="op" >
-	                    <apex:param name="sortfield" value="Contact__r.Phone" assignto="{!sortfield}"/>
+	                    <apex:commandlink value="Finalized Date" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Order_Finalized_Date__c" assignto="{!sortfield}"/>
 	                    </apex:commandlink>
 	                </apex:facet>
-	                <apex:outputLabel value="{!o.Contact__r.Phone}" /> 
+	                <apex:outputLabel value="{!o.Order_Finalized_Date__c}" /> 
 	               </apex:column>
+	               
+	                <apex:column headerValue="ETA">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="ETA" action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="IN_ETA_Jobsite_c__c" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.IN_ETA_Jobsite_c__c}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Deposit Amt.">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Deposit Amt." action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Deposit_Amount__c" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Deposit_Amount__c}" /> 
+	               </apex:column>
+	               
+	                <apex:column headerValue="Bal. Rec. Amt.">
+	                <apex:facet name="header">
+	                    <apex:commandlink value="Bal. Rec. Amt." action="{!dosort}" reRender="op" >
+	                    <apex:param name="sortfield" value="Balance_Received_Amount__c" assignto="{!sortfield}"/>
+	                    </apex:commandlink>
+	                </apex:facet>
+	                <apex:outputLabel value="{!o.Balance_Received_Amount__c}" /> 
+	               </apex:column>
+	               
+	               
+	               
+	               
 	               
 	               
 	           </apex:pageBlockTable> 

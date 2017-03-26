@@ -1,0 +1,643 @@
+<apex:page tabStyle="Quote__c" controller="Quote_WizardController_CloneNew" standardStylesheets="false" sidebar="false" showHeader="false" docType="html-5.0" >
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/slds.css"/>
+
+<style>
+.msgIcon {
+    display: none!important
+}
+.customMessage * {
+    color: #fff!important
+}
+.customMessage {
+    margin: 5px 0!important;
+    max-width: 1280px;
+    opacity: 1!important;
+    width: 100%;
+    font-size: 12px;
+    border: 0px;
+    padding-left: 10px;
+}
+.message {
+    opacity: .1
+}
+</style>
+
+
+<script>
+    $(document).ready(function(){
+       overridePageMessages();    
+    });
+
+    function overridePageMessages(){    
+        var textureEffect = '';
+        //Uncomment below line for texture effect on page messages
+        textureEffect = 'slds-theme--alert-texture';
+
+        $('.warningM3').addClass('slds-notify slds-notify--toast slds-theme--warning customMessage '+textureEffect);          
+        $('.confirmM3').addClass('slds-notify slds-notify--alert slds-theme--success  customMessage '+textureEffect);    
+        $('.errorM3').addClass('slds-notify slds-notify--alert slds-theme--error customMessage '+textureEffect);                  
+        $('.infoM3').addClass('slds-notify slds-notify--toast customMessage '+textureEffect);    
+
+        $('.errorM3').removeClass('errorM3'); 
+        $('.confirmM3').removeClass('confirmM3'); 
+        $('.infoM3').removeClass('infoM3');   
+        $('.warningM3').removeClass('warningM3');  
+    }
+</script>
+
+    <script src="/resource/jQueryForPopup/jQuery/jquery-1.8.2.min.js" type="text/javascript" />
+    <script src="/resource/jQueryForPopup/jQuery/ui/jquery-ui-1.9.1.custom.min.js" type="text/javascript" />
+    <script src="/resource/jQueryForPopup/jQuery/postmessage/jquery.ba-postmessage.js" type="text/javascript" />
+    <script src="/resource/jQueryForPopup/jQuery/bbq/jquery.ba-bbq.min.js" type="text/javascript"/>
+    <link rel="stylesheet" href="/resource/jQueryForPopup/jQuery/ui/css/ui-lightness/jquery-ui-1.9.1.custom.min.css"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS100,'assets/styles/salesforce-lightning-design-system-vf.css')}"/>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+
+ <head>
+
+<style>
+           .infoSection{
+                display: inline-block;
+                float: left;
+                height: 80px;
+                width: 95%;
+                background-color: #f8f8f8;
+                margin-top: 10px;
+                border-radius: 10px;
+            }
+            
+            .step1Section{
+                display: inline-block;
+                float: left;
+                width: 95%;
+                background-color: #f8f8f8;
+                margin-top: 5px;
+                border-radius: 10px;
+                border-top: 3px solid #3d8d8d;
+            }
+            
+            .boxStyle1{
+                color: #fff;
+               
+                font-family: arial;
+                font-size: 9px;
+                text-decoration: none;
+            }
+            
+            .boxStyle{
+                color: #000;
+                font-family: arial;
+                font-size: 13px;
+                text-decoration: none;
+            }
+            
+             .boxStyle3{
+                color: black;
+                font-weight: bold;
+               text-align: Center;
+                font-family: arial;
+                font-size: 8px;
+                text-decoration: none;
+               
+            }
+            
+            .infoboxStyle{
+                color: #000;
+                font-family: arial;
+                font-size: 13px;
+                text-decoration: none;
+                margin-left:10px;
+                margin-top: 10px;
+            }
+            
+            .lookupInput
+{
+    display: inline;
+    vertical-align: middle;
+    white-space: nowrap;
+   
+}
+.lookupInput img
+{
+    background-repeat: no-repeat;
+    margin-right: .25em;
+    vertical-align: middle;
+    
+}
+.lookupInput .disabled
+{
+    background-color: #ccc;
+}
+.lookupInput .emptyDependentLookup
+{
+    font-style: italic;
+}
+.lookupInput input[readonly]
+{
+    background-color: #e6e6e6;
+    border: 2px solid #e6e6e6;
+    color: #333;
+    cursor: default;
+}
+.lookupInput a.readOnly
+{
+    float: right;
+}
+.lookupInput span.readOnly
+{
+    display: block;
+    white-space: normal;
+}
+.lookupInput span.totalSummary
+{
+    font-weight: bold;
+}
+.inlineEditRequiredDiv .lookupInput img,.inlineEditDiv .lookupInput img
+{
+    vertical-align: middle;
+}
+.quickCreateModule .lookupInput input {
+    max-width: 155px
+}
+.lookupIcon {
+    background-image: url(/img/func_icons/util/lookup20.gif);
+    background-position: 0 0;
+    width: 20px;
+    height: 20px;
+    background-position: top left
+}
+.lookupIconOn {
+    background-image: url(/img/func_icons/util/lookup20.gif);
+    background-position: 0 0;
+    width: 20px;
+    height: 20px;
+    background-position: top right
+}
+            
+     .pbHeader {
+
+  font:$font-weight-light   
+  font-size:$font-size-medium
+}
+
+ html,html body{
+      overflow: auto;
+      -webkit-overflow-scrolling:auto;
+    }
+    body{
+      position:absolute;left:0;right:0;top:0;bottom:0;
+      margin:0;
+    }
+
+
+</style>
+        
+<style>
+            body .bPageBlock .pbBody .red .pbSubheader{
+                background-color:#c00000;
+            }
+            body .bPageBlock .pbBody .grey .pbSubheader{
+                background-color:#c0c0c0;
+            }
+            body .bPageBlock .pbBody .grey .pbSubheader h3{
+                color:#000;
+            }
+</style>
+    
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <apex:stylesheet value="{!URLFOR($Resource.salesforce_lightning, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+
+</head>
+<script>
+function fnChangeContact(a)
+    {
+    actionFuncContact(a);
+    }
+    
+function fnChangeAccount(a)
+    {
+    actionFuncAccount(a);
+    }
+    
+ function fnChangeProject(a)
+    {
+    actionFuncProject(a);
+    }
+</script>
+
+<apex:form id="insuffSectionId" rendered="{!NOT(insufficentPrivilege)}">
+<apex:pagemessages escape="false" id="Displayerrors" />
+</apex:form>
+
+<apex:form id="formId" rendered="{!insufficentPrivilege}">
+<apex:outputPanel id="messagePanel" >
+<br/>
+<div class="slds">
+<div class="slds-grid">
+<div class="slds-tabs--path" role="application">
+ <ul class="slds-tabs--path__nav" role="tablist"> 
+     <li class="slds-tabs--path__item slds-is-current" role="presentation"  style="display:{!if(showProjectForm,"none","block")};" >
+         <a class="slds-tabs--path__link" id="tabs-path-2325" aria-controls="content-path-1" aria-selected="false" tabindex="-1" role="tab" href="javascript:void(0);" aria-live="assertive">
+         <span class="slds-tabs--path__title" >You are here</span>        
+        </a>
+      </li>
+     <li class="slds-tabs--path__item slds-is-complete" role="presentation"  style="display:{!if(showProjectForm,"block","none")};">
+          <a class="slds-tabs--path__link" id="tabs-path-2324" aria-controls="content-path-1" aria-selected="false" tabindex="-1" role="tab" href="javascript:void(0);" aria-live="assertive">
+          <span class="slds-tabs--path__stage"></span>
+         <span class="slds-tabs--path__title">Acc and contact (Complete)</span> 
+         </a>
+       </li>
+             
+     <li class="slds-tabs--path__item slds-is-current" role="presentation"  style="display:{!if(showProjectForm,"block","none")};" >
+         <a class="slds-tabs--path__link" id="tabs-path-2325" aria-controls="content-path-1" aria-selected="false" tabindex="-1" role="tab" href="javascript:void(0);" aria-live="assertive">
+         <span class="slds-tabs--path__title" >You are here</span>        
+        </a>
+      </li>
+          
+     <li class="slds-tabs--path__item slds-is-incomplete" role="presentation"   style="display:{!if((quoteCreated || showProjectForm),"none","block")};">
+        <a class="slds-tabs--path__link" id="tabs-path-2326" aria-controls="content-path-1" aria-selected="false" tabindex="-1" role="tab" href="javascript:void(0);" aria-live="assertive">
+          <span class="slds-tabs--path__stage"></span>
+          <span class="slds-tabs--path__title">Add Project Info</span>
+        </a>
+      </li>
+
+  <li class="slds-tabs--path__item slds-is-current" role="presentation"   style="display:{!if((quoteCreated || showProjectForm),"none","none")};">
+        <a class="slds-tabs--path__link" id="tabs-path-2326" aria-controls="content-path-1" aria-selected="false" tabindex="-1" role="tab" href="javascript:void(0);" aria-live="assertive">
+          <span class="slds-tabs--path__stage"></span>
+          <span class="slds-tabs--path__title">Add Projects and opportunities</span>
+        </a>
+      </li>
+   <li class="slds-tabs--path__item slds-is-incomplete" role="presentation">
+        <a class="slds-tabs--path__link" id="tabs-path-2326" aria-controls="content-path-1" aria-selected="false" tabindex="-1" role="tab" href="javascript:void(0);" aria-live="assertive">
+          <span class="slds-tabs--path__stage">
+           </span>
+          <span class="slds-tabs--path__title"> Add Quote</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+ </div>
+</div>
+</apex:outputPanel>
+<apex:pagemessages escape="false" />
+&nbsp;&nbsp;
+
+<apex:outputPanel id="accountContact" rendered="{!NOT(showProjectForm)}">
+<apex:actionRegion >
+ <apex:actionFunction name="actionFuncContact" action="{!syncContact}" status="loadingStatus" reRender="accountContact,messagePanel" >
+<apex:param name="contactId" value=""  /> 
+</apex:actionFunction>
+<apex:actionFunction name="actionFuncAccount" action="{!syncAccount}" status="loadingStatus" reRender="accountSectionId,messagePanel" >
+<apex:param name="accountId" value=""  /> 
+</apex:actionFunction>
+
+<apex:outputPanel id="accountContactSection" >
+<apex:actionRegion >
+
+<div class="slds">
+<span style="font-style:slds-form-element__label;font-size:14px;">Step 1.1 : Select Contact Information</span> 
+<apex:pageBlock id="pbContactInformation">
+      <apex:actionRegion >
+      <apex:selectRadio value="{!contactCreateOption}" disabled="{!(conURLSelected)}" styleclass="slds-radio--faux" >
+          <apex:selectOptions value="{!ContactOption}"/>
+          <apex:actionSupport event="onchange" action="{!initializeContactCreateOption}" status="loadingStatus,overlay" rerender="accountContact,formId" />
+       </apex:selectRadio>
+       </apex:actionRegion>
+  <apex:outputpanel id="existingContactSection" rendered="{!NOT(createNewContact)}">
+     <div class="slds-panel__section">
+     <legend class="slds-form-element__label slds-text-title--caps">Enter Contact Information</legend>
+     <apex:inputField styleClass="lookupInput"  type="text" value="{!oppConRole.Contact__c}" rendered="{!(NOT(accountURLSelected) && NOT(conURLSelected) && NOT(oppURLSelected))}">
+     <apex:actionSupport event="onchange" reRender="conField" oncomplete="fnChangeContact('{!oppConRole.Contact__c}');"/>
+     </apex:inputfield>
+     <apex:outputfield value="{!oppConRole.Contact__c}" rendered="{!conURLSelected}"/>
+      <apex:selectList value="{!selectedContact}" multiselect="false" size="1" rendered="{!((accountURLSelected && NOT(conURLSelected)) || oppURLSelected)}">
+      <apex:selectOptions value="{!contactList}"/>
+     </apex:selectList>
+     </div>
+    </apex:outputpanel>
+  
+  <apex:outputPanel id="newContactSection" rendered="{!createNewContact}">
+    <apex:commandButton action="{!updateContactAddressNew}" status="loadingStatus" value="Copy info from Account" styleClass="slds-button slds-button slds-button--neutral"
+                           reRender="accountContact,messagePanel"/>
+
+  <div class="slds-media">
+  <div class="slds-form-element">                  
+  <div id="abc">
+  <form action="#" id="form" method="post" name="form">
+  <table class="slds-table--compact">
+  <tr>
+     <td><apex:outputLabel value="First Name" > <abbr class="slds-required" title="required">*</abbr> </apex:outputLabel></td>
+     <td>  <apex:inputText value="{!con.FirstName}" required="true"  styleclass="slds-input"  /></td>
+   </tr>
+     <tr>
+     <td> <apex:outputLabel value="Last Name" > <abbr class="slds-required" title="required">*</abbr> </apex:outputLabel></td>
+      <td> <apex:inputField value="{!con.LastName}" required="true" styleclass="slds-input" /></td>
+     </tr>
+          
+     <tr>
+     <td> <apex:outputLabel value="Phone" > </apex:outputLabel> </td>
+      <td>  <apex:inputField value="{!con.Phone}" styleclass="slds-input" /> </td>
+     </tr>
+     
+     <tr>
+     <td> <apex:outputLabel value="Email" ><abbr class="slds-required" title="required">*</abbr> </apex:outputLabel> </td>
+     <td>  <apex:inputField value="{!con.Email}" required="true" styleclass="slds-input" /> </td>
+     </tr>
+     
+     <tr><td title="Sample Title" ><h><b>ADDRESS INFORMATION</b></h></td></tr>
+                   
+      <tr>
+    <td> <apex:outputLabel value="Mailing Street" > </apex:outputLabel> </td>
+      <td>  <apex:inputField id="conStreet" value="{!con.MailingStreet}" styleclass="slds-input" /> </td>
+     </tr>
+    <tr>
+     <td> <apex:outputLabel value="Mailing Country" > <abbr class="slds-required" title="required">*</abbr> </apex:outputLabel> </td>
+      <td>  <apex:inputField id="conCount"  value="{!con.MailingCountryCode}"  styleclass="slds-input"/> </td>
+    </tr>
+    <tr>
+      <td> <apex:outputLabel value="Mailing State/Province" /></td>
+       <td><apex:inputfield id="conState"  value="{!con.MailingStateCode}" styleclass="slds-input" /></td>
+    </tr>                    
+    <tr>
+     <td> <apex:outputLabel value="Mailing City" > </apex:outputLabel> </td>
+      <td>  <apex:inputField id="conCity"  value="{!con.MailingCity}" styleclass="slds-input"/> </td>
+    </tr>
+    <tr>
+    <td> <apex:outputLabel value="Mailing Zip/Postal Code" ><abbr class="slds-required" title="required">*</abbr> </apex:outputLabel></td>
+    <td> <apex:inputfield id="conZip" value="{!con.MailingPostalCode}" styleclass="slds-input" /></td>
+   </tr> 
+  
+ </table>
+ </form>
+  </div>
+  </div>
+  </div> 
+</apex:outputPanel>
+ </apex:pageBlock>
+ </div>
+
+
+<apex:outPutPanel id="accountSectionId">
+ <div class="slds">
+ <div class="slds-panel__section">
+ <apex:pageBlock id="AccountInformation"  rendered="{!showAccountSection}">
+      <span style="font-style:slds-form-element__label;font-size:14px;">Select 1.2 : Select Account Information</span>
+      
+     <apex:actionRegion > 
+     <br/>
+      <apex:selectRadio value="{!accountCreateOption}" disabled="{!(accountURLSelected || conURLSelected)}">
+            <apex:selectOptions value="{!AccountOption}"/>
+          <apex:actionSupport event="onchange" action="{!initializeAccountCreateOption}" status="loadingStatus" rerender="accountSectionId,messagePanel"/>
+      </apex:selectRadio>
+       </apex:actionRegion> 
+      <apex:outputPanel id="existingAccountSection" rendered="{!(NOT(createNewAccount) && showAccountSection)}">
+      
+       <apex:pageBlockSection columns="1" title="Enter Account Information" >
+        <br/>
+          <apex:inputfield styleClass="lookupInput" type="text" value="{!con.AccountId}" rendered="{!(NOT(accountURLSelected) && NOT(conURLSelected))}">
+          <apex:actionSupport event="onchange" reRender="accField" oncomplete="fnChangeAccount('{!con.AccountId}');"/>
+          </apex:inputfield>
+          <apex:outputfield value="{!con.AccountId}" styleclass="slds-input" rendered="{!(accountURLSelected || conURLSelected)}"/>
+          </apex:pageBlockSection>
+      </apex:outputPanel>
+      <apex:outputpanel id="newAccountSection" rendered="{!(createNewAccount && showAccountSection)}">
+       <apex:commandButton styleClass="slds-button slds-button slds-button--neutral" action="{!updateAddressNew}" status="loadingStatus" value="Copy info from Contact" 
+                           reRender="accountAdreessId,satz,newAccountSection"/>
+   <apex:actionRegion >
+   <apex:outputPanel id="satz"> 
+   
+   
+    <div class="slds-media">
+  <div class="slds-form-element">                        
+ <table id ='satz1' class="slds-table--compact">
+    
+    <tr><td title="Sample Title"><h><b>General Info</b></h></td></tr>                           
+ 
+   <tr>   
+   <td> <apex:outputLabel value="Account Name" ><abbr class="slds-required" title="required">*</abbr>  </apex:outputLabel> </td>
+   <td> <apex:inputField value="{!acc.name}"  styleclass="slds-input"  required="true"/></td>  
+   </tr>
+   <tr>   
+   <td> <apex:outputLabel value="Phone" > </apex:outputLabel> </td>
+   <td> <apex:inputField value="{!acc.phone}" styleclass="slds-input"   /></td> 
+    </tr>
+   <tr> 
+    <td> <apex:outputLabel value="Company Email" > </apex:outputLabel> </td>  
+   <td> <apex:inputField value="{!acc.Company_Email__c}"  styleclass="slds-input"  /></td> 
+    </tr>
+    
+    <tr><td title="Additional Information" id="accountAdreessId"><h><b>Additional Information</b></h></td></tr>  
+  
+    <tr> 
+    <td> <apex:outputLabel value="Billing Street" > </apex:outputLabel> </td>  
+    <td> <apex:inputField id="accStreet" value="{!acc.BillingStreet}" styleclass="slds-input"   /></td> 
+    </tr>    
+     
+     <tr> 
+    <td> <apex:outputLabel value="Billing Country" > <abbr class="slds-required" title="required">*</abbr> </apex:outputLabel> </td>  
+    <td> <apex:inputField id="accCount" value="{!acc.BillingCountryCode}"  required="true" styleclass="slds-input"  /></td> 
+    </tr>   
+    
+    <tr> 
+    <td> <apex:outputLabel value="Billing City"> </apex:outputLabel> </td>  
+    <td> <apex:inputField id="accCity" value="{!acc.BillingCity}" styleclass="slds-input"   /></td> 
+    </tr>   
+    
+    <tr> 
+    <td> <apex:outputLabel value="Billing State" > </apex:outputLabel> </td>  
+    <td> <apex:inputField value="{!acc.BillingStateCode}" styleclass="slds-input"   /></td> 
+    </tr> 
+          
+    <tr> 
+    <td> <apex:outputLabel value="Billing Zip/Postal Code" > </apex:outputLabel> </td>  
+    <td> <apex:inputField value="{!acc.BillingPostalCode}" styleclass="slds-input"   /></td> 
+    </tr>     
+              
+              
+       
+                         
+              </table></div></div>
+              </apex:outputPanel>       
+               </apex:actionRegion>        
+      </apex:outputpanel>
+      <br/>
+       <apex:CommandButton value="Go To Step 2 " styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%" action="{!createOpportunityProjects}" status="overlay" rerender="formId"  rendered="{!NOT(projURLSelected)}" oncomplete="overridePageMessages();"/>
+      <apex:CommandButton value="Create Quote" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%" action="{!createOpportunityProjects}"  rendered="{!(projURLSelected) && ( !(Approve_Button))}" oncomplete="overridePageMessages();" />
+       <apex:CommandButton Value="Request Approval" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%" action="{!Approvalprocess}" rendered="{!(if(Approve_Button_sent==TRUE, Approve_Button_sent, Approve_Button))}" oncomplete="overridePageMessages();"/>
+    </apex:pageBlock>
+    </div>
+    </div>
+    
+    </apex:outPutPanel>
+
+<div class="slds">
+<apex:pageBlock id="selectedAccountSection" rendered="{!selectedAccountSection }" >
+    <span style="font-style:slds-form-element__label;font-size:14px;">Step 2.1 :Selected Account Section</span>
+    <apex:pageBlockSection columns="1" title="General Information">
+     <apex:outputfield value="{!acc.name}" />
+       <apex:outputfield value="{!acc.Owner.Name}" label="Rep Name" />
+         <br/>
+    </apex:pageBlockSection>
+   
+    <apex:CommandButton value="Go To Step 2" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:40%" action="{!createOpportunityProjects}" reRender="formId" status="loadingStatus" rendered="{!NOT(projURLSelected)}" oncomplete="overridePageMessages();"/>
+    <apex:CommandButton value="Create Quote" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%" action="{!createOpportunityProjects}" rendered="{!(projURLSelected) && ( !(Approve_Button))}" oncomplete="overridePageMessages();"/>
+     <apex:CommandButton value="Clone and Create Quote" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%" action="{!CloneAndCreateQuote}" rendered="{!Clone_Button}"  oncomplete="overridePageMessages();" />
+     <apex:CommandButton Value="Request Approval " styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%" action="{!Approvalprocess}" rendered="{!(if(Approve_Button_sent==TRUE, Approve_Button_sent, Approve_Button))}" oncomplete="overridePageMessages();"/>
+ </apex:pageBlock>
+ </div>
+
+ </apex:actionRegion>
+ </apex:outputPanel>
+ </apex:actionRegion>
+ </apex:outputPanel>
+
+<apex:outputPanel id="projectSection" rendered="{!showProjectForm}">
+<apex:actionRegion >
+ <apex:actionFunction name="actionFuncProject" action="{!syncProject}" status="loadingStatus" reRender="projectSection,messagePanel,formId" >
+<apex:param name="projectId" value=""  /> 
+</apex:actionFunction>
+</apex:actionRegion>
+
+<div class="slds" >
+  <div class="slds-table--compact">
+  
+   <span style="font-style:slds-form-element__label;font-size:14px;">Step 2.1 : Select Project Information</span> 
+   <br/>
+<apex:pageBlock id="projectInformation" >
+<apex:actionRegion >
+
+      <apex:selectRadio value="{!projectCreateOption}" disabled="{!oppURLSelected}"  >
+            <apex:selectOptions value="{!ProjectOption}"/>
+          <apex:actionSupport event="onchange" action="{!initializeProjectCreateOption}" status="loadingStatus" rerender="projectSection,messagePanel,formId"/>
+      </apex:selectRadio>
+     </apex:actionRegion>
+     <apex:outputPanel id="existingProjectSection" rendered="{!NOT(createNewProject)}">
+       
+        <span style="font-style:slds-form-element__label;font-size:13px;">Enter Project Information</span> 
+       <apex:pageBlockSection columns="1" >
+       <apex:inputfield styleClass="lookupInput"  type="text" value="{!opp.Project_Name__c}" rendered="{!NOT(oppURLSelected)}">
+      <apex:actionSupport event="onchange" reRender="projField,Displayerrors"  oncomplete="fnChangeProject('{!opp.Project_Name__c}');"/>
+      </apex:inputfield>
+      <apex:outputfield value="{!opp.Project_Name__c}" rendered="{!oppURLSelected}"/>
+       </apex:pageBlockSection>
+       
+            
+       
+       <apex:outputPanel >
+         <apex:CommandButton value="Back"  styleClass="slds-button slds-button slds-button--neutral" style="margin-left:15%"  action="{!goback}"  status="loadingStatus" rerender="formId" immediate="true" oncomplete="overridePageMessages();"/>
+       <apex:CommandButton value="Create Quote" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:2%" action="{!saveAndCreateQuote}" disabled="{!showNanaQuoteButton}" rendered="{!(NOT(Approve_Button))}" oncomplete="overridePageMessages();"/>
+       <apex:CommandButton value="Clone and Create Quote" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:2%" action="{!CloneAndCreateQuote}" rendered="{!Clone_Button}" oncomplete="overridePageMessages();"/>
+       <apex:CommandButton Value="Request Approval" styleClass="slds-button slds-button slds-button--neutral" style="margin-left:2%" action="{!Approvalprocess}" rendered="{!(if(Approve_Button_sent==TRUE, Approve_Button_sent, Approve_Button))}" oncomplete="overridePageMessages();"/>
+       </apex:outputPanel>
+                
+         
+     </apex:outputPanel>
+    
+     <apex:outputPanel id="newProjectSection" rendered="{!createNewProject}">
+              <apex:actionRegion >
+              
+               <div class="slds-media">
+                <div class="slds-form-element">  
+              <div class="slds-table--compact"> 
+                
+             <span style="color:black;font-weight:bold;font-size:15px">Project Information</span> 
+              <apex:pageBlockSection columns="1"  > 
+                  <apex:inputfield value="{!proj.Name}" styleclass="slds-input slds-form-element__label" label="*Project Name"/>
+                  <apex:inputfield id="date" value="{!proj.Close_Date__c}" styleclass="slds-input" required="true" type="date"/><br/>
+              </apex:pageBlockSection>
+              
+              <apex:actionRegion >
+              <span style="color:black;font-weight:bold;font-size:15px">Additional Information</span> 
+              <apex:pageBlockSection id="addSection1" columns="1">
+                    <apex:inputfield styleclass="slds-input"  value="{!proj.RecordTypeId}" required="true" label="Project Type"> 
+                      <apex:actionSupport event="onchange" reRender="applicationSection1" status="loadingStatus1"/>
+                  </apex:inputfield>
+              </apex:pageBlockSection>
+              </apex:actionRegion>
+              
+              <apex:pageBlockSection id="applicationSection1" columns="1" >
+                  
+               
+                   <apex:inputfield value="{!proj.Application__c}" required="true" styleclass="slds-input" />
+                   <apex:inputfield value="{!proj.Application_2__c}" required="true" styleclass="slds-input"/>
+                 
+                  <apex:commandButton status="loadingStatus1" action="{!CopyAddressFields}" rerender="ProjAddress1,addSection1,applicationSection1,messagePanel,newProjectSection" immediate="true" value="Copy Address info from Contact" styleClass="slds-button slds-button slds-button--neutral"  title=""/>
+              </apex:pageBlockSection>
+              <span style="color:black;font-weight:bold;font-size:15px">Project Site Address</span>
+              <apex:pageBlockSection columns="1" id="ProjAddress1">
+                  <apex:inputField value="{!proj.Project_Street_Address__c}" styleclass="slds-input" />
+                  <apex:inputField value="{!proj.Project_Country__c}"  required="true" styleclass="slds-input"/>
+                  <apex:inputField value="{!proj.Project_City__c}" styleclass="slds-input" />
+                  <div id="dependentlst1">
+                      <apex:inputField value="{!proj.Project_State__c}" styleclass="slds-input"/>
+                  </div>
+                  <apex:inputField value="{!proj.Project_Zip_Code__c}" styleclass="slds-input" />
+              </apex:pageBlockSection>
+              
+
+                   </div></div></div>
+                   </apex:actionRegion>
+                   <apex:outputPanel >
+               <apex:CommandButton value="Back"  styleClass="slds-button slds-button slds-button--neutral" style="margin-left:45%"  action="{!goback}" rerender="formId" status="loadingStatus" immediate="true" />
+               <apex:CommandButton value="Create Quote" styleClass="slds-button slds-button slds-button--neutral"  style="margin-left:2%" action="{!saveAndCreateQuote}"  />
+               <br/>&nbsp;
+               </apex:outputPanel>
+               &nbsp;
+     </apex:outputPanel>
+     
+   </apex:pageBlock>
+   </div>
+   </div>
+   
+<div class="slds">
+   <apex:outputPanel id="quoteSectionId" rendered="{!showQuoteSection}" >
+   <apex:pageBlock title="Existing Quote on Selected Project and Account">
+     <apex:pageBlockTable value="{!quoteList}" var="quote">
+       <apex:column headerValue="Action"><apex:outputLink value="{!URLFOR($Action.Quote__c.Edit,quote.Id)}">Edit</apex:outputLink> </apex:column>
+       <apex:column value="{!quote.name}"/>
+       <apex:column value="{!quote.Account_Name__c}"/>
+       <apex:column value="{!quote.Contact__c}"/>
+     </apex:pageBlockTable>
+   </apex:pageBlock>
+   </apex:outputPanel>
+   </div>
+ </apex:outputPanel>
+ 
+ <div class="slds">
+ <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+            <div class="slds-spinner_container">
+              <div role="status" class="slds-spinner slds-spinner--medium">
+    <span class="slds-assistive-text">Loading</span>
+    <div class="slds-spinner__dot-a"></div>
+    <div class="slds-spinner__dot-b"></div>
+  </div> </div>
+            </apex:facet>
+            <apex:facet name="stop" />
+ </apex:actionStatus>
+ </div>
+
+ 
+<div id="overlay" class="overlayBackground" style="width: 100%; height: 100%; display: none;"></div>
+
+<script>
+
+       function showScreen(){
+       document.getElementById('overlay').style.display='block';
+       }
+
+  function hideScreen(){
+            document.getElementById('overlay').style.display='none';
+         }
+
+</script>
+
+
+
+</apex:form>
+
+</html>
+</apex:page>

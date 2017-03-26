@@ -53,6 +53,7 @@ public class MultipleUploadController
         if(toInsert.size() > 0){
         insert toInsert;
         ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, toInsert.size() + ' file(s) uploaded successfully'));
+
         }
         else{
          ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.ERROR,'Please select at-least one file'));  

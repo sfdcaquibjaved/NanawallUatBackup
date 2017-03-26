@@ -11,86 +11,113 @@
             
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script>
+function move() {
+  var elem = document.getElementById("myBar");   
+  var width = 1;
+  var id = setInterval(frame, 180);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++; 
+      elem.style.width = width + '%'; 
+    }
+  }
+}
+</script>
 <style>
+#myProgress {
+  width: 100%;
+  background-color: #FFFFFF;
+}
 
-.button{
-width: 88px;
-height: 96px;
+#myBar {
+  width: 0%;
+  height: 30px;
+  background-color: #4682B4;
 }
 </style>
+
 <style>
 
 .fileType {
     display: block;
     position: relative;
-    width: 180px;
+    width: 175px;
     margin: auto;
     cursor: pointer;
     border: 0;
-    height: 150px;
-    border-radius: 5px;
+    height: 80px;
+    border-radius: 50px;
     outline: 0;
+    left: 15px;
+    font-weight: bolder;
+}
     
-}
-.fileType:hover:after {
-    background: #00FFFF;
-}
+    
 .fileType:after {
 
     transition: 200ms all ease;
-    border-bottom: 3px solid rgba(0,0,0,0);
-    background: #FFFFFF;
+    border-bottom: 3px solid rgba(0,0,0,0.3);
+    border-top: 3px solid rgba(0,0,0,0.3);
+    border-left: 3px solid rgba(0,0,0,0.3);
+    border-right: 3px solid rgba(0,0,0,0.3);
+    background: #ccddff;
 
-    color: #000;
-    font-size: 20px;
+    color: #000000;
+    font-size: 15px;
     text-align: center;
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100%;
+    width: 48%;
+    height: 40%;
     display: block;
-    content: 'Upload File';
-    line-height: 50px;
+    content: 'Click Here';
+    line-height: 20px;
     border-radius: 5px;
+    font-weight: bold;
 }
+
 </style>
     </head>
 
     <body>
         <div class="Nanawallcustomcss">
             <header class="slds-global-header_container">
-                <div class="slds-col slds-float--left slds-m-right--small">
-                    <div class="slds-icon slds-icon_container slds-icon-standard-file slds-icon--medium">
-                        <img src="{!URLFOR($Resource.SLDS221,'/assets/icons/standard/account_60.png')}" alt="" />
-                    </div>
-                </div>
-                <div class="slds-col ">
-                    <div class="slds-page-header__title slds-truncate">
-                        Multiple File Uploader
-                    </div>
-                </div>
+                
+                
             </header>
             <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound" aria-labelledby="newattachment">
                 <apex:form >
 
                     <div class="slds-panel__section">
-                        <div class="slds-docked-form-footer slds-button-group slds-float--right" role="group">
-                            <apex:commandButton value="Upload" action="{!SaveAttachments}" styleClass="slds-button slds-button--neutral" />
-                            <span style="display:inline-block; width: 20px;"></span>
+                        <div class="slds-docked-form-footer slds-shrink-none slds-button-group slds-float--right" role="group">
+                            <apex:commandButton value="Upload" action="{!SaveAttachments}" styleClass="slds-button slds-button--neutral" onclick="move()"/>
+                            
+                            <span style="display:inline-block; width: 30px; height: 55px"></span>
                            <apex:commandButton value="Back" onclick="sforce.one.navigateToURL('/{!objId}')" styleClass="slds-button slds-button--brand" />
                         </div>
                     </div>
                     <apex:pageMessages id="MSG" />
+                    <div class="slds-col slds-float--left slds-m-right--small">
+                    <div class="slds-icon slds-icon_container slds-icon-standard-file slds-icon--medium">
+                        <img src="{!URLFOR($Resource.SLDS221,'/assets/icons/standard/account_60.png')}" alt="" />
+                    </div>
+                </div>
+                    <div class="slds-col ">
+                    <div class="slds-page-header__title slds-truncate">
+                        Multiple File Uploader
+                    </div>
+                </div>
                     
-                    <apex:outputpanel id="newcss" style="background:#ffffff">
-                  jhijh
-                    </apex:outputpanel>     
-
                     <div class="slds-panel__section" >
                     
                         <legend class="slds-form-element__label slds-text-title--caps">SELECT FILES</legend>
-                        
+                        <div id="myProgress">
+                            <div id="myBar"></div>
+                             </div>
                         <div class="form-element__group">
                             <div class="slds-form-element__row">
                                 <div class="slds-form-element">
@@ -98,8 +125,8 @@ height: 96px;
 <div class="slds-grid slds-wrap slds-grid--pull-padded">
 
 <apex:repeat value="{!newAttachments}" var="newAtt">
-  <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--5-of-6 slds-large-size--8-of-12">
-                <div rerender="newcss">
+
+                
                 <apex:pageBlockSection columns="2">
                    <apex:pageBlockSectionItem >
 
@@ -107,8 +134,8 @@ height: 96px;
 
                     </apex:pageBlockSectionItem>
                     </apex:pageBlockSection>
-                    </div>
-                     </div>
+                    
+
             </apex:repeat>
 
 </div>

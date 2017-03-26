@@ -1,0 +1,35 @@
+<apex:page standardController="Account" extensions="HierarchyController1" sidebar="false">
+<apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="acc" value="{!Account}" >
+             <apex:column value="{!acc.Name}" />
+             <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
+             <apex:column value="{!siz}" headerValue="Project Count"/>
+         </apex:pageBlockTable>
+     </apex:pageBlockSection>
+    <apex:pageBlockSection columns="1">
+                     <apex:pageBlockTable var="site" value="{!AccSiteList}">
+                         <apex:column headerValue="Site Name"><apex:outputLink value="{!site.Id}">{!site.Name}</apex:outputLink></apex:column>
+                         <apex:column value="{!site.Type}"/>
+                         
+                         <apex:repeat var="prj" value="{!site.Projects1__r}">
+                         
+                         <apex:column headerValue="Project Name" value="{!prj.Name}"/>
+                        
+                         
+                         <apex:column headerValue="Stage" value="{!prj.Stage__c}"/>
+                         <apex:column headerValue="Architect Account" value="{!prj.Architect_Account__c}"/>
+                         <apex:column headerValue="Purchaser Account" value="{!prj.Purchaser_Account__c}"/>
+                         <apex:column headerValue="Amount" value="{!prj.Amount__c}"/>
+                         <apex:column headerValue="Application Industry" value="{!prj.Application__c}"/>
+                         <apex:column headerValue="Name" value="{!prj.RecordType.Name}"/>
+                         <apex:column headerValue="Project Site City" value="{!prj.Project_City__c}"/>
+                         <apex:column headerValue="Project Site State" value="{!prj.Project_State__c}"/>
+                         <apex:column headerValue="Project Site Zip/Postal Code" value="{!prj.Project_Zip_Code__c}"/>
+                         </apex:repeat>
+                     </apex:pageBlockTable>
+       </apex:pageBlockSection>
+     
+      
+</apex:pageBlock>
+</apex:page>

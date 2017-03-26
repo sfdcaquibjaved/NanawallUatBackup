@@ -1,6 +1,7 @@
 public with sharing class CustomContactLookupController {
 
   public Contact contact {get;set;} // new Contact to create
+    public COntact ContactInfo {get;set;}
   public List<Contact> results{get;set;} // search results
   public string searchString{get;set;} // search keyword
 
@@ -26,9 +27,9 @@ public with sharing class CustomContactLookupController {
   // run the search and return the records found. 
   private List<contact> performSearch(string searchString) {
 
-    String soql = 'select id, name from contact';
+    String soql = 'select id, name , AccountId ,Account.Name, email from contact';
     if(searchString != '' && searchString != null)
-      soql = soql +  ' where name LIKE \'%' + searchString +'%\'';
+      soql = soql +  ' where name  LIKE \'%' + searchString +'%\'';
     soql = soql + ' limit 25';
     System.debug(soql);
     return database.query(soql); 
@@ -38,9 +39,12 @@ public with sharing class CustomContactLookupController {
   // save the new contact record
   public PageReference saveContact() {
     insert contact;
-    // reset the contact
-    contact = new Contact();
-    return null;
+   
+      // reset the contact
+    PageReference exitWindow = new PageReference('/apex/exitPage'); 
+     exitWindow.setRedirect(false);
+    return exitWindow;
+    
   }
 
   // used by the visualforce page to send the link to the right dom element
@@ -52,5 +56,13 @@ public with sharing class CustomContactLookupController {
   public string getTextBox() {
     return System.currentPageReference().getParameters().get('txt');
   }
+    //Exit after contact creation
+    public PageReference exitAction(){
+         if(contact.lastname !=null){
+    	 ContactInfo=[select id,name from contact where lastname =:contact.lastname and firstname =:contact.firstname limit 1];}
+		 return null;
+  }
+    
+    
 
 }

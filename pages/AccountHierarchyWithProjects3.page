@@ -1,0 +1,31 @@
+<apex:page standardController="Account" extensions="HierarchyController3" sidebar="false">
+ <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="acc" value="{!Account}" >
+             <apex:column value="{!acc.Name}" />
+             <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
+             <apex:column value="{!siz}" headerValue="Project Count"/>
+         </apex:pageBlockTable>
+     </apex:pageBlockSection>
+   </apex:pageBlock>
+   <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="p" value="{!AccSiteList}" >
+             <apex:column value="{!p.Name}" headerValue="Site Name" />
+               <apex:repeat value="{!ListMap[p.Id]}" var="pr" rendered="NOT(ISNULL(ListMap[p.Id]))">
+                <apex:column value="{!pr.Name}"/>
+                <apex:column value="{!pr.Stage__c}" />
+                 <apex:column value="{!pr.Amount__c}" />
+                 <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/>
+                 <apex:column value="{!pr.Application__c}" />
+                 <apex:column value="{!pr.Architect_Account__c }" />
+                 <apex:column value="{!pr.Purchaser_Account__c }" />
+                 <apex:column value="{!pr.Project_City__c}" />
+                 <apex:column value="{!pr.Project_State__c}" />
+                 <apex:column value="{!pr.Project_Zip_Code__c}" /> 
+              </apex:repeat> 
+         </apex:pageBlockTable>
+     </apex:pageBlockSection> 
+   </apex:pageBlock>
+   
+</apex:page>

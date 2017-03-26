@@ -1,4 +1,4 @@
-<apex:page standardController="Case" showHeader="true" sidebar="true">
+<apex:page standardController="Case" showHeader="false" sidebar="false">
   
     <script type="text/javascript"> 
   function openLookup(baseURL, width, modified, searchParam){
@@ -62,14 +62,13 @@
             
             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Category</apex:outputLabel>
-                <apex:inputField id="casCategory" value="{!Case.Category__c}" />
+                <apex:inputField id="casCategory" value="{!Case.Category__c}"  />
             </apex:pageBlockSectionItem>
             
             <apex:pageBlockSectionItem >
-                <apex:outputLabel >Order</apex:outputLabel>
-                <apex:inputField id="casOrder" value="{!Case.Order__c}" />
+                <apex:outputLabel >Case Owner</apex:outputLabel>
+                <apex:outputField id="casOwner" value="{!Case.ownerid}" />
             </apex:pageBlockSectionItem>
-            
             
             
             <apex:pageBlockSectionItem >
@@ -77,25 +76,27 @@
                 <apex:inputField id="casSubC" value="{!Case.Sub_Category__c}" />
             </apex:pageBlockSectionItem>
 
-            <apex:pageBlockSectionItem >
-                <apex:outputLabel >Case Owner</apex:outputLabel>
-                <apex:outputField id="casOwner" value="{!Case.ownerid}" />
-            </apex:pageBlockSectionItem>
-
-            <apex:pageBlockSectionItem >
-                <apex:outputLabel >Sub Type</apex:outputLabel>
-                <apex:inputField id="casSubT" value="{!Case.Sub_Type__c }" />
-            </apex:pageBlockSectionItem>    
-
-            <apex:pageBlockSectionItem >
+            
+            
+           
+            
+             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Project Name</apex:outputLabel>
                 <apex:inputField id="casProject" value="{!Case.ProjectName__c}" />
             </apex:pageBlockSectionItem>
 
+             
+            
+            
             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Quote</apex:outputLabel>
                 <apex:inputField id="casQuote" value="{!Case.Quote__c}" />
-            </apex:pageBlockSectionItem>     
+            </apex:pageBlockSectionItem> 
+            
+             
+
+            
+                
             
             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Responsible Rep</apex:outputLabel>
@@ -104,7 +105,7 @@
 
             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Subject</apex:outputLabel>
-                <apex:inputField id="casSub" value="{!Case.Subject}" />
+                <apex:inputField id="casSub" value="{!Case.Subject}" required="true" />
             </apex:pageBlockSectionItem>
             
             <apex:pageBlockSectionItem >
@@ -114,12 +115,12 @@
 
             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Type</apex:outputLabel>
-                <apex:inputField id="casType" value="{!Case.Type}" />
+                <apex:inputField id="casType" value="{!Case.Type}" required="true" />
             </apex:pageBlockSectionItem>
             
             <apex:pageBlockSectionItem >
                 <apex:outputLabel >Status</apex:outputLabel>
-                <apex:inputField id="casStat" value="{!Case.Status}" />
+                <apex:inputField id="casStat" value="{!Case.Status}" required="true"/>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
@@ -229,12 +230,24 @@
                 <apex:outputLabel >Other Phone</apex:outputLabel>
                 <apex:inputField id="casOtherPhone" value="{!Case.Other_Phone__c}"/>
             </apex:pageBlockSectionItem>
+             
+             <apex:pageBlockSectionItem >
+                <apex:outputLabel >Caller Contact</apex:outputLabel>
+                <apex:inputField id="casOtherPhone" value="{!Case.Caller_contact__c}"/>
+            </apex:pageBlockSectionItem>
+            
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Optional" columns="1" collapsible="true">
+             <apex:pageBlockSectionItem >
+                <apex:outputLabel >Send notification email to contact</apex:outputLabel>
+                <apex:inputField id="casConEmail" value="{!Case.Send_notification_email_to_contact__c}"/>
+            </apex:pageBlockSectionItem>
+               </apex:pageBlockSection>
+
+         
 
             
-
-         </apex:pageBlockSection>
-
-
 
     </apex:pageBlock>
     </apex:form>

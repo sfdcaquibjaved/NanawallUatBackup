@@ -9,7 +9,9 @@ public class PostingCaseNumberOnShopify{
 @Future(callout=true)
     public static void CaseNumberOnShopifyOrder(string shopifyid, string Notes)
     {
+            if(shopifyid !=NULL){
             service_Quote__c sq = [select id, Shopify_ID__c, case__r.CaseNumber from service_quote__c where id=: shopifyid];
+            
             
             //Making HTTP Callouts for Shopify admin page
             Http h = new Http();
@@ -46,6 +48,7 @@ public class PostingCaseNumberOnShopify{
                 HttpResponse res = h.send(req);
             } catch (exception e) {
             System.debug('eee' + e);
+            }
             }
          }
      }
