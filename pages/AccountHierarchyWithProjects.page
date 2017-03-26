@@ -11,15 +11,20 @@
   <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
-             <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" />
-                <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/>
+        <apex:column headerValue="Site Name"> <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink></apex:column>
+            <!-- <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" /> -->
+            <apex:column headerValue="Project Name"> <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink></apex:column>
+              <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
                 <apex:column headerValue="Project Status" value="{!pr.status}" />
                  <apex:column headerValue="Project Amount" value="{!pr.amount}" />
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
                  <apex:column headerValue="Application Industry" value="{!pr.applicationIndustry}" />
-                 <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>
-                 <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" />
-                 <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" />
+                 <apex:column headerValue="Architect"> <apex:outputLink value="/{!pr.architect}">{!pr.architect.Name}</apex:outputLink></apex:column>
+               <!--  <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>  -->
+                 <apex:column headerValue="Purchaser"> <apex:outputLink value="/{!pr.purchaser}">{!pr.purchaser.Name}</apex:outputLink></apex:column>
+             <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
+                 <apex:column headerValue="Ordering Account"> <apex:outputLink value="/{!pr.orderingAccount}">{!pr.orderingAccount.Name}</apex:outputLink></apex:column>
+               <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->
                  <apex:column value="{!pr.projectCity}" headerValue="Project City" />
                  <apex:column value="{!pr.projectState}" headerValue="Project State" />
                  <apex:column value="{!pr.projectZipCode}" headerValue="Project ZipCode" /> 

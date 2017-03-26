@@ -25,7 +25,17 @@ public class HierarchyController {
         public String applicationIndustry{get;set;}
         
         public Hierarchy(){
-            
+ 
+        }
+        
+        public Hierarchy(Id arch, Id purch, Id ordr){
+			
+            this.architect = new Account();
+            this.architect.Id = arch;
+            this.purchaser = new Account();
+            this.purchaser.Id = purch;
+            this.orderingAccount = new Account();
+            this.orderingAccount.Id = ordr;
         }
     }
     
@@ -39,81 +49,56 @@ public class HierarchyController {
         siz = 0;
         psiz = 0;
             
-            AccSiteList = [Select Name, Id, Type, (Select Name,Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c from Projects1__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
+            AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
+            
+            String prevAcc ='';
             
             for (Account ac : AccSiteList){
+                                                 
+                psiz = ProjectList.size()-1;
                 
-                Hierarchy hier = new Hierarchy();
+                if(ac.Projects1__r.size()==0){
+                       
+                        Hierarchy hier = new Hierarchy();
                 
-                hier.accountName = ac;
-                 
-                for (List<Project__c> prjs: ac.Projects1__r)
+		                hier.accountName = ac;
+                
+        		        ProjectList.add(hier);
+                    }
+                    
+                    else{
+                
+                	for (List<Project__c> prjs: ac.Projects1__r){
+                    
+                    siz+=prjs.size(); 
                     
                     for(Project__c prj : prjs){
-                    
-                    //Hierarchy hier = new Hierarchy();
- 
-                        if (prj!=null){
+                        
+                        Hierarchy hier = new Hierarchy(prj.Architect_Account__c, prj.Purchaser_Account__c, prj.Ordering_Account__c);
+                        
+                        if(prevAcc!=null && prevAcc.equalsIgnoreCase(ac.Name)){
+                            hier.accountName=null;
+                        }
+                        else{ hier.accountName = ac; }
                     
                         hier.projectName = prj;
-
-                            try{
-                                    System.debug('Architect: ' + prj.Architect_Account__c);
-                                    
-                                    hier.architect = new Account();
-                                
-                                    hier.architect.Id = prj.Architect_Account__c;
-                            }catch(Exception e){}
-                        
-                            
-                        try{
-                                System.debug('Purchase: ' + prj.Purchaser_Account__c);
-                                hier.purchaser = new Account();
-                                hier.purchaser.Id = prj.Purchaser_Account__c;
-                            }catch(Exception e){}
-                            
-                        try{
-                                System.debug('ordering acccount: ' + prj.Ordering_Account__c);
-                                hier.orderingAccount = new Account();
-                                hier.orderingAccount.id = prj.Ordering_Account__c;
-                            }catch(Exception e){}
-                            
-                        hier.amount = prj.Amount__c;
+                        hier.architect.Name = prj.Architect_Account__r.Name;
+                        hier.purchaser.Name = prj.Purchaser_Account__r.Name;
+                        hier.orderingAccount.Name = prj.Ordering_Account__r.Name;    
+		                hier.amount = prj.Amount__c;
                         hier.status = prj.Stage__c;
                         hier.projectCity = prj.Project_City__c;
                         hier.projectState = prj.Project_State__c;
                         hier.projectZipCode = prj.Project_Zip_Code__c;
                         hier.applicationIndustry = prj.Application__c;
-                    }
-                        
-                        System.debug('ProjectList: ' + prj);
-                }
 
-                                ProjectList.add(hier);
-                
+                        ProjectList.add(hier);
                         
-            }
-            
-                                
-         AccRelatedList = [Select Name, Id, Type, (Select Name, Id from Projects1__r),(Select Name, Id from Projects4__r),(Select Name, Id from Projects__r),(Select Name, Id from Projects5__r) from Account where Id = :string.valueOf(ObjAcc.Id).left(15)];
-                                
-         if(AccRelatedList.Projects1__r.size()>0){
-              ProjSiteList.add(AccRelatedList.Projects1__r);
-                  rltype = 'Projects1';         
+                        prevAcc = hier.accountName.Name;
+                        
+                	 }
+                  }
+               }
           }
-          else if(AccRelatedList.Projects4__r.size()>0){
-                    ProjSiteList.add(AccRelatedList.Projects4__r);
-                        rltype = 'Projects4';
-          }
-          else if(AccRelatedList.Projects__r.size()>0){
-                        ProjSiteList.add(AccRelatedList.Projects__r);
-              rltype = 'Projects';
-          }
-          else if(AccRelatedList.Projects5__r.size()>0){
-                        ProjSiteList.add(AccRelatedList.Projects5__r);
-              rltype = 'Projects5';
-          }
-                                siz = ProjSiteList[0].size();
-            
-        }
+     }
 }
