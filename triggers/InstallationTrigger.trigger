@@ -67,24 +67,34 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
   if (((trigger.isUpdate) || (trigger.isInsert)) && (trigger.isBefore ))  {
 
         List < Installation__c > InstallationAccountList = new List < Installation__c > ();
+        List<Installation__c> changeInstallerContact = new list<Installation__c>();
         for (installation__c i: trigger.new) {
             if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
-                    .Project__c != i.Project__c)))|| (trigger.isUpdate && (trigger.oldMap.get(i.ID).Installer_Contact__c != i.Installer_Contact__c))){
+                    .Project__c != i.Project__c)))/*|| (trigger.isUpdate && (trigger.oldMap.get(i.ID).Installer_Contact__c != i.Installer_Contact__c))*/){
                               InstallationAccountList.add(i);
 
 
+            }
+            if((trigger.isBefore) && (trigger.isUpdate && (trigger.oldMap.get(i.ID).Installer_Contact__c != i.Installer_Contact__c))){
+                  changeInstallerContact.add(i);
             }
 
 
         }
         //for assigning installer account and contact to installtion record
-
+System.debug('here in trigger'+changeInstallerContact);
+      if (changeInstallerContact.size() > 0) {
+          InstallationTriggerHandler.changeInstaller(changeInstallerContact);
+            system.debug('DML 5' + Limits.getDMLStatements());
+            system.debug('SOQL 5' + Limits.getQueries());
+        }
         if (InstallationAccountList.size() > 0) {
             InstallationTriggerHandler.AssignInstaller(InstallationAccountList);
             system.debug('DML 5' + Limits.getDMLStatements());
             system.debug('SOQL 5' + Limits.getQueries());
         }
     }
+    
 
 
 

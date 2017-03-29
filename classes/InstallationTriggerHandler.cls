@@ -183,8 +183,8 @@ public class InstallationTriggerHandler {
     {
         
         set <string> setZipCode = new set<string>() ; 
+        System.debug('change?'+newTrigger);
         
-
         for(Installation__C i : newTrigger){
             system.debug(i.Project_Country_Canada__c);
             if(i.Project_Country_Canada__c){
@@ -900,6 +900,27 @@ public class InstallationTriggerHandler {
       // }catch(exception e){}
   } 
   //end of updateEntitlement method
-    
+    public static void changeInstaller(List < Installation__c > newTrigger){
+        set<Id> ConId = new set<Id>();
+        for(Installation__c i:newTrigger){
+            ConId.add(i.Installer_Contact__c);
+        }
+        System.debug('new installer contact'+conId);
+        list<Contact> conlist = [Select id,AccountId from Contact where id in:ConId Limit 1];
+        list<User> usercon = [Select id,ContactId from User where ContactId in:conlist Limit 1];
+        System.debug('contact'+conlist);
+        System.debug('user'+usercon);
+        for(Installation__c i:newTrigger){
+            for(Contact c:conlist){
+            i.Installer_Contact__c = c.id;
+            i.Installer_Account__c = c.AccountID;
+            }
+            for(User u:usercon){
+               i.Assigned_To__c = u.id;
+               i.OwnerId = u.id;
+             }
+        }
+    }
+
      
 }

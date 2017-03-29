@@ -2,26 +2,38 @@
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="acc" value="{!Account}" >
-             <apex:column value="{!acc.Name}" />
+             <apex:column value="{!acc.Name}"  headerValue="Corporate Account Name"/>
              <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
              <apex:column value="{!siz}" headerValue="Project Count"/>
+             <apex:column value="{!prjWon}" headerValue="Projects Won"/>
+             <apex:column headerValue="Closure">
+                 <apex:outputText value="{0,Number,0}%"><apex:param value="{!(100*prjWon)/IF(siz == 0, 1, siz)}" /></apex:outputText> 
+            </apex:column> -->
+            <apex:column headerValue="Total Amount">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
+            </apex:column>
+            <apex:column headerValue="Amount Won">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!amountWon}" /></apex:outputText> 
+            </apex:column>
          </apex:pageBlockTable>
      </apex:pageBlockSection>
    </apex:pageBlock>
   <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
-        <apex:column headerValue="Site Name"> <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink></apex:column>
+        <apex:column headerValue="Corporate Account Site Location"> <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink></apex:column>
             <!-- <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" /> -->
             <apex:column headerValue="Project Name"> <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink></apex:column>
               <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
                 <apex:column headerValue="Project Status" value="{!pr.status}" />
-                 <apex:column headerValue="Project Amount" value="{!pr.amount}" />
+                 <apex:column headerValue="Project Amount" >
+                     <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.amount}"/></apex:outputText>
+                 </apex:column>
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
                  <apex:column headerValue="Application Industry" value="{!pr.applicationIndustry}" />
                  <apex:column headerValue="Architect"> <apex:outputLink value="/{!pr.architect}">{!pr.architect.Name}</apex:outputLink></apex:column>
                <!--  <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>  -->
-                 <apex:column headerValue="Purchaser"> <apex:outputLink value="/{!pr.purchaser}">{!pr.purchaser.Name}</apex:outputLink></apex:column>
+                 <apex:column headerValue="Purchaser Account"> <apex:outputLink value="/{!pr.purchaser}">{!pr.purchaser.Name}</apex:outputLink></apex:column>
              <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
                  <apex:column headerValue="Ordering Account"> <apex:outputLink value="/{!pr.orderingAccount}">{!pr.orderingAccount.Name}</apex:outputLink></apex:column>
                <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->

@@ -34,18 +34,41 @@
           <apex:outputPanel id="pnlSearchResults" style="margin:10px;height:350px;overflow-Y:auto;" layout="block">
             <apex:pageBlock id="searchResults"> 
               <apex:pageBlockTable value="{!results}" var="a" id="tblResults">
+                <TABLE>
                 <apex:column >
+
                   <apex:facet name="header">
-                    <apex:outputPanel >Name &nbsp; &nbsp; &nbsp; Email &nbsp; &nbsp; &nbsp; Account Name </apex:outputPanel>
+                  
+                    <apex:outputPanel style="font-weight:bold;float:left">
+                      <tr>
+                      <td>
+                      <apex:outputLabel style="font-weight:bold;float:left" value="Name"/>
+                      </td>
+                      <td>
+                      <apex:outputLabel style="font-weight:bold;float:left" value="Email"/>
+                      </td>
+                      <td>
+                      <apex:outputLabel style="font-weight:bold;float:left" value="Account Name"/>
+                      </td>
+                     
+                      </tr>
+                    </apex:outputPanel>
                      
                   </apex:facet>
-                   <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.Id}','{!a.Name}', false)" rendered="{!NOT(ISNULL(a.Id))}">{!a.Name}</apex:outputLink>   
-                   &nbsp; &nbsp; &nbsp;
+                  
+                  <tr>
+                  <td>
+                   <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.Id}','{!a.Name}', false)" rendered="{!NOT(ISNULL(a.Id))}">{!a.Name}</apex:outputLink>   </td>
+                   <td>
                     <apex:outputLabel >{!a.Email}</apex:outputLabel>
-                     &nbsp; &nbsp; &nbsp;
+                     </td>
+                     <td>
                     <apex:outputLabel >{!a.Account.Name}</apex:outputLabel>
+                    </td>
+                    </tr>
                     
                 </apex:column>
+                </TABLE>
               </apex:pageBlockTable>
             </apex:pageBlock>
           </apex:outputPanel>
@@ -64,10 +87,68 @@
           <apex:pageMessages />
 
           <apex:pageBlockSection columns="2">
-            <apex:repeat value="{!$ObjectType.Contact.FieldSets.CustomContactLookup}" var="f">
-              <apex:inputField value="{!Contact[f]}"/>
-               
-            </apex:repeat>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Salutation</apex:outputLabel>
+                <apex:inputField id="salut" value="{!contact.Salutation}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >First Name</apex:outputLabel>
+                <apex:inputField id="fname" value="{!contact.FirstName}"  required="true"/>
+            </apex:pageBlockSectionItem>
+
+             <apex:pageBlockSectionItem >
+                <apex:outputLabel >Last Name</apex:outputLabel>
+                <apex:inputField id="fname" value="{!contact.LastName}"  required="true"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Title</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.Title}"  />
+            </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem >
+                <apex:outputLabel >Account Name</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.AccountID}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >CERO</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.CERO__c}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Email</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.Email}"  />
+            </apex:pageBlockSectionItem>
+
+             <apex:pageBlockSectionItem >
+                <apex:outputLabel >Street Address</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.MailingStreet}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >City</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.MailingCity}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >State</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.MailingStateCode}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Country</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.MailingCountryCode}"  />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Zip / Postal Code</apex:outputLabel>
+                <apex:inputField id="title" value="{!contact.MailingPostalCode}"  required="true"/>
+            </apex:pageBlockSectionItem>
+
+
+
           </apex:pageBlockSection> 
         </apex:pageBlock>
 

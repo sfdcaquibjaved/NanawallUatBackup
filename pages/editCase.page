@@ -46,6 +46,26 @@
       openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
     } 
   }
+
+
+  // if not in console redirect user to landing page 
+if (!(sforce.console.isInConsole())) { 
+window.location.replace('{!$CurrentPage.parameters.landingPage}'); 
+} 
+
+// override subtab with the landing page requested 
+sforce.console.getEnclosingPrimaryTabId(getPrimaryTabId); 
+
+function getPrimaryTabId(result) { 
+primaryTabId = result.id; 
+sforce.console.getEnclosingTabId(getSubTabId); 
+}; 
+
+function getSubTabId(result) { 
+subTabId = result.id; 
+sforce.console.openSubtab(primaryTabId, '{!$CurrentPage.parameters.landingPage}', true, 'New Case', subTabId); 
+}; 
+
 </script>
     
     

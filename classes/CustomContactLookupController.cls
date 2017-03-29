@@ -19,12 +19,14 @@ public with sharing class CustomContactLookupController {
   }
 
   // prepare the query and issue the search command
+  @TestVisible
   private void runSearch() {
     // TODO prepare query string for complex serarches & prevent injections
     results = performSearch(searchString);               
   } 
 
   // run the search and return the records found. 
+  @TestVisible
   private List<contact> performSearch(string searchString) {
 
     String soql = 'select id, name , AccountId ,Account.Name, email from contact';
