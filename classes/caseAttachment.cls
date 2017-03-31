@@ -298,7 +298,7 @@ Trigger associated with: emailMessageTrigger
             casecomment cc = new casecomment();
             cc.CommentBody = '\n\r\n From:'+em.FromAddress+ '\r\n\n' + 'To:'+ em.ToAddress + '\n\r\n' +'Subject: ' + em.Subject + '\r\n' + em.TextBody;
             cc.ParentId = em.ParentId;
-            cc.isPublished = True;
+            cc.isPublished = False;
             caseCommentInsert.add(cc);
             system.debug('Inside future 2');
         }

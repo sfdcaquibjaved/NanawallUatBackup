@@ -81,13 +81,18 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
 
 
         }
-        //for assigning installer account and contact to installtion record
-System.debug('here in trigger'+changeInstallerContact);
+      //for changing installer account and contact to installation record
+      System.debug('here in trigger'+changeInstallerContact);
       if (changeInstallerContact.size() > 0) {
           InstallationTriggerHandler.changeInstaller(changeInstallerContact);
-            system.debug('DML 5' + Limits.getDMLStatements());
-            system.debug('SOQL 5' + Limits.getQueries());
+            system.debug('DML 5.1' + Limits.getDMLStatements());
+            system.debug('SOQL 5.1' + Limits.getQueries());
+      //for changing task and event assigned to installation record
+          InstallationTriggerHandler.updateTaskEventOwner(changeInstallerContact);
+           system.debug('DML 5.2' + Limits.getDMLStatements());
+           system.debug('SOQL 5.2' + Limits.getQueries());
         }
+        //for assigning installer account and contact to installation record
         if (InstallationAccountList.size() > 0) {
             InstallationTriggerHandler.AssignInstaller(InstallationAccountList);
             system.debug('DML 5' + Limits.getDMLStatements());

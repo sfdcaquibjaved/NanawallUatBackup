@@ -900,22 +900,30 @@ public class InstallationTriggerHandler {
       // }catch(exception e){}
   } 
   //end of updateEntitlement method
+  /*
+             Method Name: changeInstaller
+             Purpose: To handle change in Installer Contact Name for Installation
+             Input Parameter : List of Installation
+             Created Date: March 2017
+             */
     public static void changeInstaller(List < Installation__c > newTrigger){
         set<Id> ConId = new set<Id>();
         for(Installation__c i:newTrigger){
             ConId.add(i.Installer_Contact__c);
         }
         System.debug('new installer contact'+conId);
-        list<Contact> conlist = [Select id,AccountId from Contact where id in:ConId Limit 1];
-        list<User> usercon = [Select id,ContactId from User where ContactId in:conlist Limit 1];
-        System.debug('contact'+conlist);
+       // list<Contact> conlist = [Select id,AccountId from Contact where id in:ConId Limit 1];
+        list<User> usercon = [Select id,ContactId,Contact.AccountID from User where ContactId in:ConId Limit 1];
+        //System.debug('contact'+conlist);
         System.debug('user'+usercon);
         for(Installation__c i:newTrigger){
-            for(Contact c:conlist){
+            /*for(Contact c:conlist){
             i.Installer_Contact__c = c.id;
             i.Installer_Account__c = c.AccountID;
-            }
+            }*/
             for(User u:usercon){
+               i.Installer_Contact__c = u.ContactId;
+               i.Installer_Account__c = u.Contact.AccountID;
                i.Assigned_To__c = u.id;
                i.OwnerId = u.id;
              }

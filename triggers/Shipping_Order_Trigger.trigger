@@ -60,7 +60,8 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
 				boolean set_IN_Actual_Pickup_Date  = false;
 				for( Shipping_Order__c so : shippingOrderMap.get( o.Id ) ) 
 				{
-					if( so.Actual_Delivery_Date__c != null )
+//					if( so.Actual_Delivery_Date__c != null )
+					if( so.Actual_Delivery_Date__c != trigger.oldMap.get(so.Id).Actual_Delivery_Date__c )
 						set_IN_Actual_Delivery_Date = true;
 
 					if( so.ETA_Jobsite__c != null )

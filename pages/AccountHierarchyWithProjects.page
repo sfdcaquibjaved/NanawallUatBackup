@@ -2,14 +2,16 @@
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="acc" value="{!Account}" >
-             <apex:column value="{!acc.Name}"  headerValue="Corporate Account Name"/>
+         <apex:column headerValue="Corporate Account Name">
+         <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
+         </apex:column>
              <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
              <apex:column value="{!siz}" headerValue="Project Count"/>
              <apex:column value="{!prjWon}" headerValue="Projects Won"/>
              <apex:column headerValue="Closure">
                  <apex:outputText value="{0,Number,0}%"><apex:param value="{!(100*prjWon)/IF(siz == 0, 1, siz)}" /></apex:outputText> 
             </apex:column> -->
-            <apex:column headerValue="Total Amount">
+            <apex:column headerValue="Amount Quoted">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
             </apex:column>
             <apex:column headerValue="Amount Won">
@@ -21,7 +23,7 @@
   <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
-        <apex:column headerValue="Corporate Account Site Location"> <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink></apex:column>
+        <apex:column headerValue="Corporate Account Site Location (End Customer)"> <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink></apex:column>
             <!-- <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" /> -->
             <apex:column headerValue="Project Name"> <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink></apex:column>
               <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
