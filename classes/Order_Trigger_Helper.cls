@@ -125,8 +125,8 @@ global with sharing class Order_Trigger_Helper {
 				
 	}
  
- 	@future
- 	public static void doOrderUpdates( list<Id> orderids) 
+// 	@future
+ 	public static void doOrderUpdates( list<Id> orderids,  map<Id, list<Shipping_Order__c>> shippingOrderMap_Override ) 
  	{
 		futureMethodRunning = true;
 				
@@ -142,14 +142,23 @@ global with sharing class Order_Trigger_Helper {
 			manufacturingOrderMap.get(mo.Order__c).add( mo );
 		} 
 		
-		for( Shipping_Order__c so : [SELECT Id,Order__c, Status__c, Actual_Pickup_Date__c,Actual_Delivery_Date__c,ETA_Jobsite__c,ETA_Jobsite_2__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c, Revised_ETA_Jobsite__c FROM Shipping_Order__c WHERE Order__c = :orderids ])
+		
+		if( shippingOrderMap_override != null )
 		{
-			if( !shippingOrderMap.containsKey( so.Order__c) )
+			shippingOrderMap = shippingOrderMap_override;
+		} else 
+		{
+			for( Shipping_Order__c so : [SELECT Id,Order__c, Status__c, Actual_Pickup_Date__c,Actual_Delivery_Date__c,ETA_Jobsite__c,ETA_Jobsite_2__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c, Revised_ETA_Jobsite__c FROM Shipping_Order__c WHERE Order__c = :orderids ])
 			{
-				shippingOrderMap.put( so.Order__c, new list<Shipping_Order__c>() );
+				if( !shippingOrderMap.containsKey( so.Order__c) )
+				{
+					shippingOrderMap.put( so.Order__c, new list<Shipping_Order__c>() );
+				}
+				shippingOrderMap.get(so.Order__c).add( so );
 			}
-			shippingOrderMap.get(so.Order__c).add( so );
+		
 		}
+		
 		
 		
 		list<Order> orders = [SELECT Id, Status, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c, IN_Actual_Delivery_Date_c__c, IN_ETA_Jobsite_c__c, IN_Freight_ETA_Jobsite_c__c, IN_Freight_Tracking_Number_c__c, IN_Revised_ETA_Jobsite_c__c  FROM Order WHERE Id = :orderids];
@@ -176,18 +185,24 @@ global with sharing class Order_Trigger_Helper {
 				Date IN_Revised_ETA_Jobsite = null;
 				Date IN_Actual_Pickup_Date = null;
 				
-				boolean set_IN_Actual_Delivery_Date = false;
+//				boolean set_IN_Actual_Delivery_Date = false;
+				boolean set_IN_Actual_Delivery_Date = true; //we always need to update this because when they are erasing old dates, it needs to push that change up to ... which is null
 				boolean set_IN_ETA_Jobsite = false;
 				boolean set_IN_Freight_ETA_Jobsite = false;
 				boolean set_IN_Freight_Tracking_Number = false;
 				boolean set_IN_Revised_ETA_Jobsite = false;
 				boolean set_IN_Actual_Pickup_Date = false;
+				 
+				boolean ordersNeedUpdating = false; 
 				
-				boolean ordersNeedUpdating = false;
+
+				
 				for( Shipping_Order__c so : shippingOrderMap.get( o.Id ) ) 
 				{
-					if( so.Actual_Delivery_Date__c != null )
-					{
+					
+					
+//					if( so.Actual_Delivery_Date__c != null )
+//					{
 system.debug('** SO: got an actual delivery date');						
 						
 						//if the order has no date set, or this date is greater than the order's, use this date
@@ -197,10 +212,11 @@ system.debug('** SO: setting temp actual delivery date');
 							IN_Actual_Delivery_Date = so.Actual_Delivery_Date__c;
 							set_IN_Actual_Delivery_Date = true;
 						}
-					}  else 
+/*					}  else 
 					{
 //						set_IN_Actual_Delivery_Date = false;
 					}
+*/
 
 /*					
 					if( so.ETA_Jobsite__c != null )

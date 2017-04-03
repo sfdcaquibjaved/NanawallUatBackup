@@ -321,6 +321,16 @@ system.debug('** ASTECH: body_rep: '+ HTMLBody_rep);
 			{
 				system.debug('** ASTECH: sending customer email');
 				r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
+
+				Task t = new Task();
+				t.ActivityDate = Date.today();
+				t.Description = 'Quote email sent from nanareps.com to ' + c.Email + ' <br />' + HTMLBody;
+				t.Subject = 'Quote Email Sent: ' + q.Quote_ID__c;
+				t.Status = 'Completed';
+				t.WhoId = c.id;
+				t.WhatId = q.Id;
+				insert t;
+				
 			}
 			
 			if( SendToRep )
@@ -337,14 +347,6 @@ system.debug('** ASTECH: body_rep: '+ HTMLBody_rep);
 //			Messaging.SendEmailResult [] r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
 		}
 
-		Task t = new Task();
-		t.ActivityDate = Date.today();
-		t.Description = 'Quote email sent from nanareps.com to ' + c.Email + ' <br />' + HTMLBody;
-		t.Subject = 'Quote Email Sent: ' + q.Quote_ID__c;
-		t.Status = 'Completed';
-		t.WhoId = c.id;
-		t.WhatId = q.Id;
-		insert t;
 
 		return true; 
 	}

@@ -1,6 +1,7 @@
 trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update) {
 
-    if( trigger.isUpdate && trigger.isBefore )
+
+	if( trigger.isUpdate && trigger.isBefore )
     {
         
         list<Id> orderIds = new list<Id>();
@@ -20,7 +21,7 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
         }  
 
           
-        for( Shipping_Order__c so : [SELECT Id,Order__c, Status__c,  Actual_Pickup_Date__c,Actual_Delivery_Date__c, ETA_Jobsite__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c,Revised_ETA_Jobsite__c  FROM Shipping_Order__c WHERE Order__c = :orderIds ])
+        for( Shipping_Order__c so : [SELECT Id,ETA_Jobsite_2__c, Order__c, Status__c,  Actual_Pickup_Date__c,Actual_Delivery_Date__c, ETA_Jobsite__c, Freight_ETA_Jobsite__c, Freight_Tracking_Number__c,Revised_ETA_Jobsite__c  FROM Shipping_Order__c WHERE Order__c = :orderIds ])
         {
             if(trigger.newMap.containsKey(so.Id ) )
                 so = trigger.newMap.get(so.Id); //we want the updating one
@@ -37,6 +38,7 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
         list<Manufacturing_Order__c> manufacturingOrdersToUpdate = new list<Manufacturing_Order__c>();
         list<Order> ordersToUpdate = new list<Order>();
         list<Id> orderIdsToUpdate = new list<Id>();
+
         for( Order o : orders ) 
         {
 //          if( o.Stage__c != 'On Hold'
@@ -61,9 +63,12 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
 				for( Shipping_Order__c so : shippingOrderMap.get( o.Id ) ) 
 				{
 //					if( so.Actual_Delivery_Date__c != null )
-					if( so.Actual_Delivery_Date__c != trigger.oldMap.get(so.Id).Actual_Delivery_Date__c )
-						set_IN_Actual_Delivery_Date = true;
+					Shipping_Order__c oldSo = trigger.oldMap.get(so.Id);
 
+					if( oldSo != null && so.Actual_Delivery_Date__c != oldSo.Actual_Delivery_Date__c )
+					{
+						set_IN_Actual_Delivery_Date = true;
+					}
 					if( so.ETA_Jobsite__c != null )
 						set_IN_ETA_Jobsite = true;
 
@@ -71,7 +76,7 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
 						set_IN_Freight_ETA_Jobsite = true;
 
 					if( so.Freight_Tracking_Number__c != null )
-						set_IN_Freight_Tracking_Number = true;
+						set_IN_Freight_Tracking_Number = true; 
 
 					if( so.Revised_ETA_Jobsite__c != null )
 						set_IN_Revised_ETA_Jobsite = true;
@@ -100,7 +105,7 @@ system.debug('**SO: orders need updating');
         }
         if(ordersToUpdate.size() > 0  && !Order_Trigger_Helper.futureMethodRunning)
         {
-            	Order_Trigger_Helper.doOrderUpdates(orderIdsToUpdate);
+            	Order_Trigger_Helper.doOrderUpdates(orderIdsToUpdate, shippingOrderMap );
 system.debug('** SO: Doing the order update');
         } else 
         {

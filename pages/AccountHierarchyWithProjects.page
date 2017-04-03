@@ -1,4 +1,5 @@
 <apex:page standardController="Account" extensions="HierarchyController" sidebar="false">
+<apex:form >
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="acc" value="{!Account}" >
@@ -23,12 +24,45 @@
   <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
-        <apex:column headerValue="Corporate Account Site Location (End Customer)"> <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink></apex:column>
+          <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
+             <apex:column >
+             <apex:facet name="header">             
+             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer){!IF(sortExpression=='AccName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                 <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+               </apex:facet>
+             <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink>
+             
+             </apex:column>
+
             <!-- <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" /> -->
-            <apex:column headerValue="Project Name"> <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink></apex:column>
+            
+          <!--  <apex:column headerValue="Project Name"> --> 
+            <apex:column >
+            <apex:facet name="header">
+            <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='ASC','▼','▲'),'')}" >
+                 <apex:param value="PrjName" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+            </apex:facet>
+            <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink>
+            </apex:column>
+            
               <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
-                <apex:column headerValue="Project Status" value="{!pr.status}" />
-                 <apex:column headerValue="Project Amount" >
+             <apex:column >
+                <apex:facet name="header">
+                <apex:commandLink action="{!viewData}" value="Project Status {!IF(sortExpression=='Stage',IF(sortDirection='ASC','▼','▲'),'')}" >
+                 <apex:param value="Stage" name="column" assignTo="{!sortExpression}" ></apex:param>
+                 </apex:commandLink>
+                 {!pr.status}
+                 </apex:facet>               
+                </apex:column>
+              <!--   <apex:column headerValue="Project Amount" > -->
+                     <apex:column >
+            <apex:facet name="header">
+            <apex:commandLink action="{!viewData}" value="Amount{!IF(sortExpression=='Amount',IF(sortDirection='ASC','▼','▲'),'')}" >
+                 <apex:param value="Amount" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+            </apex:facet>
                      <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.amount}"/></apex:outputText>
                  </apex:column>
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
@@ -45,4 +79,5 @@
          </apex:pageBlockTable>
      </apex:pageBlockSection> 
    </apex:pageBlock>
+</apex:form>   
 </apex:page>

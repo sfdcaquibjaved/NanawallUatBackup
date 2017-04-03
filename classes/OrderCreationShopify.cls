@@ -124,6 +124,7 @@ global without sharing class OrderCreationShopify {
                     sqd.Quantity__c = lt.quantity;
                     sqd.Unit_Price__c = lt.price;
                     sqd.Name = lt.Name;
+                    sqd.Ship_From_Stock__c=TRUE;
                     sqd.Service_Quote__c = sqInsert[0].id;
                     sqDetailInsert.add(sqd);
                 }
@@ -207,6 +208,7 @@ global without sharing class OrderCreationShopify {
                         sqd.Quantity__c = lt.quantity;
                         sqd.Unit_Price__c = lt.price;
                         sqd.Name = lt.Name;
+                        sqd.Ship_From_Stock__c=TRUE;
                         sqd.Service_Quote__c = serviceQuoteDirectInsert[0].id;
                         sqDetailsDirectInsert.add(sqd);
                     }
@@ -295,6 +297,7 @@ global without sharing class OrderCreationShopify {
                             sqd.Quantity__c = lt.quantity;
                             sqd.Unit_Price__c = lt.price;
                             sqd.Name = lt.Name;
+                            sqd.Ship_From_Stock__c=TRUE;
                             sqd.Service_Quote__c = serviceQuoteDirectInsert[0].id;
                             sqDetailsDirectInsert.add(sqd);
                         }
@@ -375,6 +378,7 @@ global without sharing class OrderCreationShopify {
                             sqd.Quantity__c = lt.quantity;
                             sqd.Unit_Price__c = lt.price;
                             sqd.Name = lt.Name;
+                            sqd.Ship_From_Stock__c=TRUE;
                             sqd.Service_Quote__c = serviceQuoteDirectInsert[0].id;
                             sqDetailsDirectInsert.add(sqd);
                         }
@@ -498,6 +502,7 @@ global without sharing class OrderCreationShopify {
                         sqd.Quantity__c = lt.quantity;
                         sqd.Unit_Price__c = lt.price;
                         sqd.Name = lt.Name;
+                        sqd.Ship_From_Stock__c=TRUE;
                         sqd.Service_Quote__c = serviceQuoteDirectInsert[0].id;
                         sqDetailsDirectInsert.add(sqd);
                     }

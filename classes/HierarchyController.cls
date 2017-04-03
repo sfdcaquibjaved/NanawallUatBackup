@@ -8,11 +8,108 @@ public class HierarchyController {
     public Integer psiz {get;set;}
     public String rltype {get;set;}
     public Account AccRelatedList{get;set;}  
-    public List<Hierarchy> ProjectList{get;set;}
+    public Hierarchy [] ProjectList{get;set;}
     public Double amountWon{get;set;}
     public Double totalAmount{get;set;}
+    private String sortDirection = 'ASC';
+    private String sortExp = 'AccName';
+    public List<String> acclist;
+    public Map <String,Hierarchy> accmap;    
+	public List<String> prjlist;
+    public Map <String,Hierarchy> prjmap;
+
+    public HierarchyController(ApexPages.StandardController con){
+        
+        AccSiteList = new List <Account>();
+        acclist = new List<String>();
+        accmap = new Map<String,Hierarchy>();    
+        prjlist = new List<String>();
+        prjmap = new Map<String,Hierarchy>();    
+        AccRelatedList = new Account();
+        ProjSiteList = new List<List<Project__c>>();
+        ProjectList = new List<Hierarchy>();
+        objAcc = (Account)con.getRecord();
+        totalAmount = 0.0;
+        amountWon = 0.0;
+        siz = 0;
+        psiz = 0;
+        prjWon = 0;    
+            
+        //AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r Order by Amount__c desc Nulls last),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
     
-    public class Hierarchy{
+		AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r ) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; 
+        	
+        	String prevAcc ='';
+            
+            for (Account ac : AccSiteList){
+                                                 
+            psiz = ProjectList.size()-1;
+                
+            if(ac.Projects1__r.size()==0){
+                       
+            Hierarchy hier = new Hierarchy();
+                
+            hier.accountName = ac;
+                
+            acclist.add(ac.Name);
+                
+            accmap.put(ac.Name, hier);    
+                
+            ProjectList.add(hier);
+        }
+                    
+        else{
+     
+            for (List<Project__c> prjs: ac.Projects1__r){
+                    
+            siz+=prjs.size(); 
+                    
+            for(Project__c prj : prjs){ 
+                        
+            Hierarchy hier = new Hierarchy(prj.Architect_Account__c, prj.Purchaser_Account__c, prj.Ordering_Account__c);
+                        
+           /* if(prevAcc!=null && prevAcc.equalsIgnoreCase(ac.Name)){
+            
+            hier.accountName=null;
+                
+            }  else{ hier.accountName = ac; }*/
+                    
+                		hier.accountName = ac;
+                        hier.projectName = prj;
+                		acclist.add(ac.Name);
+                		prjlist.add(prj.Name);    
+			            hier.architect.Name = prj.Architect_Account__r.Name;
+                        hier.purchaser.Name = prj.Purchaser_Account__r.Name;
+                        hier.orderingAccount.Name = prj.Ordering_Account__r.Name;    
+                        hier.amount = prj.Amount__c;
+                        hier.status = prj.Stage__c;
+                        hier.projectCity = prj.Project_City__c;
+                        hier.projectState = prj.Project_State__c;
+                        hier.projectZipCode = prj.Project_Zip_Code__c;
+                        hier.applicationIndustry = prj.Application__c;
+                        accmap.put(ac.Name, hier);
+                        prjmap.put(prj.Name, hier);
+                
+                        if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete'))){
+                            
+                            amountWon = amountWon + prj.Amount__c;
+                            prjWon = prjWon + 1;
+                        }
+                        
+                        if(prj.Amount__c!=null)
+                        
+                        totalAmount = totalAmount + prj.Amount__c;
+                        
+                        ProjectList.add(hier);
+                        
+                        prevAcc = hier.accountName.Name;
+                     }
+                  }
+               }
+          }
+     }
+    
+    public class Hierarchy {
         
         public Account accountName{get;set;}
         public Project__c projectName{get;set;}
@@ -26,14 +123,15 @@ public class HierarchyController {
         public String projectState{get;set;}
         public String projectZipCode{get;set;}
         public String applicationIndustry{get;set;}
+        public HierarchyController hc;
         
         public Hierarchy(){
- 
+            
         }
         
         public Hierarchy(Id arch, Id purch, Id ordr){
-                        
-            this.architect = new Account();
+            
+			this.architect = new Account();
             this.architect.Id = arch;
             this.purchaser = new Account();
             this.purchaser.Id = purch;
@@ -41,78 +139,113 @@ public class HierarchyController {
             this.orderingAccount.Id = ordr;
         }
     }
-    
-        public HierarchyController(ApexPages.StandardController con){
-                        
-        AccSiteList = new List <Account>();
-        AccRelatedList = new Account();
-        ProjSiteList = new List<List<Project__c>>();
-        ProjectList = new List<Hierarchy>();
-        objAcc = (Account)con.getRecord();
-        totalAmount = 0.0;
-        amountWon = 0.0;
-        siz = 0;
-        psiz = 0;
-        prjWon = 0;    
+
+    public String sortExpression {
+
+             get { return sortExp; }
+
+             set { //if the column is clicked on then switch between Ascending and Descending modes
+
+               if (value == sortExp) sortDirection = (sortDirection == 'ASC')? 'DESC' : 'ASC';
+
+               else sortDirection = 'ASC';
+
+               sortExp = value;
+           }
+       }
+
+    	public String getSortDirection() {  //if not column is selected
+
+        if (sortExpression == null || sortExpression == '') return 'ASC';
+
+            else return sortDirection;
+
+         }
+
+         public void setSortDirection(String value) { 
+
+           sortDirection = value;
+		}
+
+    	public PageReference ViewData() {
+
+        string sortFullExp = sortExpression  + ' ' + sortDirection;  
+
+        if(sortExp.equalsIgnoreCase('AccName')) sortData('AccName');
+        
+        else if (sortExp.equalsIgnoreCase('PrjName')) sortData('PrjName');
             
-            AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
+        else if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');    
             
-            String prevAcc ='';
-            
-            for (Account ac : AccSiteList){
-                                                 
-                psiz = ProjectList.size()-1;
-                
-                if(ac.Projects1__r.size()==0){
-                       
-                        Hierarchy hier = new Hierarchy();
-                
-                                hier.accountName = ac;
-                
-                                ProjectList.add(hier);
-                    }
-                    
-                    else{
-                
-                        for (List<Project__c> prjs: ac.Projects1__r){
-                    
-                    siz+=prjs.size(); 
-                    
-                    for(Project__c prj : prjs){
-                        
-                        Hierarchy hier = new Hierarchy(prj.Architect_Account__c, prj.Purchaser_Account__c, prj.Ordering_Account__c);
-                        
-                        if(prevAcc!=null && prevAcc.equalsIgnoreCase(ac.Name)){
-                            hier.accountName=null;
-                        }
-                        else{ hier.accountName = ac; }
-                    
-                        hier.projectName = prj;
-                        hier.architect.Name = prj.Architect_Account__r.Name;
-                        hier.purchaser.Name = prj.Purchaser_Account__r.Name;
-                        hier.orderingAccount.Name = prj.Ordering_Account__r.Name;    
-                        hier.amount = prj.Amount__c;
-                        hier.status = prj.Stage__c;
-                        hier.projectCity = prj.Project_City__c;
-                        hier.projectState = prj.Project_State__c;
-                        hier.projectZipCode = prj.Project_Zip_Code__c;
-                        hier.applicationIndustry = prj.Application__c;
-                        if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete'))){
-                            
-                            amountWon = amountWon + prj.Amount__c;
-                            prjWon = prjWon + 1;
-                        }
-                        totalAmount = totalAmount + prj.Amount__c;
-                        
-                        ProjectList.add(hier);
-                        
-                        prevAcc = hier.accountName.Name;
-                        
-                         }
-                  }
-               }
-          }
+        return null;
      }
-    
-    public void sortDesc(){}
+
+    	public void sortData(String str){ 
+        
+            
+            if (str.equalsIgnoreCase('Amount')){
+            
+               for (Integer i=0; i<ProjectList.size()-1;i++)
+                for(Integer j=i+1; j<ProjectList.size();j++)
+                	if(ProjectList[i].amount==null && ProjectList[j].amount!=null){	
+            			 	Hierarchy hier = ProjectList.get(i);
+                        	ProjectList.set(i, ProjectList.get(j));
+                        	ProjectList.set(j,hier);
+                    }else if(ProjectList[i].amount < ProjectList[j].amount && sortDirection.equalsIgnoreCase('DESC')){	
+            			 	Hierarchy hier = ProjectList.get(i);
+                        	ProjectList.set(i, ProjectList.get(j));
+                        	ProjectList.set(j,hier);
+                    }else if(ProjectList[i].amount > ProjectList[j].amount && sortDirection.equalsIgnoreCase('ASC')){	
+            			 	Hierarchy hier = ProjectList.get(i);
+                        	ProjectList.set(i, ProjectList.get(j));
+                        	ProjectList.set(j,hier);
+                    }
+                }
+            
+            if (str.equalsIgnoreCase('AccName')){
+            	    
+                acclist.sort();
+                
+                List<Hierarchy> hrlist = new List<Hierarchy>();
+                
+                for (String s : acclist){
+                    
+                     hrlist.add(accmap.get(s));
+                }
+                    
+                if(sortDirection.equalsIgnoreCase('ASC'))
+                
+                ProjectList = hrlist;
+             
+                else if (sortDirection.equalsIgnoreCase('DESC')){
+                
+                for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
+                    
+                    ProjectList.set(i,hrlist.get(j++));
+           	}
+         }
+            
+         	if (str.equalsIgnoreCase('PrjName')){
+            	    
+                prjlist.sort();
+                
+                List<Hierarchy> prlist = new List<Hierarchy>();
+                
+                for (String s : prjlist){
+                    
+                     prlist.add(prjmap.get(s));
+                }
+                    
+                if(sortDirection.equalsIgnoreCase('ASC'))
+                
+                ProjectList = prlist;
+             
+                else if (sortDirection.equalsIgnoreCase('DESC')){
+                
+                for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
+                    
+                    ProjectList.set(i,prlist.get(j++));
+           	}
+         }             
+     }
 }
