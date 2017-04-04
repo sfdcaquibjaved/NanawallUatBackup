@@ -17,10 +17,18 @@ public class HierarchyController {
     public Map <String,Hierarchy> accmap;    
 	public List<String> prjlist;
     public Map <String,Hierarchy> prjmap;
-
+	public List<String> prjsts;
+    public Map <String,Hierarchy> stsmap;
+    public List<Decimal> amtlst;
+    public Map <Decimal,Hierarchy> amtmap;
+    
     public HierarchyController(ApexPages.StandardController con){
         
         AccSiteList = new List <Account>();
+        amtlst = new List<Decimal>();
+        amtmap = new Map<Decimal,Hierarchy>();    
+        prjsts = new List<String>();
+        stsmap = new Map<String,Hierarchy>();    
         acclist = new List<String>();
         accmap = new Map<String,Hierarchy>();    
         prjlist = new List<String>();
@@ -77,18 +85,22 @@ public class HierarchyController {
                 		hier.accountName = ac;
                         hier.projectName = prj;
                 		acclist.add(ac.Name);
-                		prjlist.add(prj.Name);    
+                		prjlist.add(prj.Name);
+                		prjsts.add(prj.Stage__c);
 			            hier.architect.Name = prj.Architect_Account__r.Name;
                         hier.purchaser.Name = prj.Purchaser_Account__r.Name;
                         hier.orderingAccount.Name = prj.Ordering_Account__r.Name;    
                         hier.amount = prj.Amount__c;
-                        hier.status = prj.Stage__c;
+                        amtlst.add(prj.Amount__c);
+                		hier.status = prj.Stage__c;
                         hier.projectCity = prj.Project_City__c;
                         hier.projectState = prj.Project_State__c;
                         hier.projectZipCode = prj.Project_Zip_Code__c;
                         hier.applicationIndustry = prj.Application__c;
                         accmap.put(ac.Name, hier);
                         prjmap.put(prj.Name, hier);
+                		stsmap.put(prj.Stage__c,hier);
+                		amtmap.put(prj.Amount__c, hier);
                 
                         if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete'))){
                             
@@ -175,7 +187,9 @@ public class HierarchyController {
         
         else if (sortExp.equalsIgnoreCase('PrjName')) sortData('PrjName');
             
-        else if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');    
+        else if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');
+            
+        else if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');    
             
         return null;
      }
@@ -184,7 +198,7 @@ public class HierarchyController {
         
             
             if (str.equalsIgnoreCase('Amount')){
-            
+				            
                for (Integer i=0; i<ProjectList.size()-1;i++)
                 for(Integer j=i+1; j<ProjectList.size();j++)
                 	if(ProjectList[i].amount==null && ProjectList[j].amount!=null){	
@@ -200,6 +214,27 @@ public class HierarchyController {
                         	ProjectList.set(i, ProjectList.get(j));
                         	ProjectList.set(j,hier);
                     }
+                
+               	amtlst.sort();
+                
+                List<Hierarchy> amtlist = new List<Hierarchy>();
+                
+                for (Decimal s : amtlst){
+                    
+                     amtlist.add(amtmap.get(s));
+                }
+                    
+                if(sortDirection.equalsIgnoreCase('ASC'))
+                
+                ProjectList = amtlist;
+             
+                else if (sortDirection.equalsIgnoreCase('DESC')){
+                
+                for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
+                    
+                    ProjectList.set(i,amtlist.get(j++));
+           	}
+                	
                 }
             
             if (str.equalsIgnoreCase('AccName')){
@@ -246,6 +281,28 @@ public class HierarchyController {
                     
                     ProjectList.set(i,prlist.get(j++));
            	}
-         }             
+         }
+         	if (str.equalsIgnoreCase('PrjStatus')){
+            	    
+                prjsts.sort();
+                
+                List<Hierarchy> stslist = new List<Hierarchy>();
+                
+                for (String s : prjsts){
+                    
+                     stslist.add(stsmap.get(s));
+                }
+                    
+                if(sortDirection.equalsIgnoreCase('ASC'))
+                
+                ProjectList = stslist;
+             
+                else if (sortDirection.equalsIgnoreCase('DESC')){
+                
+                for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
+                    
+                    ProjectList.set(i,stslist.get(j++));
+           	}
+         }            
      }
 }

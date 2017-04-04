@@ -53,8 +53,8 @@
                 <apex:commandLink action="{!viewData}" value="Project Status {!IF(sortExpression=='Stage',IF(sortDirection='ASC','▼','▲'),'')}" >
                  <apex:param value="Stage" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
-                 {!pr.status}
-                 </apex:facet>               
+                 </apex:facet>
+                 <apex:outputText value="{!pr.status}"/>
                 </apex:column>
               <!--   <apex:column headerValue="Project Amount" > -->
                      <apex:column >
