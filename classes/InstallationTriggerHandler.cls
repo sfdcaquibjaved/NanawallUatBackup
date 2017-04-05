@@ -922,10 +922,12 @@ public class InstallationTriggerHandler {
             i.Installer_Account__c = c.AccountID;
             }*/
             for(User u:usercon){
-               i.Installer_Contact__c = u.ContactId;
+                if(i.installer_Contact__c == u.ContactID){
+               //i.Installer_Contact__c = u.ContactId;
                i.Installer_Account__c = u.Contact.AccountID;
                i.Assigned_To__c = u.id;
                i.OwnerId = u.id;
+                }
              }
         }
     }

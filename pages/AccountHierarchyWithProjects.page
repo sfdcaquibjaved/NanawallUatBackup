@@ -57,7 +57,7 @@
                  <apex:outputText value="{!pr.status}"/>
                 </apex:column>
               <!--   <apex:column headerValue="Project Amount" > -->
-                     <apex:column >
+            <apex:column >
             <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Amount{!IF(sortExpression=='Amount',IF(sortDirection='ASC','▼','▲'),'')}" >
                  <apex:param value="Amount" name="column" assignTo="{!sortExpression}" ></apex:param>
@@ -65,6 +65,19 @@
             </apex:facet>
                      <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.amount}"/></apex:outputText>
                  </apex:column>
+                 <apex:column >
+                 <apex:facet name="header">
+            <apex:commandLink action="{!viewData}" value="Order Finalized Date {!IF(sortExpression=='OFnzDt',IF(sortDirection='ASC','▼','▲'),'')}" >
+                 <apex:param value="OFnzDt" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+            </apex:facet>
+            <apex:PageBlockTable value="{!pr.ordFnzDt}" var="p">
+                  <apex:column >      
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
+                   </apex:column>  
+                 </apex:PageBlockTable>
+                 </apex:column>
+
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
                  <apex:column headerValue="Application Industry" value="{!pr.applicationIndustry}" />
                  <apex:column headerValue="Architect"> <apex:outputLink value="/{!pr.architect}">{!pr.architect.Name}</apex:outputLink></apex:column>

@@ -164,6 +164,8 @@ public class CaseCommentEmailHelper {
         '\n---------------------------------------------' +
         +'\n'+StringVariablesHelper.problemType + c.Category__c +
         '\n---------------------------------------------' +
+        +'\n'+StringVariablesHelper.Order + c.Order_Number_formula__c +
+        '\n---------------------------------------------' +
         +'\n'+ StringVariablesHelper.Subject + c.Subject +
         '\n---------------------------------------------' +
         +'\n'+StringVariablesHelper.Priority + c.Priority +
@@ -178,7 +180,7 @@ public class CaseCommentEmailHelper {
         '\n\n'+ StringVariablesHelper.Thanks;
 
         string Subject = StringVariablesHelper.CaseName + CurrentCase.CaseNumber + ': ' +
-        (String.isNotBlank(CurrentCase.Subject) ? CurrentCase.Subject : '') +
+        (String.isNotBlank(CurrentCase.Subject) ? CurrentCase.Subject : ' ') +
         StringVariablesHelper.Updated;
 
         // Send Email

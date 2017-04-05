@@ -768,8 +768,8 @@ system.debug('template name: ' + GlobalStrings.NDGPublicEmailTemplateName());
 			
 		} catch( Exception ex) {
 			Utility.JimDebug(ex, 'caught a sendquoteemail2 error');
-			email.setOrgWideEmailAddressId( GlobalStrings.DefaultOrgWideEmailAddressID() );
-			Messaging.SendEmailResult [] r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
+//			email.setOrgWideEmailAddressId( GlobalStrings.DefaultOrgWideEmailAddressID() );
+//			Messaging.SendEmailResult [] r =  Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email}); 
 		}
 
 		Task t = new Task();
