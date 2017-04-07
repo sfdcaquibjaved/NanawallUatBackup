@@ -63,7 +63,7 @@ trigger ServiceQuoteTrigger on Service_Quote__c(before insert, before Update, af
         list < Service_Quote__c > sqLists = new list < Service_Quote__c > ();
         for (Service_Quote__c sq: trigger.new) {
             //check for shopify record type
-            if (sq.recordtypeid == Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Shopify Service Quote').getRecordTypeId()) {
+            if ((sq.recordtypeid == Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Shopify Service Quote').getRecordTypeId())&& sq.Shopify_Order_NO__c!=null && sq.Shopify_Order_NO__c!='' && sq.Shopify__c==true) {
                 sqLists.add(sq);
             }
         }

@@ -71,11 +71,11 @@
                  <apex:param value="OFnzDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
-            <apex:PageBlockTable value="{!pr.ordFnzDt}" var="p">
+            <apex:DataTable value="{!pr.ordFnzDt}" var="p">
                   <apex:column >      
                      <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
                    </apex:column>  
-                 </apex:PageBlockTable>
+                 </apex:DataTable>
                  </apex:column>
 
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
@@ -86,6 +86,18 @@
              <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
                  <apex:column headerValue="Ordering Account"> <apex:outputLink value="/{!pr.orderingAccount}">{!pr.orderingAccount.Name}</apex:outputLink></apex:column>
                <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->
+                 <apex:column >
+                 <apex:facet name="header">
+            <apex:commandLink action="{!viewData}" value="Contact Role Name {!IF(sortExpression=='role',IF(sortDirection='ASC','▼','▲'),'')}" >
+                 <apex:param value="role" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+            </apex:facet>
+            <apex:DataTable value="{!pr.ocr}" var="o">
+                  <apex:column >      
+                     <apex:outputLink value="/{!o.ContactId}">{!o.Contact.Name}</apex:outputLink>
+                   </apex:column>  
+                 </apex:DataTable>
+                 </apex:column>
                  <apex:column value="{!pr.projectCity}" headerValue="Project City" />
                  <apex:column value="{!pr.projectState}" headerValue="Project State" />
                  <apex:column value="{!pr.projectZipCode}" headerValue="Project ZipCode" /> 

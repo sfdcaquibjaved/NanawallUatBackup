@@ -40,6 +40,9 @@ public class CaseAddressToShopifyOnCreation {
                     sq.Shopify_Bill_To_Zip__c = c.Billing_Zipcode__c;
                     sq.Shopify_Bill_To_Phone__c = c.Other_Phone__c;
                     sq.Shopify_Bill_To_Email__c = c.Other_Email__c;
+                    if(sq.Freight_Tracking_Number__c==null || sq.Freight_Tracking_Number__c==''){
+                    sq.Freight_Tracking_Number__c = 'Shipping from Shopify';
+                    }
                 }
             }
         }
@@ -162,7 +165,9 @@ public class CaseAddressToShopifyOnCreation {
         map < string, Service_Quote__c > sqMap = new map < string, Service_Quote__c > ();
 
         for (service_Quote__c sq: sqlist) {
+        if(sq.Shopify_Order_NO__c!=null && sq.Shopify_Order_NO__c!=''){
             setSq.add(sq.Shopify_Order_NO__c);
+            }
         }
         //retrive from data base and check for dupes
         list < Service_Quote__c > sqlistMatchedSLOrder = [select id, Shopify_Order_NO__c from Service_Quote__c where Shopify_Order_NO__c IN: setSq];

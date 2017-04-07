@@ -27,8 +27,9 @@ public class wrapperObjectShopify{
         public list < note_attributes > note_attributes;
         public string cancel_reason;
         public List < fulfillments > fulfillments;
+        public string name;
 
-        public Orders(Double price, DateTime dt, string ids, string em, List < line_items > lineItems2, Double discount, Double lineitemprice, Double weight, Double tax, String status, Double subtotal, String sub, billing_address baddress, shipping_address saddress, customer custlist, string n, list < note_attributes > na, String fullstatus, datetime cancel, string cancelreason, List < fulfillments > tdetails) {
+        public Orders(Double price, DateTime dt, string ids, string em, List < line_items > lineItems2, Double discount, Double lineitemprice, Double weight, Double tax, String status, Double subtotal, String sub, billing_address baddress, shipping_address saddress, customer custlist, string n, list < note_attributes > na, String fullstatus, datetime cancel, string cancelreason, List < fulfillments > tdetails,string oName) {
             total_price = price;
             created_at = dt;
             ids = id;
@@ -49,6 +50,7 @@ public class wrapperObjectShopify{
             cancelled_at = cancel;
             cancel_reason = cancelreason;
             fulfillments = tdetails.clone();
+            name = oName;
         }
     }
 
@@ -58,6 +60,7 @@ public class wrapperObjectShopify{
         public String title;
         public Double total_discount;
         public String Name;
+        public string sku;
     }
 
     public class billing_address {
