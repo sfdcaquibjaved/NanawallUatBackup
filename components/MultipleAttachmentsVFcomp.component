@@ -93,11 +93,11 @@ function move() {
                 <apex:form >
 
                     <div class="slds-panel__section">
-                        <div class="slds-docked-form-footer slds-shrink-none slds-button-group slds-float--right" role="group">
-                            <apex:commandButton value="Upload" action="{!SaveAttachments}" styleClass="slds-button slds-button--neutral" onclick="move()"/>
+                        <div class="slds-docked-form-footer slds-shrink-none slds-button-group slds-float--left" role="group">
+                            <apex:commandButton value="Upload" action="{!SaveAttachments}"  styleClass="slds-button slds-button--neutral" onclick="move()"/>
                             
                             <span style="display:inline-block; width: 30px; height: 55px"></span>
-                           <apex:commandButton value="Back" onclick="sforce.one.navigateToURL('/{!objId}')" styleClass="slds-button slds-button--brand" />
+                           <apex:commandButton value="Back" onclick="sforce.one.navigateToURL('/{!objId}')"  styleClass="slds-button slds-button--brand" />
                         </div>
                     </div>
                     <apex:pageMessages id="MSG" />

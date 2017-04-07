@@ -1,4 +1,4 @@
-<apex:page standardcontroller="Installation__c">
+<apex:page standardcontroller="Installation__c" sidebar="false" standardStylesheets="false" showHeader="false"  docType="html-5.0" >
 
     <c:MultipleAttachmentsVFcomp objId="{!$CurrentPage.Parameters.id}"/>
 </apex:page>

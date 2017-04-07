@@ -1,0 +1,6 @@
+<apex:page standardController="Case" standardStylesheets="false" sidebar="false" docType="html-5.0" >
+    <apex:form >
+         
+        <c:fileUpload parentId="{!Case.id}"/>
+    </apex:form>
+</apex:page>

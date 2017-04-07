@@ -1,0 +1,3 @@
+<apex:page StandardController="Installation__c" action="{!redirect}" extensions="fileUpload_Redirect">
+    
+</apex:page>

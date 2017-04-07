@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="HierarchyController" sidebar="false">
+<apex:page standardController="Account" extensions="HierarchyController3" sidebar="false">
 <apex:form >
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
@@ -7,26 +7,13 @@
          <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
          </apex:column>
              <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
-             <apex:column value="{!ProjSiteList.size}" headerValue="Project Count"/>
-             <apex:column value="{!prjStgWon}" headerValue="Projects Won"/>
-             <apex:column value="{!prjStgPrg}" headerValue="Projects In Progress"/>
-             <apex:column value="{!prjStgQtd}" headerValue="Project Quoted"/>
-            <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
+             <apex:column value="{!siz}" headerValue="Project Count"/>
              <apex:column value="{!prjWon}" headerValue="Projects Won"/>
              <apex:column headerValue="Closure">
-                 <apex:outputText value="{0,Number,0}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
+                 <apex:outputText value="{0,Number,0}%"><apex:param value="{!(100*prjWon)/IF(siz == 0, 1, siz)}" /></apex:outputText> 
             </apex:column> -->
-            <apex:column headerValue="Amount Quoted (Total)">
+            <apex:column headerValue="Amount Quoted">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
-            </apex:column>
-            <apex:column headerValue="Amount (Won)">
-                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
-            </apex:column>
-            <apex:column headerValue="Amount (In Progress)">
-                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
-            </apex:column>
-            <apex:column headerValue="Amount (Quoted)">
-                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
             </apex:column>
             <apex:column headerValue="Amount Won">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!amountWon}" /></apex:outputText> 

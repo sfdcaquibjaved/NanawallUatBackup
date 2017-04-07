@@ -60,13 +60,13 @@
         margin-right: auto;
         }
     </style>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
     <script type="text/javascript">
         var j$ = jQuery.noConflict();
     j$(document).ready(function() {
         //Event listener for click of Upload button
         j$("#uploadButton").click(function(){
+            //alert('test alert');
             prepareFileUploads();
         });
         
@@ -91,7 +91,7 @@
         //alert('files?'+files);
         //Only proceed if there are files selected
         if(files.length == 0){
-            alert('Please select a file!');
+            //alert('Please select a file!');
             return; //end function
         }
         
@@ -107,10 +107,10 @@
         for(i = 0; i < files.length; i++){
             //Determine file display size
             if(files[i].size < 1000000){
-                // alert('inside if'+files[i].size);
+                //alert('inside if'+files[i].size);
                 var displaySize = Math.floor(files[i].size/1000) + 'K';
             }else{
-                // alert('inside else'+files[i].size);
+                //alert('inside else'+files[i].size);
                 var displaySize = Math.round((files[i].size / 1000000)*10)/10 + 'MB';
             }
             
@@ -141,12 +141,12 @@
             currentFile = files[$upload.attr('data-index')];
             // alert('file?'+currentFile);
             /*Build the byteChunkArray array for the current file we are processing. This array is formatted as:
-		['0-179999','180000-359999',etc] and represents the chunks of bytes that will be uploaded individually.*/
+        ['0-179999','180000-359999',etc] and represents the chunks of bytes that will be uploaded individually.*/
         byteChunkArray = new Array();
         
         //First check to see if file size is less than the chunk size, if so first and only chunk is entire size of file
         if(currentFile.size <= CHUNK_SIZE){
-            // alert('Size of file'+currentFile.size);   
+            //alert('Size of file'+currentFile.size);   
             byteChunkArray[0] = '0-' + (currentFile.size - 1);
         }else{
             //Determine how many whole byte chunks make up the file,
@@ -179,7 +179,7 @@
         j$(".uploadBox button").removeAttr("disabled").attr("class","btn");
         
         /*Remove the browse input element and replace it, this essentially removes
-		the selected files and helps prevent duplicate uploads*/
+        the selected files and helps prevent duplicate uploads*/
         j$("#filesInput").replaceWith('<input type="file" name="file" multiple="true" id="filesInput">');
     }
     }
@@ -199,10 +199,10 @@
             var blobChunk = "";
             if (currentFile.mozSlice){
                 blobChunk = currentFile.mozSlice(startByte , stopByte + 1);
-                //  alert('mozilla');
+                // alert('mozilla');
             }else {
                 blobChunk = currentFile.slice(startByte , stopByte + 1);
-                //    alert('chrome');
+                //alert('chrome');
             }
             
             //Create a new reader object, part of HTML5 File API
@@ -270,14 +270,14 @@
     
     <script type="text/javascript">
     var parentId = '{!parentId}';
-    //alert('I am here'+parentId);
+    alert('I am here'+parentId);
     //Will be used by FileUploadJS.js but must be declared here. Static resources don't support dynamic values.
     </script>
     
     <div class="uploadBox">
         <table cellpadding="0" cellspacing="0" class="uploadTable">
             <tr>
-                <td><input type="file" multiple="multiple" id="filesInput" name="files[]" accept="image/*"/></td>
+                <td><input type="file" multiple="true" id="filesInput" name="file"/></td>
                 <td class="buttonTD">
                     <input id="uploadButton" type="button" title="Upload" class="btn" value=" Upload "/>
                     <input id="clear" type="button" title="Clear" class="btn" value=" Clear "/>
