@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="HierarchyController" sidebar="false">
+<apex:page standardController="Account" extensions="ashokHierarchyControll" sidebar="false">
 <apex:form >
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
@@ -53,7 +53,7 @@
           <!--  <apex:column headerValue="Project Name"> --> 
             <apex:column >
             <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSor" >
                  <apex:param value="PrjName" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>

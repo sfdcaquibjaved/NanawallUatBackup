@@ -90,7 +90,7 @@ public class HierarchyController {
                     prjStgWonAmt = prjStgWonAmt + proj.Amount__c; 
                 }
                 
-            if(proj.Stage__c.contains('Quoted')){
+            if(proj.Stage__c.contains('Quoted')&&proj.Amount__c!=NULL){
                 
                 prjStgQtd = prjStgQtd + 1;
                 prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
@@ -99,12 +99,12 @@ public class HierarchyController {
             
         //AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r Order by Amount__c desc Nulls last),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
     
-                AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,
+                AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
                                                        Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
                                                        Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
                                                        Architect_Account__c, Purchaser_Account__c, 
                                                        Purchaser_Account__r.Name from Projects1__r ) from Account 
-                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15) OR id=:string.valueOf(ObjAcc.Id).left(15)]; 
+                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) 
                 
                 String prevAcc ='';
             
@@ -142,7 +142,7 @@ public class HierarchyController {
                              Hierarchy hier = new Hierarchy(prj.Architect_Account__c, prj.Purchaser_Account__c,
                                                             prj.Ordering_Account__c);
 
-                             ordList = [Select Name,Id, Order_Finalized_Date__c, Project__r.Id from Order
+                             ordList = [Select Name,Id, CreatedDate, Order_Finalized_Date__c, Project__r.Id from Order
                                         where Project__r.Id =:prj.Id]; 
                
                              prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
@@ -169,8 +169,10 @@ public class HierarchyController {
                               
                for (Order od : ordList){ 
                         hier.ordFnzDt.add(od.Order_Finalized_Date__c);
+                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
                     }
-
+                         
+                                hier.crtdt = date.newInstance(prj.CreatedDate.year(), prj.CreatedDate.month(), prj.CreatedDate.day()) ;                                 
                         hier.accountName = ac;
                         hier.projectName = prj;
                         hier.architect.Name = prj.Architect_Account__r.Name;
@@ -226,18 +228,22 @@ public class HierarchyController {
         public String projectZipCode{get;set;}
         public String applicationIndustry{get;set;}
         public List<Date> ordFnzDt {get;set;}
+        public List<Date> ordCrtDt {get;set;}
         public List<OpportunityContactRole> ocr {get;set;}
+        public Date crtdt{get;set;}
         
         public Hierarchy()
         {
             
                         ordFnzDt = new List<Date>();
+                                ordCrtDt = new List<Date>();
                         ocr = new List<OpportunityContactRole>();            
         }
         
         public Hierarchy(Id arch, Id purch, Id ordr)
         {            
             ordFnzDt = new List<Date>();
+            ordCrtDt = new List<Date>();
             ocr = new List<OpportunityContactRole>();
             this.architect = new Account();
             this.architect.Id = arch;
@@ -354,9 +360,10 @@ public class HierarchyController {
             
                 if (str.equalsIgnoreCase('PrjName'))
                 {
-                    
+                    system.debug('Data before sorting: '+prjlist);
                      prjlist.sort();
-                
+                     system.debug('Data After sorting: '+prjlist);
+                    
                      List<Hierarchy> prlist = new List<Hierarchy>();
                 
                      for (String s : prjlist)

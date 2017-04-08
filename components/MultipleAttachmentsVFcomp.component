@@ -91,7 +91,9 @@ function move() {
             </header>
             <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound" aria-labelledby="newattachment">
                 <apex:form >
-
+                <br/>
+                <p class="MsoNormal" style="line-height:9.75pt"><b><span style="font-size:8.5pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">Warning: The app doesn't support multiple images taken from Camera. Please use your gallery to upload images</span></b>
+                      </p>
                     <div class="slds-panel__section">
                         <div class="slds-docked-form-footer slds-shrink-none slds-button-group slds-float--left" role="group">
                             <apex:commandButton value="Upload" action="{!SaveAttachments}"  styleClass="slds-button slds-button--neutral" onclick="move()"/>

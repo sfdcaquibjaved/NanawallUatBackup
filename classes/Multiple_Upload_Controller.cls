@@ -1,6 +1,5 @@
 global class Multiple_Upload_Controller {
 public string recrdId{get; set;}
-     
     public Multiple_Upload_Controller()
     {
             
@@ -16,6 +15,7 @@ public string recrdId{get; set;}
         */
                
         //If recordId is blank this is the first part of a multi piece upload
+        list<Attachment> toinsert = new list<Attachment>();
         if(attachmentId == '' || attachmentId == null){
             Attachment att = new Attachment(
                 ParentId = parentId,
@@ -24,18 +24,18 @@ public string recrdId{get; set;}
                 ContentType = contentType
             );
             insert att;
-            
+           ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, att.Name + ' File uploaded successfully'));
             //Return the new attachment Id
-            return att.Id;
-            
+            return att.id;
         }else{
             for(Attachment atm : [select Id, Body from Attachment where Id = :attachmentId]){
                 //Take the body of the current attachment, convert to base64 string, append base64 value sent from page, then convert back to binary for the body
                 update new Attachment(Id = attachmentId, Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
             }
-            
             //Return the Id of the attachment we are currently processing
+            //return attachmentId;
             return attachmentId;
         }
+        
     }
 }
