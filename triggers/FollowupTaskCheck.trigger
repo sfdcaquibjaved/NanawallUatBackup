@@ -138,7 +138,7 @@ system.debug('it was not completed before though!');
 */
                 if( q != null )
                 {
-                    q.Followup_Status__c = 'Reviewed';
+//                    q.Followup_Status__c = 'Reviewed';
                     q.Followup__c = true;
                     quotesToUpdate.put( q.Id, q ); //store it back in .. just in case
                 }

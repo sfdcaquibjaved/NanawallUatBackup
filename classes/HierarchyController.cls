@@ -303,7 +303,7 @@ public class HierarchyController {
             return null;
      }
 
-        public void sortData(String str)
+       public void sortData(String str)
         { 
             
             if (str.equalsIgnoreCase('Amount'))
@@ -383,7 +383,7 @@ public class HierarchyController {
                     
                     ProjectList.set(i,prlist.get(j++));
                 }
-         }
+         } 
                
      }
 }

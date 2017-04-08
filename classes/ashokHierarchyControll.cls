@@ -286,104 +286,25 @@ public class ashokHierarchyControll {
 
                 sortDirection = value;
          }
-
+         public List<Project__c> getProjSiteList() {
+       return ProjSiteList;
+   }
         public PageReference ViewData()
         {
-
+                        
             string sortFullExp = sortExpression  + ' ' + sortDirection;  
-
-            if(sortExp.equalsIgnoreCase('AccName')) sortData('AccName');
-        
-             if (sortExp.equalsIgnoreCase('PrjName')) sortData('PrjName');
+            ProjSiteList = [SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, 
+                                        Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                                        Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c,
+                                        Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, 
+                                        Purchaser_Account__c
+                                        FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY Close_Date__c DESC limit 10];
             
-             if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');
-            
-            if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');    
+               
             
             return null;
-     }
-
-        public void sortData(String str)
-        { 
-            
-            if (str.equalsIgnoreCase('Amount'))
-            {
-
-                amtlst.sort();
-                
-                List<Hierarchy> amtlist = new List<Hierarchy>();
-                
-                for (Decimal s : amtlst)
-                {
-                    
-                     amtlist.add(amtmap.get(s));
-                }
-                    
-                if(sortDirection.equalsIgnoreCase('ASC'))
-                
-                ProjectList = amtlist;
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,amtlist.get(j++));
-             }
-          }
-
-            if (str.equalsIgnoreCase('AccName'))
-            {
-                    
-                acclist.sort();
-                
-                List<Hierarchy> hrlist = new List<Hierarchy>();
-                
-                for (String s : acclist)
-                {
-                    
-                     hrlist.add(accmap.get(s));
-                }
-                    
-                if(sortDirection.equalsIgnoreCase('ASC'))
-                
-                ProjectList = hrlist;
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                    for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
-                    
-                    ProjectList.set(i,hrlist.get(j++));
-                }
-         }
-            
-                if (str.equalsIgnoreCase('PrjName'))
-                {
-                    system.debug('Data before sorting: '+prjlist);
-                     prjlist.sort();
-                     system.debug('Data After sorting: '+prjlist);
-                    
-                     List<Hierarchy> prlist = new List<Hierarchy>();
-                
-                     for (String s : prjlist)
-                     {
-                    
-                        prlist.add(prjmap.get(s));
-                     }
-                    
-                if(sortDirection.equalsIgnoreCase('ASC'))
-                
-                ProjectList = prlist;
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                    for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
-                    
-                    ProjectList.set(i,prlist.get(j++));
-                }
-         }
-               
      }
 }

@@ -9,8 +9,9 @@
         font-size: 25px;
         font-weight: bold;
         }
+       
         .button {
-   background-color: #20b2aa;
+   background-color: #4747d1;
    border: none;
    color: white;
    padding: 15px 32px;
@@ -20,7 +21,9 @@
    font-size: 13px;
    margin: 4px 2px;
    border-radius: 5px;
-   cursor: pointer;
+   
+ 
+    
 }
         .buttonTD{
         padding-left: 6px;
@@ -68,7 +71,7 @@
         color: #333333;
         font-size: 12px;
         padding: 6px;
-        width: 400px;
+        width: 100%;
         }
         .uploadError{
         border-color: #CE0000;
@@ -193,6 +196,7 @@
         processByteChunkArray('');
         
     }else{
+       
         //All uploads completed, enable the input and buttons
         j$(".uploadBox input").removeAttr("disabled");
         j$(".uploadBox button").removeAttr("disabled").attr("class","btn");
@@ -200,6 +204,7 @@
         /*Remove the browse input element and replace it, this essentially removes
         the selected files and helps prevent duplicate uploads*/
         j$("#filesInput").replaceWith('<input type="file" name="file" multiple="true" id="filesInput">');
+        
     }
     }
     
@@ -278,6 +283,7 @@
             //This file has completed, all byte chunks have been uploaded, set status on the div to complete
             $upload.attr('data-status','complete');
             
+            
             //Change name of file to link of uploaded attachment
             $upload.find(".name").html('<a href="' + VIEW_URL + attachmentId + '" target="_blank">'+currentFile.name+'</a>');
             
@@ -285,23 +291,39 @@
             checkForUploads();
         }
     }
+    
     </script>
     
     <script type="text/javascript">
     var parentId = '{!parentId}';
-    
+     function complete(){
+     
+     }
     //Will be used by FileUploadJS.js but must be declared here. Static resources don't support dynamic values.
     </script>
-    <label class="txt"><center>
-    Multiple File Uploader</center>
-    </label>
-    <div class="uploadBox">
+    
+    <p class="MsoNormal" style="line-height:9.75pt">
+        <b>
+            <span style="font-size:8.5pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">Warning: The app doesn't support multiple images taken from Camera. Please use your gallery to upload images
+            </span>
+        </b>
+    </p>
+   
+    <div class="uploadBox ">
         <table cellpadding="0" cellspacing="0" class="uploadTable">
             <tr>
                 <td><input type="file"  multiple="true" id="filesInput" name="file" /></td>
                 <td class="buttonTD">
-                    <input id="uploadButton" type="button" title="Upload" class="button" value=" Upload "/></td>
-                    <td class="buttonTD"><input id="clear" type="button" title="Clear" class="button" value=" Clear "/>
+                    <input id="uploadButton" type="button" title="Upload"  value=" Upload " class ="button" styleClass="slds-button slds-button--brand " />
+                     
+                </td>
+            </tr>
+            <br/> 
+            <tr>
+                <td></td>
+                <td>
+                	&nbsp; &nbsp; &nbsp;
+					 <apex:commandButton value="Back"  onclick="sforce.one.navigateToURL('/{!ParentId}')"  styleClass="slds-button slds-button--brand button" /> 
                 </td>
             </tr>
         </table>

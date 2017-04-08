@@ -711,7 +711,7 @@ System.Debug('Returning abbr name map');
             {           
                 //is this redundant? the task trigger should catch this to set
                 //quote reviewed    
-                q.Followup_Status__c = 'Reviewed';
+//                q.Followup_Status__c = 'Reviewed';
                 q.Viewed__c=true;
                 update q;
                 linenbr='before task load';

@@ -7,8 +7,8 @@ public fileUpload_Redirect(ApexPages.StandardController sc) {
     InstallationRecord= (Installation__c) sc.getRecord();
 }
 
-public PageReference redirect() {
-String userAgent =
+public  PageReference redirect() {
+ String userAgent =
 ApexPages.currentPage().getHeaders().get('USER-AGENT');
 Id pageid = ApexPages.currentPage().getParameters().get('id');
 
