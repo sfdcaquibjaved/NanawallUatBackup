@@ -164,7 +164,7 @@ public class HierarchyController {
                          }
                           }
                         }               
-                                 }    
+                    }    
               }          
                               
                for (Order od : ordList){ 
@@ -172,7 +172,7 @@ public class HierarchyController {
                                 hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
                     }
                          
-                                hier.crtdt = date.newInstance(prj.CreatedDate.year(), prj.CreatedDate.month(), prj.CreatedDate.day()) ;                                 
+                        hier.crtdt = date.newInstance(prj.CreatedDate.year(), prj.CreatedDate.month(), prj.CreatedDate.day()) ;                                 
                         hier.accountName = ac;
                         hier.projectName = prj;
                         hier.architect.Name = prj.Architect_Account__r.Name;

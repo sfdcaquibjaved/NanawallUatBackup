@@ -1,0 +1,2 @@
+<apex:page StandardController="Case" action="{!redirect}" extensions="fileUpload_RedirectCase">
+</apex:page>

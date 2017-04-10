@@ -36,7 +36,7 @@
    </apex:pageBlock>
   <apex:PageBlock >
      <apex:pageBlockSection columns="1">
-         <apex:pageBlockTable var="pr" value="{!ProjectList}" >
+         <apex:pageBlockTable value="{!ProjectList}" var="pr"  >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
              <apex:facet name="header">             

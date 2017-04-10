@@ -29,5 +29,32 @@ public class testfileUpload_Redirect {
          objINS.redirect();
          test.stopTest();
     }
-    
+    static testmethod void method3()
+{
+    list<case> cas = TestDataUtility.createCaseTestData();
+        insert cas;
+         test.startTest();
+         ApexPages.StandardController sc = new ApexPages.StandardController(cas[0]);
+        fileUpload_RedirectCase objCAS = new fileUpload_RedirectCase(sc);
+        PageReference pageRef = Page.MultipleFileUpload_RedirectCase;
+        system.Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getHeaders().put('USER-AGENT','.....iPhone....');
+       
+         objCAS.redirect();
+         test.stopTest();
+    }
+    static testmethod void method4()
+{
+    list<Case> cas = TestDataUtility.createCaseTestData();
+        insert cas;
+         test.startTest();
+         ApexPages.StandardController sc = new ApexPages.StandardController(cas[0]);
+        fileUpload_RedirectCase objCAS = new fileUpload_RedirectCase(sc);
+        PageReference pageRef = Page.MultipleFileUpload_RedirectCase;
+        system.Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getHeaders().put('USER-AGENT','.....Android....');
+       
+         objCAS.redirect();
+         test.stopTest();
+    }
 }

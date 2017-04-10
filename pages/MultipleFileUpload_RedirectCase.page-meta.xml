@@ -3,5 +3,5 @@
     <apiVersion>39.0</apiVersion>
     <availableInTouch>true</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>MultipleFileUpload_Case</label>
+    <label>MultipleFileUpload_RedirectCase</label>
 </ApexPage>
