@@ -197,7 +197,7 @@ public class InstallationTriggerHandler {
                  setZipCode.add(i.Project_Zip_Code__c);
         }
         system.debug(setZipCode);
-        List<Zip_Codes_Master__c> zipCodeList = [SELECT id ,Zip_Code__c ,Territory__c , Installer_Contact__c , Installer_Account__c , Installer_User__c FROM Zip_Codes_Master__c WHERE Zip_Code__c in: setZipCode ];
+        List<Zip_Codes_Master__c> zipCodeList = [SELECT id ,Zip_Code__c ,Territory__c , Installer_Contact__c , Installer_Account__c , Installer_User__c ,Installer_Contact__r.FirstName ,Installer_Contact__r.LastName FROM Zip_Codes_Master__c WHERE Zip_Code__c in: setZipCode ];
 
         system.debug(zipCodeList);
         for(Installation__c i : newTrigger){
@@ -206,6 +206,7 @@ public class InstallationTriggerHandler {
                     if(((i.Project_Country_Canada__c && i.Project_Zip_Code__c.toUppercase().substring(0,3) == zip.Zip_Code__c) ||(!i.Project_Country_Canada__c && i.Project_Zip_Code__c == zip.Zip_Code__c))&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
                             if(zip.Installer_Contact__c != null){
                                     i.Installer_Contact__c = zip.Installer_Contact__c ; 
+                                    i.Installer_Manager__c = zip.Installer_Contact__r.FirstName + ' ' + zip.Installer_Contact__r.LastName;
                             }
                             if(zip.Installer_Account__c != null){
                                     i.Installer_Account__c = zip.Installer_Account__c ;
@@ -214,7 +215,8 @@ public class InstallationTriggerHandler {
                                     i.Assigned_to__c = zip.Installer_User__c ;
                                     i.OwnerID = zip.Installer_User__c ;
                             }
-                        i.Installer_Manager__c = i.Installer_Name__c	 ; 
+                        //System.debug('Before?'+i.Installer_Name__c);
+                        //i.Installer_Manager__c = i.Installer_Name__c	 ; 
                 }
             }
         }

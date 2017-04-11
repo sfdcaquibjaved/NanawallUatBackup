@@ -69,6 +69,7 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
         List < Installation__c > InstallationAccountList = new List < Installation__c > ();
         List<Installation__c> changeInstallerContact = new list<Installation__c>();
         for (installation__c i: trigger.new) {
+            
             if ((Trigger.isBefore) && ((trigger.isInsert) || (trigger.isUpdate && (trigger.oldMap.get(i.ID)
                     .Project__c != i.Project__c)))/*|| (trigger.isUpdate && (trigger.oldMap.get(i.ID).Installer_Contact__c != i.Installer_Contact__c))*/){
                               InstallationAccountList.add(i);
@@ -92,6 +93,7 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
            system.debug('DML 5.2' + Limits.getDMLStatements());
            system.debug('SOQL 5.2' + Limits.getQueries());
         }
+      
         //for assigning installer account and contact to installation record
         if (InstallationAccountList.size() > 0) {
             InstallationTriggerHandler.AssignInstaller(InstallationAccountList);
@@ -106,8 +108,8 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
    if (((trigger.isUpdate) || (trigger.isInsert)) && (trigger.isAfter ))  {
 
         List < Installation__c > InstallationShareList = new List < Installation__c > ();
-        for (installation__c i: trigger.new) {
 
+        for (installation__c i: trigger.new) {
 
             if (((trigger.isInsert) && (Trigger.isAfter)) || (trigger.isUpdate && (trigger.oldMap.get(i.ID).Assigned_to__c != i.Assigned_to__c)))
                 {
@@ -126,6 +128,7 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
             system.debug('DML 7' + Limits.getDMLStatements());
             system.debug('SOQL 7' + Limits.getQueries());
         }
+       
     }
 
     if (trigger.isInsert && trigger.isAfter) {

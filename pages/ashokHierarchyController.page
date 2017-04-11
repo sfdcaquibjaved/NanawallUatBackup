@@ -34,6 +34,11 @@
          </apex:pageBlockTable>
      </apex:pageBlockSection>
    </apex:pageBlock>
+    <apex:pageBlock >
+        <apex:panelGrid columns="2">
+        </apex:panelGrid>>
+    </apex:pageBlock>
+    
   <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >

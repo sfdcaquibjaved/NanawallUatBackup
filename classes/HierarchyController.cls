@@ -29,13 +29,15 @@ public class HierarchyController {
     public Integer prjStgWon{get;set;}
     public Integer prjStgPrg{get;set;}
     public Integer prjStgQtd{get;set;}
-        public Decimal prjStgWonAmt{get;set;}
+    public Decimal prjStgWonAmt{get;set;}
     public Decimal prjStgPrgAmt{get;set;}
     public Decimal prjStgQtdAmt{get;set;}
+    public List<String> noPrjAccs{get;set;}
     
     public HierarchyController(ApexPages.StandardController con){
         
         AccSiteList = new List <Account>();
+        noPrjAccs = new List <String>();
         ordList = new LIST<Order>();
         contrls = new List<Contact>();
         prjList2 = new List<Project__c>();
@@ -122,6 +124,8 @@ public class HierarchyController {
                             hier.accountName = ac;
                 
                             acclist.add(ac.Name);
+                        
+                        	noPrjAccs.add(ac.Name);
                 
                             accmap.put(ac.Name, hier);    
                 
@@ -185,12 +189,12 @@ public class HierarchyController {
                         hier.projectZipCode = prj.Project_Zip_Code__c;
                         hier.applicationIndustry = prj.Application__c;
                         prjlist.add(prj.Name);
-                        prjsts.add(prj.Stage__c + prj.Id);
+                        prjsts.add(prj.Stage__c +''+ prj.Id);
                         amtlst.add(prj.Amount__c);
-                        acclist.add(ac.Name);
-                        accmap.put(ac.Name, hier);
+                        acclist.add(ac.Name +''+prj.Id);
+                        accmap.put(ac.Name+''+prj.Id, hier);
                         prjmap.put(prj.Name, hier);
-                        stsmap.put(prj.Stage__c+ prj.Id,hier);
+                        stsmap.put(prj.Stage__c+''+prj.Id,hier);
                         amtmap.put(prj.Amount__c, hier);
                                 
 /*                       if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete')))
@@ -303,6 +307,7 @@ public class HierarchyController {
             return null;
      }
 
+        
        public void sortData(String str)
         { 
             
@@ -318,22 +323,27 @@ public class HierarchyController {
                     
                      amtlist.add(amtmap.get(s));
                 }
-                    
-                if(sortDirection.equalsIgnoreCase('ASC'))
                 
-                ProjectList = amtlist;
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                	ProjectList = amtlist;
+                    
+                    for(String s: noPrjAccs)
+                    
+                    ProjectList.add(accmap.get(s));
+                }
              
                 else if (sortDirection.equalsIgnoreCase('DESC'))
                 {
                 
-                for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
+                for(Integer i = amtlist.size()-1, j=0;i >=0; i--)
                     
                  ProjectList.set(i,amtlist.get(j++));
              }
           }
 
             if (str.equalsIgnoreCase('AccName'))
-            {
+             {
                     
                 acclist.sort();
                 
@@ -355,6 +365,36 @@ public class HierarchyController {
                     for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
                     
                     ProjectList.set(i,hrlist.get(j++));
+                }
+         }
+            
+            if (str.equalsIgnoreCase('PrjStatus'))
+            {
+                    
+                prjsts.sort();
+                
+                List<Hierarchy> stslist = new List<Hierarchy>();
+                
+                for (String s : prjsts)
+                {
+                    
+                     stslist.add(stsmap.get(s));
+                }
+                    
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                	ProjectList = stslist;
+                    
+                    for(String s: noPrjAccs)
+                    
+                    ProjectList.add(accmap.get(s));
+				}
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                    for(Integer i = stslist.size()-1, j=0;i >=0; i--)
+                    
+                    ProjectList.set(i,stslist.get(j++));
                 }
          }
             
@@ -383,7 +423,12 @@ public class HierarchyController {
                     
                     ProjectList.set(i,prlist.get(j++));
                 }
-         } 
+                              
+                for(String s: noPrjAccs){
+                    
+                    ProjectList.add(accmap.get(s));
+                }
+          } 
                
      }
 }

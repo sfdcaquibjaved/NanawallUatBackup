@@ -1,0 +1,13 @@
+<apex:page standardController="Account" extensions="HierarchyController1" sidebar="false">
+<apex:form >
+ <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="acc" value="{!Account}" >
+         <apex:column headerValue="Corporate Account Name">
+         <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
+         </apex:column>
+         </apex:pageBlockTable>
+     </apex:pageBlockSection>
+    </apex:PageBlock>
+    </apex:form>                                                                        
+     </apex:page>

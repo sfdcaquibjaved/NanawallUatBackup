@@ -154,7 +154,7 @@ public class CaseCommentEmailHelper {
          Created Date   : May 2016
          */
     private void SendCommentEmail(List < String > toAddresses, string replyTo, Case CurrentCase, string CommentBody) {
-        case c = [select id, CaseNumber, Category__c, Subject, Priority, Description from
+        case c = [select id, CaseNumber, Order_Number_formula__c ,Category__c, Subject, Priority, Description from
             case where id = :
                 CurrentCase.id
         ];

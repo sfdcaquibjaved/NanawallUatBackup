@@ -2,8 +2,9 @@
 <apex:form >
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
-         <apex:pageBlockTable var="acc" value="{!Account}" >
+         <apex:pageBlockTable var="acc" value="{!Account}" >          
          <apex:column headerValue="Corporate Account Name">
+         
          <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
          </apex:column>
              <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
@@ -16,7 +17,8 @@
              <apex:column headerValue="Closure">
                  <apex:outputText value="{0,Number,0}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
             </apex:column> -->
-            <apex:column headerValue="Amount Quoted (Total)">
+            <apex:column headerValue="
+             Quoted (Total)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
             </apex:column>
             <apex:column headerValue="Amount (Won)">
@@ -34,108 +36,38 @@
          </apex:pageBlockTable>
      </apex:pageBlockSection>
    </apex:pageBlock>
-  <apex:PageBlock >
-     <apex:pageBlockSection columns="1">
-         <apex:pageBlockTable value="{!ProjectList}" var="pr"  >
-          <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
-             <apex:column >
-             <apex:facet name="header">             
-             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer){!IF(sortExpression=='AccName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
-                 <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-               </apex:facet>
-             <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink>
-             
-             </apex:column>
-
-            <!-- <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" /> -->
-            
-          <!--  <apex:column headerValue="Project Name"> --> 
-            <apex:column >
-            <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSor" >
-                 <apex:param value="PrjName" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet>
-            <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink>
-            </apex:column>
-            
-              <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
-             <apex:column >
-                <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Project Status {!IF(sortExpression=='Stage',IF(sortDirection='ASC','▼','▲'),'')}" >
-                 <apex:param value="Stage" name="column" assignTo="{!sortExpression}" ></apex:param>
-                 </apex:commandLink>
-                 </apex:facet>
-                 <apex:outputText value="{!pr.status}"/>
-                </apex:column>
-              <!--   <apex:column headerValue="Project Amount" > -->
-            <apex:column >
-            <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Amount{!IF(sortExpression=='Amount',IF(sortDirection='ASC','▼','▲'),'')}" >
-                 <apex:param value="Amount" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet>
-                     <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.amount}"/></apex:outputText>
-                 </apex:column>
-                 <apex:column >
-                 <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Project Created Date {!IF(sortExpression=='PCrtDt',IF(sortDirection='ASC','▼','▲'),'')}" >
-                 <apex:param value="PCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet>
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!pr.crtdt}"/></apex:outputText>
-                  </apex:column>
-                 <apex:column >
-                 <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Order Finalized Date {!IF(sortExpression=='OFnzDt',IF(sortDirection='ASC','▼','▲'),'')}" >
-                 <apex:param value="OFnzDt" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet>
-            <apex:DataTable value="{!pr.ordFnzDt}" var="p">
-                  <apex:column >      
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
-                   </apex:column>  
-                 </apex:DataTable>
-                 </apex:column>
-                 <apex:column >
-                 <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='ASC','▼','▲'),'')}" >
-                 <apex:param value="OCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet>
-            <apex:DataTable value="{!pr.ordCrtDt}" var="p">
-                  <apex:column >      
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
-                   </apex:column>  
-                 </apex:DataTable>
-                 </apex:column>
-
-              <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
-                 <apex:column headerValue="Application Industry" value="{!pr.applicationIndustry}" />
-                 <apex:column headerValue="Architect"> <apex:outputLink value="/{!pr.architect}">{!pr.architect.Name}</apex:outputLink></apex:column>
-               <!--  <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>  -->
-                 <apex:column headerValue="Purchaser Account"> <apex:outputLink value="/{!pr.purchaser}">{!pr.purchaser.Name}</apex:outputLink></apex:column>
-             <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
-                 <apex:column headerValue="Ordering Account"> <apex:outputLink value="/{!pr.orderingAccount}">{!pr.orderingAccount.Name}</apex:outputLink></apex:column>
-               <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->
-                 <apex:column >
-                 <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Contact Role Name {!IF(sortExpression=='role',IF(sortDirection='ASC','▼','▲'),'')}" >
-                 <apex:param value="role" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet>
-            <apex:DataTable value="{!pr.ocr}" var="o">
-                  <apex:column >      
-                     <apex:outputLink value="/{!o.ContactId}">{!o.Contact.Name}</apex:outputLink>
-                   </apex:column>  
-                 </apex:DataTable>
-                 </apex:column>
-                 <apex:column value="{!pr.projectCity}" headerValue="Project City" />
-                 <apex:column value="{!pr.projectState}" headerValue="Project State" />
-                 <apex:column value="{!pr.projectZipCode}" headerValue="Project ZipCode" /> 
-         </apex:pageBlockTable>
-     </apex:pageBlockSection> 
-   </apex:pageBlock>
-</apex:form>   
+    <apex:pageBlock >   
+   <apex:panelgrid columns="2">
+       <apex:selectList value="{!selectedField }" size="1">
+        <apex:selectOption itemValue="account.Name" itemLabel="Corporate Account Site Location (End Customer)"/>
+        <apex:selectOption itemValue="accountName.Name" itemLabel="Site Name"/>
+        <apex:selectOption itemValue="projectName.Name" itemLabel="Corporate Account Site Location (End Customer)"/>
+        <apex:selectOption itemValue="amount__C" itemLabel="Amount"/>
+        <apex:selectOption itemValue="RecordType.Name" itemLabel="Record Type"/>
+        <apex:selectOption itemValue="Application__c" itemLabel="Application Industry"/>
+        <apex:selectOption itemValue="architect" itemLabel="architect"/>
+        <apex:selectOption itemValue="purchaser" itemLabel="Purchaser Account"/>
+        <apex:selectOption itemValue="orderingAccount" itemLabel="Ordering Account"/>
+        <apex:selectOption itemValue="Project_City__c" itemLabel="Project City"/>
+        <apex:selectOption itemValue="Project_State__c" itemLabel="Project State"/>
+        <apex:selectOption itemValue="Project_Zip_Code__c" itemLabel="Project ZipCode"/>
+        <apex:selectOption itemValue="stage__c" itemLabel="stage "/>            
+    </apex:selectList>
+    <apex:commandButton value="Sort Table" action="{!sortMethod}" reRender="pgblcktbl"/>
+   </apex:panelgrid>
+  </apex:pageBlock>
+   <apex:pageBlock id="pgblcktbl">
+   <apex:pageblocktable value="{!accList1}" var="pr" >
+   <apex:column value="{!account.name}"/>
+    <apex:column value="{!pr.name}"/>        
+     <apex:column value="{!pr.Amount__c}"/>
+     <apex:column value="{!pr.Stage__c}"/>
+     <apex:column value="{!pr.Application__c}"/>
+      <apex:column value="{!pr.Project_City__c}"/>
+       <apex:column value="{!pr.Project_State__c}"/>
+        <apex:column value="{!pr.Project_Zip_Code__c}"/> 
+        <apex:column value="{!  pr.Purchaser_Account__c}"/>            
+     </apex:pageblocktable>
+  </apex:pageBlock>  
+  </apex:form>   
 </apex:page>

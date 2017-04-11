@@ -503,7 +503,7 @@ public class InstallationTriggerHandler_Test {
        insert pb2;
        
        //Create test data for Orders
-       Order o = new Order(
+       /*Order o = new Order(
             AccountId = accounts[0].id,
             EffectiveDate = system.today(),
             OpportunityId = olstOpportunity[0].id,
@@ -511,7 +511,7 @@ public class InstallationTriggerHandler_Test {
             status='Draft',
             Balance_Received_Date__c = system.today()       
         );
-        insert o;
+        insert o;*/
        
        //Creating test data for PriceBookEntry
        PricebookEntry pbe = new PricebookEntry();
@@ -522,7 +522,7 @@ public class InstallationTriggerHandler_Test {
            
         //Creating test data for OrderItem
        OrderItem otm = new orderitem();
-       otm.OrderId = o.id;
+       //otm.OrderId = o.id;
        otm.PricebookEntryId = pbe.id;
        otm.Quantity = 1;
        otm.UnitPrice = 5532;
@@ -541,7 +541,7 @@ public class InstallationTriggerHandler_Test {
        List<Installation__c> instalList = new List<Installation__c>();
        Installation__c inst = new Installation__c();
        inst.Status__c = 'Open';
-       inst.Order__c = o.id;
+       //inst.Order__c = o.id;
        inst.Installer_Account__c = accounts[0].id;
        instalList.add(inst);
        insert instalList;       
@@ -856,7 +856,7 @@ public class InstallationTriggerHandler_Test {
         
        
        //Create test data for Orders
-       Order o = new Order(
+      /* Order o = new Order(
             AccountId = accounts[0].id,
             EffectiveDate = system.today(),
             OpportunityId = olstOpportunity[0].id,
@@ -864,7 +864,7 @@ public class InstallationTriggerHandler_Test {
             status='Draft',
             Balance_Received_Date__c = system.today()       
         );
-        insert o;
+        insert o;*/
        
        //Creating test data for PriceBookEntry
        PricebookEntry pbe = new PricebookEntry();
@@ -875,7 +875,7 @@ public class InstallationTriggerHandler_Test {
            
         //Creating test data for OrderItem
        OrderItem otm = new orderitem();
-       otm.OrderId = o.id;
+      // otm.OrderId = o.id;
        otm.PricebookEntryId = pbe.id;
        otm.Quantity = 1;
        otm.UnitPrice = 5532;
@@ -1090,7 +1090,7 @@ public class InstallationTriggerHandler_Test {
         
        
        //Create test data for Orders
-       Order o = new Order(
+      /* Order o = new Order(
             AccountId = accounts[0].id,
             EffectiveDate = system.today(),
             OpportunityId = olstOpportunity[0].id,
@@ -1098,7 +1098,7 @@ public class InstallationTriggerHandler_Test {
             status='Draft',
             Balance_Received_Date__c = system.today()       
         );
-        insert o;
+        insert o;*/
        
        //Creating test data for PriceBookEntry
        PricebookEntry pbe = new PricebookEntry();
@@ -1109,7 +1109,7 @@ public class InstallationTriggerHandler_Test {
            
         //Creating test data for OrderItem
        OrderItem otm = new orderitem();
-       otm.OrderId = o.id;
+       //otm.OrderId = o.id;
        otm.PricebookEntryId = pbe.id;
        otm.Quantity = 1;
        otm.UnitPrice = 5532;
@@ -1130,7 +1130,7 @@ public class InstallationTriggerHandler_Test {
        inst.Status__c = 'Open';
         inst.Installation_Address__c = 'Other Address';
        inst.Account__c = accounts[0].id ; 
-       inst.Order__c = o.id;
+       //inst.Order__c = o.id;
        //inst.Quote_Name__c = quo[0].ID ;
        inst.contact__c = con[0].id ; 
        inst.Installer_Account__c = accounts[0].id;
@@ -1151,4 +1151,137 @@ public class InstallationTriggerHandler_Test {
       // otm.Installation__c = instalList[0].id;
       // update otm;        
    }
+    public static testMethod void myUnitTest7(){
+  
+        list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
+            insert tmList;
+        list<Account> acclist = TestDataUtility.createAccountTestData();
+        acclist[0].Certified_Installer__c = true;
+        insert acclist;
+        list<Contact> contest = TestDataUtility.createConTestData();
+        contest[0].AccountId = acclist[0].id;
+        insert contest;
+        list<Opportunity> opplist = TestDataUtility.createOppTestData();
+        insert opplist;
+        test.startTest();
+        list<Quote__C> quolist = TestDataUtility.createQuoteRecords(opplist);
+        insert quolist;
+        User testUnew = TestDataUtility.createUser('System Administrator','test@testingupdate.com');
+        insert testUnew;
+        list<Installation__c> inst = TestDataUtility.createInsTestData();
+        for(Integer i=0;i<inst.size();i++){
+            inst[i].Bypass_Flow__c = true;
+        }
+        inst[0].Quote_Name__c = quolist[0].id;
+        inst[0].Installer_Account__c = acclist[0].id;
+        inst[0].contact__c = contest[0].id;
+        inst[0].Assigned_to__c = testUnew.id;
+        insert inst;
+        Entitlement ent = new Entitlement();
+        ent.Name = '0001sl';
+        ent.AccountId = acclist[0].id;
+        ent.StartDate = system.today();
+        ent.Nana_Quote__c = quolist[0].id;
+        insert ent;
+        inst[0].Installer_Contact__c = contest[0].id;
+        update inst[0];
+        
+        test.stopTest();
+    }
+    public static testMethod void myUnitTest8(){
+  
+        list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
+            insert tmList;
+        list<Account> acclist = TestDataUtility.createAccountTestData();
+        acclist[0].Certified_Installer__c = true;
+        insert acclist;
+        list<Contact> contest = TestDataUtility.createConTestData();
+        contest[0].AccountId = acclist[0].id;
+        insert contest;
+        Project__c prolist = new Project__c();
+        prolist.Project_Zip_Code__c = '94040';
+        prolist.Name = 'Test Project CompetitorHelper_Test';
+             prolist.Application__c = 'Automotive';
+             prolist.Application_2__c = 'Dealership';
+        insert prolist;
+        list<Opportunity> opplist = TestDataUtility.createOppTestData();
+        insert opplist;
+                test.startTest();
+        list<Quote__C> quolist = TestDataUtility.createQuoteRecords(opplist);
+        insert quolist;
+        User testUnew = TestDataUtility.createUser('System Administrator','test@testingupdate.com');
+        insert testUnew;
+        list<Installation__c> inst1 = TestDataUtility.createInsTestData();
+        for(Integer i=0;i<inst1.size();i++){
+            inst1[i].Bypass_Flow__c = true;
+        }
+        inst1[0].Quote_Name__c = quolist[0].id;
+        inst1[0].Installer_Account__c = acclist[0].id;
+        inst1[0].contact__c = contest[0].id;
+        inst1[0].Assigned_to__c = testUnew.id;
+        inst1[0].Project__c = prolist.id;
+        inst1[0].Installation_Date__c = null;
+        insert inst1;
+        Entitlement ent = new Entitlement();
+        ent.Name = '0001sl';
+        ent.AccountId = acclist[0].id;
+        ent.StartDate = system.today();
+        ent.Nana_Quote__c = quolist[0].id;
+        insert ent;
+        inst1[0].Installer_Contact__c = contest[0].id;
+        update inst1[0];
+        
+        test.stopTest();
+    }
+    public static testMethod void myUnitTest9(){
+  
+        list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
+            insert tmList;
+        list<Account> acclist = TestDataUtility.createAccountTestData();
+        acclist[0].Certified_Installer__c = true;
+        insert acclist;
+        list<Contact> contest = TestDataUtility.createConTestData();
+        contest[0].AccountId = acclist[0].id;
+        insert contest;
+        Project__c prolist = new Project__c();
+        prolist.Project_Country__c = 'Canada';
+        prolist.Project_Zip_Code__c = 'M6R2J5';
+        prolist.Name = 'Test Project CompetitorHelper_Test';
+             prolist.Application__c = 'Automotive';
+             prolist.Application_2__c = 'Dealership';
+        insert prolist;
+        list<Opportunity> opplist = TestDataUtility.createOppTestData();
+        insert opplist;
+                test.startTest();
+        list<Quote__C> quolist = TestDataUtility.createQuoteRecords(opplist);
+        insert quolist;
+        list<Quote_Detail__c> qdlist = TestDataUtility.createQuoteDetailData();
+        for(Integer i=0;i<qdlist.size();i++){
+        qdlist[i].Quote__c = quolist[i].id;
+        }
+        insert qdlist;
+        User testUnew = TestDataUtility.createUser('System Administrator','test@testingupdate.com');
+        insert testUnew;
+        list<Installation__c> inst1 = TestDataUtility.createInsTestData();
+        for(Integer j=0;j<inst1.size();j++){
+          inst1[j].Quote_Name__c = quolist[j].id;
+            inst1[j].Bypass_Flow__c = true;
+        }
+        inst1[0].Installer_Account__c = acclist[0].id;
+        inst1[0].contact__c = contest[0].id;
+        inst1[0].Assigned_to__c = testUnew.id;
+        inst1[0].Project__c = prolist.id;
+        inst1[0].Installation_Date__c = null;
+        insert inst1;
+        Entitlement ent = new Entitlement();
+        ent.Name = '0001sl';
+        ent.AccountId = acclist[0].id;
+        ent.StartDate = system.today();
+        ent.Nana_Quote__c = quolist[0].id;
+        insert ent;
+        inst1[0].Installer_Contact__c = contest[0].id;
+        update inst1[0];
+        
+        test.stopTest();
+    }
 }

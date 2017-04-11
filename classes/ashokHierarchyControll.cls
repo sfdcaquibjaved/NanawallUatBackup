@@ -1,6 +1,8 @@
 public class ashokHierarchyControll {
         
     public List <Account> AccSiteList{get;set;}
+    Public string selectedField {get;set;}
+    Public List<Project__c> accList1{get;set;}
     private List<Account> accounts;
     public Account ObjAcc{get;set;}    
     public List<Project__c> ProjSiteList{get;set;}
@@ -15,7 +17,7 @@ public class ashokHierarchyControll {
     private String sortDirection = 'ASC';
     private String sortExp = 'AccName';
     public List<String> acclist;
-    public Map <String,Hierarchy> accmap;    
+    public Map <String,Hierarchy> accmap;    //
     public List<String> prjlist;
     public Map <String,Hierarchy> prjmap;
     public List<String> prjsts;
@@ -281,7 +283,52 @@ public class ashokHierarchyControll {
             else return sortDirection;
 
          }
-
+         Public void sortMethod(){
+  if(selectedField == 'account.Name')
+     accList1 =  [SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                       FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY name DESC limit 100];
+  else if(selectedField == 'Amount__c')
+     accList1 = [SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                       FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY Amount__c DESC limit 100];
+  
+                        else if(selectedField == 'Stage__c')
+    accList1 =[SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                       FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY stage__c DESC limit 100];
+                        else if(selectedField == 'Application__c')
+    accList1 =[SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                       FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY application__c DESC limit 100];
+                       else if(selectedField == 'Project_City__c')
+    accList1 =[SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                       FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY Project_City__c DESC limit 100];
+                       else if(selectedField == 'Project_State__c')
+    accList1 =[SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                       FROM Project__c
+                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                       OR Purchaser_Account__c =:objAcc.Id ORDER BY Project_State__c DESC limit 100];
+ }
+ 
          public void setSortDirection(String value) 
          { 
 

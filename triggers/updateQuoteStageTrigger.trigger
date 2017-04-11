@@ -98,7 +98,7 @@ trigger updateQuoteStageTrigger on Order (before insert,before update,after inse
       //OrderTriggerStagesHelper.updateOrderNumber(trigger.new);
       //OrderTriggerStagesHelper.updateOrderNumberBasedonManufacturing(trigger.new);
       //OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModel(trigger.new);
-      OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
+     OrderTriggerStagesHelper.orderNumberBasedOnRangeAndModelNew(trigger.new);
      
    }
    //To validate the dupe orders 
