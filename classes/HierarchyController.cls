@@ -29,10 +29,13 @@ public class HierarchyController {
     public Integer prjStgWon{get;set;}
     public Integer prjStgPrg{get;set;}
     public Integer prjStgQtd{get;set;}
+    public Integer prjStglost{get;set;}
     public Decimal prjStgWonAmt{get;set;}
     public Decimal prjStgPrgAmt{get;set;}
     public Decimal prjStgQtdAmt{get;set;}
+    public Decimal prjStglostAmt{get;set;}
     public List<String> noPrjAccs{get;set;}
+    public String relType{get;set;}
     
     public HierarchyController(ApexPages.StandardController con){
         
@@ -61,22 +64,129 @@ public class HierarchyController {
         psiz = 0;
         prjWon = 0;
         prjStgQtd = 0;
+        prjStglost=0; 
         prjStgPrg = 0;
         prjStgWon = 0;
         prjStgQtdAmt = 0.0;
+         prjStglostAmt = 0.0;
         prjStgPrgAmt = 0.0;
         prjStgWonAmt = 0.0;
+        relType='';
         
-         ProjSiteList = [SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
-                       Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+         ProjSiteList = [SELECT Id, Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+                       Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
                        FROM Project__c
                        WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                       OR Purchaser_Account__c =:objAcc.Id ORDER BY Close_Date__c DESC];
+                       OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id ORDER BY Close_Date__c DESC];
         
         
         for(Project__c proj: ProjSiteList){
         
+            /*if (proj.Architect_Account__c == objAcc.Id)
+                { 
+                    relType = 'Architect Account';
+                }
+                else if (proj.Brand_Name_Account__c == objAcc.Id) relType = 'Brand Name Account';
+                else if (proj.End_Customer_Account__c == objAcc.Id) relType = 'End Customer Account';
+                else if (proj.Franchise_Account__c == objAcc.Id) 
+                {
+                    relType = 'Franchisee Account';
+                }
+                else if (proj.Franchisor_Account__c == objAcc.Id) 
+                {
+                    relType = 'Franchisor Account';
+                }
+                else if (proj.Other_Influencer_Account__c == objAcc.Id) relType = 'Other Influencer Account';
+                else if (proj.Purchaser_Account__c == objAcc.Id) relType = 'Purchaser Account';
+                else if (proj.Ordering_Account__c == objAcc.Id) relType = 'Ordering Account';
+
+                             Hierarchy hier = new Hierarchy(proj.Architect_Account__c, proj.Purchaser_Account__c,
+                                                            proj.Ordering_Account__c);
+
+                             ordList = [Select Name,Id, CreatedDate, Order_Finalized_Date__c, Project__r.Id from Order
+                                        where Project__r.Id =:proj.Id]; 
+               
+                             prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
+                                                     StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
+                                        from Project__c where Id =:string.valueOf(proj.Id).left(15) AND Ordering_Account__c != null];
+                        
+               for (Project__c prj2 : prjList2)
+               for (List<Opportunity> oppList : prj2.Opportunities__r)
+               {
+                   for (Opportunity opp : oppList)
+                   {
+                       oppList2 = [Select Id, Name, AccountId, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
+                                    from Opportunity where Id =:string.valueOf(opp.Id).left(15) AND AccountId =: prj2.Ordering_Account__c];
+                                
+                        for (Opportunity op : oppList2){
+                                        for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
+                                        for(OpportunityContactRole ocr : ocrs ){
+                                                hier.ocr.add(ocr); System.debug('ocr: '+ocr +' hier.ocr:'+hier.ocr);
+                             }
+                          }
+                        }               
+                    }    
+              }          
+                              
+               for (Order od : ordList){ 
+                        hier.ordFnzDt.add(od.Order_Finalized_Date__c);
+                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
+                    }
+                         
+                        hier.crtdt = date.newInstance(proj.CreatedDate.year(), proj.CreatedDate.month(), proj.CreatedDate.day()) ;                                 
+                        
+                        if(relType.equalsIgnoreCase('End Customer Account'))
+                        hier.accountName.Id = proj.End_Customer_Account__c;
+                        else            
+                        if(relType.equalsIgnoreCase('Purchaser Account'))
+                        hier.accountName.Id = proj.Purchaser_Account__c;
+                        else
+                        if(relType.equalsIgnoreCase('Ordering Account'))
+                        hier.accountName.Id = proj.Ordering_Account__c;
+                        else
+                        if(relType.equalsIgnoreCase('Architect Account'))
+                        hier.accountName.Id = proj.Architect_Account__c;        
+                        else
+                        if(relType.equalsIgnoreCase('Franchisee Account'))
+                        hier.accountName.Id = proj.Franchise_Account__c;
+                        
+                        hier.projectName = proj;
+                        hier.architect.Name = proj.Architect_Account__r.Name;
+                        hier.purchaser.Name = proj.Purchaser_Account__r.Name;
+                        hier.orderingAccount.Name = proj.Ordering_Account__r.Name;    
+                        hier.amount = proj.Amount__c;
+                        hier.status = proj.Stage__c;
+                        hier.projectCity = proj.Project_City__c;
+                        hier.projectState = proj.Project_State__c;
+                        hier.projectZipCode = proj.Project_Zip_Code__c;
+                        hier.applicationIndustry = proj.Application__c;
+                        prjlist.add(proj.Name);
+                        prjsts.add(proj.Stage__c +''+ proj.Id);
+                        amtlst.add(proj.Amount__c);
+                        acclist.add(hier.accountName +''+proj.Id);
+                        accmap.put(hier.accountName+''+proj.Id, hier);
+                        prjmap.put(proj.Name, hier);
+                        stsmap.put(proj.Stage__c+''+proj.Id,hier);
+                        amtmap.put(proj.Amount__c, hier);
+                                
+                    if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete')))
+                       {
+                            
+                            amountWon = amountWon + prj.Amount__c;
+                            prjWon = prjWon + 1;
+                        }
+                        
+//                        if(prj.Amount__c!=null)
+                        
+//                        totalAmount = totalAmount + prj.Amount__c;
+                        
+                        ProjectList.add(hier);
+                         
+/                      prevAcc = hier.accountName.Name;*/
+            
+           
+            
             if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
             
             if(proj.Stage__c.contains('Prospesting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || proj.Stage__c.contains('Order Negotiation'))
@@ -92,57 +202,60 @@ public class HierarchyController {
                     prjStgWonAmt = prjStgWonAmt + proj.Amount__c; 
                 }
                 
-            if(proj.Stage__c.contains('Quoted')&&proj.Amount__c!=NULL){
+            if(proj.Stage__c.contains('Quoted')){
                 
                 prjStgQtd = prjStgQtd + 1;
+                
+                if(proj.Amount__c!=NULL){
                 prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
-            }
+            }}
+            
+            if(proj.Stage__c.contains('lost')||proj.Stage__c.contains('Inactivity')||proj.Stage__c.contains('On Hold')||proj.Stage__c.contains('Cancelled')){
+                
+                prjStglost = prjStglost + 1;
+                
+                if(proj.Amount__c!=NULL){
+                prjStglostAmt = prjStglostAmt + proj.Amount__c;
+            }}
+            
     }
             
-        //AccSiteList = [Select Name, Id, Type, (Select Name,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r Order by Amount__c desc Nulls last),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
+        //AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r Order by Amount__c desc Nulls last),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
     
                 AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
                                                        Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
                                                        Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
                                                        Architect_Account__c, Purchaser_Account__c, 
                                                        Purchaser_Account__r.Name from Projects1__r ) from Account 
-                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) 
+                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
                 
-                String prevAcc ='';
+             String prevAcc ='';
             
             for (Account ac : AccSiteList)
             {
-                                                 
                     psiz = ProjectList.size()-1;
-                
+
                     if(ac.Projects1__r.size()==0)
-                    
                     {
-                       
                             Hierarchy hier = new Hierarchy();
                 
                             hier.accountName = ac;
                 
                             acclist.add(ac.Name);
                         
-                        	noPrjAccs.add(ac.Name);
+                            noPrjAccs.add(ac.Name);
                 
                             accmap.put(ac.Name, hier);    
                 
                             ProjectList.add(hier);
                      }
-                    
         else
         {
-     
             for (List<Project__c> prjs: ac.Projects1__r)
-            
             {
                          //siz+=prjs.size();           
-                             
                      for(Project__c prj : prjs)
                      { 
- 
                              Hierarchy hier = new Hierarchy(prj.Architect_Account__c, prj.Purchaser_Account__c,
                                                             prj.Ordering_Account__c);
 
@@ -202,8 +315,8 @@ public class HierarchyController {
                             
                             amountWon = amountWon + prj.Amount__c;
                             prjWon = prjWon + 1;
-                        }
-*/                        
+                        }*/
+                        
 //                        if(prj.Amount__c!=null)
                         
 //                        totalAmount = totalAmount + prj.Amount__c;
@@ -238,14 +351,15 @@ public class HierarchyController {
         
         public Hierarchy()
         {
-            
+                        this.accountName = new Account();
                         ordFnzDt = new List<Date>();
                                 ordCrtDt = new List<Date>();
                         ocr = new List<OpportunityContactRole>();            
         }
         
         public Hierarchy(Id arch, Id purch, Id ordr)
-        {            
+        {     
+            this.accountName = new Account();
             ordFnzDt = new List<Date>();
             ordCrtDt = new List<Date>();
             ocr = new List<OpportunityContactRole>();
@@ -298,11 +412,11 @@ public class HierarchyController {
 
             if(sortExp.equalsIgnoreCase('AccName')) sortData('AccName');
         
-             if (sortExp.equalsIgnoreCase('PrjName')) sortData('PrjName');
+             else if (sortExp.equalsIgnoreCase('PrjName')) sortData('PrjName');
             
-             if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');
+           else  if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');
             
-            if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');    
+            else if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');    
             
             return null;
      }
@@ -326,7 +440,7 @@ public class HierarchyController {
                 
                 if(sortDirection.equalsIgnoreCase('ASC')){
                 
-                	ProjectList = amtlist;
+                    ProjectList = amtlist;
                     
                     for(String s: noPrjAccs)
                     
@@ -383,12 +497,12 @@ public class HierarchyController {
                     
                 if(sortDirection.equalsIgnoreCase('ASC')){
                 
-                	ProjectList = stslist;
+                    ProjectList = stslist;
                     
                     for(String s: noPrjAccs)
                     
                     ProjectList.add(accmap.get(s));
-				}
+                }
                 else if (sortDirection.equalsIgnoreCase('DESC'))
                 {
                 
@@ -419,7 +533,8 @@ public class HierarchyController {
                 else if (sortDirection.equalsIgnoreCase('DESC'))
                 {
                 
-                    for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
+                    for(Integer i = prlist.size()-1, j=0;i >=0; i--)
+                    //for(Integer i = projectlist.size()-1, j=0;i >=0; i--)
                     
                     ProjectList.set(i,prlist.get(j++));
                 }

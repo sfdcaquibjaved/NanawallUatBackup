@@ -66,7 +66,8 @@
       <apex:column value="{!pr.Project_City__c}"/>
        <apex:column value="{!pr.Project_State__c}"/>
         <apex:column value="{!pr.Project_Zip_Code__c}"/> 
-        <apex:column value="{!  pr.Purchaser_Account__c}"/>            
+        <apex:column value="{!  pr.Purchaser_Account__c}"/>       
+         <apex:column value="{!  pr.Ordering_Account__c}"/>         
      </apex:pageblocktable>
   </apex:pageBlock>  
   </apex:form>   

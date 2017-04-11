@@ -11,6 +11,7 @@
              <apex:column value="{!prjStgWon}" headerValue="Projects Won"/> 
              <apex:column value="{!prjStgPrg}" headerValue="Projects In Progress"/>
              <apex:column value="{!prjStgQtd}" headerValue="Project Quoted"/>
+             <apex:column value="{!prjStglost}" headerValue="Project Lost"/>
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
              <apex:column headerValue="Closure">
@@ -27,6 +28,9 @@
             </apex:column>
             <apex:column headerValue="Amount (Quoted)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
+            </apex:column>
+            <apex:column headerValue="Amount (Lost)">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
             </apex:column>
            <!-- <apex:column headerValue="Amount Won">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!amountWon}" /></apex:outputText> 
