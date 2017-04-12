@@ -245,7 +245,7 @@ public class HierarchyController {
                         prjmap.put(prj.Name, hier);
                         stsmap.put(prj.Stage__c+''+prj.Id,hier);
                         amtmap.put(prj.Amount__c, hier);
-                        if(prj.Architect_Account__c!=null)
+                        if(prj.Project_City__c != '')
                         {
                         	citylst.add(prj.Project_City__c);
                         	cityMap.put(prj.Project_City__c+''+prj.Id, hier);
@@ -254,7 +254,7 @@ public class HierarchyController {
                         {
                          	noPrjCity.add(hier);		    
                         }
-                        if(prj.Architect_Account__c!=null)
+                        if(prj.Project_State__c!='')
                         { 
                         	statelst.add(prj.Project_State__c+''+prj.Id); 
                         	stateMap.put(prj.Project_State__c+''+prj.Id, hier);
@@ -263,7 +263,7 @@ public class HierarchyController {
                         {
                          	noPrjState.add(hier);		    
                         }
-                        if(prj.Architect_Account__c!=null)
+                        if(prj.Project_Zip_Code__c!='')
                         {
                          	ziplst.add(prj.Project_Zip_Code__c+''+prj.Id); 
                         	zipMap.put(prj.Project_Zip_Code__c+''+prj.Id, hier);
