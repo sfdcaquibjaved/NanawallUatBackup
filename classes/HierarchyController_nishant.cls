@@ -524,8 +524,8 @@ public class HierarchyController_nishant{
      public PageReference runSearch() {
     
     
-    String AccName = Apexpages.currentPage().getParameters().get('AName');
-    System.debug('Account Name: '+AccName); 
+    String AccName = Apexpages.currentPage().getParameters().get('AccName');
+    System.debug('Varun '+AccName); 
     String ProjectName = Apexpages.currentPage().getParameters().get('ProjectName');
     String city = Apexpages.currentPage().getParameters().get('city');
     String state = Apexpages.currentPage().getParameters().get('state');
@@ -533,7 +533,7 @@ public class HierarchyController_nishant{
     String Country = Apexpages.currentPage().getParameters().get('Country');
    
    
-   System.debug('Varun'+AccName);
+   
     List<Hierarchy> Phier = new List<Hierarchy>();
     
     for(Hierarchy hr : ProjectList)
