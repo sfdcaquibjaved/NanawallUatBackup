@@ -20,12 +20,15 @@ public class FeedItemTriggerHandler {
 
         for (FeedItem NewFeed: newTrigger) {
             
-            if(NewFeed.Body.contains('you have been assigned')){
+            if(NewFeed.Body.contains('you have been assigned') ){
                 NewFeed.CreatedById = label.Lee_User_ID ; 
                 NewFeed.Visibility = 'AllUsers';
                 
             }
-           
+            
+            else if( NewFeed.Body.Contains('Post with related document body')){
+                NewFeed.Visibility = 'AllUsers';
+            }
                       
                     
         }

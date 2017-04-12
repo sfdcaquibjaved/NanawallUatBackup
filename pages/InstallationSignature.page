@@ -43,6 +43,7 @@
             Visualforce.remoting.Manager.invokeAction(
                         '{!$RemoteAction.InstallationSignatureController.uploadSignature}', signatureData, recId,
                         function(result, event){
+                            
                             if(!!result && event.status){
                                 var res = JSON.parse(result);
                                 if(res.success){
