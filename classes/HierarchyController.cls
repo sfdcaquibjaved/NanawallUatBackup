@@ -36,10 +36,50 @@ public class HierarchyController {
     public Decimal prjStglostAmt{get;set;}
     public List<String> noPrjAccs{get;set;}
     public String relType{get;set;}
+    public Map<DateTime,Hierarchy> dtmap{get;set;}
+    public List<DateTime> dtlst{get;set;}
+    public List<String> archList {get;set;}
+    public Map<String,Hierarchy> archMap {get;set;}
+    public List<Hierarchy> noPrjArch {get;set;}
+	public List<String> purchlst {get;set;}
+    public Map<String,Hierarchy> purchMap {get;set;}
+    public List<Hierarchy> noPrjPurch {get;set;}
+	public List<String> ordlst {get;set;}
+    public Map<String,Hierarchy> ordMap {get;set;}
+    public List<Hierarchy> noPrjOrd {get;set;}
+	public List<String> citylst {get;set;}
+    public Map<String,Hierarchy> cityMap {get;set;}
+	public List<String> statelst {get;set;}
+    public Map<String,Hierarchy> stateMap {get;set;}
+	public List<String> ziplst {get;set;}
+    public Map<String,Hierarchy> zipMap {get;set;}
+    public List<Hierarchy> noPrjCity {get;set;}
+    public List<Hierarchy> noPrjState {get;set;}
+    public List<Hierarchy> noPrjZip {get;set;}
     
     public HierarchyController(ApexPages.StandardController con){
         
         AccSiteList = new List <Account>();
+        noPrjArch = new List<Hierarchy>();
+        archList = new List<String>();
+        archMap = new Map<String,Hierarchy>();
+		noPrjPurch = new List<Hierarchy>();
+        purchlst = new List<String>();
+        purchMap = new Map<String,Hierarchy>();
+		noPrjOrd = new List<Hierarchy>();
+        ordlst = new List<String>();
+        ordMap = new Map<String,Hierarchy>();
+        citylst = new List<String>();
+        cityMap = new Map<String,Hierarchy>();
+        statelst = new List<String>();
+        stateMap = new Map<String,Hierarchy>();
+        ziplst = new List<String>();
+        zipMap = new Map<String,Hierarchy>();
+        noPrjCity = new List<Hierarchy>();
+        noPrjState = new List<Hierarchy>();
+        noPrjZip = new List<Hierarchy>();
+		dtlst = new List<DateTime>();
+        dtmap = new Map<DateTime,Hierarchy>();
         noPrjAccs = new List <String>();
         ordList = new LIST<Order>();
         contrls = new List<Contact>();
@@ -68,7 +108,7 @@ public class HierarchyController {
         prjStgPrg = 0;
         prjStgWon = 0;
         prjStgQtdAmt = 0.0;
-         prjStglostAmt = 0.0;
+        prjStglostAmt = 0.0;
         prjStgPrgAmt = 0.0;
         prjStgWonAmt = 0.0;
         relType='';
@@ -79,117 +119,12 @@ public class HierarchyController {
                        WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
                        OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id ORDER BY Close_Date__c DESC];
-        
-        
+  
         for(Project__c proj: ProjSiteList){
-        
-            /*if (proj.Architect_Account__c == objAcc.Id)
-                { 
-                    relType = 'Architect Account';
-                }
-                else if (proj.Brand_Name_Account__c == objAcc.Id) relType = 'Brand Name Account';
-                else if (proj.End_Customer_Account__c == objAcc.Id) relType = 'End Customer Account';
-                else if (proj.Franchise_Account__c == objAcc.Id) 
-                {
-                    relType = 'Franchisee Account';
-                }
-                else if (proj.Franchisor_Account__c == objAcc.Id) 
-                {
-                    relType = 'Franchisor Account';
-                }
-                else if (proj.Other_Influencer_Account__c == objAcc.Id) relType = 'Other Influencer Account';
-                else if (proj.Purchaser_Account__c == objAcc.Id) relType = 'Purchaser Account';
-                else if (proj.Ordering_Account__c == objAcc.Id) relType = 'Ordering Account';
 
-                             Hierarchy hier = new Hierarchy(proj.Architect_Account__c, proj.Purchaser_Account__c,
-                                                            proj.Ordering_Account__c);
-
-                             ordList = [Select Name,Id, CreatedDate, Order_Finalized_Date__c, Project__r.Id from Order
-                                        where Project__r.Id =:proj.Id]; 
-               
-                             prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
-                                                     StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
-                                        from Project__c where Id =:string.valueOf(proj.Id).left(15) AND Ordering_Account__c != null];
-                        
-               for (Project__c prj2 : prjList2)
-               for (List<Opportunity> oppList : prj2.Opportunities__r)
-               {
-                   for (Opportunity opp : oppList)
-                   {
-                       oppList2 = [Select Id, Name, AccountId, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
-                                    from Opportunity where Id =:string.valueOf(opp.Id).left(15) AND AccountId =: prj2.Ordering_Account__c];
-                                
-                        for (Opportunity op : oppList2){
-                                        for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
-                                        for(OpportunityContactRole ocr : ocrs ){
-                                                hier.ocr.add(ocr); System.debug('ocr: '+ocr +' hier.ocr:'+hier.ocr);
-                             }
-                          }
-                        }               
-                    }    
-              }          
-                              
-               for (Order od : ordList){ 
-                        hier.ordFnzDt.add(od.Order_Finalized_Date__c);
-                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
-                    }
-                         
-                        hier.crtdt = date.newInstance(proj.CreatedDate.year(), proj.CreatedDate.month(), proj.CreatedDate.day()) ;                                 
-                        
-                        if(relType.equalsIgnoreCase('End Customer Account'))
-                        hier.accountName.Id = proj.End_Customer_Account__c;
-                        else            
-                        if(relType.equalsIgnoreCase('Purchaser Account'))
-                        hier.accountName.Id = proj.Purchaser_Account__c;
-                        else
-                        if(relType.equalsIgnoreCase('Ordering Account'))
-                        hier.accountName.Id = proj.Ordering_Account__c;
-                        else
-                        if(relType.equalsIgnoreCase('Architect Account'))
-                        hier.accountName.Id = proj.Architect_Account__c;        
-                        else
-                        if(relType.equalsIgnoreCase('Franchisee Account'))
-                        hier.accountName.Id = proj.Franchise_Account__c;
-                        
-                        hier.projectName = proj;
-                        hier.architect.Name = proj.Architect_Account__r.Name;
-                        hier.purchaser.Name = proj.Purchaser_Account__r.Name;
-                        hier.orderingAccount.Name = proj.Ordering_Account__r.Name;    
-                        hier.amount = proj.Amount__c;
-                        hier.status = proj.Stage__c;
-                        hier.projectCity = proj.Project_City__c;
-                        hier.projectState = proj.Project_State__c;
-                        hier.projectZipCode = proj.Project_Zip_Code__c;
-                        hier.applicationIndustry = proj.Application__c;
-                        prjlist.add(proj.Name);
-                        prjsts.add(proj.Stage__c +''+ proj.Id);
-                        amtlst.add(proj.Amount__c);
-                        acclist.add(hier.accountName +''+proj.Id);
-                        accmap.put(hier.accountName+''+proj.Id, hier);
-                        prjmap.put(proj.Name, hier);
-                        stsmap.put(proj.Stage__c+''+proj.Id,hier);
-                        amtmap.put(proj.Amount__c, hier);
-                                
-                    if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete')))
-                       {
-                            
-                            amountWon = amountWon + prj.Amount__c;
-                            prjWon = prjWon + 1;
-                        }
-                        
-//                        if(prj.Amount__c!=null)
-                        
-//                        totalAmount = totalAmount + prj.Amount__c;
-                        
-                        ProjectList.add(hier);
-                         
-/                      prevAcc = hier.accountName.Name;*/
-            
-           
-            
             if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
             
-            if(proj.Stage__c.contains('Prospesting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || proj.Stage__c.contains('Order Negotiation'))
+            if(proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || proj.Stage__c.contains('Order Negotiation'))
                 {
                 prjStgPrg = prjStgPrg +1; prjStgPrgAmt = prjStgPrgAmt + proj.Amount__c;     
             }
@@ -210,13 +145,13 @@ public class HierarchyController {
                 prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
             }}
             
-            if(proj.Stage__c.contains('lost')||proj.Stage__c.contains('Inactivity')||proj.Stage__c.contains('On Hold')||proj.Stage__c.contains('Cancelled')){
+            if(proj.Stage__c.contains('Closed Lost - Project Lost')||proj.Stage__c.contains('Closed - Inactivity')||proj.Stage__c.contains('On Hold')||proj.Stage__c.contains('Cancelled')){
                 
                 prjStglost = prjStglost + 1;
                 
-                if(proj.Amount__c!=NULL){
+                if(proj.Amount__c!=NULL)
                 prjStglostAmt = prjStglostAmt + proj.Amount__c;
-            }}
+            }
             
     }
             
@@ -229,7 +164,7 @@ public class HierarchyController {
                                                        Purchaser_Account__r.Name from Projects1__r ) from Account 
                                                        where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
                 
-             String prevAcc ='';
+            String prevAcc ='';
             
             for (Account ac : AccSiteList)
             {
@@ -278,8 +213,8 @@ public class HierarchyController {
                                         for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
                                         for(OpportunityContactRole ocr : ocrs ){
                                                 hier.ocr.add(ocr); System.debug('ocr: '+ocr +' hier.ocr:'+hier.ocr);
-                         }
-                          }
+                         		}
+                          	}
                         }               
                     }    
               }          
@@ -290,6 +225,7 @@ public class HierarchyController {
                     }
                          
                         hier.crtdt = date.newInstance(prj.CreatedDate.year(), prj.CreatedDate.month(), prj.CreatedDate.day()) ;                                 
+                        dtlst.add(prj.CreatedDate);
                         hier.accountName = ac;
                         hier.projectName = prj;
                         hier.architect.Name = prj.Architect_Account__r.Name;
@@ -309,7 +245,62 @@ public class HierarchyController {
                         prjmap.put(prj.Name, hier);
                         stsmap.put(prj.Stage__c+''+prj.Id,hier);
                         amtmap.put(prj.Amount__c, hier);
-                                
+                        if(prj.Architect_Account__c!=null)
+                        {
+                        	citylst.add(prj.Project_City__c);
+                        	cityMap.put(prj.Project_City__c+''+prj.Id, hier);
+                        }
+                        else
+                        {
+                         	noPrjCity.add(hier);		    
+                        }
+                        if(prj.Architect_Account__c!=null)
+                        { 
+                        	statelst.add(prj.Project_State__c+''+prj.Id); 
+                        	stateMap.put(prj.Project_State__c+''+prj.Id, hier);
+                        }
+                        else
+                        {
+                         	noPrjState.add(hier);		    
+                        }
+                        if(prj.Architect_Account__c!=null)
+                        {
+                         	ziplst.add(prj.Project_Zip_Code__c+''+prj.Id); 
+                        	zipMap.put(prj.Project_Zip_Code__c+''+prj.Id, hier);
+                        }
+                        else
+                        {
+                         	noPrjZip.add(hier);		    
+                        }
+                        dtmap.put(prj.CreatedDate,hier);
+                        if(prj.Architect_Account__c!=null)
+                         { 
+                        	archList.add(prj.Architect_Account__r.Name+''+prj.Id);
+                        	archMap.put(prj.Architect_Account__r.Name+''+prj.Id, hier); 
+                         }         
+                         else
+                         {
+                         	noPrjArch.add(hier);		    
+                         }
+                         if(prj.Purchaser_Account__c!=null)
+                         { 
+                        	purchlst.add(prj.Purchaser_Account__r.Name+''+prj.Id);
+                        	purchMap.put(prj.Purchaser_Account__r.Name+''+prj.Id, hier); 
+                         }         
+                         else
+                         {
+                         	noPrjPurch.add(hier);		    
+                         }
+                         if(prj.Ordering_Account__c!=null)
+                         { 
+                        	ordlst.add(prj.Ordering_Account__r.Name+''+prj.Id);
+                        	ordMap.put(prj.Ordering_Account__r.Name+''+prj.Id, hier); 
+                         }         
+                         else
+                         {
+                         	noPrjOrd.add(hier);		    
+                         }
+                         
 /*                       if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete')))
                        {
                             
@@ -353,7 +344,7 @@ public class HierarchyController {
         {
                         this.accountName = new Account();
                         ordFnzDt = new List<Date>();
-                                ordCrtDt = new List<Date>();
+                        ordCrtDt = new List<Date>();
                         ocr = new List<OpportunityContactRole>();            
         }
         
@@ -416,7 +407,21 @@ public class HierarchyController {
             
            else  if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');
             
-            else if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');    
+            else if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');   
+            
+            else if (sortExp.equalsIgnoreCase('PCrtDt')) sortData('PrjCreatedDate');
+            
+            else if (sortExp.equalsIgnoreCase('Arch')) sortData('Architect');
+			
+            else if (sortExp.equalsIgnoreCase('Purch')) sortData('Purchaser');
+            
+            else if (sortExp.equalsIgnoreCase('Ordering')) sortData('Ordering');
+            
+            else if (sortExp.equalsIgnoreCase('City')) sortData('City');
+			
+            else if (sortExp.equalsIgnoreCase('State')) sortData('State');
+            
+            else if (sortExp.equalsIgnoreCase('Zipcode')) sortData('Zipcode');
             
             return null;
      }
@@ -424,7 +429,240 @@ public class HierarchyController {
         
        public void sortData(String str)
         { 
+           if (str.equalsIgnoreCase('PrjCreatedDate'))
+            {
+
+                dtlst.sort();
+                
+                List<Hierarchy> dtlist = new List<Hierarchy>();
+                
+                for (DateTime s : dtlst)
+                {
+                    
+                     dtlist.add(dtmap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = dtlist;
+                    
+                    for(String s: noPrjAccs)
+                    
+                    ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = dtlist.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,dtlist.get(j++));
+             }
+          }
             
+            if (str.equalsIgnoreCase('Purchaser'))
+            {
+
+                purchlst.sort();
+                
+                List<Hierarchy> purchList = new List<Hierarchy>();
+                
+                for (String s : purchlst)
+                {
+                     purchList.add(purchMap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = purchList;
+                    
+                    for (Hierarchy hr: noPrjPurch)
+                    	
+                        ProjectList.add(hr);
+			                    
+                    for(String s: noPrjAccs)
+                  		
+                        ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = purchList.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,purchList.get(j++));
+             }
+          }
+            
+          if (str.equalsIgnoreCase('City'))
+            {
+
+                citylst.sort();
+                
+                List<Hierarchy> cityList = new List<Hierarchy>();
+                
+                for (String s : citylst)
+                {
+                     cityList.add(cityMap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = cityList;
+                    
+                    for (Hierarchy hr: noPrjCity)
+                    	
+                        ProjectList.add(hr);
+			                    
+                    for(String s: noPrjAccs)
+                  		
+                        ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = cityList.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,cityList.get(j++));
+             }
+          }
+            
+          if (str.equalsIgnoreCase('State'))
+            {
+
+                statelst.sort();
+                
+                List<Hierarchy> stateList = new List<Hierarchy>();
+                
+                for (String s : statelst)
+                {
+                     stateList.add(stateMap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = stateList;
+                    
+                    for (Hierarchy hr: noPrjState)
+                    	
+                        ProjectList.add(hr);
+			                    
+                    for(String s: noPrjAccs)
+                  		
+                        ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = stateList.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,stateList.get(j++));
+             }
+          }
+            
+          if (str.equalsIgnoreCase('Zipcode'))
+            {
+
+                ziplst.sort();
+                
+                List<Hierarchy> zipList = new List<Hierarchy>();
+                
+                for (String s : ziplst)
+                {
+                     zipList.add(purchMap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = zipList;
+                    
+                    for (Hierarchy hr: noPrjZip)
+                    	
+                        ProjectList.add(hr);
+			                    
+                    for(String s: noPrjAccs)
+                  		
+                        ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = zipList.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,zipList.get(j++));
+             }
+          }  
+            
+          if (str.equalsIgnoreCase('Ordering'))
+            {
+
+                ordlst.sort();
+                
+                List<Hierarchy> ordList = new List<Hierarchy>();
+                
+                for (String s : ordlst)
+                {
+                     ordList.add(ordMap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = ordList;
+                    
+                    for (Hierarchy hr: noPrjOrd)
+                    	
+                        ProjectList.add(hr);
+			                    
+                    for(String s: noPrjAccs)
+                  		
+                        ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = ordList.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,ordList.get(j++));
+             }
+          }  
+           
+            if (str.equalsIgnoreCase('Architect'))
+            {
+
+                archList.sort();
+                
+                List<Hierarchy> archlst = new List<Hierarchy>();
+                
+                for (String s : archList)
+                {
+                     archlst.add(archMap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = archlst;
+                    
+                    for (Hierarchy hr: noPrjArch)
+                    	
+                        ProjectList.add(hr);
+			                    
+                    for(String s: noPrjAccs)
+                  		
+                        ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = archlst.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,archlst.get(j++));
+             }
+          }
             if (str.equalsIgnoreCase('Amount'))
             {
 
@@ -546,4 +784,5 @@ public class HierarchyController {
           } 
                
      }
+
 }

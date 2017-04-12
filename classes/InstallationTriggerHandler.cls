@@ -185,6 +185,16 @@ public class InstallationTriggerHandler {
         set <string> setZipCode = new set<string>() ; 
         System.debug('change?'+newTrigger);
         
+        Zip_Code_Range_for_Bill_Leon__c myCS1 = Zip_Code_Range_for_Bill_Leon__c.getValues('Northern NJ');
+        Integer start1 = Integer.valueof(myCS1.Zip_Code_del__c);
+        Integer end1 = Integer.valueof(myCS1.Zip_Code_End_Value__c);
+        Zip_Code_Range_for_Bill_Leon__c myCS2 = Zip_Code_Range_for_Bill_Leon__c.getValues('NY State');
+        Integer start2 = Integer.valueof(myCS2.Zip_Code_del__c);
+        Integer end2 = Integer.valueof(myCS2.Zip_Code_End_Value__c);
+        Zip_Code_Range_for_Paul_Nalette__c myCS3 = Zip_Code_Range_for_Paul_Nalette__c.getValues('Zip Range');
+        Integer start3 = Integer.valueof(myCS3.Start_Value__c);
+        Integer end3 = Integer.valueof(myCS3.End_Value__c);
+        
         for(Installation__C i : newTrigger){
             system.debug(i.Project_Country_Canada__c);
             if(i.Project_Country_Canada__c){
@@ -193,21 +203,38 @@ public class InstallationTriggerHandler {
                     setZipCode.add(zip.substring(0,3));
                     }
                }
-               else if(i.Project_Zip_Code__c!= null && i.Project_Zip_Code__c!='')
-                 setZipCode.add(i.Project_Zip_Code__c);
+            else if(i.Project_Zip_Code__c!= null && i.Project_Zip_Code__c!=''){
+                setZipCode.add(i.Project_Zip_Code__c);
+                
+            }
         }
-        system.debug(setZipCode);
+        system.debug('setZipCode'+setZipCode);
         List<Zip_Codes_Master__c> zipCodeList = [SELECT id ,Zip_Code__c ,Territory__c , Installer_Contact__c , Installer_Account__c , Installer_User__c ,Installer_Contact__r.FirstName ,Installer_Contact__r.LastName FROM Zip_Codes_Master__c WHERE Zip_Code__c in: setZipCode ];
 
         system.debug(zipCodeList);
         for(Installation__c i : newTrigger){
             if(zipCodeList.size() > 0){
                 for(Zip_Codes_Master__c zip : zipCodeList){
+                    Integer projectzip;
+                    if(!i.Project_Country_Canada__c){
+                    projectzip = Integer.valueof(i.Project_Zip_Code__c);
+                    }
+                            System.debug('projectzip2'+projectzip); 
+                         if((projectzip <= end1 && projectzip >= start1) || (projectzip <= end2 && projectzip >= start2)){
+                             i.Assigned_to_Bill_Leon__c = true;
+                               i.OwnerId = Label.Bill_Leon_UserId;
+                         }
+                         else if(projectzip <= end3 && projectzip >= start3){
+                               i.Assigned_to_Paul_Nalette__c = true;
+                               i.OwnerId = Label.Paul_Nalette_UserId;
+                         }
+                            else
                     if(((i.Project_Country_Canada__c && i.Project_Zip_Code__c.toUppercase().substring(0,3) == zip.Zip_Code__c) ||(!i.Project_Country_Canada__c && i.Project_Zip_Code__c == zip.Zip_Code__c))&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
-                            if(zip.Installer_Contact__c != null){
-                                    i.Installer_Contact__c = zip.Installer_Contact__c ; 
-                                    i.Installer_Manager__c = zip.Installer_Contact__r.FirstName + ' ' + zip.Installer_Contact__r.LastName;
-                            }
+                        System.debug('Here');
+                        if(zip.Installer_Contact__c != null){
+                               i.Installer_Contact__c = zip.Installer_Contact__c ; 
+                               i.Installer_Manager__c = zip.Installer_Contact__r.FirstName + ' ' + zip.Installer_Contact__r.LastName;
+                         }
                             if(zip.Installer_Account__c != null){
                                     i.Installer_Account__c = zip.Installer_Account__c ;
                             }
@@ -215,6 +242,7 @@ public class InstallationTriggerHandler {
                                     i.Assigned_to__c = zip.Installer_User__c ;
                                     i.OwnerID = zip.Installer_User__c ;
                             }
+                    
                         //System.debug('Before?'+i.Installer_Name__c);
                         //i.Installer_Manager__c = i.Installer_Name__c	 ; 
                 }

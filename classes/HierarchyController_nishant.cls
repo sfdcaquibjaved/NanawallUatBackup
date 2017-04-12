@@ -1,9 +1,10 @@
-public class ashokHierarchyControll {
-        
+public class HierarchyController_nishant{
+    public string AccName{get;set;}
+    
+      
     public List <Account> AccSiteList{get;set;}
     public Account ObjAcc{get;set;}    
     public List<Project__c> ProjSiteList{get;set;}
-    list<Hierarchy> lstw = new list<Hierarchy>();
     public Integer prjWon {get;set;}
     public Integer siz {get;set;}
     public Integer psiz {get;set;}
@@ -38,7 +39,7 @@ public class ashokHierarchyControll {
     public List<String> noPrjAccs{get;set;}
     public String relType{get;set;}
     
-    public ashokHierarchyControll(ApexPages.StandardController con){
+    public HierarchyController_nishant(ApexPages.StandardController con){
         
         AccSiteList = new List <Account>();
         noPrjAccs = new List <String>();
@@ -73,7 +74,7 @@ public class ashokHierarchyControll {
         prjStgPrgAmt = 0.0;
         prjStgWonAmt = 0.0;
         relType='';
-        
+       
          ProjSiteList = [SELECT Id, Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
                        Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
                        FROM Project__c
@@ -81,18 +82,82 @@ public class ashokHierarchyControll {
                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
                        OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id ORDER BY Close_Date__c DESC];
                        
-        AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
-                       Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
-                       Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
-                       Architect_Account__c, Purchaser_Account__c, 
-                       Purchaser_Account__r.Name from Projects1__r ) from Account 
-                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
+                    
                        
                       
         
         
-        for(Project__c proj: ProjSiteList)
-        {    
+        for(Project__c proj: ProjSiteList){
+        
+            /*
+
+                             
+                                
+                        for (Opportunity op : oppList2){
+                                        for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
+                                        for(OpportunityContactRole ocr : ocrs ){
+                                                hier.ocr.add(ocr); System.debug('ocr: '+ocr +' hier.ocr:'+hier.ocr);
+                             }
+                          }
+                        }               
+                    }    
+              }          
+                              
+               for (Order od : ordList){ 
+                        hier.ordFnzDt.add(od.Order_Finalized_Date__c);
+                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
+                    }
+                         
+                        hier.crtdt = date.newInstance(proj.CreatedDate.year(), proj.CreatedDate.month(), proj.CreatedDate.day()) ;                                 
+                        
+                        if(relType.equalsIgnoreCase('End Customer Account'))
+                        hier.accountName.Id = proj.End_Customer_Account__c;
+                        else            
+                        if(relType.equalsIgnoreCase('Purchaser Account'))
+                        hier.accountName.Id = proj.Purchaser_Account__c;
+                        else
+                        if(relType.equalsIgnoreCase('Ordering Account'))
+                        hier.accountName.Id = proj.Ordering_Account__c;
+                        else
+                        if(relType.equalsIgnoreCase('Architect Account'))
+                        hier.accountName.Id = proj.Architect_Account__c;        
+                        else
+                        if(relType.equalsIgnoreCase('Franchisee Account'))
+                        hier.accountName.Id = proj.Franchise_Account__c;
+                        
+                        hier.projectName = proj;
+                        hier.architect.Name = proj.Architect_Account__r.Name;
+                        hier.purchaser.Name = proj.Purchaser_Account__r.Name;
+                        hier.orderingAccount.Name = proj.Ordering_Account__r.Name;    
+                        hier.amount = proj.Amount__c;
+                        hier.status = proj.Stage__c;
+                        hier.projectCity = proj.Project_City__c;
+                        hier.projectState = proj.Project_State__c;
+                        hier.projectZipCode = proj.Project_Zip_Code__c;
+                        hier.applicationIndustry = proj.Application__c;
+                        prjlist.add(proj.Name);
+                        prjsts.add(proj.Stage__c +''+ proj.Id);
+                        amtlst.add(proj.Amount__c);
+                        acclist.add(hier.accountName +''+proj.Id);
+                        accmap.put(hier.accountName+''+proj.Id, hier);
+                        prjmap.put(proj.Name, hier);
+                        stsmap.put(proj.Stage__c+''+proj.Id,hier);
+                        amtmap.put(proj.Amount__c, hier);
+                                
+                    if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete')))
+                       {
+                            
+                            amountWon = amountWon + prj.Amount__c;
+                            prjWon = prjWon + 1;
+                        }
+                        
+//                        if(prj.Amount__c!=null)
+                        
+//                        totalAmount = totalAmount + prj.Amount__c;
+                        
+                        ProjectList.add(hier);
+                         
+/                      prevAcc = hier.accountName.Name;*/
             
            
             
@@ -129,6 +194,7 @@ public class ashokHierarchyControll {
             
     }
             
+        //AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r Order by Amount__c desc Nulls last),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
     
                 AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
                                                        Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
@@ -454,4 +520,38 @@ public class ashokHierarchyControll {
           } 
                
      }
+     
+     public PageReference runSearch() {
+    
+    
+    String AccName = Apexpages.currentPage().getParameters().get('AName');
+    System.debug('Account Name: '+AccName); 
+    String ProjectName = Apexpages.currentPage().getParameters().get('ProjectName');
+    String city = Apexpages.currentPage().getParameters().get('city');
+    String state = Apexpages.currentPage().getParameters().get('state');
+    String zipcode = Apexpages.currentPage().getParameters().get('zipcode');
+    String Country = Apexpages.currentPage().getParameters().get('Country');
+   
+   
+   System.debug('Nishant'+AccName);
+    List<Hierarchy> Phier = new List<Hierarchy>();
+    
+    for(Hierarchy hr : ProjectList)
+    
+    {
+       if(AccName != null)
+        {
+          if(hr.accountName.Name.contains('Cactus Club Café- park-royal'))
+           {
+             Phier.add(hr);
+             
+           }
+        }
+    } 
+    ProjectList.clear(); 
+   // ProjectList = Phier;
+
+    // run the query again
+   return null;
+  }
 }

@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="HierarchyController" sidebar="false">
+<apex:page standardController="Account" extensions="ashokHierarchyControll" sidebar="false">
 <apex:form >
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
@@ -46,19 +46,18 @@
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
-             <apex:facet name="header">             
-             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer){!IF(sortExpression=='AccName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
-                 <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-               </apex:facet>
-             <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink>
-             
+                    <apex:facet name="header">             
+                    <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer){!IF(sortExpression=='AccName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                    <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
+                    </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink>             
              </apex:column>
 
             <!-- <apex:column value="{!pr.accountName.Name}" headerValue="Site Name" /> -->
             
-          <!--  <apex:column headerValue="Project Name"> --> 
-            <apex:column >
+                    <!--  <apex:column headerValue="Project Name"> --> 
+                <apex:column >
             <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='ASC','▼','▲'),'')}" >
                  <apex:param value="PrjName" name="column" assignTo="{!sortExpression}" ></apex:param>
