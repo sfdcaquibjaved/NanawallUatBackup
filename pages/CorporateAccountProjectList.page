@@ -8,7 +8,7 @@
                 <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
             </apex:pageBlockSection>
             <apex:pageBlockSection rendered="{!lstProject.size > 0}" >
-                <apex:outputText label="Sites Total" value="{!lstAccount.size - 1}"></apex:outputText>
+                <apex:outputText label="Sites Total" value="{!lstAccount.size}"></apex:outputText>
                 <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
                 
                 <apex:outputText label="Projects Total" value="{!lstProject.size}" />

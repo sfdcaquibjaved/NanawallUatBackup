@@ -52,4 +52,81 @@ public class AttachmentUtility {
 
         }
     }
+    
+    
+     /*	
+     	 Method Name    : moveAttachment
+         Purpose        : This Method serves the pupose of moving signature attachment on Installation form to files and deleting attachment.
+		 Input Parameter: List of attachment  
+         Created Date: April 2017
+         */
+    
+    public static void moveAttachment(List < attachment > newAttachment) {
+        
+        set<ID> AttachmentID = new set<ID> () ;
+        String insfprefix;
+        Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
+       
+        //Getting ID of Installation Form Object
+        for(Schema.SObjectType stype : gd.values()){
+                Schema.DescribeSObjectResult r = stype.getDescribe();
+            if(r.getName() == 'Installation_Form__c'){
+                insfprefix = r.getKeyPrefix();
+            }
+        }
+        
+        List < ContentVersion > ContentVersionInsert = new List <ContentVersion>() ;
+        
+        for(Attachment a:newAttachment) {
+            string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
+            if(myIdPrefix.equals(insfprefix) && (a.name == 'Signature.png')){
+                
+                ContentVersion cont = new ContentVersion();
+                cont.versionData = a.Body;
+        	    cont.title = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
+       		    cont.pathOnClient ='eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
+                
+                ContentVersionInsert.add(cont);
+                AttachmentID.add(a.ID);
+                
+            }
+        }
+        
+        try{
+            //Inserting ContentVersion
+            insert ContentVersionInsert ;
+        }
+        catch(exception e){
+            system.debug('Exception is:' +e);
+        }
+
+        List <FeedItem> FeedItemContentList = new List <FeedItem> () ;
+       	List<Attachment> AttachmentDelete = new List <Attachment> () ;
+        
+        for(ContentVersion C : ContentVersionInsert ){
+            for(Attachment a : newAttachment ){ 
+                if(c.versionData == a.Body ){
+                    //Attaching FeedItem to ContentVersion and InstallationForm
+           			FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                	FeedItemContentList.add(elm);
+                    
+                }
+            }
+        }
+        
+        try{
+            //Insert FeedItem
+            insert FeedItemContentList ;
+            //Delete Attachment
+            Delete [select id from Attachment where id in :AttachmentID];
+            
+            
+        }
+        catch(exception e)
+        {
+            system.debug('Exception is ' +e);
+        }
+        
+    }
+    
 }

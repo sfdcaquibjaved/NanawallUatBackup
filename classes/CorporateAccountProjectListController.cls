@@ -47,8 +47,8 @@ public with sharing class CorporateAccountProjectListController
         if(objAcc.Id != null)
         {
             
-            lstAccount = [SELECT Id,parentID, Name FROM Account WHERE Ultimate_ParentId__c = :string.valueOf(objAcc.Id).left(15) OR Parent.Id = :string.valueOf(objAcc.Id).left(15)];
-            system.debug('lstAccount -> ' + lstAccount);
+            lstAccount = [SELECT Id,parentID, Name FROM Account WHERE (Ultimate_ParentId__c = :string.valueOf(objAcc.Id).left(15) OR Parent.Id = :string.valueOf(objAcc.Id).left(15)) AND id !=:string.valueOf(objAcc.Id).left(15)];
+            
             
             architects = [SELECT Id, Name FROM Account WHERE Type='Architecture Firm'];
             
@@ -59,9 +59,9 @@ public with sharing class CorporateAccountProjectListController
             lstProj = [SELECT Id, Name, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
                        Architect_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
                        FROM Project__c
-                       WHERE Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                       WHERE ( Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                       OR Purchaser_Account__c =:objAcc.Id ORDER BY Close_Date__c DESC];
+                       OR Purchaser_Account__c =:objAcc.Id ) AND (Stage__c!='Duplicate') ORDER BY Close_Date__c DESC];
                        
             
             for (Project__c proj : lstProj) {

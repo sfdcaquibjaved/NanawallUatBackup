@@ -35,13 +35,33 @@
            <!-- <apex:column headerValue="Amount Won">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!amountWon}" /></apex:outputText> 
             </apex:column> -->
-           <apex:column headerValue="Amount Quoted (Total)">
+           <apex:column headerValue="Total Amount">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
             </apex:column> -->
          </apex:pageBlockTable>
      </apex:pageBlockSection>
    </apex:pageBlock>
-  <apex:PageBlock >
+  
+  
+   <apex:pageBlock >
+   <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null, true,false)}"/>
+          <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
+              <apex:panelGrid columns="6" cellspacing="10">
+              <apex:outputLabel value="Account Name:" style="align:center;"/><apex:inputText value="{!accFilter}"/>
+              <apex:outputLabel value="Project Name:"/><apex:inputText value="{!prjFilter}"/>
+               <apex:outputLabel value="Project/Account City:"/><apex:inputText value="{!cityFilter}"/>
+               <apex:outputLabel value="Project/Account State:"/><apex:inputText value="{!stateFilter}"/>
+               <apex:outputLabel value="Project/Account Zipcode:"/><apex:inputText value="{!zipFilter}"/>
+              </apex:panelGrid>
+              
+            <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+      
+     
+     
+    </apex:pageBlock>
+      
+  <apex:PageBlock >    
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
@@ -119,7 +139,15 @@
                  </apex:column>
 
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
-                 <apex:column headerValue="Application Industry" value="{!pr.applicationIndustry}" />
+             <apex:column >
+                <apex:facet name="header">
+                <apex:commandLink action="{!viewData}" value="Application Industry {!IF(sortExpression=='AppIndustry',IF(sortDirection='ASC','▼','▲'),'')}" >
+                 <apex:param value="AppIndustry" name="column" assignTo="{!sortExpression}" ></apex:param>
+                 </apex:commandLink>
+                 </apex:facet>
+                 <apex:outputText value="{!pr.applicationIndustry}" />
+                </apex:column>
+
                  <apex:column >
                 <apex:facet name="header">
                 <apex:commandLink action="{!viewData}" value="Architect {!IF(sortExpression=='Arch',IF(sortDirection='ASC','▼','▲'),'')}" >
@@ -190,10 +218,7 @@
                  </apex:facet>
                  <apex:outputText value="{!pr.projectZipCode}"/> 
                 </apex:column>
-
-                 
-                 
-                 
+        
          </apex:pageBlockTable>
      </apex:pageBlockSection> 
    </apex:pageBlock>

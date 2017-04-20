@@ -1,7 +1,7 @@
 public class HierarchyController_nishant{
-    public string AccName{get;set;}
+    Public string myInput{get;set;}
     
-      
+    String AccName = Apexpages.currentPage().getParameters().get('AName');  
     public List <Account> AccSiteList{get;set;}
     public Account ObjAcc{get;set;}    
     public List<Project__c> ProjSiteList{get;set;}
@@ -522,24 +522,22 @@ public class HierarchyController_nishant{
      }
      
      public PageReference runSearch() {
+    System.debug(myInput);
     
-    
-    String AccName = Apexpages.currentPage().getParameters().get('AccName');
-    System.debug('Varun '+AccName); 
+    String AName1 = Apexpages.currentPage().getParameters().get('AName');
+    System.debug('Account Name: '+AccName); 
     String ProjectName = Apexpages.currentPage().getParameters().get('ProjectName');
     String city = Apexpages.currentPage().getParameters().get('city');
     String state = Apexpages.currentPage().getParameters().get('state');
     String zipcode = Apexpages.currentPage().getParameters().get('zipcode');
     String Country = Apexpages.currentPage().getParameters().get('Country');
    
-   
-   
     List<Hierarchy> Phier = new List<Hierarchy>();
     
     for(Hierarchy hr : ProjectList)
     
     {
-       if(AccName != null)
+       if(AName1 != null)
         {
           if(hr.accountName.Name.contains('Cactus Club Café- park-royal'))
            {

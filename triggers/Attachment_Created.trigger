@@ -53,4 +53,7 @@ trigger Attachment_Created on Attachment (after insert) {
     {
         AttachmentUtility.AttachmentHandler(Trigger.new);
     }
+    if(trigger.isInsert && trigger.isAfter){
+        AttachmentUtility.moveAttachment(Trigger.new);
+    }
 }

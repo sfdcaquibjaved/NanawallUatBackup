@@ -51,9 +51,10 @@
      </apex:pageBlockSection>
    </apex:pageBlock>
                                                <!-- Nishant Filter -->
+   
    <apex:pageBlock >
        <apex:actionFunction name="searchServer" action="{!runSearch}"  rerender="results,debug,errors">
-          <apex:param name="AName" assignTo="{!AccName}" value="" />
+          <apex:param name="AName"  value="" />
           <apex:param name="ProjectName" value="" />
           <apex:param name="city" value="" />
           <apex:param name="state" value="" />
@@ -64,7 +65,7 @@
  <table cellpadding="1" cellspacing="1">
       <tr>
         <td style="font-weight:bold;width:100px">Account Name </td>
-        <td><input type="text" id="AccName" />
+        <td><apex:inputText value="{!myinput}"/> <input type="text" id="AName" value="{!myinput}" />
         </td>
         <td style="font-weight:bold;width:100px" align="right">Project Name </td>
         <td><input type="text" id="ProjectName" />
@@ -96,7 +97,6 @@
       </table>
    
    </apex:pageBlock>
-   
    
                                                <!-- *************  -->
    

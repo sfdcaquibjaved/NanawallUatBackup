@@ -84,5 +84,27 @@ public class AttachmentUtility_Test {
         insert attList[0];
 
     }
+    static testMethod void unitTest2() {
+        list<Installation__c> instlist = TestDataUtility.createInsTestData();
+        insert instlist;
+        list<Installation_Form__c> insflist= new list<Installation_Form__c>();
+        Installation_Form__c inf = new Installation_Form__c();
+        inf.Installation_Number__c = instlist[0].id;
+        insflist.add(inf);
+        insert insflist;
+        
+        Test.startTest();
+        list < Attachment > attList = new list < Attachment > ();
+        Attachment attach = new Attachment();
+        attach.Name = 'Signature.png';
+        Blob bodyBlob = Blob.valueOf('Unit Test Attachment Body');
+        attach.body = bodyBlob;
+        attach.parentId = insflist[0].id;
+
+        attList.add(attach);
+
+        insert attList[0];
+        Test.stopTest();
+    }
 
 }

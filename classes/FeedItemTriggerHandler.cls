@@ -20,17 +20,17 @@ public class FeedItemTriggerHandler {
 
         for (FeedItem NewFeed: newTrigger) {
             
-            if(NewFeed.Body.contains('you have been assigned') ){
+            if( (NewFeed.Type == 'TextPost') && (NewFeed.Body.contains('you have been assigned')) ){
                 NewFeed.CreatedById = label.Lee_User_ID ; 
                 NewFeed.Visibility = 'AllUsers';
                 
             }
-            
-            else if( NewFeed.Body.Contains('Post with related document body')){
-                NewFeed.Visibility = 'AllUsers';
-            }
+            String ParentIDofFeed = NewFeed.ParentId ; 
+                if(String.valueOf(ParentIDofFeed).substring(0,3) == 'a5x' ){
+                     NewFeed.Visibility = 'AllUsers';
+                }
                       
-                    
+                     
         }
     } 
   }

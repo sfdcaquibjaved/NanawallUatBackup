@@ -12,7 +12,7 @@ global class EmailTaskCaller {
 	WebService static boolean SendQuoteEmail4( string SalesforceQuoteID, integer PDFHistoryID,integer CADHistoryID, string ModelDescription, string ShowroomInfo, string NDGLink_OverrideURL, boolean SendToCustomer, boolean SendToRep ) {
 	
 
-		Quote__c q = [SELECT id,Cleaned_Discount__c, Cleaned_Quote_ID__c, Discount__c, Responsible_Rep__r.Email, Opportunity__r.Owner.Email, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
+		Quote__c q = [SELECT id, Responsible_Rep__c, Cleaned_Discount__c, Cleaned_Quote_ID__c, Discount__c, Responsible_Rep__r.Email, Opportunity__r.Owner.Email, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
 				//need a workflow action when you print a quote, this method could be refactored
 		q.Followup_Status__c ='Reviewing';
 		q.Print_Date__c = DateTime.now();
@@ -255,9 +255,7 @@ global class EmailTaskCaller {
 		string emailAdd_rep = '';
 //		if(SendToRep )
 		{
-			if(q.Responsible_Rep__r != null && q.Responsible_Rep__r.Email != null && q.Responsible_Rep__r.Email != '' )
-				emailAdd_rep = q.Responsible_Rep__r.Email;
-			else   emailAdd_rep = q.Opportunity__r.Owner.Email;
+			emailAdd_rep = q.Opportunity__r.Owner.Email;
 			
 		}
 		
@@ -295,6 +293,14 @@ global class EmailTaskCaller {
 			rep_ccs.add(  u.Email3__c);
 		if(u.Email4__c != null && u.Email4__c != '' )
 			rep_ccs.add(  u.Email4__c);
+			
+		if(q.Responsible_Rep__r != null 
+			&& q.Responsible_Rep__r.Email != null 
+			&& q.Responsible_Rep__r.Email != '' )
+			rep_ccs.add( q.Responsible_Rep__r.Email);
+
+			
+			
 			
 		email_rep.setCcAddresses(rep_ccs );
 		

@@ -17,11 +17,14 @@ public class InstallationSignatureController {
     public InstallationSignatureController(ApexPages.StandardController stdController){
      }
     
+   
+    
               /*
              Method Name: uploadSignature
              Purpose: To handle signatureon InstallationSignature page
              Created Date: June 2016
              */
+    
     
     @RemoteAction
     public static String uploadSignature(String b64SignData, String id){
@@ -33,14 +36,14 @@ public class InstallationSignatureController {
         ret.message = 'Signature uploaded successfully';
         try{
              Blob signature = EncodingUtil.base64Decode(b64SignData);
-           /* Attachment att = new Attachment();
+            Attachment att = new Attachment();
             att.body = signature;
             att.ContentType = 'image/png';
             att.name = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
             att.IsPrivate = false;
             att.ParentId = id;
             insert att; 
-            */
+            
             ContentVersion cont = new ContentVersion();
             cont.versionData = signature;
         	cont.title = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
@@ -74,6 +77,8 @@ public class InstallationSignatureController {
         return JSON.serialize(ret);
     }
     
+    
+   
     
      private class returnData{
         Boolean success {get;set;}

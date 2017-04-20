@@ -1,15 +1,7 @@
-<apex:page standardController="Installation_Form__c" extensions="InstallationSignatureController" docType="html-5.0" showHeader="false" sidebar="false" standardStylesheets="false" >
-    <apex:stylesheet value="{!URLFOR($Resource.slds120_1,'assets/styles/salesforce-lightning-design-system.css')}"/> 
-    
-    
-    <script src="{!URLFOR($Resource.sPad_1,'')}"/>
+<apex:page standardController="Installation__c" extensions="ZVFSignaturePadController" docType="html-5.0" showHeader="false" sidebar="false" standardStylesheets="false" >
+    <apex:stylesheet value="{!URLFOR($Resource.slds120,'assets/styles/salesforce-lightning-design-system.css')}"/> 
+    <script src="{!URLFOR($Resource.sPad,'')}"/>
     <script src='/canvas/sdk/js/publisher.js'></script>
-    <apex:form >
-       
-                <apex:commandButton value="Save Signature" onclick="uploadSignature(); return false;" styleClass="button"/>
-    </apex:form>
-
-
     <script>
         var signaturePad;
         var canvas;
@@ -31,24 +23,18 @@
             resizeCanvas();
             signaturePad = new SignaturePad(canvas);
         }    
-                
         function sPadClear(){
             signaturePad.clear();
         }
-    
 
         function uploadSignature(){
-            alert('I am here');
             signatureData = signaturePad.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
-            alert('signatureData' +signatureData);
+            
             Visualforce.remoting.Manager.invokeAction(
-                        '{!$RemoteAction.InstallationSignatureController.uploadSignature}', signatureData, recId,
+                        '{!$RemoteAction.ZVFSignaturePadController.uploadSignature}', signatureData, recId,
                         function(result, event){
-                            
                             if(!!result && event.status){
-                                
                                 var res = JSON.parse(result);
-                                
                                 if(res.success){
                                 }else{
                                     alert('Error:' +  res.message);
@@ -58,14 +44,9 @@
                             }
                             Sfdc.canvas.publisher.publish({name:"publisher.close",payload:{refresh:"true"}});
                     },{escape: false});
-            if(sforce.one){
-            	var attachid = '{!$CurrentPage.parameters.Id}';
-            	
-				sforce.one.back(true);
                 
-            }
         }
-        
+    
         function resizeCanvas() {
             var ratio =  Math.max(window.devicePixelRatio || 1, 1);
             canvas.width = canvas.offsetWidth * ratio;
@@ -91,6 +72,5 @@
                 <canvas class="sPad" id="sPad"/>
             </div>
         </div>
-        
     </body>
 </apex:page>

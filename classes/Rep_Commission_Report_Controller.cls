@@ -239,11 +239,12 @@ public with sharing class Rep_Commission_Report_Controller {
             soql += ' Base_Reduction__c,  Base_Commission__c,  Overage_Commission__c, Base_Commission_Pct__c, Shipping_Zip__c, Drawing_Deposit_Amount__c, ';
             soql += ' Overage_Commission_First__c, Overage_Commission_Second__c, Overage_Commission_Third__c, BaseOrExcess_First__c, BaseOrExcess_Second__c , BaseOrExcess_Third__c,   ';
             soql += ' Out_WtdDisc_c__c, In_WtdDisc_c__c ';
-            soql += ' FROM Report_Total_Order_Report_Data_Point__c ';
+            soql += ' FROM Total_Order_Report_Data_Point__c ';
  
             soql += ' WHERE ';
             soql += '( ';
-            soql += '   ( Balance_Received_Date__c >= '+d1.format('yyyy-MM-dd')+'   AND Balance_Received_Date__c <= '+d2.format('yyyy-MM-dd')+'  AND Balance_Amount__c > 0  ) ';
+            soql += '   ( Order_Finalized_Date__c >= '+d1.format('yyyy-MM-dd')+'   AND Order_Finalized_Date__c <= '+d2.format('yyyy-MM-dd')+'  AND Order_Finalized_Date__c > 0  ) ';
+            soql += '   OR ( Balance_Received_Date__c >= '+d1.format('yyyy-MM-dd')+'   AND Balance_Received_Date__c <= '+d2.format('yyyy-MM-dd')+'  AND Balance_Amount__c > 0  ) ';
             soql += '   OR ( Deposit_Date__c >= '+d1.format('yyyy-MM-dd')+'  AND Deposit_Date__c <= '+d2.format('yyyy-MM-dd')+'  AND Deposit_Amount__c > 0 )   ';
 //          soql += '   OR (Drawing_Deposit_Date__c >= '+d1.format('yyyy-MM-dd')+'  AND Drawing_Deposit_Date__c <= '+d2.format('yyyy-MM-dd')+'  AND Drawing_Deposit_Amount__c > 0 )   ';
             soql += ')    ';

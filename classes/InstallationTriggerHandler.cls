@@ -957,6 +957,7 @@ public class InstallationTriggerHandler {
                i.Installer_Account__c = u.Contact.AccountID;
                i.Assigned_To__c = u.id;
                i.OwnerId = u.id;
+               i.Installer_Changed__c  = TRUE ; 
                 }
              }
         }

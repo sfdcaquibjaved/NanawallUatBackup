@@ -6,7 +6,7 @@
     <script src="/resource/jQueryForPopup/jQuery/postmessage/jquery.ba-postmessage.js" type="text/javascript" />
     <script src="/resource/jQueryForPopup/jQuery/bbq/jquery.ba-bbq.min.js" type="text/javascript"/>
     <link rel="stylesheet" href="/resource/jQueryForPopup/jQuery/ui/css/ui-lightness/jquery-ui-1.9.1.custom.min.css"/>
-    <apex:stylesheet value="{!URLFOR($Resource.SLDS101,'assets/styles/salesforce-lightning-design-system-vf.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS100,'assets/styles/salesforce-lightning-design-system-vf.css')}"/>
     <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
 
 <head>
@@ -21,7 +21,7 @@
 
 
 </head>
-  <div class="slds">
+  <div class="slds" style="font-size:13px" id="abc">
 <apex:form id="formid">
 
 <span style="font-style:slds-form-element__label;font-size:20px;">Pipeline Wizard</span><br/><br/>
@@ -31,140 +31,118 @@
 <apex:inputtext id="searchTextBox2" value="{!searchText}"/> <br/><br/>
 <B>Order Name:</B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <apex:inputtext id="searchTextBox3" value="{!searchText}"/> <br/><br/>
+<apex:PageBlock id="test">
+<b style="color:red"><apex:pageMessages ></apex:pageMessages></b>
 
-<apex:commandButton action="{!dosearch}" value="Search" reRender="tab" status="actStatusId" /><br/>
-
+<apex:commandButton action="{!dosearch}" value="Search" reRender="tab,test" status="actStatusId"  style="font-size:11px;margin-left:2%"  styleClass="slds-button slds-button slds-button--neutral" disabled="{!buttonsEnabled}"/>
+<apex:commandButton action="{!Clear}" value="Clear" style="margin-left:2%;font-size:11px;" styleClass="slds-button slds-button slds-button--neutral"/>
+ <br/><br/>
 <apex:actionStatus id="actStatusId" >
 <apex:facet name="start" >
 <img src="/img/loading.gif" />                    
 </apex:facet>
 </apex:actionStatus>
 
-  <apex:PageBlock > 
+   
   <apex:pageBlockSection id="tab1" columns="1">
   
-    <div class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--compact">
-              <div class="panel-body">
-              <apex:outputPanel layout="block" style="overflow:scroll"  >
-     <table>   
-  <apex:pageBlockTable value="{!orderdetailslst}" var="od" id="tab" >          
+   <!-- <div class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--compact">-->
+     <apex:outputPanel id="tab"  >
+        
+  <Table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--compact">
+  <apex:repeat value="{!orderdetailslst}" var="od" >          
    
-<!--   <apex:column value="{!od.Order.Name}" title="Name"/>
- 
-  <apex:column value="{!od.Order.Order_Confirmation_Started__c}" title="Name"/>
-  <apex:column value="{!od.installation}" title="Name"/>
-  <apex:column value="{!od.cases}" title="Name"/>-->
- <tr>
-      <td>
-   <apex:column headerValue="Order Name"  >
-       <apex:outputLink value="https://cs3.salesforce.com/{!od.Order.Id}" id="theLink">
-		 <apex:outputText value="{!od.Order.Name}" /> 
-        </apex:outputLink>
 
+   <tr>
+   <td><apex:outputLabel value="Order Name"></apex:outputLabel></td>
+  <td>  <apex:outputLink value="{!$Site.BaseUrl}/{!od.Order.Id}" id="theLink">
+   <apex:outputText value="{!od.Order.Name}" /></apex:outputLink> </td>
+    
+    </tr>
+    <tr>
+ <td><apex:outputLabel value="Effective Date"  /></td>
+    <td><apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.EffectiveDate}" ></apex:param> </apex:outputText></td>
+     </tr> 
+     <tr>
+     <td><apex:outputLabel value="Order Confirmation Date"/></td>
+      <td> <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.Order_Confirmation_Started__c}" ></apex:param> </apex:outputText></td>
+      </tr>
+      <tr>
+   <td><apex:outputLabel value="Complete signoff Date"/></td>
+   <td> <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.Complete_Signoff_Date__c}" ></apex:param> </apex:outputText></td>
+      </tr>
+      
+      <tr>
+     <td>  <apex:outputLabel value="Deposit Date"   /></td>
+   <td> <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.Deposit_Date__c}" ></apex:param> </apex:outputText></td>
+      
+      </tr>
+      
+       <tr>
+     <td>  <apex:outputLabel value="OrderFinalizedDate"  / ></td>
+   <td> <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.Order_Finalized_Date__c}" ></apex:param> </apex:outputText></td>
+     </tr>
+       
+       <tr>
+      <td> <apex:outputLabel value="Payment Type" / ></td>
+  <td> <apex:outputText value="{!od.Order.Payment_Type__c}" /> </td>
+    </tr>
+     
+     <tr>
+    <td> <apex:outputLabel value="Initial Deposit Description"  /></td>
+   <td><apex:outputText value="{!od.Order.Initial_Deposit_Description__c}" /> </td>
+        </tr>
+   <tr> 
+   <td><apex:outputLabel value="Initial Deposit Description"  /></td>
+  <td> <apex:outputText value="{!od.Order.Balance_Received_Amount__c}" /> </td>
+   </tr>
+    
+     <tr> 
+  <td>  <apex:outputLabel value="Invoice Sent Date" /></td>
+   <td> <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.Invoices_Sent_Date__c}" ></apex:param> </apex:outputText></td>
+      </tr>
+      
+      <tr>
+     <td>  <apex:outputLabel value="Actual delivery Date"/></td>
+       <td>  <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.IN_Actual_Delivery_Date_c__c}" ></apex:param> </apex:outputText></td>
+      </tr>
+      
+      <tr>
+      <td><apex:outputLabel value="Balanced Received Date"/ ></td>
+      <td>   <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+    <apex:param value="{!od.Order.Balance_Received_Date__c}" ></apex:param> </apex:outputText></td>
+      </tr>
+      <tr>
+   <td>  <apex:outputLabel value="Installations"/ > </td>
   
-    </apex:column>
-   </td>
-   <td>
-   <apex:column headerValue="Effective Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.EffectiveDate}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    
-    <td>
-       <apex:column headerValue="Confirmation Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.Order_Confirmation_Started__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    &nbsp; &nbsp;
-    <td>
-       <apex:column headerValue="Signoff Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.Complete_Signoff_Date__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    
-    
-    <td>
-       <apex:column headerValue="Deposit Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.Deposit_Date__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    
-    <td>
-       <apex:column headerValue="Finalized Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.Order_Finalized_Date__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    
-    <td>
-       <apex:column headerValue="Payment Type"  >
-   <apex:outputText value="{!od.Order.Payment_Type__c}" /> 
-    </apex:column>
-   </td>
-   
-   <td>
-     <apex:column headerValue="Deposit Description"  >
-   <apex:outputText value="{!od.Order.Initial_Deposit_Description__c}" /> 
-    </apex:column>
-   </td>
-   
-   <td>
-    <apex:column headerValue="Received Amount"  >
-   <apex:outputText value="{!od.Order.Balance_Received_Amount__c}" /> 
-    </apex:column>
-   </td>
-   
-   <td>
-    <apex:column headerValue="Invoice Sent Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.Invoices_Sent_Date__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    
-    <td>
-    <apex:column headerValue="Delivery Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.IN_Actual_Delivery_Date_c__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-    <td>
-      <apex:column headerValue="Balanced Received Date"   >
-    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
-    <apex:param value="{!od.Order.Balance_Received_Date__c}" ></apex:param> </apex:outputText>
-      </apex:column>
-    </td>
-      <td>
-     <apex:column headerValue="Installation Number" > 
-     <apex:repeat value="{!od.installation}" var="op">
-         <apex:outputLink value="https://cs3.salesforce.com/{!op.Id}" id="theLink2">
-		 <apex:outputText value="{!op.Name}" /> 
-             </apex:outputLink>
-     <br/>
-     </apex:repeat>
-     </apex:column>
-     </td>
-     <td>
-      <apex:column headerValue="  Cases" > 
-        <apex:repeat value="{!od.cases}" var="cs">
-            <apex:outputLink value="https://cs3.salesforce.com/{!cs.Id}" id="theLink2">
-		 <apex:outputText value="{!cs.caseNumber}" /> 
-             </apex:outputLink>
-     <br/>
-         </apex:repeat>
-          </apex:column> 
-       </td>
-       </tr>
-</apex:pageBlockTable>
-       </table>
+    <td><apex:repeat value="{!od.installation}" var="op">
+     <apex:outputLink value="{!$Site.BaseUrl}/{!op.Id}" id="theLink2">
+     <apex:outputText label="Installation" value="{!op.Name}" /></apex:outputLink><br/>
+     </apex:repeat></td>
+     
+      </tr>
+      <tr>
+     <td> <apex:outputLabel value="Cases" /> </td>
+     <td>   <apex:repeat value="{!od.cases}" var="cs">
+      <apex:outputLink value="{!$Site.BaseUrl}/{!cs.Id}" id="theLink3">
+       <apex:outputText label="Case" value="{!cs.caseNumber}" /></apex:outputLink><br/>
+         </apex:repeat></td>
+          </tr>
+ </apex:repeat>
+</Table>
 </apex:outputpanel>
- </div>
- </div>
+ 
+ <!--</div>-->
   </apex:pageBlockSection>
- </apex:PageBlock>      
+ </apex:PageBlock>
+       
 </apex:form>
 </div>
 </html>  

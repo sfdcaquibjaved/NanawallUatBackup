@@ -27,12 +27,28 @@ public string searchOrder {
         get;
         set;
     }
+     public Boolean buttonsEnabled{
+        get;
+        set;
+    }
+    
     public list <displayDetails> orderdetailslst {
         get;
         set;
     }  
-
+public boolean displayPopup {get; set;}    
+public boolean displayPopup2 {get; set;}    
+    
+    public void closePopup() {        
+        displayPopup = false;    
+    }     
+    public void showPopup() {  
+        
+        displayPopup = TRUE;   
+        dosearch();
+    }
  public retrieveObjectDetails() {
+     
  orderList=new list<order>();
  
  searchResults= new list<orderprojquote>();
@@ -45,7 +61,9 @@ public string searchOrder {
   
     searchResults = new list<orderprojquote>() ;
     noSearchResults = true;
-        
+    buttonsEnabled=true;
+    
+    
      String searchOrder= 'Select Id, Name,Order_Confirmation_Started__c,Nana_Order_Mfg__c,EffectiveDate,Complete_Signoff_Date__c,Deposit_Date__c,Deposit_Received_Date__c,Deposit_Amount__c,Order_Finalized_Date__c,Payment_Type__c,Initial_Deposit_Description__c,Invoices_Sent_Date__c,Balance_Received_Amount__c,IN_Actual_Delivery_Date_c__c,Balance_Received_Date__c  from Order' + ' where Name like \'%'+searchText+'%\' order by Name Limit 500';
         
       orderList = Database.query(searchOrder); 
@@ -71,6 +89,7 @@ public string searchOrder {
 
 
         }
+       
 
        for (Order ord: orderList) {
             orderprojquote ordWrapp = new orderprojquote(ord);
@@ -116,7 +135,18 @@ public string searchOrder {
       
       
 //Wrapper class for displaying         
-         
+   public pageReference clear(){
+  // searchText.clear();
+   orderdetailslst.clear();
+   String  myUrl=Site.getPathPrefix()+'/apex/retrieveObjectDetailsPage';
+             PageReference redUrl1 = new PageReference(myUrl);
+redUrl1.setRedirect(true);
+return redUrl1;
+   
+     
+  
+   
+   }       
          
          
          
