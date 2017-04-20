@@ -14,7 +14,7 @@ public class HierarchyController {
     public Double amountWon{get;set;}
     public Double totalAmount{get;set;}
     private String sortDirection = 'ASC';
-    private String sortExp = 'AccName';
+    private String sortExp = '';
     public List<String> acclist;
     public Map <String,Hierarchy> accmap;    
     public List<String> prjlist;
@@ -822,9 +822,9 @@ public class HierarchyController {
             
                 if (str.equalsIgnoreCase('PrjName'))
                 {
-                    system.debug('Data before sorting: '+prjlist);
+                    //system.debug('Data before sorting: '+prjlist);
                      prjlist.sort();
-                     system.debug('Data After sorting: '+prjlist);
+                     //system.debug('Data After sorting: '+prjlist);
                     
                      List<Hierarchy> prlist = new List<Hierarchy>();
                 
