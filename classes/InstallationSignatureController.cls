@@ -42,7 +42,7 @@ public class InstallationSignatureController {
             att.name = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
             att.IsPrivate = false;
             att.ParentId = id;
-            insert att; 
+         //   insert att; 
             
             ContentVersion cont = new ContentVersion();
             cont.versionData = signature;

@@ -792,19 +792,17 @@ public class HierarchyController {
             
             if (str.equalsIgnoreCase('PrjStatus'))
             {
-                    
                 prjsts.sort();
                 
                 List<Hierarchy> stslist = new List<Hierarchy>();
                 
                 for (String s : prjsts)
                 {
-                    
                      stslist.add(stsmap.get(s));
                 }
                     
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
+                if(sortDirection.equalsIgnoreCase('ASC'))
+                {
                     ProjectList = stslist;
                     
                     for(String s: noPrjAccs)
@@ -830,26 +828,23 @@ public class HierarchyController {
                 
                      for (String s : prjlist)
                      {
-                    
                         prlist.add(prjmap.get(s));
                      }
                     
-                if(sortDirection.equalsIgnoreCase('ASC'))
-                
-                ProjectList = prlist;
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
+                    if(sortDirection.equalsIgnoreCase('ASC'))
+                    {
+                		ProjectList = prlist;
+                    
+                    	for(String s: noPrjAccs)
+                    
+                   		ProjectList.add(accmap.get(s));
+                    }
+					else if (sortDirection.equalsIgnoreCase('DESC'))
+                	{	
                     for(Integer i = prlist.size()-1, j=0;i >=0; i--)
                     //for(Integer i = projectlist.size()-1, j=0;i >=0; i--)
                     
                     ProjectList.set(i,prlist.get(j++));
-                }
-                              
-                for(String s: noPrjAccs){
-                    
-                    ProjectList.add(accmap.get(s));
                 }
           } 
             
