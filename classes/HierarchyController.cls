@@ -65,9 +65,11 @@ public class HierarchyController {
     public String cityFilter{get;set;}
     public String stateFilter{get;set;}
     public String zipFilter{get;set;}
+    public Date ordFnzDtMax{get;set;}
     
     public HierarchyController(ApexPages.StandardController con){
         
+        ordFnzDtMax = null;
         AccSiteList = new List <Account>();
         noPrjArch = new List<Hierarchy>();
         archList = new List<String>();
@@ -231,8 +233,8 @@ public class HierarchyController {
                                 
                         for (Opportunity op : oppList2){
                                         for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
-                                        for(OpportunityContactRole ocr : ocrs ){
-                                                hier.ocr.add(ocr); System.debug('ocr: '+ocr +' hier.ocr:'+hier.ocr);
+                                        for(OpportunityContactRole ocr : ocrs ){ 
+                                                hier.ocr.add(ocr); 
                                 }
                             }
                         }               
@@ -243,7 +245,21 @@ public class HierarchyController {
                         hier.ordFnzDt.add(od.Order_Finalized_Date__c);
                                 hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
                     }
+                        hier.ordFnzDt.sort();
                          
+                        Integer sz = hier.ordFnzDt.size(); 
+                        
+                         if((ordFnzDtMax!=null) && sz > 0 &&(ordFnzDtMax < hier.ordFnzDt.get(sz-1))){
+                             
+                             ordFnzDtMax = date.newInstance(hier.ordFnzDt.get(sz-1).year(), hier.ordFnzDt.get(sz-1).month(), hier.ordFnzDt.get(sz-1).day());
+                         }
+                             
+                         else if (ordFnzDtMax==null && sz > 0 && hier.ordFnzDt.get(sz-1)!=null){
+                                    
+                             ordFnzDtMax = date.newInstance(hier.ordFnzDt.get(sz-1).year(), hier.ordFnzDt.get(sz-1).month(), hier.ordFnzDt.get(sz-1).day());
+                         }
+                             
+                            
                         hier.crtdt = date.newInstance(prj.CreatedDate.year(), prj.CreatedDate.month(), prj.CreatedDate.day()) ;                                 
                         dtlst.add(prj.CreatedDate);
                         hier.accountName = ac;
@@ -862,11 +878,11 @@ public class HierarchyController {
         {
             integer flag = 0, cnt=0;
             
-            if(accFilter!='') cnt++;
-            if(prjFilter!='') cnt++;
-            if(cityFilter!='') cnt++;
-            if(stateFilter!='') cnt++;
-            if(zipFilter!='') cnt++;
+            if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
+            if(prjFilter!=''){prjFilter = prjFilter.trim(); cnt++;} 
+            if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
+            if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
+            if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;} 
             
             if(accFilter!='' && hr.accountName!=null) 
                if(hr.accountName.Name.containsIgnoreCase((accFilter)))

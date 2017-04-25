@@ -7,26 +7,29 @@
          <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
          </apex:column>
              <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
-             <apex:column value="{!ProjSiteList.size}" headerValue="Project Count"/>
-             <apex:column value="{!prjStgWon}" headerValue="Projects Won"/> 
+             <apex:column value="{!ProjSiteList.size}" headerValue="Projects Count"/>
+             <apex:column headerValue="Most Recent Order Date">
+             <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!ordFnzDtMax}"/></apex:outputText>
+             </apex:column>
+             <apex:column value="{!prjStgWon}" headerValue="Projects Won (Order Paid)"/> 
              <apex:column value="{!prjStgPrg}" headerValue="Projects (Order In Progress)"/>
-             <apex:column value="{!prjStgQtd}" headerValue="Project Quoted"/>
+             <apex:column value="{!prjStgQtd}" headerValue="Projects (Quote in Progress)"/>
              <apex:column value="{!prjStglost}" headerValue="Project Lost"/>
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
-             <apex:column headerValue="Closure">
+             <apex:column headerValue="Closure Rate">
                  <apex:outputText value="{0,Number,0.00}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
-            </apex:column> -->
+            </apex:column>
          <!--   <apex:column headerValue="Amount Quoted (Total)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
             </apex:column> -->
-            <apex:column headerValue="Amount (Won)">
+            <apex:column headerValue="Amount (Projects Won)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
             </apex:column>
-            <apex:column headerValue="Amount (In Progress)">
+            <apex:column headerValue="Amount (Order In Progress)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
             </apex:column>
-            <apex:column headerValue="Amount (Quoted)">
+            <apex:column headerValue="Amount (Quote In Progress)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
             </apex:column>
             <apex:column headerValue="Amount (Lost)">
@@ -37,7 +40,7 @@
             </apex:column> -->
            <apex:column headerValue="Total Amount">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
-            </apex:column> -->
+            </apex:column>
          </apex:pageBlockTable>
      </apex:pageBlockSection>
    </apex:pageBlock>

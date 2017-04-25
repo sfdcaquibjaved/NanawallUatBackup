@@ -139,7 +139,6 @@ public class AttachmentUtility {
         
         set<ID> AttachmentID = new set<ID> () ;
         String instprefix;
-        String caseprefix;
         Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
        
         //Getting ID of Installation Object
@@ -197,6 +196,84 @@ public class AttachmentUtility {
           
             
             
+        }
+        catch(exception e)
+        {
+            system.debug('Exception is ' +e);
+        }
+        
+    }
+    /*  
+         Method Name    : movecaseuploads
+         Purpose        : This Method serves the pupose of moving all attachments on Cases related to Installations to files and deleting attachment.
+         Input Parameter: List of attachment  
+         Created Date: April 2017
+         */
+    public static void movecaseuploads(List < attachment > newAttachment) {
+        
+        set<ID> AttachmentID = new set<ID> () ;
+        String caseprefix;
+        Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
+       
+        //Getting ID of Installation Object
+        for(Schema.SObjectType stype : gd.values()){
+                Schema.DescribeSObjectResult r = stype.getDescribe();
+                if(r.getName() == 'Case'){
+                caseprefix = r.getKeyPrefix();
+                System.debug('case'+caseprefix);
+            }
+        }
+        
+        List < ContentVersion > ContentVersionInsert = new List <ContentVersion>() ;
+        
+        for(Attachment a:newAttachment) {
+            string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
+            string aname = String.valueOf(a.name).substring(0,4);
+            if(myIdPrefix.equals(caseprefix) && aname == 'INS_'){
+                System.debug('in here');
+                ContentVersion cont = new ContentVersion();
+                cont.versionData = a.Body;
+                cont.title = a.Name;
+                cont.pathOnClient = a.Name;
+                
+                ContentVersionInsert.add(cont);
+                AttachmentID.add(a.ID);
+                
+            }
+        }
+        System.debug('list'+ContentVersionInsert);
+        try{
+            //Inserting ContentVersion
+            insert ContentVersionInsert ;
+            System.debug('Success !');
+        }
+        catch(exception e){
+            system.debug('Exception is:' +e);
+            System.debug('catch');
+        }
+
+        List <FeedItem> FeedItemContentList = new List <FeedItem> () ;
+        List<Attachment> AttachmentDelete = new List <Attachment> () ;
+        
+        for(ContentVersion C : ContentVersionInsert ){
+            for(Attachment a : newAttachment ){ 
+                if(c.versionData == a.Body ){
+                    System.debug('is it equal?');
+                    //Attaching FeedItem to ContentVersion and InstallationForm
+                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                    FeedItemContentList.add(elm);
+                    
+                }
+            }
+        }
+        System.debug('feed list'+FeedItemContentList);
+        try{
+            //Insert FeedItem
+            insert FeedItemContentList ;
+            System.debug('Success 2!');
+            //Delete Attachment
+            Delete [select id from Attachment where id in :AttachmentID];
+          System.debug('Success 3!');            
         }
         catch(exception e)
         {

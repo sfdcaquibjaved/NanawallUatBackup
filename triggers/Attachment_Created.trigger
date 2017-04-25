@@ -56,5 +56,6 @@ trigger Attachment_Created on Attachment (after insert) {
     if(trigger.isInsert && trigger.isAfter){
         AttachmentUtility.moveAttachment(Trigger.new);
         AttachmentUtility.moveuploads(Trigger.new);
+        AttachmentUtility.movecaseuploads(Trigger.new);
     }
 }

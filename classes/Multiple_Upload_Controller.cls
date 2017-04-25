@@ -20,7 +20,7 @@ public string recrdId{get; set;}
             Attachment att = new Attachment(
                 ParentId = parentId,
                 Body = EncodingUtil.Base64Decode(base64BlobValue),
-                Name = fileName,
+                Name = 'INS_'+fileName ,
                 ContentType = contentType
             );
             insert att;
@@ -30,7 +30,7 @@ public string recrdId{get; set;}
         }else{
             for(Attachment atm : [select Id, Name, Body from Attachment where Id = :attachmentId]){
                 //Take the body of the current attachment, convert to base64 string, append base64 value sent from page, then convert back to binary for the body
-                update new Attachment(Id = attachmentId, Name = fileName,Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
+                update new Attachment(Id = attachmentId, Name = 'INS_'+fileName,Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
             }
             //Return the Id of the attachment we are currently processing
             //return attachmentId;
