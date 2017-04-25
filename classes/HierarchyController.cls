@@ -833,14 +833,14 @@ public class HierarchyController {
                     
                     if(sortDirection.equalsIgnoreCase('ASC'))
                     {
-                		ProjectList = prlist;
+                        ProjectList = prlist;
                     
-                    	for(String s: noPrjAccs)
+                        for(String s: noPrjAccs)
                     
-                   		ProjectList.add(accmap.get(s));
+                        ProjectList.add(accmap.get(s));
                     }
-					else if (sortDirection.equalsIgnoreCase('DESC'))
-                	{	
+                    else if (sortDirection.equalsIgnoreCase('DESC'))
+                    {   
                     for(Integer i = prlist.size()-1, j=0;i >=0; i--)
                     //for(Integer i = projectlist.size()-1, j=0;i >=0; i--)
                     

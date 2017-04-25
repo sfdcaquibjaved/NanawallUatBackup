@@ -28,9 +28,9 @@ public string recrdId{get; set;}
             //Return the new attachment Id
             return att.id;
         }else{
-            for(Attachment atm : [select Id, Body from Attachment where Id = :attachmentId]){
+            for(Attachment atm : [select Id, Name, Body from Attachment where Id = :attachmentId]){
                 //Take the body of the current attachment, convert to base64 string, append base64 value sent from page, then convert back to binary for the body
-                update new Attachment(Id = attachmentId, Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
+                update new Attachment(Id = attachmentId, Name = fileName,Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
             }
             //Return the Id of the attachment we are currently processing
             //return attachmentId;

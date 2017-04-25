@@ -185,7 +185,7 @@ public class InstallationTriggerHandler {
         set <string> setZipCode = new set<string>() ; 
         System.debug('change?'+newTrigger);
         
-        Zip_Code_Range_for_Bill_Leon__c myCS1 = Zip_Code_Range_for_Bill_Leon__c.getValues('Northern NJ');
+        /*Zip_Code_Range_for_Bill_Leon__c myCS1 = Zip_Code_Range_for_Bill_Leon__c.getValues('Northern NJ');
         Integer start1 = Integer.valueof(myCS1.Zip_Code_del__c);
         Integer end1 = Integer.valueof(myCS1.Zip_Code_End_Value__c);
         Zip_Code_Range_for_Bill_Leon__c myCS2 = Zip_Code_Range_for_Bill_Leon__c.getValues('NY State');
@@ -193,7 +193,7 @@ public class InstallationTriggerHandler {
         Integer end2 = Integer.valueof(myCS2.Zip_Code_End_Value__c);
         Zip_Code_Range_for_Paul_Nalette__c myCS3 = Zip_Code_Range_for_Paul_Nalette__c.getValues('Zip Range');
         Integer start3 = Integer.valueof(myCS3.Start_Value__c);
-        Integer end3 = Integer.valueof(myCS3.End_Value__c);
+        Integer end3 = Integer.valueof(myCS3.End_Value__c);*/
         
         for(Installation__C i : newTrigger){
             system.debug(i.Project_Country_Canada__c);
@@ -215,7 +215,7 @@ public class InstallationTriggerHandler {
         for(Installation__c i : newTrigger){
             if(zipCodeList.size() > 0){
                 for(Zip_Codes_Master__c zip : zipCodeList){
-                    Integer projectzip;
+                    /*Integer projectzip;
                     if(!i.Project_Country_Canada__c){
                     projectzip = Integer.valueof(i.Project_Zip_Code__c);
                     }
@@ -228,7 +228,7 @@ public class InstallationTriggerHandler {
                                i.Assigned_to_Paul_Nalette__c = true;
                                i.OwnerId = Label.Paul_Nalette_UserId;
                          }
-                            else
+                            else*/
                     if(((i.Project_Country_Canada__c && i.Project_Zip_Code__c.toUppercase().substring(0,3) == zip.Zip_Code__c) ||(!i.Project_Country_Canada__c && i.Project_Zip_Code__c == zip.Zip_Code__c))&&((zip.Installer_Contact__c != null) || (zip.Installer_Account__c != null)||(zip.Installer_User__c != null))){
                         System.debug('Here');
                         if(zip.Installer_Contact__c != null){
@@ -943,7 +943,7 @@ public class InstallationTriggerHandler {
         }
         System.debug('new installer contact'+conId);
        // list<Contact> conlist = [Select id,AccountId from Contact where id in:ConId Limit 1];
-        list<User> usercon = [Select id,ContactId,Contact.AccountID from User where ContactId in:ConId Limit 1];
+        list<User> usercon = [Select id,ContactId,Contact.AccountID,Contact.Name from User where ContactId in:ConId Limit 1];
         //System.debug('contact'+conlist);
         System.debug('user'+usercon);
         for(Installation__c i:newTrigger){
@@ -957,6 +957,8 @@ public class InstallationTriggerHandler {
                i.Installer_Account__c = u.Contact.AccountID;
                i.Assigned_To__c = u.id;
                i.OwnerId = u.id;
+               i.Installer_Manager__c = u.Contact.Name;
+               System.debug('Manger'+i.Installer_Manager__c);
                i.Installer_Changed__c  = TRUE ; 
                 }
              }

@@ -26,7 +26,7 @@ public class FeedItemTriggerHandler {
                 
             }
             String ParentIDofFeed = NewFeed.ParentId ; 
-                if(String.valueOf(ParentIDofFeed).substring(0,3) == 'a5x' ){
+                if((String.valueOf(ParentIDofFeed).substring(0,3) == 'a5x' ) || (String.valueOf(ParentIDofFeed).substring(0,3) == 'a4k')){
                      NewFeed.Visibility = 'AllUsers';
                 }
                       

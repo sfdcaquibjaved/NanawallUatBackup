@@ -5,7 +5,7 @@ public class MultipleUploadController
     //Selected count
     // the parent object it
    public Id sobjId {get; set;}
-    
+    //public String newstr = 'INS_';
     // list of existing attachments - populated on demand
     public List<Attachment> attachments;
     
@@ -41,11 +41,13 @@ public class MultipleUploadController
     // Save action method
     public void SaveAttachments()
     {
+        
         List<Attachment> toInsert=new List<Attachment>();
         for (Attachment newAtt : newAttachments)
         {
             if (newAtt.Body!=null)
             {
+                //newAtt.Name = newstr+newAtt.Name;
                 newAtt.parentId=sobjId;
                 toInsert.add(newAtt);
             }

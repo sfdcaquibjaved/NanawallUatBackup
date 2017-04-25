@@ -4,16 +4,16 @@
     @ Test File     : ATtachmentUtility_Test
     @ Description   : This class serves the pupose of utility class for Attachment_Created trigger
     @ Audit Trial   : 
-	@ Last Modified Date : 07-June-2016
+    @ Last Modified Date : 07-June-2016
   
 ****************************************************************************/ 
 
 public class AttachmentUtility {
 
-        /*	
-     	 Method Name    : AttachmentHandler
+        /*  
+         Method Name    : AttachmentHandler
          Purpose        : This Method serves the pupose of handling attachment in email to case functionality.
-		 Input Parameter: List of attachment  
+         Input Parameter: List of attachment  
          Created Date: June 2016
          */
     public static void AttachmentHandler(List < attachment > newAttachment) {
@@ -54,10 +54,10 @@ public class AttachmentUtility {
     }
     
     
-     /*	
-     	 Method Name    : moveAttachment
+     /* 
+         Method Name    : moveAttachment
          Purpose        : This Method serves the pupose of moving signature attachment on Installation form to files and deleting attachment.
-		 Input Parameter: List of attachment  
+         Input Parameter: List of attachment  
          Created Date: April 2017
          */
     
@@ -83,8 +83,8 @@ public class AttachmentUtility {
                 
                 ContentVersion cont = new ContentVersion();
                 cont.versionData = a.Body;
-        	    cont.title = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
-       		    cont.pathOnClient ='eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
+                cont.title = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
+                cont.pathOnClient ='eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
                 
                 ContentVersionInsert.add(cont);
                 AttachmentID.add(a.ID);
@@ -101,14 +101,14 @@ public class AttachmentUtility {
         }
 
         List <FeedItem> FeedItemContentList = new List <FeedItem> () ;
-       	List<Attachment> AttachmentDelete = new List <Attachment> () ;
+        List<Attachment> AttachmentDelete = new List <Attachment> () ;
         
         for(ContentVersion C : ContentVersionInsert ){
             for(Attachment a : newAttachment ){ 
                 if(c.versionData == a.Body ){
                     //Attaching FeedItem to ContentVersion and InstallationForm
-           			FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
-                	FeedItemContentList.add(elm);
+                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                    FeedItemContentList.add(elm);
                     
                 }
             }
@@ -119,6 +119,82 @@ public class AttachmentUtility {
             insert FeedItemContentList ;
             //Delete Attachment
             Delete [select id from Attachment where id in :AttachmentID];
+          
+            
+            
+        }
+        catch(exception e)
+        {
+            system.debug('Exception is ' +e);
+        }
+        
+    }
+    /*  
+         Method Name    : moveuploads
+         Purpose        : This Method serves the pupose of moving all attachments on Installation to files and deleting attachment.
+         Input Parameter: List of attachment  
+         Created Date: April 2017
+         */
+    public static void moveuploads(List < attachment > newAttachment) {
+        
+        set<ID> AttachmentID = new set<ID> () ;
+        String instprefix;
+        String caseprefix;
+        Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
+       
+        //Getting ID of Installation Object
+        for(Schema.SObjectType stype : gd.values()){
+                Schema.DescribeSObjectResult r = stype.getDescribe();
+            if(r.getName() == 'Installation__c' ) {
+               instprefix = r.getKeyPrefix();
+            }
+        }
+        
+        List < ContentVersion > ContentVersionInsert = new List <ContentVersion>() ;
+        
+        for(Attachment a:newAttachment) {
+            string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
+            if(myIdPrefix.equals(instprefix)){
+                System.debug('in here');
+                ContentVersion cont = new ContentVersion();
+                cont.versionData = a.Body;
+                cont.title = a.Name;
+                cont.pathOnClient = a.Name;
+                
+                ContentVersionInsert.add(cont);
+                AttachmentID.add(a.ID);
+                
+            }
+        }
+        
+        try{
+            //Inserting ContentVersion
+            insert ContentVersionInsert ;
+        }
+        catch(exception e){
+            system.debug('Exception is:' +e);
+        }
+
+        List <FeedItem> FeedItemContentList = new List <FeedItem> () ;
+        List<Attachment> AttachmentDelete = new List <Attachment> () ;
+        
+        for(ContentVersion C : ContentVersionInsert ){
+            for(Attachment a : newAttachment ){ 
+                if(c.versionData == a.Body ){
+                    //Attaching FeedItem to ContentVersion and InstallationForm
+                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                    FeedItemContentList.add(elm);
+                    
+                }
+            }
+        }
+        
+        try{
+            //Insert FeedItem
+            insert FeedItemContentList ;
+            //Delete Attachment
+            Delete [select id from Attachment where id in :AttachmentID];
+          
             
             
         }

@@ -106,5 +106,22 @@ public class AttachmentUtility_Test {
         insert attList[0];
         Test.stopTest();
     }
+    static testMethod void unitTest3() {
+        list<Installation__c> instlist = TestDataUtility.createInsTestData();
+        insert instlist;
+        
+        Test.startTest();
+        list < Attachment > attList = new list < Attachment > ();
+        Attachment attach = new Attachment();
+        attach.Name = 'Img1.png';
+        Blob bodyBlob = Blob.valueOf('Unit Test Attachment Body');
+        attach.body = bodyBlob;
+        attach.parentId = instlist[0].id;
+
+        attList.add(attach);
+
+        insert attList[0];
+        Test.stopTest();
+    }
 
 }
