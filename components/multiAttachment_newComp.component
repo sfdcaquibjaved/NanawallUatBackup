@@ -9,63 +9,35 @@
             
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <style>
-
-.fileType {
-    display: block;
-    position: relative;
-    width: 175px;
-    margin: auto;
-    cursor: pointer;
-    border: 0;
-    height: 80px;
-    border-radius: 50px;
-    outline: 0;
-    left: 15px;
-    font-weight: bolder;
-}
-    
-    
-.fileType:after {
-
-    transition: 200ms all ease;
-    border-bottom: 3px solid rgba(0,0,0,0.3);
-    border-top: 3px solid rgba(0,0,0,0.3);
-    border-left: 3px solid rgba(0,0,0,0.3);
-    border-right: 3px solid rgba(0,0,0,0.3);
-    background: #ccddff;
-
-    color: #000000;
-    font-size: 15px;
-    text-align: center;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 48%;
-    height: 40%;
-    display: block;
-    content: 'Click Here';
-    line-height: 20px;
-    border-radius: 5px;
-    font-weight: bold;
-}
-        </style>
+<style>
+    .table111{
+    height: 66px;
+    border: 5px;
+    padding: 30px; 
+    padding-left: 20px;
+    background-color: #ccffee;
+    }
+    .picklist{
+    width: 70%;
+    }
+    .browse{
+    height: 75%;
+    padding: 3px;
+    }
+</style>
     </head>
    <body>
         <div class="Nanawallcustomcss">
-            <header class="slds-global-header_container">
-                
-                
-            </header>
+            
             <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound" aria-labelledby="newattachment">
                 <apex:form >
-                <br/>
+                
                
                     <div class="slds-panel__section">
                         <div class="slds-docked-form-footer slds-shrink-none slds-button-group slds-float--left" role="group">
                          <apex:commandButton value="Upload" action="{!SaveFiles}"  styleClass="slds-button slds-button--neutral" onclick="move()"/>
-                            <span style="display:inline-block; width: 30px; height: 55px"></span>
-                          <apex:commandButton value="Back" onclick="sforce.one.navigateToURL('/{!objId}')"  styleClass="slds-button slds-button--brand" />
+                            <span style="display:inline-block; width: 20px; height: 35px"></span>
+                          <apex:commandButton value="Back" action="{!goBack}"  styleClass="slds-button slds-button--brand" />
                         </div>
                     </div>
                     <apex:pageMessages id="MSG" />
@@ -92,24 +64,17 @@
                                 <apex:pageBlock >
 <div class="slds-grid slds-wrap slds-grid--pull-padded">
 
-<!--<apex:repeat value="{!newFiles}" var="newf">-->
 
-                <apex:pageBlockSection >
-             <apex:pageBlockTable value="{!newFiles}" var="newf" columnsWidth="500px,500px">       
-                        <apex:column >
-                     <apex:inputFile value="{!newf.versionData}" filename="{!newf.title}" id="file"/>
+             <apex:pageBlockTable value="{!newFiles}" var="newf">       
+                        <apex:column styleClass="table111">
+                     <apex:inputFile value="{!newf.versionData}" filename="{!newf.title}" id="file" styleClass="browse"/>
                         </apex:column>
-                 <apex:column >
-                         <p class="MsoNormal" style="line-height:9.75pt"><b><span style="font-size:8.5pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">File Type</span></b></p>
-                      <apex:inputField value=" {!newf.Type_of_File__c}" label="File Type" id="pick" styleclass="slds-picklist slds-dropdown-trigger slds-dropdown-trigger--click slds-is-open !important;"/>
+                 <apex:column styleClass="table111" width="270px">
+                         <p class="MsoNormal" style="line-height:9.75pt"><b><span style="font-size:9.5pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">File Type</span></b></p>
+                      <apex:inputField value=" {!newf.Type_of_File__c}" label="File Type" id="pick" styleclass="picklist"/>
                  </apex:column>
-                 <apex:pageBlockSectionItem ><!--empty section--> </apex:pageBlockSectionItem>
-                 <apex:pageBlockSectionItem ><!--empty section--> </apex:pageBlockSectionItem>
-                 <apex:pageBlockSectionItem ><!--empty section--> </apex:pageBlockSectionItem>
-   </apex:pageBlockTable>
 
-                    </apex:pageBlockSection>
-                       <!--</apex:repeat>-->
+   </apex:pageBlockTable>
          
 </div>
 </apex:PageBlock>                                

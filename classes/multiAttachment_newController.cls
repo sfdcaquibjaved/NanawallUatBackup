@@ -6,10 +6,9 @@ public class multiAttachment_newController {
     // list of new files to add
     public List<ContentVersion> newfiles {get; set;}
     
-    // the number of new files to add to the list when the user clicks 'Add More'
     public static final Integer NUM_FILES_TO_ADD=9;
     public multiAttachment_newController(){
-        // instantiate the list with a single attachment
+        // instantiate the list with a single file
         newfiles=new List<ContentVersion>{new ContentVersion(),new ContentVersion(),new ContentVersion(),new ContentVersion(),
             new ContentVersion(),new ContentVersion(),new ContentVersion(),new ContentVersion(),new ContentVersion(),new ContentVersion()};
             
@@ -32,7 +31,7 @@ public class multiAttachment_newController {
         insert toInsert;
             for(ContentVersion c: toInsert){
                     System.debug('is it equal?');
-                    //Attaching FeedItem to ContentVersion and InstallationForm
+                    //Attaching FeedItem to ContentVersion
                     FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = sobjId, RelatedRecordId = c.ID, Type = 'ContentPost');
                     FeedItemContentList.add(elm);
                     
@@ -50,4 +49,10 @@ public class multiAttachment_newController {
         // null the list of existing files - this will be rebuilt when the page is refreshed
         files=null;
     }
+    public Pagereference goBack()
+    {
+        PageReference nextPage = new PageReference('/' + sObjId);
+        return nextPage;
+    }
+    
 }

@@ -274,17 +274,17 @@ public class HierarchyController {
                         hier.projectZipCode = prj.Project_Zip_Code__c;
                         hier.applicationIndustry = prj.Application__c;
                         prjlist.add(prj.Name);
-                        prjsts.add(prj.Stage__c +''+ prj.Id);
+                        prjsts.add(prj.Stage__c +'  '+ prj.Id);
                         amtlst.add(prj.Amount__c);
-                        acclist.add(ac.Name +''+prj.Id);
-                        accmap.put(ac.Name+''+prj.Id, hier);
+                        acclist.add(ac.Name +'  '+prj.Id);
+                        accmap.put(ac.Name+'  '+prj.Id, hier);
                         prjmap.put(prj.Name, hier);
-                        stsmap.put(prj.Stage__c+''+prj.Id,hier);
+                        stsmap.put(prj.Stage__c+'  '+prj.Id,hier);
                         amtmap.put(prj.Amount__c, hier);
                         if(String.isNotBlank(prj.Application__c))
                         {
-                            applst.add(prj.Application__c+prj.Id);
-                            appMap.put(prj.Application__c+prj.Id, hier);
+                            applst.add(prj.Application__c+'  '+prj.Id);
+                            appMap.put(prj.Application__c+'  '+prj.Id, hier);
                         }
                         else
                         {
@@ -292,8 +292,8 @@ public class HierarchyController {
                         }
                          if(String.isNotBlank(prj.Project_City__c))
                         {
-                            citylst.add(prj.Project_City__c+prj.Id);
-                            cityMap.put(prj.Project_City__c+prj.Id, hier);
+                            citylst.add(prj.Project_City__c+'  '+prj.Id);
+                            cityMap.put(prj.Project_City__c+'  '+prj.Id, hier);
                         }
                         else
                         {
@@ -301,9 +301,8 @@ public class HierarchyController {
                         }
                         if(String.isNotBlank(prj.Project_State__c))
                         { 
-                            System.debug('prj.Project_State__c+prj.Id:'+prj.Project_State__c+prj.Id);
-                            statelst.add(prj.Project_State__c+prj.Id); 
-                            stateMap.put(prj.Project_State__c+prj.Id, hier);
+                            statelst.add(prj.Project_State__c+'  '+prj.Id); 
+                            stateMap.put(prj.Project_State__c+'  '+prj.Id, hier);
                         }
                         else
                         {
@@ -321,8 +320,8 @@ public class HierarchyController {
                         dtmap.put(prj.CreatedDate,hier);
                         if(prj.Architect_Account__c!=null)
                          { 
-                            archList.add(prj.Architect_Account__r.Name+''+prj.Id);
-                            archMap.put(prj.Architect_Account__r.Name+''+prj.Id, hier); 
+                            archList.add(prj.Architect_Account__r.Name+'  '+prj.Id);
+                            archMap.put(prj.Architect_Account__r.Name+'  '+prj.Id, hier); 
                          }         
                          else
                          {
@@ -330,8 +329,8 @@ public class HierarchyController {
                          }
                          if(prj.Purchaser_Account__c!=null)
                          { 
-                            purchlst.add(prj.Purchaser_Account__r.Name+''+prj.Id);
-                            purchMap.put(prj.Purchaser_Account__r.Name+''+prj.Id, hier); 
+                            purchlst.add(prj.Purchaser_Account__r.Name+'  '+prj.Id);
+                            purchMap.put(prj.Purchaser_Account__r.Name+'  '+prj.Id, hier); 
                          }         
                          else
                          {
@@ -339,8 +338,8 @@ public class HierarchyController {
                          }
                          if(prj.Ordering_Account__c!=null)
                          { 
-                            ordlst.add(prj.Ordering_Account__r.Name+''+prj.Id);
-                            ordMap.put(prj.Ordering_Account__r.Name+''+prj.Id, hier); 
+                            ordlst.add(prj.Ordering_Account__r.Name+'  '+prj.Id);
+                            ordMap.put(prj.Ordering_Account__r.Name+'  '+prj.Id, hier); 
                          }         
                          else
                          {

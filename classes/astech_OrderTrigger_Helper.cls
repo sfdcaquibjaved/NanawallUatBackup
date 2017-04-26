@@ -379,7 +379,7 @@ system.debug('astech_OrderTrigger_Helper: finished after insert ...');
 	public static void handleAfterUpdate( map<Id, Order> oldMap, list<Order> orders ) 
 	{
 system.debug('** ASTECH: running handleafterupdate');	                
-       Contact dummyContact  = [SELECT Id FROM Contact WHERE LastName = 'CAD EMAIL RECIPIENT' LIMIT 1]; //SOQL opt -- we could stick this contact on the order when it is inserted, and then just refer to that field 
+       //Contact dummyContact  = [SELECT Id FROM Contact WHERE LastName = 'CAD EMAIL RECIPIENT' LIMIT 1]; //SOQL opt -- we could stick this contact on the order when it is inserted, and then just refer to that field 
         
         list<Task> tasksToInsert = new list<Task>(); 
         map< Id, Account> pipelineEmails = new map<id, Account>();
@@ -417,7 +417,8 @@ system.debug('** ASTECH: GUUIDs: ' + o.Test_GUID__c + ' ?= ' + oldMap.get(o.Id).
 system.debug('** ASTECH: sending CAD email to  ' + o.Quote.Nana_Quote__r.Installer__c );
 				try
 				{
-	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'jurgen@nanawall.com', 'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', dummyContact.Id, o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
+					//003A0000005h271 is jurgen's record, this CANNOT be deleted or changed
+	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', '003A0000005h271', o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
 	                Task tsk = new Task();
 //	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
 //	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;

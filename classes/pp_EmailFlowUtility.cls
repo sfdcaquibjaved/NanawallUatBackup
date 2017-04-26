@@ -79,7 +79,7 @@ System.debug('pp_EmailFlowUtility: Calling http://'+GlobalStrings.NanaServerAddr
     public static void sendTemplatedEmail(String[] toRecipients, String[] ccRecipients, String templateApiName, ID targetObjId, Id whatId, ID orgWideEmailId, Boolean saveAsActivity, Attachment[] attachList ) {
       //  templateId   must be ID of an Email template
       //  targetObjId must be a Contact, User, Lead Id -- also used in merge fields of template recipient.xxxx
-      //  whatId    must be an SObject that is used in the merge fields of the template relatedTo.xxxx
+      //  whatId    must be an SObject that is used in the merge fields of the template relatedTo.xxxx  Cannot use UserID's
       //  fromId    if non null, use current user, otherwise, use this ID (most likely an org wide no reply id)
       //  bcc      not permitted when using templates
       
