@@ -2,7 +2,7 @@ public class multiAttachment_newController {
     public Id sobjId {get; set;}
     // list of existing files - populated on demand
     public List<ContentVersion> files;
-    
+    public ContentVersion cc{get; set;}
     // list of new files to add
     public List<ContentVersion> newfiles {get; set;}
     
