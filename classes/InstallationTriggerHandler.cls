@@ -958,6 +958,7 @@ public class InstallationTriggerHandler {
                i.Assigned_To__c = u.id;
                i.OwnerId = u.id;
                i.Installer_Manager__c = u.Contact.Name;
+               i.status__c = 'Assigned';
                System.debug('Manger'+i.Installer_Manager__c);
                i.Installer_Changed__c  = TRUE ; 
                 }

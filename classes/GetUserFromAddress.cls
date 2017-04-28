@@ -644,7 +644,7 @@ else if (subzip>='83200' && subzip <='83999')
 }
 else if (subzip>='84000' && subzip <='84799') 
 {
-    return '005A0000000N1nuIAC';
+    return '005A0000007NSok'; //005A0000000N1nuIAC
 }
 else if (subzip>='85000' && subzip <='86599') 
 {

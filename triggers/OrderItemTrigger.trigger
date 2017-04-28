@@ -42,7 +42,7 @@ system.debug('** OrderItemTrigger: Opp ID = ' + oi.OrderId );
 system.debug('last char: ' + lastchar);
 
 //visorQueenIds
-		if( oi.Product_Name__c.toLowerCase() == 'shades' )
+		if( oi.Product_Name__c.toLowerCase() == 'shade' )
 		{
 			if( !visorQueenIds.containsKey(oi.OrderId) )
 			{

@@ -11,15 +11,45 @@ global class AttachmentTOFileConversion implements Database.Batchable < sObject 
     //Execute method of the batch class
      global void execute(Database.BatchableContext BC, List<Installation__c> scope)
     {
-      List<attachment> attList=[select id,ParentId,Name,Body from attachment where ContentType=:'attachment'];
+    
+    set<id> insId = new set<id>();
+    for(Installation__c ins:scope){
+    insId.add(ins.id);
+    }
+      List<attachment> attList=[select id,ParentId,Name,Body,ContentType,BodyLength from attachment where ParentId=:insId];
+      List<ContentDocument> ListCnd=new List<ContentDocument>();
+      List<ContentVersion> versions = new List<ContentVersion>();
       
-        for ( Installation__c inst : scope)
-        {
-         attachment a=new attachment();
-         a.ParentId = inst.id;
-         a.ContentType='File';
+      for(Installation__c ins:scope){
+      
+            for ( attachment att: attList)
+            {
+            if(ins.id==att.ParentId){
+            // att.ContentType='File';
+           /* ContentDocument cnd=new ContentDocument();
+            //cnd.FileType=att.ContentType;
+            cnd.ParentId=ins.id;
+            ListCnd.add(cnd);*/
+            
+            //string base64Data = EncodingUtil.urlDecode(base64Data, 'UTF-8');
+        
+        ContentVersion cv = new ContentVersion();
+        cv.ContentLocation = 'S';
+        
+        //cv.FileType=att.ContentType;
+        versions.add(cv);
+        //cv.ContentDocumentId = contentDocumentId;
+        //cv.VersionData = EncodingUtil.base64Decode(EncodingUtil.urlDecode(base64Data, 'UTF-8'));
+        //cv.Title = fileName;
+        //cv.PathOnClient = filename;
+        
+        //insert cv;                          
+
+             }
+            }
         }
-        update scope;
+        insert versions;
+        //insert ListCnd;
     }  
 
     //Finish method of the batch class

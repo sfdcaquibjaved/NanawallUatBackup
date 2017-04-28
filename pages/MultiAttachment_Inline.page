@@ -1,0 +1,59 @@
+<apex:page standardController="Project__c" extensions="MultiAttachment_InlineController">
+    <apex:form >
+    <apex:pageBlock title="Files" >
+        <apex:pageBlockButtons >
+        <apex:commandButton value="Add Files" action="{!redirect}" rerender="redirectPanel"/>
+            <apex:outputPanel id="redirectPanel" >
+            <apex:outputText rendered="{!shouldRedirect}">
+                <script type="text/javascript">
+                    window.top.location.href = '{!redirectUrl}';
+                </script>
+            </apex:outputText>
+        </apex:outputPanel>
+        </apex:pageBlockButtons>
+         <apex:pageBlockTable value="{!filelist}" var="files">
+                    <apex:column headerValue="Action" width="20%"> 
+                    <apex:outputlink value="{!$Site.BaseUrl}/{!files.recordId}" target="_blank" styleclass="actionLink" style="color: #015ba7;">
+                    Preview 
+                    </apex:outputlink>
+                   <!-- <apex:outputlink value="{!URLFOR($Action.Attachment.Download,files.recordId)}"  target="_blank" rendered="{!NOT(ISBLANK(files)) && NOT(ISBLANK(files.recordId))}" styleclass="actionLink" style="color: #015ba7;">
+                    Download 
+                    </apex:outputlink>-->
+                    <apex:commandLink value=" Del" onclick="if(!confirm('Are you sure?')){return false;}" action="{!deleteRecord}" styleclass="actionLink" style="color: #015ba7;">
+                    <apex:param name="recordId" value="{!files.recordId}" assignTo="{!recordId}"/>   
+                    </apex:commandLink>                
+                    
+                    </apex:column>
+                    <apex:column headerValue="Title" width="20%" >
+                     <apex:outputlink value="{!$Site.BaseUrl}/{!files.recordId}"  target="_blank">
+                    <apex:outputText value="{!files.Title}"/>
+                    </apex:outputlink>
+                    
+                    </apex:column>
+                    <apex:column headerValue="Type of File" width="20%" >
+                    <apex:outputText value="{!files.typeoffile}" >
+                    </apex:outputText>                  
+                    </apex:column>
+                    
+                    <apex:column headerValue="Created By" width="20%" >
+                    <apex:outputText value="{!files.CBName}" >
+                    </apex:outputText>                  
+                    </apex:column>
+             
+                    <apex:column headerValue="Created Date" width="30%" >
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+                    <apex:param value="{!files.created}" ></apex:param>                    
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Last Modified Date" width="30%" >
+                    <apex:outputText value="{0, date, MM'/'dd'/'yyyy}" >
+                    <apex:param value="{!files.LMDate}" ></apex:param>                    
+                    </apex:outputText>
+                    </apex:column>
+                    
+                    
+                    </apex:pageBlocktable>
+         </apex:pageBlock>
+        </apex:form>
+</apex:page>
