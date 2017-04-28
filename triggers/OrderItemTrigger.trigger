@@ -30,6 +30,7 @@ trigger OrderItemTrigger on OrderItem (after insert) {
 	map<id, list<OrderItem> > solarluxIds = new map<id, list<OrderItem>>();
 	map<id, list<OrderItem> > wizardIds = new map<id, list<OrderItem>>();
 	map<id, list<OrderItem> > seikiIds = new map<id, list<OrderItem>>();
+	map<id, list<OrderItem> > visorQueenIds = new map<id, list<OrderItem>>();
 
 	map< Id,string> mfoTypes = new map<Id, string>();
 
@@ -39,7 +40,19 @@ system.debug('** OrderItemTrigger: checking product: ' + oi.Product_Name__c );
 system.debug('** OrderItemTrigger: Opp ID = ' + oi.OrderId );
 		string lastchar = oi.Product_Name__c.substring( oi.Product_Name__c.length()-1,oi.Product_Name__c.length() );
 system.debug('last char: ' + lastchar);
-		if( oi.Product_Name__c.toLowerCase() == 'screenone' )
+
+//visorQueenIds
+		if( oi.Product_Name__c.toLowerCase() == 'shades' )
+		{
+			if( !visorQueenIds.containsKey(oi.OrderId) )
+			{
+				visorQueenIds.put( oi.OrderId, new list<OrderItem>() );
+			}
+			visorQueenIds.get(oi.OrderId).add( oi );
+
+system.debug('got a Visor Queen');
+		
+		} else if( oi.Product_Name__c.toLowerCase() == 'screenone' )
 		{
 			//make sure a wizard WO doesnt already exist
 			//Wizard_Work_Order
@@ -99,7 +112,7 @@ system.debug('got a solarlux');
 		}
 	}
 		
-	if( teuffelIds.size() > 0 || richmondIds.size() > 0 || solarluxids.size() > 0 || wizardIds.size() > 0 || seikiIds.size() > 0  )
+	if( visorQueenIds.size() > 0 || teuffelIds.size() > 0 || richmondIds.size() > 0 || solarluxids.size() > 0 || wizardIds.size() > 0 || seikiIds.size() > 0  )
 	{
  
 		
@@ -120,6 +133,30 @@ System.debug('got a record type ' + rt.DeveloperName + ' ; ' + rt.Id);
     	}
 		list<Manufacturing_Order__c> workorderstocreate = new list<Manufacturing_Order__c>();
 		list<Shipping_Order__c> shippingorderstocreate = new list<Shipping_Order__c>();
+		
+		
+		//visorQueenIds
+		for( Id OrderID : visorQueenIds.keySet() )
+		{
+			Order o = orderMap.get( OrderId );
+			Manufacturing_Order__c wo = new Manufacturing_Order__c();
+			wo.OwnerId = o.Opportunity.OwnerId;
+			wo.Order__c = OrderId;
+			wo.RecordTypeId = recordTypes.get('Visor');
+			wo.Project__c = o.Project__c;
+			
+			 
+			mfoTypes.put(OrderID, ( mfoTypes.get(OrderID) != '' && mfoTypes.get(OrderID) != null ? mfoTypes.get(OrderID)+';' : '')+'Visor' );
+			
+			//defaults
+			wo.Account__c = o.Opportunity.AccountId;
+			wo.Contact__c = o.Quote.ContactId;
+			wo.AACO__c = o.Quote.AACO__c;
+
+system.debug('using Seiki record type ' + recordTypes.get('Seiki') );			
+			workorderstocreate.add(wo);
+			
+		}
 		
 //		seikiIds
 		for( Id OrderID : seikiIds.keySet() )
@@ -280,7 +317,11 @@ system.debug('using Solarlux record type ' + recordTypes.get('Solarlux') );
 		
 		
 			list<OrderItem> orderLineItems = null;	
-			if( wo.RecordTypeId == recordTypes.get('Seiki') )
+			
+			if( wo.RecordTypeId == recordTypes.get('Visor') )
+			{
+				orderLineItems = visorQueenIds.get( wo.Order__c);				
+			} else if( wo.RecordTypeId == recordTypes.get('Seiki') )
 			{
 				orderLineItems = seikiIds.get( wo.Order__c);				
 			} else if( wo.RecordTypeId == recordTypes.get('Wizard') )

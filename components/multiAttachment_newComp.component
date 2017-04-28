@@ -9,34 +9,7 @@
             
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script>
-        $(function(){
-              // script that triggers the click of the standard
-              // choose file button 
-              $('#CustomChooseFileButton').click( function(e) {
-                 
-                  var vild=document.getElementById("file");
-                      alert(vild);
-                      
-                  
-                  });
-                  
-                              // script to hide the blinking cursor
-               $('input[type="text"]').mousedown(function(e) { 
-                      e.preventDefault();
-                      $(this).blur();
-                      return false;
-           });
-         });
-        </script>
-        <script type = "text/javascript">
-        function check(obj)){
-        var vild=document.getElementById("file").click()});
-         alert(vild);
-        }
-        </script>
 <style>
-       
     .table111{
     height: 66px;
     border: 5px;
@@ -44,20 +17,14 @@
     padding-left: 20px;
     background-color: #ffffff;
     }
+    .picklist{
+    width: 70%;
+    }
     .browse{
     height: 75%;
     padding: 3px;
     padding-left: 80px;
     }
-        .ChooseFileContainer {
-          position:relative;
-         display:inline;
-}
-     .OverlayButton {
-          position:absolute;
-          left:5px;
-          right:0;
-} 
 </style>
     </head>
    <body>
@@ -99,20 +66,16 @@
 <div class="slds-grid slds-wrap slds-grid--pull-padded">
 
 
-           <!--  <apex:pageBlockTable value="{!newFiles}" var="newf">-->
-                 <div class="ChooseFileContainer">
-                       <!-- <apex:column styleClass="table111">-->
-                                <apex:inputFile value="{!cc.versionData}" filename="{!cc.title}" id="file" styleClass="browse"/>
-                     <input id="CustomChooseFileButton" type="text" size="23" name="CustomChooseFileButton" value="Upload" class="OverlayButton btn" background="Blue"/>
-                     
-                       <!-- </apex:column>-->
-                        </div>
-                <!-- <apex:column styleClass="table111" width="440px">-->
+             <apex:pageBlockTable value="{!newFiles}" var="newf">       
+                        <apex:column styleClass="table111">
+                     <apex:inputFile value="{!newf.versionData}" filename="{!newf.title}" id="file" styleClass="browse"/>
+                        </apex:column>
+                 <apex:column styleClass="table111" width="440px">
                          <p class="MsoNormal" style="line-height:9.75pt"><b><span style="font-size:9.5pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">File Type</span></b></p>
-                     <apex:inputField value=" {!cc.Type_of_File__c}" label="File Type" id="pick" styleClass="btn btn-default dropdown-toggle" style="width: 50%" />
-               <!--  </apex:column>-->
+                     <apex:inputField value=" {!newf.Type_of_File__c}" label="File Type" id="pick" styleclass="btn btn-default dropdown-toggle" style="width: 50%"/>
+                 </apex:column>
 
-  <!-- </apex:pageBlockTable>-->
+   </apex:pageBlockTable>
          
 </div>
 </apex:PageBlock>                                
