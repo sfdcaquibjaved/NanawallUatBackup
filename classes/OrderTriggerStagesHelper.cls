@@ -503,6 +503,7 @@ public with sharing class OrderTriggerStagesHelper{
        decimal sd ;
        decimal td ;
        decimal wd ;
+       decimal vd ;
        //query to get the highest ordernumber for that respective manufacturer
          list<order> ord = [select id,Name , Manufacturing__c from order where Manufacturing__c = 'Richmond' AND name >= '40000' AND name <'75000' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord.size()>0){rd= decimal.valueOf(ord[0].Name);}
@@ -510,9 +511,10 @@ public with sharing class OrderTriggerStagesHelper{
          if(ord1.size()>0){sd= decimal.valueOf(ord1[0].Name);}
        list<order> ord2 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Teuffel' AND name >= '75000' AND name <'90000' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord2.size()>0){ td= decimal.valueOf(ord2[0].Name);}
-       list<order> ord3 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Wizard' AND name >= '90000'  ORDER BY Name DESC NULLS last limit 1 ];
+       list<order> ord3 = [select id, Name , Manufacturing__c from order where (Manufacturing__c = 'Wizard' OR Manufacturing__c = 'Seiki')AND name >= '97000' AND name <'99000' ORDER BY Name DESC NULLS last limit 1 ];
         if(ord3.size()>0){ wd= decimal.valueOf(ord3[0].Name);}
-        
+        list<order> ord4 = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'VQ' AND name >= '93000' AND name <'97000' ORDER BY Name DESC NULLS last limit 1 ];
+        if(ord4.size()>0){ vd= decimal.valueOf(ord4[0].Name);}
         /*rd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Richmond').LatestOrderNumber__c);
         sd = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Solarlux').LatestOrderNumber__c);
         td = decimal.valueOf(Manufacturer_OrderNb__c.getInstance('Teuffel').LatestOrderNumber__c);
@@ -593,7 +595,17 @@ public with sharing class OrderTriggerStagesHelper{
                     system.debug('Rtueffeldata'+ oNew.Manufacturing__c+oNew.Name+td);
                      counterT+=1;
                 }
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard') && (wd>=90000)){
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('seiki')&& (wd>=97000 && wd<99000)){
+                
+                   oNew.Manufacturing__c='Seiki';
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name=string.valueof(wd+1);
+                     //store incremental value 
+                    wd = decimal.valueOf(oNew.Name);
+                    system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
+                   counterW+=1;
+                }
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard')&& (wd>=97000 && wd<99000)){
                 
                    oNew.Manufacturing__c='Wizard';
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
@@ -603,7 +615,8 @@ public with sharing class OrderTriggerStagesHelper{
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                    counterW+=1;
                 }
-                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard')){
+               
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Wizard')||ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('seiki')){
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name='97000';
                     oNew.Manufacturing__c='Wizard';
@@ -611,6 +624,25 @@ public with sharing class OrderTriggerStagesHelper{
                     wd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                      counterW+=1;
+                }
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('VQ') && (vd>=93000 && vd<97000)){
+                
+                   oNew.Manufacturing__c='VQ';
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name=string.valueof(vd+1);
+                     //store incremental value 
+                    vd = decimal.valueOf(oNew.Name);
+                    system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+vd);
+                   //counterW+=1;
+                }
+                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('VQ')){
+                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
+                        oNew.Name='93000';
+                    oNew.Manufacturing__c='VQ';
+                     //store incremental value 
+                    vd = decimal.valueOf(oNew.Name);
+                    system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+vd);
+                     //counterW+=1;
                 }
             // }   
             

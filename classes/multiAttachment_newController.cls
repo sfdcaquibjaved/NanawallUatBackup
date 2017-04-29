@@ -20,6 +20,7 @@ public class multiAttachment_newController {
         List <FeedItem> FeedItemContentList = new List <FeedItem> () ;
         for (ContentVersion newf : newFiles)
         {
+           System.debug('versionData'+newf.VersionData);
             if (newf.versionData!=null)
             {
                 newf.pathOnClient = newf.Title;

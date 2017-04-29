@@ -16,7 +16,7 @@
                     <apex:outputlink value="{!$Site.BaseUrl}/{!files.recordId}" target="_blank" styleclass="actionLink" style="color: #015ba7;">
                     Preview 
                     </apex:outputlink>
-                   <!-- <apex:outputlink value="{!URLFOR($Action.Attachment.Download,files.recordId)}"  target="_blank" rendered="{!NOT(ISBLANK(files)) && NOT(ISBLANK(files.recordId))}" styleclass="actionLink" style="color: #015ba7;">
+                    <!--<apex:outputlink value="{!URLFOR($Action.Attachment.Download,files.recordId)}"  target="_blank" rendered="{!NOT(ISBLANK(files)) && NOT(ISBLANK(files.recordId))}" styleclass="actionLink" style="color: #015ba7;">
                     Download 
                     </apex:outputlink>-->
                     <apex:commandLink value=" Del" onclick="if(!confirm('Are you sure?')){return false;}" action="{!deleteRecord}" styleclass="actionLink" style="color: #015ba7;">
