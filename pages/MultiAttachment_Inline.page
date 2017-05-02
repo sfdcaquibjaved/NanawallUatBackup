@@ -1,8 +1,15 @@
 <apex:page standardController="Project__c" extensions="MultiAttachment_InlineController">
+    <style>
+        .button{
+        position: absolute;
+        left: 42%;
+        top: 4%;
+        }
+    </style>
     <apex:form >
     <apex:pageBlock title="Files" >
-        <apex:pageBlockButtons >
-        <apex:commandButton value="Add Files" action="{!redirect}" rerender="redirectPanel"/>
+        <!--<apex:pageBlockButtons >-->
+        <apex:commandButton value="Add Files" action="{!redirect}" rerender="redirectPanel" styleClass="button"/>
             <apex:outputPanel id="redirectPanel" >
             <apex:outputText rendered="{!shouldRedirect}">
                 <script type="text/javascript">
@@ -10,7 +17,7 @@
                 </script>
             </apex:outputText>
         </apex:outputPanel>
-        </apex:pageBlockButtons>
+       <!-- </apex:pageBlockButtons>-->
          <apex:pageBlockTable value="{!filelist}" var="files">
                     <apex:column headerValue="Action" width="20%"> 
                     <apex:outputlink value="{!$Site.BaseUrl}/{!files.recordId}" target="_blank" styleclass="actionLink" style="color: #015ba7;">

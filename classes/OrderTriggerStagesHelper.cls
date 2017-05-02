@@ -458,7 +458,7 @@ public with sharing class OrderTriggerStagesHelper{
         
             if(qdList.Quote__c==o.NanaQuote__c){
             count=count+1;
-                if(!qdList.model__c.contains('Screen')){  
+                if(!qdList.model__c.contains('Screen') && !qdList.model__c.contains('Shade') ){  
                         c=c+1;
                         count2=count2+1; 
                         if(c==1){

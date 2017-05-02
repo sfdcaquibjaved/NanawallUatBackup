@@ -5,6 +5,7 @@ public class multiAttachment_newController {
     public ContentVersion cc{get; set;}
     // list of new files to add
     public List<ContentVersion> newfiles {get; set;}
+    public list<Installation__c> childinst;
     
     public static final Integer NUM_FILES_TO_ADD=9;
     public multiAttachment_newController(){
@@ -18,6 +19,7 @@ public class multiAttachment_newController {
         
         List<ContentVersion> toInsert=new List<ContentVersion>();
         List <FeedItem> FeedItemContentList = new List <FeedItem> () ;
+        List <FeedItem> FeedItemList = new List <FeedItem>();
         for (ContentVersion newf : newFiles)
         {
            System.debug('versionData'+newf.VersionData);
@@ -30,14 +32,25 @@ public class multiAttachment_newController {
         }
         if(toInsert.size() > 0){
         insert toInsert;
+            childinst = [select id,name from installation__c where project__c =:sobjId];
             for(ContentVersion c: toInsert){
                     System.debug('is it equal?');
                     //Attaching FeedItem to ContentVersion
                     FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = sobjId, RelatedRecordId = c.ID, Type = 'ContentPost');
                     FeedItemContentList.add(elm);
+                    //Attaching Files of type 'Drawings' to Installations under the Project
+                    if(childinst.size() > 0 && c.Type_of_File__c == 'Drawings'){
+                        for(Installation__c inst:childinst){
+                            FeedItem e = new FeedItem(Body = 'Post with related document body', ParentId = inst.Id, RelatedRecordId = c.ID, Type = 'ContentPost');
+                            FeedItemList.add(e);
+                        }
+                    }
                     
                 }
             insert FeedItemContentList;
+            if(FeedItemList.size() > 0){
+                insert FeedItemList;
+            }
             ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, toInsert.size() + ' file(s) uploaded successfully'));
         }
         else{

@@ -965,6 +965,5 @@ public class InstallationTriggerHandler {
              }
         }
     }
-
      
 }
