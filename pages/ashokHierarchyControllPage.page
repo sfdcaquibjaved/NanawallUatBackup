@@ -4,8 +4,8 @@
 <APex:pageBlockSection columns="1">
 <apex:pageBlocktable value="{!account}" var="acc">
 <Apex:column headervalue="Corporate Account Name" value="{!acc.name}"/>
-<Apex:column headervalue="Site Count"/>
-<Apex:column headervalue="Projects Count"/>
+<Apex:column headervalue="Site Count" value="{!AccSiteList.size}"/>
+<Apex:column headervalue="Projects Count" value="{!ProjSiteList.size}"/>
 <Apex:column headervalue="Most Recent Order Date"/>
 <Apex:column headervalue="Projects Won (Order Paid)"/>
 <Apex:column headervalue="Projects (Order In Progress)"/>
