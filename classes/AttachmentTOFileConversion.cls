@@ -25,14 +25,7 @@ global class AttachmentTOFileConversion implements Database.Batchable < sObject 
             for ( attachment att: attList)
             {
             if(ins.id==att.ParentId){
-            // att.ContentType='File';
-           /* ContentDocument cnd=new ContentDocument();
-            //cnd.FileType=att.ContentType;
-            cnd.ParentId=ins.id;
-            ListCnd.add(cnd);*/
-            
-            //string base64Data = EncodingUtil.urlDecode(base64Data, 'UTF-8');
-        
+           
         ContentVersion cv = new ContentVersion();
         cv.ContentLocation = 'S';
         

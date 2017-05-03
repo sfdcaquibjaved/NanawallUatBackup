@@ -1,0 +1,8 @@
+<apex:page >
+  <apex:form >  
+  <Apex:pageBlock >
+  <Apex:pageBlockSection columns="1">
+  </Apex:pageBlockSection>
+  </Apex:pageBlock>  
+  </apex:form>
+  </apex:page>

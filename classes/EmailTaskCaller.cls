@@ -9,6 +9,26 @@ global class EmailTaskCaller {
 		return string.valueOf(i);
 	}
 
+	WebService static boolean TriggerQuoteEmailWorkflow( string SalesforceQuoteID,  string GUUID_Quote, string GUUID_CAD) {
+		
+		//2. save the GUIDs
+		Quote__c q = [SELECT id,Followup_Status__c,Print_Date__c,GUUID_CAD__c, GUUID_Quote__c, Opportunity__c  FROM Quote__c WHERE id = :SalesforceQuoteID ];
+		q.Followup_Status__c ='Reviewing';
+		q.Print_Date__c = DateTime.now();
+		q.GUUID_CAD__c = GUUID_CAD;
+		q.GUUID_Quote__c = GUUID_Quote;
+		update q;
+
+
+		//to put in workflow
+		Opportunity o = [SELECT Id, Customer_Emailed__c FROM Opportunity WHERE Id = :q.Opportunity__c];
+		o.Customer_Emailed__c = true;
+		update o;
+
+
+		return true;
+	}
+
 	WebService static boolean SendQuoteEmail4( string SalesforceQuoteID, integer PDFHistoryID,integer CADHistoryID, string ModelDescription, string ShowroomInfo, string NDGLink_OverrideURL, boolean SendToCustomer, boolean SendToRep ) {
 	
 
