@@ -10,7 +10,7 @@ global class orderAmountsCleanupBatch implements Database.Batchable < sObject > 
      //Start method of the batch class
     global Database.QueryLocator start(Database.BatchableContext BC) {
       
-        this.query = 'SELECT Id,Name,TotalAmount,Opportunity,project__c from order WHERE status!=status1 AND status!=status2 AND status!=status3';
+        this.query = 'SELECT Id,Name,TotalAmount,Opportunityid,project__c from order WHERE status!=:status1 AND status!=:status2 AND status!=:status3';
       
         return Database.getQueryLocator(query);
     }
@@ -44,7 +44,7 @@ global class orderAmountsCleanupBatch implements Database.Batchable < sObject > 
       database.update( updateOppList);
       
       list<project__c> updateProList =new list<project__c>();
-      list<Project__c> proList = [select id ,Stage__c,(select id , Status,NanaQuote__c,Project__c from Orders__r where status!=:status1 AND status!=:status2 AND status!=:status3) from Project__c where id IN : proIds];
+      list<Project__c> proList = [select id ,Amount__c,Stage__c,(select id ,TotalAmount, Status,NanaQuote__c,Project__c from Orders__r where status!=:status1 AND status!=:status2 AND status!=:status3) from Project__c where id IN : proIds];
       for(project__c pro: proList){
       decimal sum =0;
       for(order o:pro.Orders__r){
