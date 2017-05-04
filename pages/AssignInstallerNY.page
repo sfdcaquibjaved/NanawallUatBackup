@@ -1,0 +1,26 @@
+<apex:page Controller="AssignInstallerNY_Controller" showHeader="false" sidebar="false">
+   <script type="text/javascript">
+        function CloseAndRefresh(){
+            window.top.location.href="/{!$CurrentPage.parameters.id}";
+        }    
+    </script>
+    <apex:form >
+        <apex:pageBlock id="out"> 
+           <apex:selectList value="{!selectedInstaller}" multiselect="false" size="1">
+                <apex:selectOption itemValue="Aaco Glass" itemLabel="Aaco Glass"/>
+                <apex:selectOption itemValue="Prism Home Improvements" itemLabel="Prism Home Improvements"/>
+                <apex:selectOption itemValue="Lombardi Construction" itemLabel="Lombardi Construction"/>
+            </apex:selectList>
+         
+         <apex:pageBlockButtons >
+            <apex:commandButton value="Save" action="{!save}" rerender="out" status="actStatusId" onComplete="CloseAndRefresh()"/>
+            <apex:actionStatus id="actStatusId">
+                <apex:facet name="start">
+                    <img src="/img/loading.gif" />
+                </apex:facet>
+            </apex:actionStatus>
+        </apex:pageBlockButtons>
+      </apex:pageBlock>
+         
+    </apex:form>
+</apex:page>

@@ -113,7 +113,7 @@
         //alert('files?'+files);
         //Only proceed if there are files selected
         if(files.length == 0){
-            //alert('Please select a file!');
+            // alert('Please select a file!');
             return; //end function
         }
         
@@ -161,7 +161,7 @@
         if($upload.length != 0){
             //Based on index of the div, get correct file from files array
             currentFile = files[$upload.attr('data-index')];
-            // alert('file?'+currentFile);
+            //alert('file?'+currentFile);
             /*Build the byteChunkArray array for the current file we are processing. This array is formatted as:
         ['0-179999','180000-359999',etc] and represents the chunks of bytes that will be uploaded individually.*/
         byteChunkArray = new Array();
@@ -210,7 +210,7 @@
     
     //Uploads a chunk of bytes, if attachmentId is passed in it will attach the bytes to an existing attachment record
     function processByteChunkArray(attachmentId){
-        // alert('byteChunkArray'+byteChunkArray.length);
+        //  alert('byteChunkArray'+byteChunkArray.length);
         //Proceed if there are still values in the byteChunkArray, if none, all piece of the file have been uploaded
         if(byteChunkArray.length > 0){
             //Determine the byte range that needs to uploaded, if byteChunkArray is like... ['0-179999','180000-359999']
@@ -240,7 +240,7 @@
                 if(evt.target.readyState == FileReader.DONE){ //Make sure read was successful, DONE == 2
                     //Base 64 encode the data for transmission to the server with JS remoting, window.btoa currently on support by some browsers
                     var base64value = window.btoa(evt.target.result);
-                    //alert('read successfull');
+                    // alert('read successfull');
                     //Use js remoting to send the base64 encoded chunk for uploading
                     Multiple_Upload_Controller.attachBlob(parentId,attachmentId,currentFile.name,currentFile.type,base64value,function(result,event){
                         

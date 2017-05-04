@@ -61,7 +61,7 @@ public with sharing class CorporateAccountProjectListController
                        FROM Project__c
                        WHERE ( Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                       OR Purchaser_Account__c =:objAcc.Id ) AND (Stage__c!='Duplicate') ORDER BY Close_Date__c DESC];
+                       OR Purchaser_Account__c =:objAcc.Id ) ORDER BY Close_Date__c DESC];
                        
             
             for (Project__c proj : lstProj) {

@@ -448,29 +448,29 @@ public class HierarchyController_nishant1 {
 
             string sortFullExp = sortExpression  + ' ' + sortDirection;  
 
-            if(sortExp.equalsIgnoreCase('AccName')) sortData('AccName');
+            if(sortExp.equalsIgnoreCase('AccName')) sortData(acclist,accmap);
         
-             else if (sortExp.equalsIgnoreCase('PrjName')) sortData('PrjName');
+            else if (sortExp.equalsIgnoreCase('PrjName')) sortData(prjlist,prjmap);
             
-           else  if (sortExp.equalsIgnoreCase('Amount')) sortData('Amount');
+           else  if (sortExp.equalsIgnoreCase('Amount')) sortData(amtlst,amtmap);
             
-            else if (sortExp.equalsIgnoreCase('Stage')) sortData('PrjStatus');   
+            else if (sortExp.equalsIgnoreCase('Stage')) sortData(prjsts,stsmap);   
             
-            else if (sortExp.equalsIgnoreCase('PCrtDt')) sortData('PrjCreatedDate');
+            else if (sortExp.equalsIgnoreCase('PCrtDt')) sortData(dtlst,dtmap);
             
-            else if (sortExp.equalsIgnoreCase('Arch')) sortData('Architect');
+            else if (sortExp.equalsIgnoreCase('Arch')) sortData(archList,archMap);
             
-            else if (sortExp.equalsIgnoreCase('Purch')) sortData('Purchaser');
+            else if (sortExp.equalsIgnoreCase('Purch')) sortData(purchlst,purchMap);
             
-            else if (sortExp.equalsIgnoreCase('Ordering')) sortData('Ordering');
+           else if (sortExp.equalsIgnoreCase('Ordering')) sortData(ordlst,ordMap);
             
-            else if (sortExp.equalsIgnoreCase('City')) sortData('City');
+           else if (sortExp.equalsIgnoreCase('City')) sortData(citylst,cityMap);
             
-            else if (sortExp.equalsIgnoreCase('State')) sortData('State');
+            else if (sortExp.equalsIgnoreCase('State')) sortData(statelst,stateMap);
             
-            else if (sortExp.equalsIgnoreCase('Zipcode')) sortData('Zipcode');
+            else if (sortExp.equalsIgnoreCase('Zipcode')) sortData(ziplst,zipMap);
             
-            else if (sortExp.equalsIgnoreCase('AppIndustry')) sortData('AppIndustry');
+            else if (sortExp.equalsIgnoreCase('AppIndustry')) sortData(applst,appMap);
             
             ProjectListBkp = ProjectList; 
             
@@ -478,12 +478,73 @@ public class HierarchyController_nishant1 {
      }
 
         
-       public void sortData(String str)
+       public void sortData(List<String> str , Map<String,Hierarchy> map1)
         { 
-           if (str.equalsIgnoreCase('PrjCreatedDate'))
-            {
-
-                dtlst.sort();
+           
+                    
+                str.sort();
+                
+                List<Hierarchy> hrlist = new List<Hierarchy>();
+                
+                for (String s : str)
+                {
+                    
+                     hrlist.add(map1.get(s));
+                }
+                    
+                if(sortDirection.equalsIgnoreCase('ASC'))
+                
+                ProjectList = hrlist;
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                    for(Integer i = str.size()-1, j=0;i >=0; i--)
+                    
+                    ProjectList.set(i,hrlist.get(j++));
+                }
+   
+           
+               
+     }
+     
+     public void sortData(List<decimal> str , Map<decimal,Hierarchy> map1)
+        { 
+           
+                    
+               amtlst.sort();
+               List<Hierarchy> amtlist = new List<Hierarchy>();
+                
+                for (Decimal s : amtlst)
+                {
+                    
+                     amtlist.add(amtmap.get(s));
+                }
+                
+                if(sortDirection.equalsIgnoreCase('ASC')){
+                
+                    ProjectList = amtlist;
+                    
+                    for(String s: noPrjAccs)
+                    
+                    ProjectList.add(accmap.get(s));
+                }
+             
+                else if (sortDirection.equalsIgnoreCase('DESC'))
+                {
+                
+                for(Integer i = amtlist.size()-1, j=0;i >=0; i--)
+                    
+                 ProjectList.set(i,amtlist.get(j++));
+             }
+               
+     }
+    
+     public void sortData(List<DateTime> str , Map<DateTime,Hierarchy> map1)
+        { 
+           
+                    
+               dtlst.sort();
                 
                 List<Hierarchy> dtlist = new List<Hierarchy>();
                 
@@ -508,364 +569,11 @@ public class HierarchyController_nishant1 {
                 for(Integer i = dtlist.size()-1, j=0;i >=0; i--)
                     
                  ProjectList.set(i,dtlist.get(j++));
-             }
-          }
-            
-            if (str.equalsIgnoreCase('Purchaser'))
-            {
-
-                purchlst.sort();
-                
-                List<Hierarchy> purchList = new List<Hierarchy>();
-                
-                for (String s : purchlst)
-                {
-                     purchList.add(purchMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = purchList;
-                    
-                    for (Hierarchy hr: noPrjPurch)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = purchList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,purchList.get(j++));
-             }
-          }
-            
-          if (str.equalsIgnoreCase('City'))
-            {
-
-                citylst.sort();
-                
-                List<Hierarchy> cityList = new List<Hierarchy>();
-                
-                for (String s : citylst)
-                {
-                     cityList.add(cityMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = cityList;
-                    
-                    for (Hierarchy hr: noPrjCity)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = cityList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,cityList.get(j++));
-             }
-          }
-            
-          if (str.equalsIgnoreCase('State'))
-            {
-
-                statelst.sort();
-                
-                List<Hierarchy> stateList = new List<Hierarchy>();
-                
-                for (String s : statelst)
-                {
-                     stateList.add(stateMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = stateList;
-                    
-                    for (Hierarchy hr: noPrjState)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = stateList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,stateList.get(j++));
-             }
-          }
-            
-          if (str.equalsIgnoreCase('Zipcode'))
-            {
-
-                ziplst.sort();
-                
-                List<Hierarchy> zipList = new List<Hierarchy>();
-                
-                for (String s : ziplst)
-                {
-                     zipList.add(zipMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = zipList;
-                    
-                    for (Hierarchy hr: noPrjZip)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = zipList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,zipList.get(j++));
-             }
-          }  
-            
-          if (str.equalsIgnoreCase('Ordering'))
-            {
-
-                ordlst.sort();
-                
-                List<Hierarchy> ordList = new List<Hierarchy>();
-                
-                for (String s : ordlst)
-                {
-                     ordList.add(ordMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = ordList;
-                    
-                    for (Hierarchy hr: noPrjOrd)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = ordList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,ordList.get(j++));
-             }
-          }  
-           
-            if (str.equalsIgnoreCase('Architect'))
-            {
-
-                archList.sort();
-                
-                List<Hierarchy> archlst = new List<Hierarchy>();
-                
-                for (String s : archList)
-                {
-                     archlst.add(archMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = archlst;
-                    
-                    for (Hierarchy hr: noPrjArch)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = archlst.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,archlst.get(j++));
-             }
-          }
-            
-          if (str.equalsIgnoreCase('AppIndustry'))
-            {
-
-                applst.sort();
-                
-                List<Hierarchy> appList = new List<Hierarchy>();
-                
-                for (String s : applst)
-                {
-                     appList.add(appMap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = appList;
-                    
-                    for (Hierarchy hr: noPrjApp)
-                        
-                        ProjectList.add(hr);
-                                
-                    for(String s: noPrjAccs)
-                        
-                        ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = appList.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,appList.get(j++));
-             }
-          }  
-            if (str.equalsIgnoreCase('Amount'))
-            {
-
-                amtlst.sort();
-                
-                List<Hierarchy> amtlist = new List<Hierarchy>();
-                
-                for (Decimal s : amtlst)
-                {
-                    
-                     amtlist.add(amtmap.get(s));
-                }
-                
-                if(sortDirection.equalsIgnoreCase('ASC')){
-                
-                    ProjectList = amtlist;
-                    
-                    for(String s: noPrjAccs)
-                    
-                    ProjectList.add(accmap.get(s));
-                }
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                for(Integer i = amtlist.size()-1, j=0;i >=0; i--)
-                    
-                 ProjectList.set(i,amtlist.get(j++));
-             }
-          }
-
-            if (str.equalsIgnoreCase('AccName'))
-             {
-                    
-                acclist.sort();
-                
-                List<Hierarchy> hrlist = new List<Hierarchy>();
-                
-                for (String s : acclist)
-                {
-                    
-                     hrlist.add(accmap.get(s));
-                }
-                    
-                if(sortDirection.equalsIgnoreCase('ASC'))
-                
-                ProjectList = hrlist;
-             
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                    for(Integer i = ProjectList.size()-1, j=0;i >=0; i--)
-                    
-                    ProjectList.set(i,hrlist.get(j++));
-                }
-         }
-            
-            if (str.equalsIgnoreCase('PrjStatus'))
-            {
-                prjsts.sort();
-                
-                List<Hierarchy> stslist = new List<Hierarchy>();
-                
-                for (String s : prjsts)
-                {
-                     stslist.add(stsmap.get(s));
-                }
-                    
-                if(sortDirection.equalsIgnoreCase('ASC'))
-                {
-                    ProjectList = stslist;
-                    
-                    for(String s: noPrjAccs)
-                    
-                    ProjectList.add(accmap.get(s));
-                }
-                else if (sortDirection.equalsIgnoreCase('DESC'))
-                {
-                
-                    for(Integer i = stslist.size()-1, j=0;i >=0; i--)
-                    
-                    ProjectList.set(i,stslist.get(j++));
-                }
-         }
-            
-                if (str.equalsIgnoreCase('PrjName'))
-                {
-                    //system.debug('Data before sorting: '+prjlist);
-                     prjlist.sort();
-                     //system.debug('Data After sorting: '+prjlist);
-                    
-                     List<Hierarchy> prlist = new List<Hierarchy>();
-                
-                     for (String s : prjlist)
-                     {
-                        prlist.add(prjmap.get(s));
-                     }
-                    
-                    if(sortDirection.equalsIgnoreCase('ASC'))
-                    {
-                        ProjectList = prlist;
-                    
-                        for(String s: noPrjAccs)
-                    
-                        ProjectList.add(accmap.get(s));
-                    }
-                    else if (sortDirection.equalsIgnoreCase('DESC'))
-                    {   
-                    for(Integer i = prlist.size()-1, j=0;i >=0; i--)
-                    //for(Integer i = projectlist.size()-1, j=0;i >=0; i--)
-                    
-                    ProjectList.set(i,prlist.get(j++));
-                }
-          } 
-            
-         ProjectListBkp = ProjectList;   
+                 }
                
-     }
+     } 
+   
+    
     
     public void filter()
     {

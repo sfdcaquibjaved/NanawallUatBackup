@@ -93,8 +93,10 @@ public class AttachmentUtility {
         }
         
         try{
+            if(ContentVersionInsert.size() > 0){
             //Inserting ContentVersion
             insert ContentVersionInsert ;
+            }
         }
         catch(exception e){
             system.debug('Exception is:' +e);
@@ -115,11 +117,14 @@ public class AttachmentUtility {
         }
         
         try{
+            if(FeedItemContentList.size() > 0){
             //Insert FeedItem
-            insert FeedItemContentList ;
+          		  insert FeedItemContentList ;
+            }
+            if(AttachmentID.size() > 0){
             //Delete Attachment
-            Delete [select id from Attachment where id in :AttachmentID];
-          
+          		  Delete [select id from Attachment where id in :AttachmentID];
+            }
             
             
         }
@@ -158,7 +163,7 @@ public class AttachmentUtility {
                 ContentVersion cont = new ContentVersion();
                 cont.versionData = a.Body;
                 cont.title = a.Name;
-                cont.pathOnClient = a.Name;
+                //cont.pathOnClient = a.Name;
                 
                 ContentVersionInsert.add(cont);
                 AttachmentID.add(a.ID);
@@ -167,8 +172,11 @@ public class AttachmentUtility {
         }
         
         try{
-            //Inserting ContentVersion
-            insert ContentVersionInsert ;
+            if(ContentVersionInsert.size() > 0){
+                //Inserting ContentVersion
+                insert ContentVersionInsert ;
+                system.debug('I am here with ContentVersion' +ContentVersionInsert);
+            }
         }
         catch(exception e){
             system.debug('Exception is:' +e);
@@ -189,11 +197,14 @@ public class AttachmentUtility {
         }
         
         try{
+            if(FeedItemContentList.size() > 0){
             //Insert FeedItem
-            insert FeedItemContentList ;
+            	insert FeedItemContentList ;
+            }
+            if(AttachmentID.size() > 0){
             //Delete Attachment
-            Delete [select id from Attachment where id in :AttachmentID];
-          
+            	Delete [select id from Attachment where id in :AttachmentID];
+            }
             
             
         }
@@ -243,8 +254,10 @@ public class AttachmentUtility {
         }
         System.debug('list'+ContentVersionInsert);
         try{
+            if(ContentVersionInsert.size() > 0){
             //Inserting ContentVersion
-            insert ContentVersionInsert ;
+            	insert ContentVersionInsert ;
+            }
             System.debug('Success !');
         }
         catch(exception e){
@@ -268,12 +281,16 @@ public class AttachmentUtility {
         }
         System.debug('feed list'+FeedItemContentList);
         try{
+            if(FeedItemContentList.size() > 0 ){
             //Insert FeedItem
-            insert FeedItemContentList ;
-            System.debug('Success 2!');
+            	insert FeedItemContentList ;
+            	System.debug('Success 2!');
+            }
+            if(AttachmentID.size() > 0){
             //Delete Attachment
             Delete [select id from Attachment where id in :AttachmentID];
-          System.debug('Success 3!');            
+          System.debug('Success 3!');   
+            }
         }
         catch(exception e)
         {

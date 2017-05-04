@@ -7,18 +7,32 @@
 <Apex:column headervalue="Site Count" value="{!AccSiteList.size}"/>
 <Apex:column headervalue="Projects Count" value="{!ProjSiteList.size}"/>
 <Apex:column headervalue="Most Recent Order Date"/>
-<Apex:column headervalue="Projects Won (Order Paid)"/>
-<Apex:column headervalue="Projects (Order In Progress)"/>
-<Apex:column headervalue="Projects (Quote in Progress)"/>
-<Apex:column headervalue="Project Lost"/>
-<Apex:column headervalue="Closure Rate"/>
-<Apex:column headervalue="Projects Won"/>
-<Apex:column headervalue="Closure Rate"/>
-<Apex:column headervalue="Amount (Projects Won)"/>
-<Apex:column headervalue="Amount (Order In Progress)"/>
-<Apex:column headervalue="Amount (Quote In Progress)"/>
-<Apex:column headervalue="Amount (Lost)"/>
-<Apex:column headervalue="Total Amount"/>
+<Apex:column headervalue="Projects Won (Order Paid)" value="{!prjWon}"/>
+<Apex:column headervalue="Projects (Order In Progress)" value="{!prjStgPrg }"/>
+<Apex:column headervalue="Projects (Quote in Progress)" value="{!prjStgPrg }"/>
+<Apex:column headervalue="Project Lost" value="{!prjStglost }"/>
+<apex:column headerValue="Closure Rate">
+<apex:outputText value="{0,Number,0.00}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
+</apex:column>
+<Apex:column headervalue="Duplicate Projects" value="{!DuplPrj }"/>
+<apex:column headerValue="Amount (Projects Won)">
+<apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
+</apex:column>
+<apex:column headerValue="Amount (Order In Progress)">
+<apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
+</apex:column>
+<apex:column headerValue="Amount (Quote In Progress)">
+<apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
+</apex:column>
+<apex:column headerValue="Amount (Lost)">
+<apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
+</apex:column>
+<!-- <apex:column headerValue="Amount Won">
+<apex:outputText value="{0, Number, Currency}"><apex:param value="{!amountWon}" /></apex:outputText> 
+</apex:column> -->
+<Apex:column headervalue="Total Amount">
+<apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
+</apex:column>
 </apex:pageBlocktable>
 </APex:pageBlockSection>
 </APex:pageBlock>

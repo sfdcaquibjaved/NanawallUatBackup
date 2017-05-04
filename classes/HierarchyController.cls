@@ -1,8 +1,14 @@
 public class HierarchyController {
         
     public List <Account> AccSiteList{get;set;}
+    public integer DuplPrj{get;set;}    
     public Account ObjAcc{get;set;}    
     public String accFilter{get;set;}
+    public String prjStsFilter{get;set;}
+    public String archFilter{get;set;}
+    public String purFilter{get;set;}
+    public String ordFilter{get;set;}
+    public String appIndFilter{get;set;}
     public List<Project__c> ProjSiteList{get;set;}
     public Integer prjWon {get;set;}
     public Integer siz {get;set;}
@@ -70,7 +76,8 @@ public class HierarchyController {
     public HierarchyController(ApexPages.StandardController con){
         
         ordFnzDtMax = null;
-        AccSiteList = new List <Account>();
+        DuplPrj =0;
+    AccSiteList = new List <Account>();
         noPrjArch = new List<Hierarchy>();
         archList = new List<String>();
         archMap = new Map<String,Hierarchy>();
@@ -133,18 +140,18 @@ public class HierarchyController {
         stateFilter = '';
         zipFilter = '';
         
-         ProjSiteList = [SELECT Id, Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
+         ProjSiteList = [SELECT Id,(Select Id From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
                        Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
                        FROM Project__c
                        WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                       OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id) AND (Stage__c!='Duplicate') ORDER BY Close_Date__c DESC];
+                       OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id) ORDER BY Close_Date__c DESC];
   
         for(Project__c proj: ProjSiteList){
 
             if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
             
-            if(proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || proj.Stage__c.contains('Order - Negotiation'))
+            if(proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || proj.Stage__c.contains('Order - Negotiation') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()>0))
                 {
                 prjStgPrg = prjStgPrg +1; prjStgPrgAmt = prjStgPrgAmt + proj.Amount__c;     
             }
@@ -157,7 +164,12 @@ public class HierarchyController {
                     prjStgWonAmt = prjStgWonAmt + proj.Amount__c; 
                 }
                 
-            if(proj.Stage__c.contains('Quoted')){
+        if(proj.Stage__c.contains('Duplicate'))
+                {
+                    DuplPrj = DuplPrj +1;
+                }   
+
+            if(proj.Stage__c.contains('Quoted') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
                 
                 prjStgQtd = prjStgQtd + 1;
                 
@@ -165,7 +177,7 @@ public class HierarchyController {
                 prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
             }}
             
-            if(proj.Stage__c.contains('Closed Lost - Project Lost')||proj.Stage__c.contains('Closed - Inactivity')||proj.Stage__c.contains('On Hold')||proj.Stage__c.contains('Cancelled')){
+            if(proj.Stage__c.contains('Closed Lost - Project Lost')||proj.Stage__c.contains('Closed - Inactivity')||proj.Stage__c.contains('Cancelled')){
                 
                 prjStglost = prjStglost + 1;
                 
@@ -881,7 +893,12 @@ public class HierarchyController {
             if(prjFilter!=''){prjFilter = prjFilter.trim(); cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
-            if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;} 
+            if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
+            if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
+            if(prjStsFilter!=''){prjStsFilter = prjStsFilter.trim(); cnt++;}
+            if(archFilter!=''){archFilter = archFilter.trim(); cnt++;}
+            if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
+            if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
             
             if(accFilter!='' && hr.accountName!=null) 
                if(hr.accountName.Name.containsIgnoreCase((accFilter)))
@@ -902,7 +919,27 @@ public class HierarchyController {
             if(zipFilter!='' && hr.projectZipCode!=null)
                 if(hr.projectZipCode.containsIgnoreCase((zipFilter)))
                     flag++;
+                    
+            if(appIndFilter!='' && hr.applicationIndustry!=null)
+                if(hr.applicationIndustry.containsIgnoreCase((appIndFilter)))
+                    flag++;
             
+            if(prjStsFilter!='' && hr.status!=null)
+                if(hr.status.containsIgnoreCase((prjStsFilter)))
+                    flag++;
+                    
+            if(archFilter!='' && hr.architect!=null)
+                if((hr.architect.Name+'').containsIgnoreCase((archFilter)))
+                    flag++;
+                    
+            if(purFilter!='' && hr.purchaser!=null)
+                if(hr.purchaser.Name.containsIgnoreCase((purFilter)))
+                    flag++;
+                    
+            if(ordFilter!='' && hr.orderingAccount!=null)
+                if(hr.orderingAccount.Name.containsIgnoreCase((ordFilter)))
+                    flag++;
+                            
             if(cnt == flag)
                 filterList.add(hr);
             

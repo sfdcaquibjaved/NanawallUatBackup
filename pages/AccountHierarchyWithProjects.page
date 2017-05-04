@@ -15,6 +15,7 @@
              <apex:column value="{!prjStgPrg}" headerValue="Projects (Order In Progress)"/>
              <apex:column value="{!prjStgQtd}" headerValue="Projects (Quote in Progress)"/>
              <apex:column value="{!prjStglost}" headerValue="Project Lost"/>
+             <apex:column value="{!DuplPrj }" headerValue="Duplicate Projects"/>
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
              <apex:column headerValue="Closure Rate">
@@ -55,6 +56,11 @@
                <apex:outputLabel value="Project/Account City:"/><apex:inputText value="{!cityFilter}"/>
                <apex:outputLabel value="Project/Account State:"/><apex:inputText value="{!stateFilter}"/>
                <apex:outputLabel value="Project/Account Zipcode:"/><apex:inputText value="{!zipFilter}"/>
+               <apex:outputLabel value="Project Application Industry:"/><apex:inputText value="{!appIndFilter}"/>
+               <apex:outputLabel value="Project Status:"/><apex:inputText value="{!prjStsFilter}"/>
+               <apex:outputLabel value="Architect Account:"/><apex:inputText value="{!archFilter}"/>
+               <apex:outputLabel value="Purchaser Account:"/><apex:inputText value="{!purFilter}"/>
+               <apex:outputLabel value="Ordering Account :"/><apex:inputText value="{!ordFilter}"/>
               </apex:panelGrid>
               
             <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
