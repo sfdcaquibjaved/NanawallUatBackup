@@ -161,7 +161,7 @@ global with sharing class Order_Trigger_Helper {
 		
 		
 		
-		list<Order> orders = [SELECT Id, Status, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c, IN_Actual_Delivery_Date_c__c, IN_ETA_Jobsite_c__c, IN_Freight_ETA_Jobsite_c__c, IN_Freight_Tracking_Number_c__c, IN_Revised_ETA_Jobsite_c__c  FROM Order WHERE Id = :orderids];
+		list<Order> orders = [SELECT Id, Status,Estimated_Pickup_Date_Set__c, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c, IN_Actual_Delivery_Date_c__c, IN_ETA_Jobsite_c__c, IN_Freight_ETA_Jobsite_c__c, IN_Freight_Tracking_Number_c__c, IN_Revised_ETA_Jobsite_c__c  FROM Order WHERE Id = :orderids];
 		
 		list<Order> ordersToUpdate = new list<Order>();
 		for( Order o : orders )
@@ -192,6 +192,7 @@ global with sharing class Order_Trigger_Helper {
 				boolean set_IN_Freight_Tracking_Number = false;
 				boolean set_IN_Revised_ETA_Jobsite = false;
 				boolean set_IN_Actual_Pickup_Date = false;
+				boolean set_IN_Estimated_Pickup_Date = false;
 				 
 				boolean ordersNeedUpdating = false; 
 				
@@ -204,6 +205,12 @@ global with sharing class Order_Trigger_Helper {
 //					if( so.Actual_Delivery_Date__c != null )
 //					{
 system.debug('** SO: got an actual delivery date');						
+						
+						
+						if( so.Estimated_Pickup_Date__c != null )
+						{
+							set_IN_Estimated_Pickup_Date = true;
+						}
 						
 						//if the order has no date set, or this date is greater than the order's, use this date
 						if( IN_Actual_Delivery_Date == null || so.Actual_Delivery_Date__c > IN_Actual_Delivery_Date )
@@ -281,6 +288,12 @@ system.debug('** SO: assigning actual delivery date');
 					o.IN_Actual_Pickup_Date_c__c = IN_Actual_Pickup_Date;
 				}
 				
+				
+				if(set_IN_Estimated_Pickup_Date && ( !o.Estimated_Pickup_Date_Set__c  || o.Estimated_Pickup_Date_Set__c == null )  )
+				{
+					o.Estimated_Pickup_Date_Set__c = true;
+					ordersNeedUpdating = true;
+				}
 				
 				if(set_IN_Actual_Delivery_Date )
 				{

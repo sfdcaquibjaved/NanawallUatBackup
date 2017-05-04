@@ -163,7 +163,7 @@ public class AttachmentUtility {
                 ContentVersion cont = new ContentVersion();
                 cont.versionData = a.Body;
                 cont.title = a.Name;
-                //cont.pathOnClient = a.Name;
+                cont.pathOnClient = a.Name;
                 
                 ContentVersionInsert.add(cont);
                 AttachmentID.add(a.ID);

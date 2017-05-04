@@ -60,6 +60,8 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
 				boolean set_IN_Freight_Tracking_Number = false;
 				boolean set_IN_Revised_ETA_Jobsite = false;
 				boolean set_IN_Actual_Pickup_Date  = false;
+				boolean set_IN_Estimated_Pickup_Date  = false;
+				
 				for( Shipping_Order__c so : shippingOrderMap.get( o.Id ) ) 
 				{
 //					if( so.Actual_Delivery_Date__c != null )
@@ -83,9 +85,14 @@ trigger Shipping_Order_Trigger on Shipping_Order__c (after update, before update
 
 					if( so.Actual_Pickup_Date__c != null )
 						set_IN_Actual_Pickup_Date = true;
+						
+					if( so.Estimated_Pickup_Date__c != null )
+						set_IN_Estimated_Pickup_Date = true;
+						
+						//
 				}
 
-				boolean ordersNeedUpdating  = ( set_IN_Actual_Delivery_Date || set_IN_ETA_Jobsite || set_IN_Freight_ETA_Jobsite || set_IN_Freight_Tracking_Number || set_IN_Revised_ETA_Jobsite || set_IN_Actual_Pickup_Date);
+				boolean ordersNeedUpdating  = ( set_IN_Estimated_Pickup_Date || set_IN_Actual_Delivery_Date || set_IN_ETA_Jobsite || set_IN_Freight_ETA_Jobsite || set_IN_Freight_Tracking_Number || set_IN_Revised_ETA_Jobsite || set_IN_Actual_Pickup_Date);
 				// end of pipeline push
 system.debug('** SO: ordersNeedUpdating: ' + ordersNeedUpdating );
                 

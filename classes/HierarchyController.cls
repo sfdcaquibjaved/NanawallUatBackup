@@ -3,12 +3,7 @@ public class HierarchyController {
     public List <Account> AccSiteList{get;set;}
     public integer DuplPrj{get;set;}    
     public Account ObjAcc{get;set;}    
-    public String accFilter{get;set;}
     public String prjStsFilter{get;set;}
-    public String archFilter{get;set;}
-    public String purFilter{get;set;}
-    public String ordFilter{get;set;}
-    public String appIndFilter{get;set;}
     public List<Project__c> ProjSiteList{get;set;}
     public Integer prjWon {get;set;}
     public Integer siz {get;set;}
@@ -71,13 +66,18 @@ public class HierarchyController {
     public String cityFilter{get;set;}
     public String stateFilter{get;set;}
     public String zipFilter{get;set;}
+    public String archFilter{get;set;}
+    public String purFilter{get;set;}
+    public String ordFilter{get;set;}
+    public String appIndFilter{get;set;}
+    public String accFilter{get;set;}
     public Date ordFnzDtMax{get;set;}
     
     public HierarchyController(ApexPages.StandardController con){
         
         ordFnzDtMax = null;
         DuplPrj =0;
-    AccSiteList = new List <Account>();
+    	AccSiteList = new List <Account>();
         noPrjArch = new List<Hierarchy>();
         archList = new List<String>();
         archMap = new Map<String,Hierarchy>();
@@ -138,7 +138,11 @@ public class HierarchyController {
         prjFilter = '';
         cityFilter = '';
         stateFilter = '';
-        zipFilter = '';
+        appIndFilter = '';
+        prjStsFilter = '';
+        ordFilter = '';
+        purFilter = '';
+        archFilter = '';
         
          ProjSiteList = [SELECT Id,(Select Id From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Bid_Date__c, Close_Date__c,
                        Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
@@ -401,7 +405,9 @@ public class HierarchyController {
         public Hierarchy()
         {
                         this.accountName = new Account();
-                        ordFnzDt = new List<Date>();
+            			this.purchaser = new Account();
+                        this.orderingAccount = new Account();
+            			ordFnzDt = new List<Date>();
                         ordCrtDt = new List<Date>();
                         ocr = new List<OpportunityContactRole>();            
         }

@@ -542,11 +542,8 @@ system.debug('done setting stages for order ' + o.Id);
             }
             // end pipeline updates         
             
-            if( 
-            	(o.Order_Finalized_Date__c != null && oldMap.get(o.Id).Order_Finalized_Date__c == null )
-				|| o.Regenerate_GUUID__c
-        	)
-            { //the order finalized date was set
+            if(  (o.Order_Finalized_Date__c != null && oldMap.get(o.Id).Order_Finalized_Date__c == null ) || o.Regenerate_GUUID__c )
+	        { //the order finalized date was set
                  
                 //(1) update GUUID
                 Blob aes = Crypto.generateAesKey(128);
@@ -558,7 +555,23 @@ system.debug('done setting stages for order ' + o.Id);
                 //(2) Tell nana about the GUUID
 System.debug('***ORDERTRIGGER: About to call the doCallout Method  ' + o.Quote_Name__c );
                 
-                pp_EmailFlowUtility.doCallout(o.Quote_Name__c, hex);
+                pp_EmailFlowUtility.doCallout(o.Quote_Name__c, hex, 'of' );
+            }
+            
+            if( o.Estimated_Pickup_Date_Set__c == true && ( oldMap.get(o.Id).Estimated_Pickup_Date_Set__c == false ||oldMap.get(o.Id).Estimated_Pickup_Date_Set__c == null ) )
+            {
+                //(1) update GUUID
+                Blob aes = Crypto.generateAesKey(128);
+                String hex = EncodingUtil.convertToHex(aes);                
+                
+                o.Test_GUID__c = hex;
+                o.Regenerate_GUUID__c = false;
+                                
+                //(2) Tell nana about the GUUID
+System.debug('***ORDERTRIGGER: About to call the doCallout Method  w/ param ep ' + o.Quote_Name__c );
+                
+                pp_EmailFlowUtility.doCallout(o.Quote_Name__c, hex, 'ep' );
+            	
             }
         }
 
