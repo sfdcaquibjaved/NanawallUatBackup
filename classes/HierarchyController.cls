@@ -28,6 +28,7 @@ public class HierarchyController {
     public LIST<Contact> contrls{get;set;}
     public LIST<Project__c> prjList2{get;set;}
     public LIST<Opportunity> oppList2{get;set;}
+    public LIST<Opportunity> oppList4{get;set;}
     public LIST<List<Opportunity>> oppList3{get;set;}
     public Integer prjStgWon{get;set;}
     public Integer prjStgPrg{get;set;}
@@ -104,6 +105,7 @@ public class HierarchyController {
         prjList2 = new List<Project__c>();
         oppList2 = new List<Opportunity>();
         oppList3 = new List<List<Opportunity>>();
+        oppList4 = new List<Opportunity>();
         amtlst = new List<Decimal>();
         amtmap = new Map<Decimal,Hierarchy>();    
         applst = new List<String>();
@@ -191,14 +193,12 @@ public class HierarchyController {
             
     }
             
-        //AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id, Architect_Account__c, Purchaser_Account__c, Purchaser_Account__r.Name from Projects1__r Order by Amount__c desc Nulls last),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects4__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects__r),(Select Name, Id, Ordering_Account__c, Amount__c,Application__c,RecordType.Name,Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c, Architect_Account__c, Purchaser_Account__c from Projects5__r) from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];
-    
-                AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
+                AccSiteList = [Select Name, Id, Type, Ultimate_ParentId__c, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
                                                        Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
                                                        Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
                                                        Architect_Account__c, Purchaser_Account__c, 
                                                        Purchaser_Account__r.Name from Projects1__r ) from Account 
-                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
+                                                       where Ultimate_ParentId__c=:string.valueOf(ObjAcc.Id).left(15) OR Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
                 
             String prevAcc ='';
             
@@ -226,7 +226,6 @@ public class HierarchyController {
         {
             for (List<Project__c> prjs: ac.Projects1__r)
             {
-                         //siz+=prjs.size();           
                      for(Project__c prj : prjs)
                      { 
                              Hierarchy hier = new Hierarchy(prj.Architect_Account__c, prj.Purchaser_Account__c,
@@ -244,6 +243,24 @@ public class HierarchyController {
                {
                    for (Opportunity opp : oppList)
                    {
+                       oppList4.add(opp);
+                       
+                      /* oppList2 = [Select Id, Name, AccountId, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
+                                    from Opportunity where Id =:string.valueOf(opp.Id).left(15) AND AccountId =: prj2.Ordering_Account__c];
+                                
+                        for (Opportunity op : oppList2){
+                                        for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
+                                        for(OpportunityContactRole ocr : ocrs ){ 
+                                                hier.ocr.add(ocr); 
+                                }
+                            }
+                        }   */            
+                    }    
+              }          
+               
+               for (Project__c prj2 : prjList2)          
+               for (Opportunity opp : oppList4)
+                   {
                        oppList2 = [Select Id, Name, AccountId, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
                                     from Opportunity where Id =:string.valueOf(opp.Id).left(15) AND AccountId =: prj2.Ordering_Account__c];
                                 
@@ -254,8 +271,7 @@ public class HierarchyController {
                                 }
                             }
                         }               
-                    }    
-              }          
+                    }   
                               
                for (Order od : ordList){ 
                         hier.ordFnzDt.add(od.Order_Finalized_Date__c);
@@ -361,22 +377,8 @@ public class HierarchyController {
                          {
                             noPrjOrd.add(hier);         
                          }
-                         
-/*                       if (prj.Stage__c != null && (prj.Stage__c.contains('Closed Won') || prj.Stage__c.contains('Closed Complete')))
-                       {
-                            
-                            amountWon = amountWon + prj.Amount__c;
-                            prjWon = prjWon + 1;
-                        }*/
-                        
-//                        if(prj.Amount__c!=null)
-                        
-//                        totalAmount = totalAmount + prj.Amount__c;
-                        
                         ProjectList.add(hier);
-                          
                         ProjectListBkp.add(hier); 
-//                        prevAcc = hier.accountName.Name;
                      }
                   }
                }
@@ -431,7 +433,7 @@ public class HierarchyController {
 
              get { return sortExp; }
 
-             set { //if the column is clicked on then switch between Ascending and Descending modes
+             set { 
 
                if (value == sortExp) 
                    
@@ -445,8 +447,6 @@ public class HierarchyController {
 
         public String getSortDirection() 
         {  
-            //if not column is selected
-
                 if (sortExpression == null || sortExpression == '') 
                     return 'ASC';
 
@@ -456,15 +456,12 @@ public class HierarchyController {
 
          public void setSortDirection(String value) 
          { 
-
-                sortDirection = value;
-             
+		    sortDirection = value;
          }
 
         public PageReference ViewData()
         {
-
-            string sortFullExp = sortExpression  + ' ' + sortDirection;  
+           string sortFullExp = sortExpression  + ' ' + sortDirection;  
 
             if(sortExp.equalsIgnoreCase('AccName')) sortData('AccName');
         
@@ -494,7 +491,6 @@ public class HierarchyController {
             
             return null;
      }
-
         
        public void sortData(String str)
         { 
@@ -853,10 +849,8 @@ public class HierarchyController {
             
                 if (str.equalsIgnoreCase('PrjName'))
                 {
-                    //system.debug('Data before sorting: '+prjlist);
                      prjlist.sort();
-                     //system.debug('Data After sorting: '+prjlist);
-                    
+                   
                      List<Hierarchy> prlist = new List<Hierarchy>();
                 
                      for (String s : prjlist)
@@ -875,7 +869,6 @@ public class HierarchyController {
                     else if (sortDirection.equalsIgnoreCase('DESC'))
                     {   
                     for(Integer i = prlist.size()-1, j=0;i >=0; i--)
-                    //for(Integer i = projectlist.size()-1, j=0;i >=0; i--)
                     
                     ProjectList.set(i,prlist.get(j++));
                 }

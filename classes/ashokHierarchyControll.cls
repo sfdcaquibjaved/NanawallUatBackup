@@ -64,9 +64,9 @@ public class ashokHierarchyControll
                                                        Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
                                                        Architect_Account__c, Purchaser_Account__c, 
                                                        Purchaser_Account__r.Name from Projects1__r ) from Account 
-                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];                                                      
-        
-        
+                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];  
+                                                                                                           
+               
         for(Project__c proj :ProjSiteList )
         {
               
