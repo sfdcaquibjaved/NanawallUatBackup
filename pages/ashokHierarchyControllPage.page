@@ -26,15 +26,43 @@
                     </apex:column>
                     <apex:column headerValue="Amount (Lost)">
                     <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <!-- <apex:column headerValue="Amount Won">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!amountWon}" /></apex:outputText> 
-                    </apex:column> -->
+                    </apex:column>                    
                     <Apex:column headervalue="Total Amount">
                     <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
                     </apex:column>
                     </apex:pageBlocktable>
-              </APex:pageBlockSection>
+                  </APex:pageBlockSection>
+           </APex:pageBlock>
+           <APex:pageBlock >
+            <APex:pageBlockSection columns="1">
+                <apex:pageBlocktable value="{!ProjSiteList }" var="acc">
+                    <Apex:column headervalue="Corporate Account Site Location (End Customer)"/>
+                    <Apex:column headervalue="Projects Name" value="{!acc.name}"/>
+                    <Apex:column headervalue="Projects Status" />
+                    <Apex:column headervalue="Amount" value="{!rectDate}"/>
+                    <Apex:column headervalue="Project created Date" />
+                    <Apex:column headervalue="Order FinalizeDate"/>
+                    <Apex:column headervalue="Order Created Date"/>
+                    <Apex:column headervalue="Application Industry" />
+                    <apex:column headerValue="Architect"/>
+                    
+                    <Apex:column headervalue="Purchaser Account" value="{!DuplPrj }"/>
+                    <apex:column headerValue="Ordering Account">
+                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
+                    </apex:column>
+                    <apex:column headerValue="Contact role account">
+                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
+                    </apex:column>
+                    <apex:column headerValue="Project City">
+                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
+                    </apex:column>
+                    <apex:column headerValue="Project State">
+                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
+                    </apex:column>                   
+                    <Apex:column headervalue="Project Zip code"/>
+                    
+                    </apex:pageBlocktable>
+                  </APex:pageBlockSection>
            </APex:pageBlock>
            
 </Apex:form>

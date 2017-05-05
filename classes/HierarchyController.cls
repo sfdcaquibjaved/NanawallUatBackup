@@ -194,8 +194,8 @@ public class HierarchyController {
                                                        Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
                                                        Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
                                                        Architect_Account__c, Purchaser_Account__c, 
-                                                       Purchaser_Account__r.Name from Projects1__r) from Account 
-                                                       where Ultimate_ParentId__c=:string.valueOf(ObjAcc.Id).left(15) OR parent.Id=:string.valueOf(ObjAcc.Id).left(15) LIMIT 500]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
+                                                       Purchaser_Account__r.Name from Projects1__r where End_Customer_Account__c!=NULL) from Account 
+                                                       where Ultimate_ParentId__c=:string.valueOf(ObjAcc.Id).left(15) OR parent.Id=:string.valueOf(ObjAcc.Id).left(15) LIMIT 525]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
                 /* List<Account> acc1 = [Select Name, Id, Type, Ultimate_ParentId__c, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
                                                        Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
                                                        Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,

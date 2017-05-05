@@ -52,11 +52,14 @@ public class ashokHierarchyControll
         ProjSiteList = [SELECT Id, Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, 
                         RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, 
                         Project_Zip_Code__c, Bid_Date__c, Close_Date__c,Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, 
-                        End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
+                        End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c,
+                        (select Order_Finalized_Date__c from orders__r )
                         FROM Project__c
                         WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                         OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
                         OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id)];
+                        
+                        system.debug('the value of projlist = '+ProjSiteList );
                        
          //list contains all site count under the parent account  (site count)            
         AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
@@ -115,15 +118,16 @@ public class ashokHierarchyControll
             
             // count project queated amount and project lost amount
             
-            if(proj.Stage__c.contains('Quoted'))
+            if(proj.Stage__c.contains('Quoted') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0))
             {
                 
                 prjStgQtd = prjStgQtd + 1;
                 
                 if(proj.Amount__c!=NULL)
                 {
-                    prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
+                        prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
                 }
+                
             }
             if(proj.Stage__C.contains('Duplicate'))
             {

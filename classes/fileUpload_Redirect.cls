@@ -16,10 +16,10 @@ Id pageid = ApexPages.currentPage().getParameters().get('id');
     String fullUrl = Site.getPathPrefix();
     System.debug('fullUrl'+fullUrl);
 System.debug('userAgent'+userAgent);
-if( !!userAgent.contains('Android')) {
+if( !userAgent.contains('Android')) {
     System.debug('iphone');
     
-    String  myUrl=Site.getPathPrefix()+'/apex/MultipleFileUpload?id='+pageid;
+    String  myUrl=Site.getPathPrefix()+'/apex/MultipleAttachmentsVFpage?id='+pageid;
         
              PageReference redUrl1 = new PageReference(myUrl);
              redUrl1.getParameters().put('Installation__c.ID', InstallationRecord.Id);
