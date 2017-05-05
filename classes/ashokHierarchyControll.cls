@@ -5,7 +5,7 @@ public class ashokHierarchyControll
        // this list to count all sites to display on visualforce page  
        public list <account> AccSiteList{get;set;} 
        // list the ordering date 
-       public list<order> OrdList {get;set;}
+       public list<order> rectDate{get;set;}
        public Account ObjAcc{get;set;}       
        public integer size{get;set;}
        public integer PrjWon{get;set;}
@@ -31,7 +31,7 @@ public class ashokHierarchyControll
         objAcc = (Account)con.getRecord();
         ProjSiteList = new List<Project__c>();
         AccSiteList = new List<Account>();
-        OrdList = new List<order>();
+        rectDate = new List<order>();
          //inilize all variebles counters to zero 
         totalAmount = 0.0;
         amountWon = 0.0;
@@ -54,9 +54,9 @@ public class ashokHierarchyControll
                         Project_Zip_Code__c, Bid_Date__c, Close_Date__c,Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, 
                         End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c
                         FROM Project__c
-                       WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
-                       OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                       OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id)];
+                        WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
+                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
+                        OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id)];
                        
          //list contains all site count under the parent account  (site count)            
         AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
@@ -65,6 +65,11 @@ public class ashokHierarchyControll
                                                        Architect_Account__c, Purchaser_Account__c, 
                                                        Purchaser_Account__r.Name from Projects1__r ) from Account 
                                                        where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];  
+       
+        rectDate = [select Order_Finalized_Date__c  from order where Order_Finalized_Date__c != null 
+                    and Project__c IN : ProjSiteList order by Order_Finalized_Date__c desc limit 1];
+
+                                             
                                                                                                            
                
         for(Project__c proj :ProjSiteList )

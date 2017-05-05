@@ -13,6 +13,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
    /*if(!Org_Default_Settings__c.getInstance().OpportunityTrigger__c){
      return;
    }*/
+   
    if(Limits.getQueries()<50){
    System.debug('I am here with Limit in opportunity'+Limits.getQueries());
     if(!projectStageUpdate.skipOppTrigger){
@@ -27,7 +28,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
         Set<Id> oppIds2 = new Set<Id>();
         Set<Id> oppIds3 = new Set<Id>();
         Set<Id> accId = new Set<Id>();
-       
+        
         Map<Id,String> mpAccIDType = new Map<Id,String>();
         
         //Datetime myDate = datetime.newInstance(2015, 4, 18, 0, 30, 12);
@@ -513,8 +514,9 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
             if (trigger.isUpdate) {
                 Opportunity oldOpp = mapOldOpp.get(opps.Id);
                 //Only if the OwnerId is changed
-                If((oldOpp.OwnerId) != opps.OwnerId) {
+                If((oldOpp.OwnerId) != opps.OwnerId && OpportunityHelper.runOppTeamSharingOnce) {
                     //OppIds.add(opp.Id);
+                    //runOppTeamSharingOnce = false;
                     OpportunityHelper.createProjShareOnOppInsertOrUpdate(lstNewOpp , mapOldOpp);
                 }
             } 

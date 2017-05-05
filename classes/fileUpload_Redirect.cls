@@ -16,7 +16,7 @@ Id pageid = ApexPages.currentPage().getParameters().get('id');
     String fullUrl = Site.getPathPrefix();
     System.debug('fullUrl'+fullUrl);
 System.debug('userAgent'+userAgent);
-if( !userAgent.contains('Android')) {
+if( !!userAgent.contains('Android')) {
     System.debug('iphone');
     
     String  myUrl=Site.getPathPrefix()+'/apex/MultipleFileUpload?id='+pageid;

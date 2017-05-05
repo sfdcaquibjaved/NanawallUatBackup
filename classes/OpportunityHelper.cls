@@ -12,6 +12,8 @@ public class OpportunityHelper {
                 of Project to Closed/Lost if any one opportunity is Closed/Won
     Input Parameter: Set of Ids         
     *************************************************/
+    public static boolean runOppTeamSharingOnce = true;
+    
     public static void UpdateRelatedOpportunities(Set < Id > projIds,Map<id,Decimal> mapWonAmount) {
         //Declaration of Variables
         List < Opportunity > updateList = new List < Opportunity > ();
@@ -561,7 +563,8 @@ public class OpportunityHelper {
     Input Parameter: Trigger.new and Trigger.oldMap         
     *************************************************/
     public static void createProjShareOnOppInsertOrUpdate(List < Opportunity > lstNewOpp, Map < Id, Opportunity > mapOldOpp) {
-
+        
+        runOppTeamSharingOnce = false;
         List < Id > OppIds = new List < Id > ();
         List < OpportunityTeamMember > changedRecsIdList = new List < OpportunityTeamMember > ();
 
@@ -580,7 +583,7 @@ public class OpportunityHelper {
                 OppIds.add(opp.Id);
             }
         }
-
+        system.debug('Checking for the opps'+OppIds);
         //Query the OpportunityTeamMembers to create a corresponding Share record
         changedRecsIdList = [select id, OpportunityId, UserId from OpportunityTeamMember where OpportunityId = : OppIds];
         //Null Check
