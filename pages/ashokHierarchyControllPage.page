@@ -38,27 +38,23 @@
                 <apex:pageBlocktable value="{!ProjSiteList }" var="acc">
                     <Apex:column headervalue="Corporate Account Site Location (End Customer)"/>
                     <Apex:column headervalue="Projects Name" value="{!acc.name}"/>
-                    <Apex:column headervalue="Projects Status" />
-                    <Apex:column headervalue="Amount" value="{!rectDate}"/>
+                    <Apex:column headervalue="Projects Status" value="{!acc.Stage__c}"/>
+                    <Apex:column headervalue="Amount" value="{!acc.Amount__c}"/>
                     <Apex:column headervalue="Project created Date" />
                     <Apex:column headervalue="Order FinalizeDate"/>
                     <Apex:column headervalue="Order Created Date"/>
                     <Apex:column headervalue="Application Industry" />
                     <apex:column headerValue="Architect"/>
                     
-                    <Apex:column headervalue="Purchaser Account" value="{!DuplPrj }"/>
-                    <apex:column headerValue="Ordering Account">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <apex:column headerValue="Contact role account">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <apex:column headerValue="Project City">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <apex:column headerValue="Project State">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
-                    </apex:column>                   
+                    <Apex:column headervalue="Purchaser Account"/>
+                    <apex:column headerValue="Ordering Account"/>
+                    
+                    <apex:column headerValue="Contact role account"/>
+                    
+                    <apex:column headerValue="Project City"/>
+                    
+                    <apex:column headerValue="Project State"/>
+                                       
                     <Apex:column headervalue="Project Zip code"/>
                     
                     </apex:pageBlocktable>

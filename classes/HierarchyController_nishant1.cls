@@ -202,34 +202,34 @@ public class HierarchyController_nishant1{
                                                        Purchaser_Account__r.Name from Projects1__r) from Account 
                                                        where Ultimate_ParentId__c=:string.valueOf(ObjAcc.Id).left(15) OR parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
                 
-		for (Account ac : AccSiteList)
+        for (Account ac : AccSiteList)
         for (List<Project__c> prjs: ac.Projects1__r)
-            		{
+                    {
                      for(Project__c prj : prjs)
                          { 
                             SetTest.add(prj.id);
                              SetOr.add(prj.Ordering_Account__c);
                          }
                     }
-        			
-        				    ordList = [Select Name,Id, CreatedDate, Order_Finalized_Date__c, Project__r.Id from Order]; 
+                    
+                            ordList = [Select Name,Id, CreatedDate, Order_Finalized_Date__c, Project__r.Id from Order]; 
                          
                              prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
                                                      StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
                                         from Project__c where ID IN :SetTest AND Ordering_Account__c != null];
                             
-        					SetTest = new Set<ID>();
+                            SetTest = new Set<ID>();
         
-        					for (Project__c prj2 : prjList2)
-          					for (List<Opportunity> oppList : prj2.Opportunities__r)
-               				{
-                  			for (Opportunity opp : oppList)
-                  			{
-                      			SetTest.add(opp.Id);
-                  			}
-               			}
+                            for (Project__c prj2 : prjList2)
+                            for (List<Opportunity> oppList : prj2.Opportunities__r)
+                            {
+                            for (Opportunity opp : oppList)
+                            {
+                                SetTest.add(opp.Id);
+                            }
+                        }
         
-        					
+                            
                               oppList2 = [Select Id, Name, AccountId, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
                                     from Opportunity where Id IN:SetTest AND  AccountId IN:SetOr];
                                    
