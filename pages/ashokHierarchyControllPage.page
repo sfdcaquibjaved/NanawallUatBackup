@@ -35,27 +35,48 @@
            </APex:pageBlock>
            <APex:pageBlock >
             <APex:pageBlockSection columns="1">
-                <apex:pageBlocktable value="{!ProjSiteList }" var="acc">
-                    <Apex:column headervalue="Corporate Account Site Location (End Customer)"/>
-                    <Apex:column headervalue="Projects Name" value="{!acc.name}"/>
-                    <Apex:column headervalue="Projects Status" value="{!acc.Stage__c}"/>
-                    <Apex:column headervalue="Amount" value="{!acc.Amount__c}"/>
-                    <Apex:column headervalue="Project created Date" />
-                    <Apex:column headervalue="Order FinalizeDate"/>
-                    <Apex:column headervalue="Order Created Date"/>
-                    <Apex:column headervalue="Application Industry" />
-                    <apex:column headerValue="Architect"/>
+                <apex:pageBlocktable value="{!ProjSiteList }" var="prj">
+                    <Apex:column headervalue="Corporate Account Site Location (End Customer)" value="{!prj.End_Customer_Account__c}" />
+                    <Apex:column headervalue="Projects Name" value="{!prj.name}"/>
+                    <Apex:column headervalue="Projects Status" value="{!prj.Stage__c}"/>
+                    <Apex:column headervalue="Amount" value="{!prj.Amount__c}"/>
+                    <Apex:column headervalue="Project created Date">
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!prj.CreatedDate}"/></apex:outputText>
+                     </apex:column>
+                                  
+                    <apex:column headerValue="Order Created Date">
+                <!-- <apex:facet name="header">
+            <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='DESC','▼','▲'),'')}" >
+                 <apex:param value="OCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+            </apex:facet> -->
+            <apex:DataTable value="{!prj.Orders__r}" var="p">
+                  <apex:column >      
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.CreatedDate}"/></apex:outputText>
+                   </apex:column>  
+                 </apex:DataTable>
+                 </apex:column>
+                    <apex:column headerValue="Order Finalized Date">
+                
+            <apex:DataTable value="{!prj.Orders__r}" var="p">
+                  <apex:column >      
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.Order_Finalized_Date__c}"/></apex:outputText>
+                   </apex:column>  
+                 </apex:DataTable>
+                 </apex:column>
+                    <Apex:column headervalue="Application Industry" value="{!prj.Application__c}" />
+                    <apex:column headerValue="Architect" value="{!prj.Architect_Account__r.Name}"/>
                     
-                    <Apex:column headervalue="Purchaser Account"/>
-                    <apex:column headerValue="Ordering Account"/>
-                    
+                    <Apex:column headervalue="Purchaser Account" value="{!prj.Purchaser_Account__r.Name}"/>
+                    <apex:column headerValue="Ordering Account" value="{!prj.Ordering_Account__r.Name}"/>
+                                        
                     <apex:column headerValue="Contact role account"/>
                     
-                    <apex:column headerValue="Project City"/>
+                    <apex:column headerValue="Project City" value="{!prj.Project_City__c}"/>
                     
-                    <apex:column headerValue="Project State"/>
+                    <apex:column headerValue="Project State" value="{!prj.Project_State__c}"/>
                                        
-                    <Apex:column headervalue="Project Zip code"/>
+                    <Apex:column headervalue="Project Zip code" value="{!prj.Project_Zip_Code__c}"/>                    
                     
                     </apex:pageBlocktable>
                   </APex:pageBlockSection>

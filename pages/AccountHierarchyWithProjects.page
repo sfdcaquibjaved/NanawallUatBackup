@@ -6,8 +6,8 @@
          <apex:column headerValue="Corporate Account Name">
          <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
          </apex:column>
-             <apex:column value="{!AccSiteList.size}" headerValue="Site Count"/>
-             <apex:column value="{!ProjSiteList.size}" headerValue="Projects Count"/>
+             <apex:column value="{!siz}" headerValue="Site Count"/>
+             <apex:column value="{!psiz}" headerValue="Projects Count"/>
              <apex:column headerValue="Most Recent Order Date">
              <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!ordFnzDtMax}"/></apex:outputText>
              </apex:column>
@@ -44,11 +44,11 @@
             </apex:column>
          </apex:pageBlockTable>
      </apex:pageBlockSection>
-   </apex:pageBlock>
+    </apex:PageBlock> 
   
   
    <apex:pageBlock >
-   <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
+   <apex:pageBlockSection title="{!ProjSiteList.size} records found with Projects." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
           <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
               <apex:panelGrid columns="6" cellspacing="10">
               <apex:outputLabel value="Account Name:" style="align:center;"/><apex:inputText value="{!accFilter}"/>
@@ -65,14 +65,11 @@
               
             <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
           </apex:pageBlockSection>
-      
-     
-     
     </apex:pageBlock>
       
   <apex:PageBlock >    
      <apex:pageBlockSection columns="1">
-         <apex:pageBlockTable var="pr" value="{!ProjectList}" >
+         <apex:pageBlockTable var="pr" value="{!ProjSiteList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
              <apex:facet name="header">             
@@ -80,7 +77,7 @@
                  <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
                </apex:facet>
-             <apex:outputLink value="/{!pr.accountName}">{!pr.accountName.Name}</apex:outputLink>
+             <apex:outputLink value="/{!pr.End_Customer_Account__c}">{!pr.End_Customer_Account__r.Name}</apex:outputLink>
              
              </apex:column>
 
@@ -93,7 +90,7 @@
                  <apex:param value="PrjName" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
-            <apex:outputLink value="/{!pr.projectName}">{!pr.projectName.Name}</apex:outputLink>
+            <apex:outputLink value="/{!pr.Id}">{!pr.Name}</apex:outputLink>
             </apex:column>
             
               <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
@@ -103,7 +100,7 @@
                  <apex:param value="Stage" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputText value="{!pr.status}"/>
+                 <apex:outputText value="{!pr.Stage__c}"/>
                 </apex:column>
               <!--   <apex:column headerValue="Project Amount" > -->
             <apex:column >
@@ -112,7 +109,7 @@
                  <apex:param value="Amount" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
-                     <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.amount}"/></apex:outputText>
+                     <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.Amount__c}"/></apex:outputText>
                  </apex:column>
                  <apex:column >
                  <apex:facet name="header">
@@ -120,29 +117,29 @@
                  <apex:param value="PCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!pr.crtdt}"/></apex:outputText>
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!pr.CreatedDate}"/></apex:outputText>
                   </apex:column>
-                 <apex:column >
-                 <apex:facet name="header">
+                 <apex:column headerValue="Order Finalized Date">
+                <!-- <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Order Finalized Date {!IF(sortExpression=='OFnzDt',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="OFnzDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
-            </apex:facet>
-            <apex:DataTable value="{!pr.ordFnzDt}" var="p">
+            </apex:facet> -->
+            <apex:DataTable value="{!pr.Orders__r}" var="p">
                   <apex:column >      
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.Order_Finalized_Date__c}"/></apex:outputText>
                    </apex:column>  
                  </apex:DataTable>
                  </apex:column>
-                 <apex:column >
-                 <apex:facet name="header">
+                 <apex:column headerValue="Order Created Date">
+                <!-- <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="OCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
-            </apex:facet>
-            <apex:DataTable value="{!pr.ordCrtDt}" var="p">
+            </apex:facet> -->
+            <apex:DataTable value="{!pr.Orders__r}" var="p">
                   <apex:column >      
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.CreatedDate}"/></apex:outputText>
                    </apex:column>  
                  </apex:DataTable>
                  </apex:column>
@@ -154,7 +151,7 @@
                  <apex:param value="AppIndustry" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputText value="{!pr.applicationIndustry}" />
+                 <apex:outputText value="{!pr.Application__c}" />
                 </apex:column>
 
                  <apex:column >
@@ -163,7 +160,7 @@
                  <apex:param value="Arch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputLink value="/{!pr.architect}">{!pr.architect.Name}</apex:outputLink>
+                 <apex:outputLink value="/{!pr.Architect_Account__c}">{!pr.Architect_Account__r.Name}</apex:outputLink>
                 </apex:column>
                  <apex:column >
                 <apex:facet name="header">
@@ -171,7 +168,7 @@
                  <apex:param value="Purch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputLink value="/{!pr.purchaser}">{!pr.purchaser.Name}</apex:outputLink>
+                 <apex:outputLink value="/{!pr.Purchaser_Account__c}">{!pr.Purchaser_Account__r.Name}</apex:outputLink>
                 </apex:column>
 
                  <apex:column >
@@ -180,7 +177,7 @@
                  <apex:param value="Ordering" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputLink value="/{!pr.orderingAccount}">{!pr.orderingAccount.Name}</apex:outputLink>
+                 <apex:outputLink value="/{!pr.Ordering_Account__c}">{!pr.Ordering_Account__r.Name}</apex:outputLink>
                 </apex:column>
 
                <!--  <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>  -->
@@ -188,7 +185,7 @@
              <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
                  
                <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->
-                 <apex:column >
+               <!--  <apex:column >
                  <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Contact Role Name {!IF(sortExpression=='role',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="role" name="column" assignTo="{!sortExpression}" ></apex:param>
@@ -199,7 +196,7 @@
                      <apex:outputLink value="/{!o.ContactId}">{!o.Contact.Name}</apex:outputLink>
                    </apex:column>  
                  </apex:DataTable>
-                 </apex:column>
+                 </apex:column> -->
                  
               <apex:column >
                 <apex:facet name="header">
@@ -207,7 +204,7 @@
                  <apex:param value="City" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputText value="{!pr.projectCity}"/>
+                 <apex:outputText value="{!pr.Project_City__c}"/>
               </apex:column>
 
               <apex:column >
@@ -216,7 +213,7 @@
                  <apex:param value="State" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputText value="{!pr.projectState}"/>
+                 <apex:outputText value="{!pr.Project_State__c}"/>
              </apex:column>
               
              <apex:column >
@@ -225,11 +222,28 @@
                  <apex:param value="Zipcode" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
-                 <apex:outputText value="{!pr.projectZipCode}"/> 
+                 <apex:outputText value="{!pr.Project_Zip_Code__c}"/> 
                 </apex:column>
         
          </apex:pageBlockTable>
      </apex:pageBlockSection> 
-   </apex:pageBlock>
+    </apex:PageBlock>
+    
+    <apex:PageBlock >  
+    <apex:pageBlockSection title="{!AccSiteList.size} records found without Projects." collapsible="false"/>    
+     <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
+         <apex:pageBlockTable var="ac" value="{!AccSiteList}">
+          <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
+             <apex:column >
+             <apex:facet name="header">             
+             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer) with No Projects{!IF(sortExpression=='AccName',IF(sortDirection='DESC','▼','▲'),'')}" id="cmdSort">
+                 <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
+               </apex:commandLink>
+               </apex:facet>
+             <apex:outputLink value="/{!ac.Id}">{!ac.Name}</apex:outputLink>
+             </apex:column>
+         </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:PageBlock>
 </apex:form>   
 </apex:page>

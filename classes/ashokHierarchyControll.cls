@@ -53,7 +53,7 @@ public class ashokHierarchyControll
                         RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, 
                         Project_Zip_Code__c, Bid_Date__c, Close_Date__c,Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, 
                         End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c,
-                        (select Order_Finalized_Date__c from orders__r )
+                        (select Order_Finalized_Date__c from orders__r order by Order_Finalized_Date__c ASC )
                         FROM Project__c
                         WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
                         OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
@@ -70,7 +70,7 @@ public class ashokHierarchyControll
                                                        where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];  
        
         rectDate = [select Order_Finalized_Date__c  from order where Order_Finalized_Date__c != null 
-                    and Project__c IN : ProjSiteList order by Order_Finalized_Date__c desc limit 1];
+                    and Project__c IN : ProjSiteList order by Order_Finalized_Date__c ASC limit 1];
 
                                              
                                                                                                            

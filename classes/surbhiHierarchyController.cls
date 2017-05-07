@@ -460,7 +460,7 @@ public class surbhiHierarchyController {
         for(Project__c proj: ProjSiteList){
 
 
-           
+            
 
 
            if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
@@ -654,7 +654,7 @@ public class surbhiHierarchyController {
                             ProjectList.add(hier);
 
 
-                            
+                           
 
 
                             ProjectListBkp.add(hier);
@@ -678,13 +678,15 @@ public class surbhiHierarchyController {
 
                                 List<Id> projectIDList = new List<Id>();
 
+                                List<Order> ordList = new List<Order>();
+
                                 for(Project__c proj:prjs){
 
                                                 projectIdList.add(proj.Id);
 
                                 }
 
-                                List<Order> orderList=[Select id, Name, CreatedDate, Order_Finalized_date__c, Project__r.id from Order where Project__r.id IN : projectIDList];
+                                List<Order> orderList=[Select id, Name, CreatedDate, Order_Finalized_date__c, Project__r.id from Order where Project__r.id IN :projectIDList];
 
                                 Map<Id, List<Order>> projectIdOrderListMap = new Map<ID, List<Order>>();
 
@@ -692,21 +694,21 @@ public class surbhiHierarchyController {
 
                                                 if(projectIdOrderListMap.get(ord.Project__r.id)!=Null){
 
-                                                                List<Order> ordList = projectIdOrderListMap.get(ord.Project__r.id);
+                                                                List<Order> odList = projectIdOrderListMap.get(ord.Project__r.id);
 
-                                                                ordList.add(ord);
+                                                                odList.add(ord);
 
-                                                                projectIdOrderListMap.put(ord.Project__r.id, ordList);
+                                                                projectIdOrderListMap.put(ord.Project__r.id, odList);
 
                                                 }             
 
                                                 if(projectIdOrderListMap.get(ord.Project__r.id)==Null){
 
-                                                                List<Order> ordList = new List<Order>();
+                                                                List<Order> odList = new List<Order>();
 
-                                                                ordList.add(ord);
+                                                                odList.add(ord);
 
-                                                                projectIdOrderListMap.put(ord.Project__r.id, ordList);
+                                                                projectIdOrderListMap.put(ord.Project__r.id, odList);
 
                                                 }                                                                             
 
@@ -724,24 +726,25 @@ public class surbhiHierarchyController {
 
                                                             prj.Ordering_Account__c);
 
+                                                               
 
- 
 
- 
+                                                                //Surbhi
+
 
                              /*ordList = [Select Name,Id, CreatedDate, Order_Finalized_Date__c, Project__r.Id from Order
 
 
-                                        where Project__r.Id =:prj.Id]; *//*Surbhi*/
+                                        where Project__r.Id =:prj.Id]; */
 
 
-                         
+                        
 
 
                              prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
 
 
-                                                     StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                         
+                                                     StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
 
 
                                         from Project__c where Id =:string.valueOf(prj.Id).left(15) AND Ordering_Account__c != null];
@@ -813,23 +816,27 @@ public class surbhiHierarchyController {
   
 
 
-              
+                /*Surbhi*/
 
- 
+                                if(prj.id != null){
 
-                       List<Order> ordList = projectIdOrderListMap.get(prj.id);/*Surbhi*/
+                                                ordList = projectIdOrderListMap.get(prj.id);
+
+                                                for (Order od : ordList){
 
 
-               for (Order od : ordList){
-
-
-                        hier.ordFnzDt.add(od.Order_Finalized_Date__c);
+                             hier.ordFnzDt.add(od.Order_Finalized_Date__c);
 
 
                                 hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
 
 
-                    }
+                              }
+
+                                }
+
+
+              
 
 
                         hier.ordFnzDt.sort();
@@ -1180,7 +1187,7 @@ public class surbhiHierarchyController {
         public Account purchaser{get;set;}
 
 
-       public Account orderingAccount{get;set;}
+        public Account orderingAccount{get;set;}
 
 
         public Account architect{get;set;}
@@ -1647,7 +1654,7 @@ public class surbhiHierarchyController {
                         ProjectList.add(hr);
 
 
-                               
+                                
 
 
                     for(String s: noPrjAccs)
@@ -1877,13 +1884,13 @@ public class surbhiHierarchyController {
                 {
 
 
-               
+                
 
 
                 for(Integer i = stateList.size()-1, j=0;i >=0; i--)
 
 
-                    
+                   
 
 
                  ProjectList.set(i,stateList.get(j++));
@@ -1956,7 +1963,7 @@ public class surbhiHierarchyController {
                         ProjectList.add(hr);
 
 
-                                
+                               
 
 
                     for(String s: noPrjAccs)
@@ -2162,7 +2169,7 @@ public class surbhiHierarchyController {
                         ProjectList.add(hr);
 
 
-                               
+                                
 
 
                     for(String s: noPrjAccs)
@@ -2495,7 +2502,7 @@ public class surbhiHierarchyController {
                 List<Hierarchy> stslist = new List<Hierarchy>();
 
 
-                
+               
 
 
                 for (String s : prjsts)
@@ -2606,7 +2613,7 @@ public class surbhiHierarchyController {
                         ProjectList = prlist;
 
 
-                    
+                   
 
 
                         for(String s: noPrjAccs)
@@ -2822,7 +2829,7 @@ public class surbhiHierarchyController {
                     flag++;
 
 
-                    
+                   
 
 
             if(purFilter!='' && hr.purchaser.Name!=null)
