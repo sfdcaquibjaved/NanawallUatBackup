@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="ashokHierarchyControll" sidebar="false">
+<apex:page standardController="Account" action="{!ViewData}" extensions="ashokHierarchyControll" sidebar="false">
     <Apex:form >
         <APex:pageBlock >
             <APex:pageBlockSection columns="1">
@@ -34,9 +34,21 @@
                   </APex:pageBlockSection>
            </APex:pageBlock>
            <APex:pageBlock >
-            <APex:pageBlockSection columns="1">
-                <apex:pageBlocktable value="{!ProjSiteList }" var="prj">
-                    <Apex:column headervalue="Corporate Account Site Location (End Customer)" value="{!prj.End_Customer_Account__c}" />
+           
+           
+            <APex:pageBlockSection columns="1" id="blocktable">
+                <apex:pageBlocktable value="{!ProjSiteList }" var="prj" rendered="{!NOT(ISNULL(ProjSiteList))}" id="cmdsort">
+                
+                    <apex:column >
+                            <apex:facet name="header">   
+                                <apex:commandLink action="{!ViewData}" value="Corporate Account Site Location (End Customer){!IF(ExpressionSort=='name',IF(DirectionOfSort == 'ASC', '▼', '▲'),'')}">
+                                    <apex:param value="name" name="column" assignTo="{!ExpressionSort}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                            <apex:outputLink value="/{!prj.Id}" target="_blank">{!prj.Name}</apex:outputLink>
+                        </apex:column>
+                    
+                    <Apex:column headervalue="Corporate Account Site Location (End Customer)}" value="{! prj.End_Customer_Account__c}" />
                     <Apex:column headervalue="Projects Name" value="{!prj.name}"/>
                     <Apex:column headervalue="Projects Status" value="{!prj.Stage__c}"/>
                     <Apex:column headervalue="Amount" value="{!prj.Amount__c}"/>
@@ -45,11 +57,7 @@
                      </apex:column>
                                   
                     <apex:column headerValue="Order Created Date">
-                <!-- <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='DESC','▼','▲'),'')}" >
-                 <apex:param value="OCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-            </apex:facet> -->
+              
             <apex:DataTable value="{!prj.Orders__r}" var="p">
                   <apex:column >      
                      <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.CreatedDate}"/></apex:outputText>
@@ -81,6 +89,14 @@
                     </apex:pageBlocktable>
                   </APex:pageBlockSection>
            </APex:pageBlock>
-           
+           <apex:PageBlock >  
+    <apex:pageBlockSection />    
+     <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
+         <apex:pageBlockTable var="ac" value="{!AccSiteList}">
+          <APex:column value="{!ac.name}"/>>
+             
+         </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:PageBlock>
 </Apex:form>
 </apex:page>

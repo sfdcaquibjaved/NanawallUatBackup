@@ -43,8 +43,10 @@ public class HierarchyController{
     public String accFilter{get;set;}
     public Date ordFnzDtMax{get;set;}
     public String ordby;
+    public Set<ID> oppIDSet{get;set;}
+    public Set<ID> oppAccSet{get;set;}
     
-    Public Set<Id> SetTest{get;set;}
+   // Public Set<Id> SetTest{get;set;}
     
     public String sortExpression {
 
@@ -195,8 +197,9 @@ public class HierarchyController{
     public void runQuery(ID objAccId){
         
         String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
-               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c';
-               query1+=' FROM Project__c';
+               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
+        	   query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\')';
+        	   query1+=' FROM Project__c';
                query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
                query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
                query1+=' OR Purchaser_Account__c =:objAccId OR Ordering_Account__c =:objAccId) '; 
@@ -211,6 +214,13 @@ public class HierarchyController{
         
         ProjSiteList = database.query(query1);
         
+        opportunityCRSet();
+        
+ 		oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
+                                    from Opportunity where Id IN:oppIDSet AND  AccountId IN:oppAccSet];	        
+        
+        retrieveContactRoles();
+        
         psiz = ProjSiteList.size();
         
         if(sortExp!='AccName')
@@ -219,11 +229,45 @@ public class HierarchyController{
         ProjectListBkp = ProjSiteList;
     }
     
+    public void opportunityCRSet(){
+        
+        for(Project__c plist: ProjSiteList){
+            
+            if(plist.Opportunities__r.size()!=0){
+                
+                for(Project__c prj : ProjSiteList){
+                    
+                for(Opportunity opp: prj.Opportunities__r){
+    					
+                    	oppIDSet.add(opp.Id);
+                    	oppAccSet.add(prj.Ordering_Account__c);
+	                }
+                }
+           }
+        }
+    }
+    
+    public void retrieveContactRoles(){
+        
+        for(Project__c prj: ProjSiteList){
+			
+            for (Opportunity op : oppList2){
+    	          for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
+        	              for(OpportunityContactRole ocr : ocrs ){ 
+            	               //hier.ocr.add(ocr); 
+                    }
+                }
+            }
+        }
+    }
+    
     public HierarchyController(ApexPages.StandardController con){
         
         ordFnzDtMax = null;
         ordby='';
         DuplPrj =0;
+        oppIdSet = new Set<ID>();
+        oppAccSet = new Set<ID>();
         AccSiteList = new List <Account>();
         ordList = new LIST<Order>();
         contrls = new List<Contact>();
@@ -234,7 +278,7 @@ public class HierarchyController{
         ProjSiteList = new List<Project__c>();
         ProjectListBkp = new List<Project__c>();
         objAcc = (Account)con.getRecord();
-        SetTest =new set<Id>();
+       // SetTest =new set<Id>();
         SetOr =new set<Id>();
         totalAmount = 0.0;
         amountWon = 0.0;

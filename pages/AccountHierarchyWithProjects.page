@@ -73,7 +73,7 @@
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
              <apex:facet name="header">             
-             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer){!IF(sortExpression=='AccName',IF(sortDirection='DESC','▼','▲'),'')}" id="cmdSort">
+             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer){!IF(sortExpression=='AccName',IF(sortDirection='DESC','?','?'),'')}" id="cmdSort">
                  <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
                </apex:facet>
@@ -86,7 +86,7 @@
           <!--  <apex:column headerValue="Project Name"> --> 
             <apex:column >
             <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='DESC','▼','▲'),'')}" >
+            <apex:commandLink action="{!viewData}" value="Project Name{!IF(sortExpression=='PrjName',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="PrjName" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
@@ -96,7 +96,7 @@
               <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
              <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Project Status {!IF(sortExpression=='Stage',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Project Status {!IF(sortExpression=='Stage',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="Stage" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -105,7 +105,7 @@
               <!--   <apex:column headerValue="Project Amount" > -->
             <apex:column >
             <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Amount{!IF(sortExpression=='Amount',IF(sortDirection='DESC','▼','▲'),'')}" >
+            <apex:commandLink action="{!viewData}" value="Amount{!IF(sortExpression=='Amount',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="Amount" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
@@ -113,7 +113,7 @@
                  </apex:column>
                  <apex:column >
                  <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Project Created Date {!IF(sortExpression=='PCrtDt',IF(sortDirection='DESC','▼','▲'),'')}" >
+            <apex:commandLink action="{!viewData}" value="Project Created Date {!IF(sortExpression=='PCrtDt',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="PCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
@@ -121,7 +121,7 @@
                   </apex:column>
                  <apex:column headerValue="Order Finalized Date">
                 <!-- <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Order Finalized Date {!IF(sortExpression=='OFnzDt',IF(sortDirection='DESC','▼','▲'),'')}" >
+            <apex:commandLink action="{!viewData}" value="Order Finalized Date {!IF(sortExpression=='OFnzDt',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="OFnzDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet> -->
@@ -133,7 +133,7 @@
                  </apex:column>
                  <apex:column headerValue="Order Created Date">
                 <!-- <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='DESC','▼','▲'),'')}" >
+            <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="OCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet> -->
@@ -147,7 +147,7 @@
               <!--   <apex:column value="{!pr.RecordType.Name}" headerValue="Record Type"/> -->
              <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Application Industry {!IF(sortExpression=='AppIndustry',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Application Industry {!IF(sortExpression=='AppIndustry',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="AppIndustry" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -156,7 +156,7 @@
 
                  <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Architect {!IF(sortExpression=='Arch',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Architect {!IF(sortExpression=='Arch',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="Arch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -164,7 +164,7 @@
                 </apex:column>
                  <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Purchaser Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Purchaser Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="Purch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -173,21 +173,20 @@
 
                  <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Ordering Account {!IF(sortExpression=='Ordering',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Ordering Account {!IF(sortExpression=='Ordering',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="Ordering" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
                  <apex:outputLink value="/{!pr.Ordering_Account__c}">{!pr.Ordering_Account__r.Name}</apex:outputLink>
                 </apex:column>
-
                <!--  <apex:column value="{!pr.architect.Name}" headerValue="Architect"/>  -->
                  
              <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
                  
                <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->
-               <!--  <apex:column >
-                 <apex:facet name="header">
-            <apex:commandLink action="{!viewData}" value="Contact Role Name {!IF(sortExpression=='role',IF(sortDirection='DESC','▼','▲'),'')}" >
+             <!--   <apex:column >
+              <!--   <apex:facet name="header">
+            <apex:commandLink action="{!viewData}" value="Contact Role Name {!IF(sortExpression=='role',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="role" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
             </apex:facet>
@@ -200,7 +199,7 @@
                  
               <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Project City {!IF(sortExpression=='City',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Project City {!IF(sortExpression=='City',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="City" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -209,7 +208,7 @@
 
               <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Project State {!IF(sortExpression=='State',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Project State {!IF(sortExpression=='State',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="State" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -218,7 +217,7 @@
               
              <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Project ZipCode {!IF(sortExpression=='Zipcode',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Project ZipCode {!IF(sortExpression=='Zipcode',IF(sortDirection='DESC','?','?'),'')}" >
                  <apex:param value="Zipcode" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -236,7 +235,7 @@
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
              <apex:facet name="header">             
-             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer) with No Projects{!IF(sortExpression=='AccName',IF(sortDirection='DESC','▼','▲'),'')}" id="cmdSort">
+             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer) with No Projects{!IF(sortExpression=='AccName',IF(sortDirection='DESC','?','?'),'')}" id="cmdSort">
                  <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
                </apex:facet>

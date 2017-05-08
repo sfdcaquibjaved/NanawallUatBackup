@@ -18,7 +18,7 @@ System.debug('userAgent'+userAgent);
 if( !userAgent.contains('Android')) {
     System.debug('iphone');
     
-    String  myUrl=Site.getPathPrefix()+'/apex/MultipleFileUpload_Case?id='+pageid;
+    String  myUrl=Site.getPathPrefix()+'/apex/MultipleAttachmentsVFCase?id='+pageid;
         
              PageReference redUrl1 = new PageReference(myUrl);
              redUrl1.getParameters().put('Case.ID', CaseRecord.Id);
