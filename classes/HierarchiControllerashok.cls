@@ -1,4 +1,6 @@
-public class HierarchyController_nishant1{
+public class HierarchiControllerashok 
+{
+	
     
     public Set<Id> SetOr{get;set;}
     public List<ProjectWrapper> records{get;set;} 
@@ -47,6 +49,7 @@ public class HierarchyController_nishant1{
     public Set<ID> oppIDSet{get;set;}
     public Set<ID> oppAccSet{get;set;}
     public Hierarchy [] ProjectList{get;set;}
+    
 
     
    // Public Set<Id> SetTest{get;set;}
@@ -69,6 +72,9 @@ public class HierarchyController_nishant1{
         public List<Date> ordCrtDt {get;set;}
         public List<OpportunityContactRole> ocr {get;set;}
         public Date crtdt{get;set;}
+        public list<Hierarchy> projectsiteList{get;set;}
+        public List<Project__c> ProjSiteList{get;set;}
+        public list<opportunity> opplist2{get;set;}
         
         public Hierarchy()
         {
@@ -332,7 +338,8 @@ public class HierarchyController_nishant1{
         ProjectList.add(hier);
     }
     
-    public HierarchyController_nishant1(ApexPages.StandardController con){
+    public HierarchiControllerashok(ApexPages.StandardController con)
+    {
         
         ProjectList = new List<Hierarchy>();
         ordFnzDtMax = null;

@@ -12,6 +12,7 @@ global class EmailTaskCaller {
 	WebService static boolean TriggerQuoteEmailWorkflow( string SalesforceQuoteID,  string GUUID_Quote, string GUUID_CAD) {
 		
 		//2. save the GUIDs
+		/*
 		Quote__c q = [SELECT id,Followup_Status__c,Print_Date__c,GUUID_CAD__c, GUUID_Quote__c, Opportunity__c  FROM Quote__c WHERE id = :SalesforceQuoteID ];
 		q.Followup_Status__c ='Reviewing';
 		q.Print_Date__c = DateTime.now();
@@ -24,7 +25,7 @@ global class EmailTaskCaller {
 		Opportunity o = [SELECT Id, Customer_Emailed__c FROM Opportunity WHERE Id = :q.Opportunity__c];
 		o.Customer_Emailed__c = true;
 		update o;
-
+		*/
 
 		return true;
 	}
