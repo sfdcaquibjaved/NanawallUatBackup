@@ -102,7 +102,7 @@
     var files;
     var currentFile;
     var $upload;
-    var CHUNK_SIZE = 180000; //Must be evenly divisible by 3, if not, data corruption will occur
+    var CHUNK_SIZE = 360000; //Must be evenly divisible by 3, if not, data corruption will occur
     var VIEW_URL = '/servlet/servlet.FileDownload?file=';
     //var parentId, you will see this variable used below but it is set in the component as this is a dynamic value passed in by component attribute
     
@@ -165,7 +165,7 @@
             /*Build the byteChunkArray array for the current file we are processing. This array is formatted as:
         ['0-179999','180000-359999',etc] and represents the chunks of bytes that will be uploaded individually.*/
         byteChunkArray = new Array();
-        
+            //var CHUNK_SIZE = currentFile.size*3;
         //First check to see if file size is less than the chunk size, if so first and only chunk is entire size of file
         if(currentFile.size <= CHUNK_SIZE){
             //alert('Size of file'+currentFile.size);   
@@ -210,20 +210,20 @@
     
     //Uploads a chunk of bytes, if attachmentId is passed in it will attach the bytes to an existing attachment record
     function processByteChunkArray(attachmentId){
-        //  alert('byteChunkArray'+byteChunkArray.length);
+        // alert('byteChunkArray'+byteChunkArray.length);
         //Proceed if there are still values in the byteChunkArray, if none, all piece of the file have been uploaded
         if(byteChunkArray.length > 0){
             //Determine the byte range that needs to uploaded, if byteChunkArray is like... ['0-179999','180000-359999']
             var indexes = byteChunkArray[0].split('-'); //... get the first index range '0-179999' -> ['0','179999']
             var startByte = parseInt(indexes[0]); //0
             var stopByte = parseInt(indexes[1]); //179999
-            // alert('stopByte'+stopByte);
+            //alert('stopByte'+stopByte);
             //alert('current file?'+currentFile);
             //Slice the part of the file we want to upload, currentFile variable is set in checkForUploads() method that is called before this method
             var blobChunk = "";
             if (currentFile.mozSlice){
                 blobChunk = currentFile.mozSlice(startByte , stopByte + 1);
-                // alert('mozilla');
+                //alert('mozilla');
             }else {
                 blobChunk = currentFile.slice(startByte , stopByte + 1);
                 //alert('chrome');
@@ -246,7 +246,7 @@
                         
                         //Proceed if there were no errors with the remoting call
                         if(event.status == true){
-                            //alert('successfull remoting');
+                            // alert('successfull remoting');
                             //Update the percent of the status bar and percent, first determine percent complete
                             var percentComplete = Math.round((stopByte / currentFile.size) * 100);
                             $upload.find(".percentComplete").text(percentComplete + '%');
@@ -268,7 +268,7 @@
                             $upload.addClass('uploadError');
                             $upload.find(".statusPercent").addClass('statusPercentError');
                             $upload.attr('title',event.message);
-                            
+                            alert('Error'+event.message);
                             //Check and continue the next file to upload
                             checkForUploads();
                         }

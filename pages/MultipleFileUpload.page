@@ -2,6 +2,7 @@
 
     <apex:form >
          
-        <c:fileUpload parentId="{!$CurrentPage.Parameters.id}"/>
+      <c:fileUpload parentId="{!$CurrentPage.Parameters.id}"/> 
+      <!--  <c:MultiAttUpload_IOS parentId="{!$CurrentPage.Parameters.id}"/> -->
     </apex:form>
 </apex:page>

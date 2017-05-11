@@ -122,24 +122,24 @@
             </apex:facet>
                      <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!pr.crtdt}"/></apex:outputText>
                   </apex:column>
-                 <apex:column headerValue="Order Finalized Date">
-               <!--  <apex:facet name="header">
+                 <apex:column >
+                 <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Order Finalized Date {!IF(sortExpression=='OFnzDt',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="OFnzDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
-            </apex:facet> -->
+            </apex:facet> 
             <apex:DataTable value="{!pr.ordFnzDt}" var="p">
                   <apex:column >      
                      <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
                    </apex:column>  
                  </apex:DataTable>
                  </apex:column>
-                 <apex:column headerValue="Order Created Date" >
-                <!-- <apex:facet name="header">
+                 <apex:column >
+                <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Order Created Date {!IF(sortExpression=='OCrtDt',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="OCrtDt" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
-            </apex:facet> -->
+            </apex:facet>
             <apex:DataTable value="{!pr.ordCrtDt}" var="p">
                   <apex:column >      
                      <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p}"/></apex:outputText>
@@ -188,12 +188,12 @@
              <!--    <apex:column value="{!pr.purchaser.Name}" headerValue="Purchaser" /> -->
                  
                <!--  <apex:column value="{!pr.orderingAccount.Name}" headerValue="Odering Account" /> -->
-                 <apex:column headerValue="Contact Role Name">
-                 <!--<apex:facet name="header">
+                 <apex:column >
+                 <apex:facet name="header">
             <apex:commandLink action="{!viewData}" value="Contact Role Name {!IF(sortExpression=='role',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="role" name="column" assignTo="{!sortExpression}" ></apex:param>
                </apex:commandLink>
-            </apex:facet>-->
+            </apex:facet>
             <apex:DataTable value="{!pr.ocr}" var="o">
                   <apex:column >      
                      <apex:outputLink value="/{!o.ContactId}">{!o.Contact.Name}</apex:outputLink>

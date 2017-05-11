@@ -8,10 +8,12 @@ public class ashokHierarchyControll
        public list<order> rectDate{get;set;}   
         public String SortingExpression = 'name';
         public String DirectionOfSort = 'ASC';
-    
-       public list <project__C> projectToShow{get;set;}
+    Public Integer size{get;set;} 
+    Public Integer noOfRecords{get; set;} 
+    public List<SelectOption> paginationSizeOptions{get;set;} 
+   
        public Account ObjAcc{get;set;}       
-       public integer size{get;set;}
+       public integer siz{get;set;}
        public integer PrjWon{get;set;}
        public integer psize{get;set;}
        public Integer prjStgWon{get;set;}
@@ -39,15 +41,19 @@ public class ashokHierarchyControll
           ProjSiteList = new List<Project__c>();
         ApexPages.StandardSetController ssc = new ApexPages.StandardSetController(ProjSiteList);
         RecentOrdeDate = null;    
-        objAcc = (Account)con.getRecord();
-        
-       
-        AccSiteList = new List<Account>();
-        projectToShow = new list<project__C>();
+        siz=10;
+        paginationSizeOptions = new List<SelectOption>();
+        paginationSizeOptions.add(new SelectOption('5','5'));
+        paginationSizeOptions.add(new SelectOption('10','10'));
+        paginationSizeOptions.add(new SelectOption('20','20'));
+        paginationSizeOptions.add(new SelectOption('50','50'));
+        paginationSizeOptions.add(new SelectOption('100','100'));
+        paginationSizeOptions.add(new SelectOption('200','200'));        
+        objAcc = (Account)con.getRecord();     
+        AccSiteList = new List<Account>();       
         rectDate = new List<order>();
          //inilize all variebles counters to zero 
-         //init variable        
-        
+         //init variable     
         
         totalAmount = 0.0;
         amountWon = 0.0;
@@ -62,19 +68,7 @@ public class ashokHierarchyControll
         prjStglostAmt = 0.0;
         prjStgPrgAmt = 0.0;
         prjStgWonAmt = 0.0; 
-        DuplPrj =0;
-       
-       
-    ProjSiteList= [SELECT Id, Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, 
-                        RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, 
-                        Project_Zip_Code__c, Bid_Date__c, Close_Date__c,Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, 
-                        End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c,
-                        (select Order_Finalized_Date__c , createdDate from orders__r order by createdDate ASC )
-                        FROM Project__c
-                        WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
-                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                        OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id) ];    
-                        
+        DuplPrj =0;                        
                        
                        
          //list contains all site count under the parent account  (site count)            
@@ -86,11 +80,6 @@ public class ashokHierarchyControll
                                                        where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];  
        
             
-                
-
-                                             
-                                                                                                           
-               
         for(Project__c proj :ProjSiteList )
         {
               
@@ -198,20 +187,40 @@ public class ashokHierarchyControll
     public PageReference ViewData() 
      {
          string sortFullExp = SortingExpression + ' ' + DirectionOfSort ;       
-        ProjSiteList= [SELECT Id, Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, 
-                        RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, 
-                        Project_Zip_Code__c, Bid_Date__c, Close_Date__c,Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, 
-                        End_Customer_Account__c, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c,
-                        (select Order_Finalized_Date__c , createdDate from orders__r order by createdDate ASC )
-                        FROM Project__c
-                        WHERE (Architect_Account__c = :objAcc.Id OR Brand_Name_Account__c = :objAcc.Id OR End_Customer_Account__c = :objAcc.Id 
-                        OR Franchise_Account__c = :objAcc.Id OR Franchisor_Account__c = :objAcc.Id OR Other_Influencer_Account__c = :objAcc.Id 
-                        OR Purchaser_Account__c =:objAcc.Id OR Ordering_Account__c =:objAcc.Id)]; 
+        
 
             return null;
     }
-    
+    public ApexPages.StandardSetController setCon 
+        {
+        get 
+        {
+            if(setCon == null) 
+            {                
+                setCon = new ApexPages.StandardSetController(Database.getQueryLocator(
+                                                [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
+                                                       Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
+                                                       Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
+                                                       Architect_Account__c, Purchaser_Account__c, 
+                                                       Purchaser_Account__r.Name from Projects1__r ) from Account 
+                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)]));
+                        setCon.setPageSize(size);  
+                        noOfRecords = setCon.getResultSize();
+            }            
+            return setCon;
+        }
+        set;
+    }
         
-    
-        
-   }
+     //Changes the size of pagination
+    public PageReference refreshPageSize() {
+         setCon.setPageSize(size);
+         return null;
+    }
+ 
+    // Initialize setCon and return a list of record    
+     
+                public List<project__c> getprojects() {
+           return (List<project__c>) setCon.getRecords();
+    }
+}

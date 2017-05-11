@@ -122,7 +122,7 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
     if(caseConIds.size()>0){
         caseTriggerHelperForOrderUpdate.autoUpdateConTypeOnCase(Trigger.new,caseConIds);
     }
-    
+    set<id> caseOrdInst = new set<id>();
     set<id> caseOrdIds = new set<id>();
     for(case c:trigger.new){
     if( trigger.isBefore && (trigger.isInsert || (trigger.isUpdate && (Trigger.oldMap.get(c.id).order__c != c.order__c)))){
@@ -130,11 +130,38 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
         caseOrdIds.add(c.order__c);
         }  
     }
-    
+        if(trigger.isBefore && trigger.isInsert){
+            if(c.order__c !=null){
+        caseOrdInst.add(c.order__c);
+        }
+        if(caseOrdInst.size()>0){    
+        CaseTriggerUtility.updateInstallerContactonCase(Trigger.new,caseOrdInst);
+          } 
+        }
         if(caseOrdIds.size()>0){    
         caseTriggerHelperForOrderUpdate.updateSLorderFromManufact(Trigger.new,caseOrdIds);
         }
     }
+ 
+ 
+ /************************Delete the cases which are created by Email to case Functionality*************/   
+    
+
+if(trigger.isAfter && trigger.isInsert){
+    List<Case> casesToDelete=new List<Case>();
+   Group Queuename=[select Id from Group where Name = 'EmailtoSalesforce' and Type = 'Queue'];
+ 
+  
+    for(case record: Trigger.new){
+       if(record.ownerId==Queuename.Id){
+            casesToDelete.add(record);
+}
+}
+   
+    delete casesToDelete;
+}    
+    
+ 
     
     
 }

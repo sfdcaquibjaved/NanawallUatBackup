@@ -513,6 +513,8 @@ system.debug('ORDERTRIGGER: Got ' + manufacturingOrderMap.size() + ' orders with
         
         for( Order o : orders )
         {
+        	if( o.DEV_Skip_Stage_Triggers__c ) continue;
+        	
 System.debug('***ORDERTRIGGER: In the o loop:  ' + o.Quote_Name__c );
             //pipeline updates 
             Order_Trigger_Helper.OrderStageAggregate osa = new Order_Trigger_Helper.OrderStageAggregate();
@@ -524,7 +526,8 @@ system.debug('setting stages for order ' + o.Id);
             Order_Trigger_Helper.SetStages( osa );
 system.debug('done setting stages for order ' + o.Id);
             
-            if( o.Stage__c != oldMap.get(o.Id).Stage__c )
+            if( o.Stage__c != oldMap.get(o.Id).Stage__c 
+            	&& !o.DEV_Skip_Stage_Triggers__c )
             {
                 osa.mfrOrdersNeedUpdating = true;
                 osa.shippingOrdersNeedUpdating = true;

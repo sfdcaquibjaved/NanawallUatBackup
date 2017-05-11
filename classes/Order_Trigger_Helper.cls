@@ -41,12 +41,14 @@ global with sharing class Order_Trigger_Helper {
 			shippingOrderMap.get(so.Order__c).add( so );
 		}
 		
-		 
-		list<Order> orders = [SELECT Id, Status, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c FROM Order WHERE Id = :orderids];
+
+		list<Order> orders = [SELECT Id,DEV_Skip_Stage_Triggers__c, Status, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c FROM Order WHERE Id = :orderids];
 		list<Shipping_Order__c> shippingOrdersToUpdate = new list<Shipping_Order__c>();
 		list<Order> ordersToUpdate = new list<Order>();
 		for( Order o : orders )
 		{
+system.debug('doShippingOrderUpdates DEV_Skip_Stage_Triggers__c = ' + o.DEV_Skip_Stage_Triggers__c );			
+			if( o.DEV_Skip_Stage_Triggers__c ) continue;
 //			if( o.Stage__c != 'On Hold'
 //				&& o.Stage__c != 'Cancelled')
 			{
@@ -57,7 +59,7 @@ global with sharing class Order_Trigger_Helper {
 				osa.shippingOrders = shippingOrderMap.get( o.Id );
 				
 				Order_Trigger_Helper.SetStages( osa );
-				if(  osa.shippingOrdersNeedUpdating)
+				if(  osa.shippingOrdersNeedUpdating  )
 				{
 					 shippingOrdersToUpdate.addAll( osa.shippingOrders);
 				}
@@ -97,11 +99,14 @@ global with sharing class Order_Trigger_Helper {
 		}
 		
 		 
-		list<Order> orders = [SELECT Id, Status, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c FROM Order WHERE Id = :orderids];
+		list<Order> orders = [SELECT Id,DEV_Skip_Stage_Triggers__c, Status, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c FROM Order WHERE Id = :orderids];
 		list<Manufacturing_Order__c> manufacturingOrdersToUpdate = new list<Manufacturing_Order__c>();
 		list<Order> ordersToUpdate = new list<Order>();
 		for( Order o : orders )
 		{
+system.debug('doMfrOrderUpdates DEV_Skip_Stage_Triggers__c = ' + o.DEV_Skip_Stage_Triggers__c );			
+			
+			if( o.DEV_Skip_Stage_Triggers__c ) continue;
 //			if( o.Stage__c != 'On Hold'
 //				&& o.Stage__c != 'Cancelled')
 			{
@@ -112,7 +117,7 @@ global with sharing class Order_Trigger_Helper {
 				osa.shippingOrders = shippingOrderMap.get( o.Id );
 				
 				Order_Trigger_Helper.SetStages( osa );
-				if(  osa.mfrOrdersNeedUpdating)
+				if(  osa.mfrOrdersNeedUpdating )
 				{
 					 manufacturingOrdersToUpdate.addAll( osa.manufacturingOrders);
 				}
@@ -161,11 +166,14 @@ global with sharing class Order_Trigger_Helper {
 		
 		
 		
-		list<Order> orders = [SELECT Id, Status,Estimated_Pickup_Date_Set__c, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c, IN_Actual_Delivery_Date_c__c, IN_ETA_Jobsite_c__c, IN_Freight_ETA_Jobsite_c__c, IN_Freight_Tracking_Number_c__c, IN_Revised_ETA_Jobsite_c__c  FROM Order WHERE Id = :orderids];
+		list<Order> orders = [SELECT Id, Status,DEV_Skip_Stage_Triggers__c, Estimated_Pickup_Date_Set__c, Order_Finalized_Date__c, Balance_Received_Date__c, Stage__c, IN_Actual_Delivery_Date_c__c, IN_ETA_Jobsite_c__c, IN_Freight_ETA_Jobsite_c__c, IN_Freight_Tracking_Number_c__c, IN_Revised_ETA_Jobsite_c__c  FROM Order WHERE Id = :orderids];
 		
 		list<Order> ordersToUpdate = new list<Order>();
 		for( Order o : orders )
 		{
+			if(o.DEV_Skip_Stage_Triggers__c )
+				continue;
+			
 			if( o.Stage__c != 'On Hold'
 				&& o.Stage__c != 'Cancelled')
 			{			

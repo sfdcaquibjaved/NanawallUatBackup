@@ -8,7 +8,7 @@
   
 ****************************************************************************/ 
 
-public class AttachmentUtility {
+global class AttachmentUtility {
 
         /*  
          Method Name    : AttachmentHandler
@@ -140,9 +140,16 @@ public class AttachmentUtility {
          Input Parameter: List of attachment  
          Created Date: April 2017
          */
-    public static void moveuploads(List < attachment > newAttachment) {
+   	
+    public static void moveuploads(List<Attachment> AttachmentNew) {
+       
+       
+         
         
-        set<ID> AttachmentID = new set<ID> () ;
+        
+      
+      //  list<Attachment> newAttachment = [select id,name,body,parentId from Attachment where id in:newAttachmentIds];
+ 	 	set<ID> AttachmentID = new set<ID> () ;
         String instprefix;
         Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
        
@@ -156,18 +163,18 @@ public class AttachmentUtility {
         
         List < ContentVersion > ContentVersionInsert = new List <ContentVersion>() ;
         
-        for(Attachment a:newAttachment) {
+        for(Attachment a: AttachmentNew) {
             string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
             if(myIdPrefix.equals(instprefix)){
                 System.debug('in here');
-                ContentVersion cont = new ContentVersion();
-                cont.versionData = a.Body;
-                cont.title = a.Name;
-                cont.pathOnClient = a.Name;
+                ContentVersion cont = new ContentVersion(versionData = a.Body,
+                title = a.Name,
+                pathOnClient = a.Name);
+                System.debug('Size'+ a.Body.size()+' '+cont.VersionData.size());
                 
-                ContentVersionInsert.add(cont);
+               ContentVersionInsert.add(cont);
                 AttachmentID.add(a.ID);
-                
+             
             }
         }
         
@@ -186,7 +193,7 @@ public class AttachmentUtility {
         List<Attachment> AttachmentDelete = new List <Attachment> () ;
         
         for(ContentVersion C : ContentVersionInsert ){
-            for(Attachment a : newAttachment ){ 
+            for(Attachment a : AttachmentNew ){ 
                 if(c.versionData == a.Body ){
                     //Attaching FeedItem to ContentVersion and InstallationForm
                     FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
@@ -199,11 +206,13 @@ public class AttachmentUtility {
         try{
             if(FeedItemContentList.size() > 0){
             //Insert FeedItem
+            system.debug('In here FeedItemContentList' +FeedItemContentList);
             	insert FeedItemContentList ;
             }
             if(AttachmentID.size() > 0){
             //Delete Attachment
-            	Delete [select id from Attachment where id in :AttachmentID];
+            	system.debug('Inside here AttachmentID' +AttachmentID);
+            	Delete [select id from Attachment where id in :AttachmentID] ;
             }
             
             
@@ -283,7 +292,7 @@ public class AttachmentUtility {
         try{
             if(FeedItemContentList.size() > 0 ){
             //Insert FeedItem
-            	insert FeedItemContentList ;
+            //	insert FeedItemContentList ;
             	System.debug('Success 2!');
             }
             if(AttachmentID.size() > 0){

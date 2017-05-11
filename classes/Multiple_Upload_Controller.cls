@@ -19,32 +19,41 @@ public string recrdId{get; set;}
       
       
         if(attachmentId == '' || attachmentId == null){
-           
+           System.debug('attachmentID'+attachmentId);
             
-              ContentVersion att = new ContentVersion(
+              /*ContentVersion att = new ContentVersion(
                     // data fields
-                    versionData = EncodingUtil.Base64Decode(base64BlobValue),
-                    title = 'INS_'+fileName,
-                    pathOnClient = '/' + fileName
-                  	
-                );
-          
+                    pathonclient = '/'+ filename,
+                    VersionData = EncodingUtil.Base64Decode(base64BlobValue),
+                    Title = 'INS_'+fileName
+          );*/
+            Attachment att = new Attachment(
+                ParentId = parentId,
+            Name = 'INS_'+filename,
+            Body = EncodingUtil.Base64Decode(base64BlobValue)
+            );
+            try{
             insert att;
+                System.debug('Success!');
+            }
+            catch(Exception e){
+                System.debug('Failed'+e);
+            }
             system.debug('I am here with att' +att);
-            system.debug('ContentDocumentId' +att.ContentDocumentId);
-           ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, att.Title + ' File uploaded successfully'));
+            //system.debug('ContentDocumentId' +att.ContentDocumentId);
+//           ApexPages.addmessage(new ApexPages.message(ApexPages.Severity.INFO, att.Title + ' File uploaded successfully'));
            
             
             
-            ContentDocumentLink CDL = new ContentDocumentLink(
+            /*ContentDocumentLink CDL = new ContentDocumentLink(
             					linkedEntityId = parentId ,
                 				ContentDocumentId = [SELECT Id, ContentDocumentId FROM ContentVersion WHERE Id =: att.Id].ContentDocumentId ,
                        			 shareType = 'V',
                         		 visibility = 'AllUsers'
                 
-            ) ; 
-            system.debug('I am here with CDL' +CDL);
-            insert CDL ;
+            ) ; */
+            //system.debug('I am here with CDL' +CDL);
+            //insert CDL ;
                 
                 
                 //Return the new file Id 

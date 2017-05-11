@@ -1,5 +1,7 @@
 /*****************Class Declaration
-* API Version : 39.0
+* Author : CloudAlyze Solutions LLC
+* Version : 1.0
+* Class: Display the data Project , Opportunity ,order , ContactRoles
 ********************/
 public class HierarchyController {
 /*****************Constructor Variable initialization********************/
@@ -19,8 +21,8 @@ public class HierarchyController {
     public Hierarchy [] ProjectListBkp{get;set;}
     public Double amountWon{get;set;}
     public Double totalAmount{get;set;}
-    private String sortDirection = 'ASC';
-    private String sortExp = '';
+    private String sortDirection = 'DESC';
+    private String sortExp = 'PCrtDt';
     public List<String> acclist;
     public List<Order> ordList{get;set;}
     public LIST<Contact> contrls{get;set;}
@@ -209,7 +211,7 @@ public class HierarchyController {
                                       
            if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
             
-            if(proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || proj.Stage__c.contains('Order - Negotiation') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()>0))
+            if(proj.Stage__c.contains('Closed Won - Order In Process') || proj.Stage__c.contains('Closed Won - Order Signed') || proj.Stage__c.contains('Order - Negotiation') || proj.Stage__c.contains('Project On Hold') && proj.Orders__r.size()>0)
                 {
                 prjStgPrg = prjStgPrg +1; 
                     
@@ -218,10 +220,10 @@ public class HierarchyController {
                 prjStgPrgAmt = prjStgPrgAmt + proj.Amount__c;     
             }
                 
-            if (proj.Stage__c != null && (proj.Stage__c.contains('Closed Won') || proj.Stage__c.contains('Closed Complete')))
+            if (proj.Stage__c != null && (proj.Stage__c.contains('Closed Complete - Ordered - Paid')))
                 {
                     prjWon = prjWon + 1;
-                    amountWon = amountWon + proj.Amount__c;
+                    amountWon = amountWon + proj.Amount__c;  
                     prjStgWon = prjStgWon + 1;
                     prjStgWonAmt = prjStgWonAmt + proj.Amount__c; 
                 }
@@ -231,7 +233,7 @@ public class HierarchyController {
                     DuplPrj = DuplPrj +1;
                 }   
 
-            if(proj.Stage__c.contains('Quoted') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
+            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
                 
                 prjStgQtd = prjStgQtd + 1;
                 
@@ -288,7 +290,7 @@ public class HierarchyController {
         
         String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
                query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\')';
+               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
                query1+=' FROM Project__c';
                query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
                query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
@@ -309,7 +311,7 @@ public class HierarchyController {
         opportunityCRSet();
         
         oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
-                                    from Opportunity where Id IN:oppIDSet AND  AccountId IN:oppAccSet];         
+                                    from Opportunity where Id IN:oppIDSet]; //AND  AccountId IN:oppAccSet         
 		for(Project__c prj:ProjSiteList ) { hierarchySetData(prj);  }  
         
         psiz = ProjSiteList.size();
@@ -373,7 +375,7 @@ public class HierarchyController {
         tmpList = new List<Hierarchy>();
         ProjectList = new List<Hierarchy>();
         ordFnzDtMax = null;
-        ordby='';
+        ordby='CreatedDate';
         DuplPrj =0;
         oppIdSet = new Set<ID>();
         oppAccSet = new Set<ID>();
@@ -617,7 +619,11 @@ public class HierarchyController {
             pr.setRedirect(true);
             return pr;
     } 
-    
+    /** This method 
+ * 
+ * Add filter logic in the VF page
+ * Add filterList and assign to projectList .
+ */
     public void filterAcc(){
         
         AccSiteList = noProjectAccounts();

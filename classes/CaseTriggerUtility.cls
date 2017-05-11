@@ -81,4 +81,25 @@ public class CaseTriggerUtility {
         }
         }catch(exception e){}
     }
+    /*********************************************
+    Method:updateInstallerContactonCase
+    Purpose: To fill the Installer Contact field on Case created if Order field is not empty 
+             and the Order has Installations below it
+    Related Triggers:CaseTrigger
+    **********************************************/
+    public static void updateInstallerContactonCase(list<Case>caselist,set<id>ordIds){
+        list<Installation__c> inslist= [Select id,Installer_Contact__c,Order__c from Installation__c where Order__c in:ordIds];
+        if(inslist.size()>0){
+            for(case c:caselist){
+                for(installation__c i:inslist){
+                    if(c.order__c == i.order__c) 
+                    {
+                        c.Installer_Contact__c = i.Installer_Contact__c;
+                    }
+                }
+            }
+        }
+
+        
+    }
 }

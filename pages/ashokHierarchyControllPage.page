@@ -1,102 +1,32 @@
 <apex:page standardController="Account" action="{!ViewData}" extensions="ashokHierarchyControll" sidebar="false">
     <Apex:form >
-        <APex:pageBlock >
-            <APex:pageBlockSection columns="1">
-                <apex:pageBlocktable value="{!account}" var="acc">
-                    <Apex:column headervalue="Corporate Account Name" value="{!acc.name}"/>
-                    <Apex:column headervalue="Site Count" value="{!AccSiteList.size}"/>
-                    <Apex:column headervalue="Projects Count" value="{!ProjSiteList.size}"/>
-                    <Apex:column headervalue="Most Recent Order Date" value="{!rectDate}"/>
-                    <Apex:column headervalue="Projects Won (Order Paid)" value="{!prjWon}"/>
-                    <Apex:column headervalue="Projects (Order In Progress)" value="{!prjStgPrg }"/>
-                    <Apex:column headervalue="Projects (Quote in Progress)" value="{!prjStgPrg }"/>
-                    <Apex:column headervalue="Project Lost" value="{!prjStglost }"/>
-                    <apex:column headerValue="Closure Rate">
-                    <apex:outputText value="{0,Number,0.00}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
-                    </apex:column>
-                    <Apex:column headervalue="Duplicate Projects" value="{!DuplPrj }"/>
-                    <apex:column headerValue="Amount (Projects Won)">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <apex:column headerValue="Amount (Order In Progress)">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <apex:column headerValue="Amount (Quote In Progress)">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
-                    </apex:column>
-                    <apex:column headerValue="Amount (Lost)">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
-                    </apex:column>                    
-                    <Apex:column headervalue="Total Amount">
-                    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
-                    </apex:column>
-                    </apex:pageBlocktable>
-                  </APex:pageBlockSection>
-           </APex:pageBlock>
-           <APex:pageBlock >
-           
-           
-            <APex:pageBlockSection columns="1" id="blocktable">
-                <apex:pageBlocktable value="{!ProjSiteList }" var="prj" rendered="{!NOT(ISNULL(ProjSiteList))}" id="cmdsort">
-                
-                    <apex:column >
-                            <apex:facet name="header">   
-                                <apex:commandLink action="{!ViewData}" value="Corporate Account Site Location (End Customer){!IF(ExpressionSort=='name',IF(DirectionOfSort == 'ASC', '▼', '▲'),'')}">
-                                    <apex:param value="name" name="column" assignTo="{!ExpressionSort}" ></apex:param>
-                                </apex:commandLink>
-                            </apex:facet>
-                            <apex:outputLink value="/{!prj.Id}" target="_blank">{!prj.Name}</apex:outputLink>
-                        </apex:column>
-                    
-                    <Apex:column headervalue="Corporate Account Site Location (End Customer)}" value="{! prj.End_Customer_Account__c}" />
-                    <Apex:column headervalue="Projects Name" value="{!prj.name}"/>
-                    <Apex:column headervalue="Projects Status" value="{!prj.Stage__c}"/>
-                    <Apex:column headervalue="Amount" value="{!prj.Amount__c}"/>
-                    <Apex:column headervalue="Project created Date">
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!prj.CreatedDate}"/></apex:outputText>
-                     </apex:column>
-                                  
-                    <apex:column headerValue="Order Created Date">
-              
-            <apex:DataTable value="{!prj.Orders__r}" var="p">
-                  <apex:column >      
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.CreatedDate}"/></apex:outputText>
-                   </apex:column>  
-                 </apex:DataTable>
-                 </apex:column>
-                    <apex:column headerValue="Order Finalized Date">
-                
-            <apex:DataTable value="{!prj.Orders__r}" var="p">
-                  <apex:column >      
-                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.Order_Finalized_Date__c}"/></apex:outputText>
-                   </apex:column>  
-                 </apex:DataTable>
-                 </apex:column>
-                    <Apex:column headervalue="Application Industry" value="{!prj.Application__c}" />
-                    <apex:column headerValue="Architect" value="{!prj.Architect_Account__r.Name}"/>
-                    
-                    <Apex:column headervalue="Purchaser Account" value="{!prj.Purchaser_Account__r.Name}"/>
-                    <apex:column headerValue="Ordering Account" value="{!prj.Ordering_Account__r.Name}"/>
-                                        
-                    <apex:column headerValue="Contact role account"/>
-                    
-                    <apex:column headerValue="Project City" value="{!prj.Project_City__c}"/>
-                    
-                    <apex:column headerValue="Project State" value="{!prj.Project_State__c}"/>
-                                       
-                    <Apex:column headervalue="Project Zip code" value="{!prj.Project_Zip_Code__c}"/>                    
-                    
-                    </apex:pageBlocktable>
-                  </APex:pageBlockSection>
-           </APex:pageBlock>
-           <apex:PageBlock >  
-    <apex:pageBlockSection />    
-     <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
-         <apex:pageBlockTable var="ac" value="{!AccSiteList}">
+     <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId"/>
+           <apex:PageBlock id="pbId">  
+          
+    <apex:pageBlockSection title="All Account with no Projects" collapsible="false" columns="1" >    
+             <apex:pageBlockTable var="ac" value="{!projects}">
           <APex:column value="{!ac.name}"/>>
              
          </apex:pageBlockTable>
+          <apex:panelGrid columns="8"> 
+                 
+                <apex:selectList value="{!size}" multiselect="false" size="1" onchange="refreshPageSize();">
+                    <apex:selectOptions value="{!paginationSizeOptions}"/>
+                </apex:selectList>
+                 
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="First" action="{!setCon.first}" disabled="{!!setCon.hasPrevious}" title="First Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Previous" action="{!setCon.previous}" disabled="{!!setCon.hasPrevious}" title="Previous Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Next" action="{!setCon.next}" disabled="{!!setCon.hasNext}" title="Next Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Last" action="{!setCon.last}" disabled="{!!setCon.hasNext}" title="Last Page"/> 
+  
+                <apex:outputText >{!(setCon.pageNumber * size)+1-size}-{!IF((setCon.pageNumber * size)>noOfRecords, noOfRecords,
+                     (setCon.pageNumber * size))} of {!noOfRecords}
+                </apex:outputText> 
+                </apex:panelGrid>  
         </apex:pageBlockSection>
     </apex:PageBlock>
-</Apex:form>
+       </apex:form>
 </apex:page>

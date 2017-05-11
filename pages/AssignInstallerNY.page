@@ -1,26 +1,41 @@
 <apex:page Controller="AssignInstallerNY_Controller" showHeader="false" sidebar="false">
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS221, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+<style>
+        .button{
+        position: absolute;
+        border: solid 3px #fff;
+        left: 77%;
+        moz-border-radius: 10px;
+        webkit-border-radius: 10px;
+        top: 28%;
+        }
+    </style>
    <script type="text/javascript">
         function CloseAndRefresh(){
             window.top.location.href="/{!$CurrentPage.parameters.id}";
         }    
     </script>
+    <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound">
     <apex:form >
+    <div class="slds-panel__section">
         <apex:pageBlock id="out"> 
-           <apex:selectList value="{!selectedInstaller}" multiselect="false" size="1">
+                         <p class="MsoNormal" style="line-height:9.75pt"><b><span style="font-size:8.0pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">SELECT INSTALLER:</span></b></p>
+           <apex:selectList value="{!selectedInstaller}" multiselect="false" size="1" styleclass="btn btn-default dropdown-toggle">
                 <apex:selectOption itemValue="Aaco Glass" itemLabel="Aaco Glass"/>
                 <apex:selectOption itemValue="Prism Home Improvements" itemLabel="Prism Home Improvements"/>
                 <apex:selectOption itemValue="Lombardi Construction" itemLabel="Lombardi Construction"/>
             </apex:selectList>
          
-         <apex:pageBlockButtons >
-            <apex:commandButton value="Save" action="{!save}" rerender="out" status="actStatusId" onComplete="CloseAndRefresh()"/>
+
+            <apex:commandButton value="Save" action="{!save}" rerender="out" status="actStatusId" onComplete="CloseAndRefresh()" styleClass="slds-button slds-button--neutral" style=" position: absolute ,left: 79%, top: 28%, color: black, background: white;"/>
             <apex:actionStatus id="actStatusId">
                 <apex:facet name="start">
                     <img src="/img/loading.gif" />
                 </apex:facet>
             </apex:actionStatus>
-        </apex:pageBlockButtons>
+
       </apex:pageBlock>
-         
+         </div>
     </apex:form>
+    </div>
 </apex:page>
