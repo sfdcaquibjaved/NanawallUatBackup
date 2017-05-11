@@ -33,7 +33,7 @@ global class EmailTaskCaller {
 	WebService static boolean SendQuoteEmail4( string SalesforceQuoteID, integer PDFHistoryID,integer CADHistoryID, string ModelDescription, string ShowroomInfo, string NDGLink_OverrideURL, boolean SendToCustomer, boolean SendToRep ) {
 	
 
-		Quote__c q = [SELECT id, Responsible_Rep__c, Cleaned_Discount__c, Cleaned_Quote_ID__c, Discount__c, Responsible_Rep__r.Email, Opportunity__r.Owner.Email, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
+		Quote__c q = [SELECT id, Responsible_Rep__c,GUUID_CAD__c, Cleaned_Discount__c, Cleaned_Quote_ID__c, Discount__c, Responsible_Rep__r.Email, Opportunity__r.Owner.Email, Opportunity__c, Contact__c,ContactName__c,Quote_ID__c,OpportunityName__c, Calculated_Email__c,  (SELECT id, Model__c FROM Quote_Details__r) FROM Quote__c WHERE id = :SalesforceQuoteID ];
 				//need a workflow action when you print a quote, this method could be refactored
 		q.Followup_Status__c ='Reviewing';
 		q.Print_Date__c = DateTime.now();
@@ -185,7 +185,10 @@ global class EmailTaskCaller {
 		string link='';
 		string link_rep='';
 
-		link_rep = 'https://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?rep=true&ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '&k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
+//		link_rep = 'https://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?rep=true&ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '&k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
+		link_rep = 'https://' + Utility.NanaServerAddress() + '/filefetching/GetCADInterface.aspx?GUUID=' +  q.GUUID_CAD__c;		
+		
+		//https://www.nanareps.com/filefetching/GetCADInterface.aspx?GUUID=GUUID_CAD__c
 		link = 'http://now.eloqua.com/e/f2.aspx?elqFormName=QuoteLink&elqSiteID=1745&Description=View&e=' + c.Email + '&QuoteSFID=' + q.Id + '&url=https://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '%26k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
 				
 		HTMLBody = HTMLBody.replace('{!QuoteLink}', link);
