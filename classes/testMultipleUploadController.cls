@@ -13,7 +13,7 @@ public class testMultipleUploadController {
         list<Attachment> att = new list<Attachment>();
     	Attachment attachment = new Attachment();
     	attachment.ParentId = acct[0].Id;
-    	attachment.Name = 'Test Attachment for Parent';
+    	attachment.Name = 'INS_CompleteTest Attachment for Parent';
     	attachment.Body = b;
     	att.add(attachment);
         insert att;

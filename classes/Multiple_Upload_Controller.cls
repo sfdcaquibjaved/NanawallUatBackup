@@ -83,6 +83,7 @@ global class Multiple_Upload_Controller {
                                 //update new Attachment(Id = attachmentId, Name = 'INS_Complete'+fileName,Body = EncodingUtil.Base64Decode(EncodingUtil.Base64Encode(atm.Body) + base64BlobValue));
                             }
                             update atm;
+                    System.debug('Updated');
                         }
 
                         //Return the Id of the attachment we are currently processing

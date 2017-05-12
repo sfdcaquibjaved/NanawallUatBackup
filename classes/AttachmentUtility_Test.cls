@@ -69,8 +69,10 @@ public class AttachmentUtility_Test {
         newCase.Description = 'Test Description';
         cs.add(newCase);
         insert cs[0];
-
-
+        
+      list<Opportunity> oplist = TestDataUtility.createOppTestData();
+        insert oplist;
+      
 
         list < Attachment > attList = new list < Attachment > ();
         Attachment attach = new Attachment();
@@ -78,8 +80,15 @@ public class AttachmentUtility_Test {
         Blob bodyBlob = Blob.valueOf('Unit Test Attachment Body');
         attach.body = bodyBlob;
         attach.parentId = cs[0].id;
+        
+        Attachment attach1 = new Attachment();
+        attach1.Name = 'Unit Test Attachment1';
+        Blob bodyBlobnew = Blob.valueOf('Unit Test Attachment Body new');
+        attach1.body = bodyBlobnew;
+        attach1.parentId = oplist[0].id;
 
         attList.add(attach);
+        attlist.add(attach1);
 
         insert attList[0];
 
@@ -113,7 +122,7 @@ public class AttachmentUtility_Test {
         Test.startTest();
         list < Attachment > attList = new list < Attachment > ();
         Attachment attach = new Attachment();
-        attach.Name = 'Img1.png';
+        attach.Name = 'INS_CompleteImg1.png';
         Blob bodyBlob = Blob.valueOf('Unit Test Attachment Body');
         attach.body = bodyBlob;
         attach.parentId = instlist[0].id;
@@ -130,7 +139,7 @@ public class AttachmentUtility_Test {
         Test.startTest();
         list < Attachment > attList = new list < Attachment > ();
         Attachment attach = new Attachment();
-        attach.Name = 'INS_Img1.png';
+        attach.Name = 'INS_CompleteImg1.png';
         Blob bodyBlob = Blob.valueOf('Unit Test Attachment Body');
         attach.body = bodyBlob;
         attach.parentId = caselist[0].id;

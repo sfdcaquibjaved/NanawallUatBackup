@@ -342,7 +342,7 @@ static {
             lc.setAccountId(acct.Id);
             lc.setOwnerId(account.OwnerId);
         }
-         
+         System.debug('opppppppppppppp'+oppCheck);
         list<LiveChatTranscript>chatsToUpdate = new list <LiveChatTranscript>();
         list<Get_Feedback_Survey_Response__c> surveysToUpdate= new list<Get_Feedback_Survey_Response__c>();
         if (oppCheck) {
@@ -380,6 +380,10 @@ static {
                 boolean check = false;
                 
                 if (selectedProject != mainLead.Project_Name__c && !(oppCheck)) {
+                    system.debug('selectedProject != mainLead.Project_Name__c && !(oppCheck)');
+                    system.debug('selectedProject != mainLead.Project_Name__c selectedProject'+selectedProject);
+                    system.debug('selectedProject != mainLead.Project_Name__c oppCheck'+oppCheck);
+                    
                     proj.Id = selectedProject;
                     check = true;
                     try{
@@ -400,6 +404,7 @@ static {
                     
                 } else {
                     if (!projCheck) {
+                        system.debug('else projCheck'+projCheck);
                         proj = new Project__c();
                         proj.Name = mainLead.Project_Name__c;
                         

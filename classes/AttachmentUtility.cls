@@ -165,13 +165,15 @@ global class AttachmentUtility {
             string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
             System.debug('prefix'+myIdPrefix+instprefix);
             String s= a.Name;
+            String p = 'INS_Complete';
             System.debug('name'+s);
             if(myIdPrefix.equals(instprefix) && s.containsIgnoreCase('Complete')){
                 System.debug('in here');
                 ContentVersion cont = new ContentVersion(versionData = a.Body,
-                title = a.Name,
+                title = p.difference(a.Name),
                 ParentId__c = a.ParentId,                                
                 pathOnClient = '/'+a.Name);
+                System.debug('Name'+ p.difference(a.Name));
                 System.debug('Size'+ a.Body.size()+' '+cont.VersionData.size());
                 
                ContentVersionInsert.add(cont);
@@ -248,12 +250,13 @@ global class AttachmentUtility {
         
         for(Attachment a:newAttachment) {
             string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
-            string aname = String.valueOf(a.name).substring(0,4);
-            if(myIdPrefix.equals(caseprefix) && aname == 'INS_'){
+            string aname = String.valueOf(a.name).substring(0,12);
+            String p = 'INS_Complete';
+            if(myIdPrefix.equals(caseprefix) && aname == 'INS_Complete'){
                 System.debug('in here');
                 ContentVersion cont = new ContentVersion();
                 cont.versionData = a.Body;
-                cont.title = a.Name;
+                cont.title = p.difference(a.Name);
                 cont.pathOnClient = a.Name;
                 cont.ParentId__c = a.ParentId;
                 ContentVersionInsert.add(cont);
@@ -290,7 +293,7 @@ global class AttachmentUtility {
         try{
             if(FeedItemContentList.size() > 0 ){
             //Insert FeedItem
-            //	insert FeedItemContentList ;
+            	insert FeedItemContentList ;
             	System.debug('Success 2!');
             }
             if(AttachmentID.size() > 0){
