@@ -176,7 +176,7 @@
             var remainderBytes = currentFile.size % CHUNK_SIZE; // would determine remainder of 1200000 bytes that is not a full chunk
             var startByte = 0;
             var endByte = CHUNK_SIZE - 1;
-            
+            //alert('number of chunks'+numOfFullChunks);
             //Loop through the number of full chunks and build the byteChunkArray array
             for(i = 0; i < numOfFullChunks; i++){
                 byteChunkArray[i] = startByte+'-'+endByte;
@@ -210,7 +210,9 @@
     
     //Uploads a chunk of bytes, if attachmentId is passed in it will attach the bytes to an existing attachment record
     function processByteChunkArray(attachmentId){
-        // alert('byteChunkArray'+byteChunkArray.length);
+         //alert('byteChunkArray'+byteChunkArray.length);
+        var valuetosend = byteChunkArray.length;
+        //alert('valuetosend'+valuetosend.length);
         //Proceed if there are still values in the byteChunkArray, if none, all piece of the file have been uploaded
         if(byteChunkArray.length > 0){
             //Determine the byte range that needs to uploaded, if byteChunkArray is like... ['0-179999','180000-359999']
@@ -242,7 +244,7 @@
                     var base64value = window.btoa(evt.target.result);
                     // alert('read successfull');
                     //Use js remoting to send the base64 encoded chunk for uploading
-                    Multiple_Upload_Controller.attachBlob(parentId,attachmentId,currentFile.name,currentFile.type,base64value,function(result,event){
+                    Multiple_Upload_Controller.attachBlob(parentId,attachmentId,currentFile.name,valuetosend,currentFile.type,base64value,function(result,event){
                         
                         //Proceed if there were no errors with the remoting call
                         if(event.status == true){
@@ -254,7 +256,7 @@
                             
                             //Remove the index information from the byteChunkArray array for the piece just uploaded.
                             byteChunkArray.shift(); //removes 0 index
-                            
+                            //alert('shift'+byteChunkArray.length);
                             //Set the attachmentId of the file we are now processing
                             attachmentId = result;
                             

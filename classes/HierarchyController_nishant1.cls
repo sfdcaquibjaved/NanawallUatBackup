@@ -47,6 +47,7 @@ public class HierarchyController_nishant1{
     public Set<ID> oppIDSet{get;set;}
     public Set<ID> oppAccSet{get;set;}
     public Hierarchy [] ProjectList{get;set;}
+    datetime RecentCreateDate;
 
     
    // Public Set<Id> SetTest{get;set;}
@@ -69,6 +70,7 @@ public class HierarchyController_nishant1{
         public List<Date> ordCrtDt {get;set;}
         public List<OpportunityContactRole> ocr {get;set;}
         public Date crtdt{get;set;}
+     //   RecentCreateDate
         
         public Hierarchy()
         {
@@ -381,39 +383,7 @@ public class HierarchyController_nishant1{
        
         summary();
                            
-                           /*prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
-                                                     StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
-                                        from Project__c where ID IN :SetTest AND Ordering_Account__c != null];
-                            
-                            SetTest = new Set<ID>();
-        
-                            for (Project__c prj2 : prjList2)
-                            for (List<Opportunity> oppList : prj2.Opportunities__r)
-                            {
-                            for (Opportunity opp : oppList)
-                            {
-                                SetTest.add(opp.Id);
-                            }
-                        }
-        
-                              oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
-                                    from Opportunity where Id IN:SetTest AND  AccountId IN:SetOr];
-                                   
-                        /*for (Opportunity op : oppList2){
-                                        for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
-                                        for(OpportunityContactRole ocr : ocrs ){ 
-                                                hier.ocr.add(ocr); 
-                                }
-                            }
-                        }  */            
-
-              /*   for (Order od : ordList){ 
-                   if(od.Project__r.Id == prj.Id){
-                        hier.ordFnzDt.add(od.Order_Finalized_Date__c);
-                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
-                   }
-               }*/
-                         
+                           
                  
      }
     

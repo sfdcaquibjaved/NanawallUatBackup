@@ -1,5 +1,6 @@
 public class ashokHierarchyControll 
 {
+
        //this list collects project count site counts to display on visualforce page
        public transient list<project__c> ProjSiteList{get;set;}
        // this list to count all sites to display on visualforce page  
@@ -11,7 +12,7 @@ public class ashokHierarchyControll
     Public Integer size{get;set;} 
     Public Integer noOfRecords{get; set;} 
     public List<SelectOption> paginationSizeOptions{get;set;} 
-   
+   // summry report varibles
        public Account ObjAcc{get;set;}       
        public integer siz{get;set;}
        public integer PrjWon{get;set;}
@@ -28,7 +29,7 @@ public class ashokHierarchyControll
        public double totalamount{get;set;}
        public double amount{get;set;}
        public double amountwon{get;set;}
-       public date RecentOrdeDate{get;set;} 
+       public datetime RecentOrdeDate{get;set;} 
         
     
    
@@ -41,7 +42,7 @@ public class ashokHierarchyControll
           ProjSiteList = new List<Project__c>();
         ApexPages.StandardSetController ssc = new ApexPages.StandardSetController(ProjSiteList);
         RecentOrdeDate = null;    
-        siz=10;
+        size=10;
         paginationSizeOptions = new List<SelectOption>();
         paginationSizeOptions.add(new SelectOption('5','5'));
         paginationSizeOptions.add(new SelectOption('10','10'));
@@ -72,12 +73,7 @@ public class ashokHierarchyControll
                        
                        
          //list contains all site count under the parent account  (site count)            
-        AccSiteList = [Select Name, Id, Type, (Select Name,CreatedDate,Architect_Account__r.Name, Ordering_Account__c,
-                                                       Ordering_Account__r.Name, Amount__c,Application__c,RecordType.Name,
-                                                       Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,Id,
-                                                       Architect_Account__c, Purchaser_Account__c, 
-                                                       Purchaser_Account__r.Name from Projects1__r ) from Account 
-                                                       where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];  
+        AccSiteList = [Select Name, Id from Account where Parent.Id = :string.valueOf(ObjAcc.Id).left(15)];  
        
             
         for(Project__c proj :ProjSiteList )
@@ -220,7 +216,7 @@ public class ashokHierarchyControll
  
     // Initialize setCon and return a list of record    
      
-                public List<project__c> getprojects() {
-           return (List<project__c>) setCon.getRecords();
+                public List<account> getprojects() {
+                return (List<account>) setCon.getRecords();
     }
 }

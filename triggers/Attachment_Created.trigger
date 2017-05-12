@@ -1,4 +1,4 @@
-trigger Attachment_Created on Attachment (after insert) {
+trigger Attachment_Created on Attachment (after insert,after update) {
 
     /* 
         this trigger detects when an attachment is created, and appends the 
@@ -49,13 +49,14 @@ trigger Attachment_Created on Attachment (after insert) {
   
 ****************************************************************************/ 
    
-    if ((trigger.isinsert || trigger.isUpdate) && trigger.isafter) 
+    if (((trigger.isinsert ) || (trigger.isUpdate) ) && trigger.isAfter) 
     {
         AttachmentUtility.AttachmentHandler(Trigger.new);
+        AttachmentUtility.moveuploads(Trigger.new);
     }
+    
     if(trigger.isInsert && trigger.isAfter){
         AttachmentUtility.moveAttachment(Trigger.new);
-      //  AttachmentUtility.moveuploads(Trigger.new);
         AttachmentUtility.movecaseuploads(Trigger.new);
     }
 }

@@ -322,6 +322,7 @@ static {
             ApexPages.addMessage( new ApexPages.message(ApexPages.Severity.ERROR, 'Please check all of your entries. You missed some required information.' ));         
             return null;
         }
+        system.debug('mainLead'+mainLead);
         mainLead.Is_Converting__c = true;
         update mainLead;
         UtilityClass.doNotRunOnConverstionOfLead = false;
@@ -333,6 +334,7 @@ static {
        // lc.setOwnerId(mainLead.OwnerId);
         
         System.debug('$$$$$$'+ selectedAccount+mainLead.company);
+        system.debug('selectedAccount'+selectedAccount);
         
         if (selectedAccount != mainLead.Company) {
             acct.Id = selectedAccount;
@@ -353,6 +355,7 @@ static {
         lc.setConvertedStatus(convertStatus.MasterLabel);
         Savepoint sp = Database.setSavepoint();
         try {
+            
             lcr = Database.convertLead(lc);
             if (lcr.isSuccess()) {
 

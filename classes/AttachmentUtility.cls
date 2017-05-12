@@ -85,7 +85,7 @@ global class AttachmentUtility {
                 cont.versionData = a.Body;
                 cont.title = 'eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
                 cont.pathOnClient ='eSignature_dtd_' + Datetime.now().format('MM_dd_yyyy_HH_MM_ss')+'.png';
-                
+                cont.ParentId__c = a.ParentId;
                 ContentVersionInsert.add(cont);
                 AttachmentID.add(a.ID);
                 
@@ -106,14 +106,12 @@ global class AttachmentUtility {
         List<Attachment> AttachmentDelete = new List <Attachment> () ;
         
         for(ContentVersion C : ContentVersionInsert ){
-            for(Attachment a : newAttachment ){ 
-                if(c.versionData == a.Body ){
                     //Attaching FeedItem to ContentVersion and InstallationForm
-                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = c.ParentId__c, RelatedRecordId = c.ID, Type = 'ContentPost');
                     FeedItemContentList.add(elm);
                     
-                }
-            }
+                
+            
         }
         
         try{
@@ -165,11 +163,15 @@ global class AttachmentUtility {
         
         for(Attachment a: AttachmentNew) {
             string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
-            if(myIdPrefix.equals(instprefix)){
+            System.debug('prefix'+myIdPrefix+instprefix);
+            String s= a.Name;
+            System.debug('name'+s);
+            if(myIdPrefix.equals(instprefix) && s.containsIgnoreCase('Complete')){
                 System.debug('in here');
                 ContentVersion cont = new ContentVersion(versionData = a.Body,
                 title = a.Name,
-                pathOnClient = a.Name);
+                ParentId__c = a.ParentId,                                
+                pathOnClient = '/'+a.Name);
                 System.debug('Size'+ a.Body.size()+' '+cont.VersionData.size());
                 
                ContentVersionInsert.add(cont);
@@ -193,14 +195,12 @@ global class AttachmentUtility {
         List<Attachment> AttachmentDelete = new List <Attachment> () ;
         
         for(ContentVersion C : ContentVersionInsert ){
-            for(Attachment a : AttachmentNew ){ 
-                if(c.versionData == a.Body ){
                     //Attaching FeedItem to ContentVersion and InstallationForm
-                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = c.ParentId__c, RelatedRecordId = c.ID, Type = 'ContentPost');
                     FeedItemContentList.add(elm);
                     
-                }
-            }
+                
+            
         }
         
         try{
@@ -255,7 +255,7 @@ global class AttachmentUtility {
                 cont.versionData = a.Body;
                 cont.title = a.Name;
                 cont.pathOnClient = a.Name;
-                
+                cont.ParentId__c = a.ParentId;
                 ContentVersionInsert.add(cont);
                 AttachmentID.add(a.ID);
                 
@@ -278,15 +278,13 @@ global class AttachmentUtility {
         List<Attachment> AttachmentDelete = new List <Attachment> () ;
         
         for(ContentVersion C : ContentVersionInsert ){
-            for(Attachment a : newAttachment ){ 
-                if(c.versionData == a.Body ){
                     System.debug('is it equal?');
                     //Attaching FeedItem to ContentVersion and InstallationForm
-                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = a.parentid, RelatedRecordId = c.ID, Type = 'ContentPost');
+                    FeedItem elm = new FeedItem(Body = 'Post with related document body', ParentId = c.ParentId__c, RelatedRecordId = c.ID, Type = 'ContentPost');
                     FeedItemContentList.add(elm);
                     
-                }
-            }
+                
+            
         }
         System.debug('feed list'+FeedItemContentList);
         try{

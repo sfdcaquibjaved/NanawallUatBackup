@@ -185,8 +185,7 @@ global class EmailTaskCaller {
 		string link='';
 		string link_rep='';
 
-//		link_rep = 'https://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?rep=true&ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '&k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
-		link_rep = 'https://' + Utility.NanaServerAddress() + '/filefetching/GetCADInterface.aspx?GUUID=' +  q.GUUID_CAD__c;		
+		link_rep = 'https://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?rep=true&ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '&k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
 		
 		//https://www.nanareps.com/filefetching/GetCADInterface.aspx?GUUID=GUUID_CAD__c
 		link = 'http://now.eloqua.com/e/f2.aspx?elqFormName=QuoteLink&elqSiteID=1745&Description=View&e=' + c.Email + '&QuoteSFID=' + q.Id + '&url=https://' + Utility.NanaServerAddress() + '/filefetching/GetQuotePDF.aspx?ID=' +  Encodingutil.urlEncode(encodedID, 'UTF-8') + '%26k=' +  Encodingutil.urlEncode(hash, 'UTF-8');		
@@ -204,12 +203,18 @@ global class EmailTaskCaller {
 		if(CADHistoryID > 0 )
 		{
 			cadlink = '<a href="http://now.eloqua.com/e/f2.aspx?elqFormName=CADLink&elqSiteID=1745&Description=CAD&e=' + c.Email + '&QuoteSFID=' + q.Id + '&url=https://' + Utility.NanaServerAddress() + '/filefetching/GetCADInterface.aspx?ID=' +  Encodingutil.urlEncode(encodedCADID, 'UTF-8') + '%26k=' +  Encodingutil.urlEncode(cadhash, 'UTF-8') + '">click here to view your CAD drawings</a>';
+			
 		}
 		if(NDGLink_OverrideURL != null && NDGLink_OverrideURL != '' )
 		{
 			cadlink = '<a href="'+NDGLink_OverrideURL+'">click here to view your CAD drawings</a>';
 			
 		}
+
+		//ignore the above CAD link info 
+		cadlink = 'http://' + Utility.NanaServerAddress() + '/filefetching/GetCADInterface.aspx?GUUID=' +  q.GUUID_CAD__c;		
+		
+
 		
 		HTMLBody = HTMLBody.replace('{!CADLink}', cadlink);
 		PlainTextBody = PlainTextBody.replace('{!CADLink}',cadlink);
@@ -320,7 +325,8 @@ global class EmailTaskCaller {
 			
 		if(q.Responsible_Rep__r != null 
 			&& q.Responsible_Rep__r.Email != null 
-			&& q.Responsible_Rep__r.Email != '' )
+			&& q.Responsible_Rep__r.Email != '' 
+			&& emailAdd_rep != q.Responsible_Rep__r.Email )
 			rep_ccs.add( q.Responsible_Rep__r.Email);
 
 			

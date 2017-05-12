@@ -47,7 +47,7 @@ public class MultipleUploadController
         {
             if (newAtt.Body!=null)
             {
-               newAtt.Name = 'INS_'+newAtt.Name;
+               newAtt.Name = 'INS_Complete'+newAtt.Name;
                 newAtt.parentId=sobjId;
                 toInsert.add(newAtt);
             }
