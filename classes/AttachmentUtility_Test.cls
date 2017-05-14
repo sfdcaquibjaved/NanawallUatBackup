@@ -71,8 +71,14 @@ public class AttachmentUtility_Test {
         insert cs[0];
         
       list<Opportunity> oplist = TestDataUtility.createOppTestData();
+        for(Integer i = 0;i<oplist.size();i++){
+            oplist[i].AccountId = accounts[i].id;
+        }
         insert oplist;
-      
+      nrOpportunity_Account__c noa = new nrOpportunity_Account__c();
+        noa.account__c = accounts[0].id;
+        noa.Opportunity__c = oplist[0].id;
+        insert noa;
 
         list < Attachment > attList = new list < Attachment > ();
         Attachment attach = new Attachment();

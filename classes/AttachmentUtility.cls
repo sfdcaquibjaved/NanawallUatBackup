@@ -250,9 +250,9 @@ global class AttachmentUtility {
         
         for(Attachment a:newAttachment) {
             string myIdPrefix = String.valueOf(a.parentId).substring(0,3); 
-            string aname = String.valueOf(a.name).substring(0,12);
+            //string aname = String.valueOf(a.name).substring(0,12);
             String p = 'INS_Complete';
-            if(myIdPrefix.equals(caseprefix) && aname == 'INS_Complete'){
+            if(myIdPrefix.equals(caseprefix) && a.Name.containsIgnoreCase('INS_Complete')){
                 System.debug('in here');
                 ContentVersion cont = new ContentVersion();
                 cont.versionData = a.Body;

@@ -4,18 +4,18 @@
             <apex:pageBlockTable value="{!Account}" var="acc">
                 <apex:column headervalue="Corporate Account Name" value="{!acc.name}"/>
                 <apex:column headervalue="Site Count" value="{!accList.size}"/>
-                <apex:column headervalue="Most Recent Order Date" value="{!accList.size}"/>
-                <apex:column headervalue="Project Won(Order Paid)" value="{!accList.size}"/>
+                <apex:column headervalue="Most Recent Order Date"/>
+                <apex:column headervalue="Project Won(Order Paid)" value="{!ProgStageWon }"/>
                 <apex:column headervalue="Projects (Order In Progress)" value="{!accList.size}"/>
-                <apex:column headervalue="Projects (Quote in Progress)" value="{!accList.size}"/>
-                <apex:column headervalue="Project Lost" value="{!accList.size}"/>
-                <apex:column headervalue="Duplicate Projects" value="{!accList.size}"/>
+                <apex:column headervalue="Projects (Quote in Progress)" value="{!projectStageQueted }"/>
+                <apex:column headervalue="Project Lost" value="{!ProjectStagelost }"/>
+                <apex:column headervalue="Duplicate Projects" value="{!DuplicateProject }"/>
                 <apex:column headervalue="Closure Rate" value="{!accList.size}"/>
                 <apex:column headervalue="Amount (Projects Won)" value="{!accList.size}"/>
                 <apex:column headervalue="Amount (Order In Progress)" value="{!accList.size}"/>
                 <apex:column headervalue="Amount (Quote In Progress)" value="{!accList.size}"/>
                 <apex:column headervalue="Amount (Lost)" value="{!accList.size}"/>
-                 <apex:column headervalue="Total Amount" value="{!accList.size}"/>                
+                 <apex:column headervalue="Total Amount" value="{!totalAmount }"/>                
             </apex:pageBlockTable>
         </apex:pageBlock>
     </apex:form>
