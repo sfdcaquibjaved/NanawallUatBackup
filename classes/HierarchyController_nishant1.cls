@@ -3,8 +3,8 @@
 * Version : 1.0
 * Class: Display the data Project , Opportunity ,order , ContactRoles
 ********************/
-public class HierarchyController_nishant1{
-/*****************Class Variable Declaration********************/
+public class HierarchyController_nishant1 {
+/*****************Constructor Variable initialization********************/
     //public Set<Id> SetOr{get;set;}
     public List<ProjectWrapper> records{get;set;} 
     public string sortFullExp{get;set;}
@@ -55,7 +55,25 @@ public class HierarchyController_nishant1{
     public List<Hierarchy> tmpList{get;set;}
     public integer cnt{get;set;}
     public Set<ID> prjId{get;set;}
+
+    public String project_drp_Stage {get;set;}
     
+   public List<SelectOption> getStageDrp()    
+    {    
+        List<SelectOption> options =  new List<SelectOption>();    
+        options.add(new selectOption('None','--- None ---'));    
+        Schema.DescribeFieldResult fieldResult = project__c.Stage__c.getDescribe();    
+        List<Schema.picklistEntry> ple = fieldResult.getPicklistValues();    
+        for(Schema.picklistEntry f:ple)    
+        {    
+            options.add(new selectOption(f.getLabel(),f.getValue()));                    
+        }    
+        return Options;    
+    }      
+
+
+
+
    // Public Set<Id> SetTest{get;set;}
   /**
  * This Hierarchy wrapper class
@@ -502,62 +520,23 @@ public class HierarchyController_nishant1{
             cnt = 0;
             
             if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
-            if(prjFilter!=''){prjFilter = prjFilter.trim(); cnt++;} 
+            if(prjFilter!=''){prjFilter = prjFilter; cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
             if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
-            if(prjStsFilter!=''){prjStsFilter = prjStsFilter.trim(); cnt++;}
-            if(archFilter!=''){archFilter = archFilter.trim(); cnt++;}
+            if(project_drp_Stage!='' && project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
+            if(archFilter!=''){archFilter = archFilter; cnt++;}
             if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
             
-           /* if(accFilter!='' && hr.End_Customer_Account__r.Name!=null) 
-               if(hr.End_Customer_Account__r.Name.containsIgnoreCase(accFilter))
-                flag++; 
-            
-            if(prjFilter!='' && hr.Name!=null) 
-                if(hr.Name.containsIgnoreCase(prjFilter))
-                    flag++;
-
-            if(cityFilter!='' && hr.Project_City__c!=null) 
-                if(hr.Project_City__c.containsIgnoreCase(cityFilter))
-                    flag++;
-
-            if(stateFilter!='' && hr.Project_State__c!=null)
-                if(hr.Project_State__c.containsIgnoreCase(stateFilter))
-                    flag++;
-
-            if(zipFilter!='' && hr.Project_Zip_Code__c!=null)
-                if(hr.Project_Zip_Code__c.containsIgnoreCase(zipFilter))
-                    flag++;
-                    
-            if(appIndFilter!='' && hr.Application__c!=null)
-                if(hr.Application__c.containsIgnoreCase(appIndFilter))
-                    flag++;
-            
-            if(prjStsFilter!='' && hr.Stage__c!=null)
-                if(hr.Stage__c.containsIgnoreCase(prjStsFilter))
-                    flag++;
-                    
-            if(archFilter!='' && hr.Architect_Account__r.Name!=null)
-                if(hr.Architect_Account__r.Name.containsIgnoreCase(archFilter))
-                    flag++;
-                    
-            if(purFilter!='' && hr.Purchaser_Account__r.Name!=null)
-                if(hr.Purchaser_Account__r.Name.containsIgnoreCase(purFilter))
-                    flag++;
-                    
-            if(ordFilter!='' && hr.Ordering_Account__r.Name!=null)
-                if(hr.Ordering_Account__r.Name.containsIgnoreCase(ordFilter))
-                    flag++;*/
             
             if(accFilter!='' && hr.accountName!=null && hr.accountName.Name!=null) 
                if(hr.accountName.Name.containsIgnoreCase(accFilter))
                 flag++; 
             
             if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
-                if(hr.ProjectName.Name.containsIgnoreCase(prjFilter))
+                if(hr.ProjectName.Name.containsOnly(prjFilter) || hr.architect.Name.contains( prjFilter))
                     flag++;
 
             if(cityFilter!='' && hr.projectCity!=null) 
@@ -576,13 +555,13 @@ public class HierarchyController_nishant1{
                 if(hr.applicationIndustry.containsIgnoreCase(appIndFilter))
                     flag++;
             
-            if(prjStsFilter!='' && hr.status!=null)
-                if(hr.status.containsIgnoreCase(prjStsFilter))
+            if(project_drp_Stage!='' && hr.status!=null )
+                if(hr.status.containsIgnoreCase(project_drp_Stage))
                     flag++;
                     System.debug('Arctitec'+ hr.architect.Name);
                     
-            if(archFilter!='' && hr.architect.Name!=null && hr.architect.Name!=null)
-                if(hr.architect.Name.containsIgnoreCase(archFilter))
+            if(archFilter!='' && hr.architect.Name!=null)
+                if(hr.architect.Name.containsOnly( archFilter) || hr.architect.Name.contains( archFilter))
                     flag++;
                     
             if(purFilter!='' && hr.purchaser.Name!=null && hr.purchaser.Name!=null)
@@ -593,7 +572,7 @@ public class HierarchyController_nishant1{
                 if(hr.orderingAccount.Name.containsIgnoreCase(ordFilter))
                     flag++;
 
-                            
+                         
             if(cnt == flag)
                 filterList.add(hr);
               

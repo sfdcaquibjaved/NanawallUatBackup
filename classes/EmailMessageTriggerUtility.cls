@@ -61,7 +61,7 @@ public class EmailMessageTriggerUtility {
                 caseAttachment.insertfirstemail(emailmessageset);
             if (caseCommentList.size() > 0) {
                 try{
-                    insert caseCommentList;
+                 //   insert caseCommentList;
                 }
                 catch(exception e)
                 {
@@ -71,7 +71,7 @@ public class EmailMessageTriggerUtility {
             if (emailMessageCommentSet.size() > 0)
             {
                 system.debug('The value of emailmessageMap' + emailmessageMap);
-                caseAttachment.insertcasecomment(emailMessageCommentSet, emailmessageMap);
+               // caseAttachment.insertcasecomment(emailMessageCommentSet, emailmessageMap);
             }
             HelperClass.firstRun = false;
         }

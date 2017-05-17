@@ -317,6 +317,14 @@ static {
     }
 
     public PageReference convertLead() {
+      
+
+      system.debug('oppcheckhey'+oppcheck);
+      system.debug('selectedAccounthey'+selectedAccount);
+      system.debug('selectedProjecthey'+selectedProject);
+      system.debug('projCheckhey'+projCheck);
+  
+        
        if( !validateFields() )
         {
             ApexPages.addMessage( new ApexPages.message(ApexPages.Severity.ERROR, 'Please check all of your entries. You missed some required information.' ));         
@@ -372,6 +380,7 @@ static {
                 
                 //Redirect to Opportunity page if it is being created else to Account page
                 if (oppCheck) {
+                    system.debug('lcr.getContactId()');
                     redirectId = lcr.getContactId();
                 } else
                     redirectId = lcr.getOpportunityId();
@@ -420,11 +429,15 @@ static {
                         
                         proj.recordTypeID = Schema.getGlobalDescribe().get('Project__c').getDescribe().getRecordTypeInfosByName().get(Record_type_assign__c.getinstance(mainlead.type_of_record__c).Project_record_type_name__c).getRecordTypeId();
                         insert proj;
+                        system.debug('else projCheck proj '+proj.id);
                         check = true;
                     }
                 }
 
                 if (check && !oppCheck) {
+                    system.debug('check && !oppCheck');
+                      system.debug('check && !oppCheck '+check);
+                    system.debug('check && !oppCheck'+proj.Id);
                     Opportunity opp = [Select Id, RecordTypeID,Account.ownerId,ownerID,Project_Name__c from Opportunity where id = : lcr.getOpportunityId()];
                     opp.Project_Name__c = proj.Id;
                     opp.CloseDate= system.today() + 180;
