@@ -27,6 +27,8 @@ public class HierarchyController_nishant1 {
     public List<Order> ordList{get;set;}
     public LIST<Contact> contrls{get;set;}
     public LIST<Project__c> prjList2{get;set;}
+    public Set<ID> OppStatus{get;set;}
+    public LIST<Project__c> GetPrjList{get;set;}
     public LIST<Opportunity> oppList2{get;set;}
     public LIST<List<Opportunity>> oppList3{get;set;}
     public Integer prjStgWon{get;set;}
@@ -55,6 +57,7 @@ public class HierarchyController_nishant1 {
     public List<Hierarchy> tmpList{get;set;}
     public integer cnt{get;set;}
     public Set<ID> prjId{get;set;}
+    public Set<ID> OppId{get;set;}
 
     public String project_drp_Stage {get;set;}
     
@@ -395,6 +398,8 @@ public class HierarchyController_nishant1 {
         ordFnzDtMax = null;
         ordby='CreatedDate';
         DuplPrj =0;
+        OppStatus = new Set<ID>();
+        OppId = new Set<ID>();
         oppIdSet = new Set<ID>();
         oppAccSet = new Set<ID>();
         AccSiteList = new List <Account>();
@@ -407,6 +412,7 @@ public class HierarchyController_nishant1 {
         ProjSiteList = new List<Project__c>();
         ProjectListBkp = new List<Hierarchy>();
         objAcc = (Account)con.getRecord();
+       
        // SetTest =new set<Id>();
         prjId =new Set<Id>();
         totalAmount = 0.0;
@@ -438,7 +444,18 @@ public class HierarchyController_nishant1 {
         runQuery(objAcc.Id);
        
         summary();
-                           
+         for (Project__c prj2 : prjList2)
+                            for (List<Opportunity> oppList : prj2.Opportunities__r)
+                            {
+                            for (Opportunity opp : oppList)
+                            {
+                                OppStatus.add(opp.Id);
+                            }
+                        }
+        System.debug(OppStatus.size());
+        string PrjOppList= 'Select Id, Name, (Select Id, Name, stageName from Opportunities__r where Id !=NULL AND (StageName like \'%Need Analysis%\' OR StageName like \'%Drawings - Requested%\' OR StageName like \'%Drawings - Provided%\' ) ) from project__c where Purchaser_Account__c=:OppStatus';        
+          List<Project__c> GetPrjList = Database.query(PrjOppList);  
+        System.debug(GetPrjList.size());
                            /*prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
                                                      StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
                                         from Project__c where ID IN :SetTest AND Ordering_Account__c != null];

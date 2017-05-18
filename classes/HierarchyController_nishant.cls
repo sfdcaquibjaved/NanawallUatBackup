@@ -1,12 +1,11 @@
 public class HierarchyController_nishant{
     Public string myInput{get;set;}
-    
     String AccName = Apexpages.currentPage().getParameters().get('AName');  
     public List <Account> AccSiteList{get;set;}
     public Account ObjAcc{get;set;}    
     public List<Project__c> ProjSiteList{get;set;}
     public Integer prjWon {get;set;}
-    public Integer siz {get;set;}
+    public Integer siz {get;set;}   
     public Integer psiz {get;set;}
     public String rltype {get;set;}
     public Account AccRelatedList{get;set;}  

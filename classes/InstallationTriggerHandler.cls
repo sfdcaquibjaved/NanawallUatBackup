@@ -970,7 +970,13 @@ public class InstallationTriggerHandler {
             }
         
     }
-   public static void sharewithOldOwner(List < Installation__c > newTrigger,set<Id>owners){
+    /*
+             Method Name: sharewithOldOwner
+             Purpose: To enable Paul to view installations assigned by him in the community
+             Input Parameter : List of Installation
+             Created Date: May 2017
+             */
+   public static void sharewithOldOwner(List < Installation__c > newTrigger){
         List<Installation__Share> ShareInstallation = new List<Installation__Share>();
         list<Installation__Share> oldshares = [Select id from Installation__Share where RowCause = :Schema.Installation__Share.rowCause.CommunityShare__c];
         for(Installation__c i:newtrigger){

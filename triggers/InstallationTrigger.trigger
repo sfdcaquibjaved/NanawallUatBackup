@@ -155,16 +155,16 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
             system.debug('SOQL 8' + Limits.getQueries());
         }
     } catch (exception e) {}
-    set<Id> oldownerlist = new set<Id>();
+    //set<Id> oldownerlist = new set<Id>();
     list<Installation__c> insrecord = new list<Installation__c>();
     for(Installation__c i:trigger.new){
     if(trigger.isAfter && (trigger.isUpdate && (trigger.oldMap.get(i.ID).OwnerId != i.OwnerId))){
-        oldownerlist.add(trigger.oldMap.get(i.ID).OwnerId);
+        //oldownerlist.add(trigger.oldMap.get(i.ID).OwnerId);
         insrecord.add(i);
     }
     }
-    if (oldownerlist.size() > 0) {
-          InstallationTriggerHandler.sharewithOldOwner(insrecord,oldownerlist);
+    if (insrecord.size() > 0) {
+          InstallationTriggerHandler.sharewithOldOwner(insrecord);
             system.debug('DML 5.1' + Limits.getDMLStatements());
             system.debug('SOQL 5.1' + Limits.getQueries());
 
