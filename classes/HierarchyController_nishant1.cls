@@ -35,6 +35,7 @@ public class HierarchyController_nishant1 {
     public Integer prjStgPrg{get;set;}
     public Integer prjStgQtd{get;set;}
     public Integer prjStglost{get;set;}
+    public  Integer Oppstatus1{get;set;}
     public Decimal prjStgWonAmt{get;set;}
     public Decimal prjStgPrgAmt{get;set;}
     public Decimal prjStgQtdAmt{get;set;}
@@ -213,6 +214,14 @@ public class HierarchyController_nishant1 {
         for(Project__c proj: ProjSiteList){
             
             if(proj.Id!=null){ 
+
+                for(Opportunity opp : proj.Opportunities__r)
+                 {
+                  if(opp.StageName.contains('Need Analysis') || opp.StageName.contains('Drawings - Requested') || opp.StageName.contains('Drawings - Provided') )
+                   {
+                    Oppstatus1 = Oppstatus1 +1;
+                   }
+                 }
             
             ordList = proj.Orders__r;
                 
@@ -271,6 +280,8 @@ public class HierarchyController_nishant1 {
             }
             }
         }
+
+
         
     }
     /** This method return
@@ -415,6 +426,7 @@ public class HierarchyController_nishant1 {
        
        // SetTest =new set<Id>();
         prjId =new Set<Id>();
+        Oppstatus1 = 0;
         totalAmount = 0.0;
         amountWon = 0.0;
         cnt=0;
