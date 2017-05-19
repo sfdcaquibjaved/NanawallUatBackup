@@ -18,7 +18,7 @@
              <apex:column value="{!DuplPrj }" headerValue="Duplicate Projects"/>
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
-             <apex:column value="{!Oppstatus1}" headerValue="Opportunity"/>
+             <apex:column value="{!CAPrjOpp}" headerValue="Opportunity"/>
              <apex:column headerValue="Closure Rate">
                  <apex:outputText value="{0,Number,0.00}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
             </apex:column>
@@ -74,6 +74,17 @@
      
     </apex:pageBlock>
       
+    <apex:pageBlock >
+      <apex:pageBlockSection title="Total {!CAPrjOpp} are QuoteLess Opportunities">
+        <apex:pageBlockTable value="{!CAProjOppList}" var="Opp">
+            <apex:column headerValue="Project Name"></apex:column>
+            <apex:repeat var="c" value="{!Opp.opportunities__r}">
+                <apex:outputText value="c.Name">Nishant</apex:outputText>
+            </apex:repeat>
+        </apex:pageBlockTable>
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+    
   <apex:PageBlock id="Acc_proj" >    
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >

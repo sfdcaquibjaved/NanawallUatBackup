@@ -30,12 +30,16 @@ public class HierarchyController_nishant1 {
     public Set<ID> OppStatus{get;set;}
     public LIST<Project__c> GetPrjList{get;set;}
     public LIST<Opportunity> oppList2{get;set;}
-    public LIST<List<Opportunity>> oppList3{get;set;}
+   
+    public List<Project__c> CAProjOppList{get;set;}
+    public Integer CAPrjOpp{get;set;}
+    public String CAgetProOpp{get;set;}
+    public Set<ID> CAoppId{get;set;}
+
     public Integer prjStgWon{get;set;}
     public Integer prjStgPrg{get;set;}
     public Integer prjStgQtd{get;set;}
     public Integer prjStglost{get;set;}
-    public  Integer Oppstatus1{get;set;}
     public Decimal prjStgWonAmt{get;set;}
     public Decimal prjStgPrgAmt{get;set;}
     public Decimal prjStgQtdAmt{get;set;}
@@ -210,18 +214,12 @@ public class HierarchyController_nishant1 {
  * Generate summary data with latest orderfinalized date
  */
     public void summary(){
+  
+      
         
         for(Project__c proj: ProjSiteList){
             
             if(proj.Id!=null){ 
-
-                for(Opportunity opp : proj.Opportunities__r)
-                 {
-                  if(opp.StageName.contains('Need Analysis') || opp.StageName.contains('Drawings - Requested') || opp.StageName.contains('Drawings - Provided') )
-                   {
-                    Oppstatus1 = Oppstatus1 +1;
-                   }
-                 }
             
             ordList = proj.Orders__r;
                 
@@ -339,7 +337,36 @@ public class HierarchyController_nishant1 {
         }
      /******** Pass query data to ProjectSiteList ********/   
         ProjSiteList = database.query(query1);
+
+
+        /*********************NIshant Code****************/
+    String query2 = 'Select Id,Name, (Select Name, StageName,Amount,Quote_Count__c from opportunities__r where (StageName Like \'Need Analysis%\' OR StageName LIKE \'Drawings - Requested%\' OR StageName LIKE \'Drawings - Provided%\'))from project__c where Purchaser_Account__c = :objAccId';
         
+        CAProjOppList = database.query(query2);
+                
+        for(Project__c oppProj : CAProjOppList)
+        {
+            for(Opportunity OppVal : oppProj.opportunities__r)
+            {
+                if(OppVal.StageName.Contains('Need Analysis') || OppVal.StageName.Contains('Drawings - Requested') || OppVal.StageName.Contains('Drawings - Provided'))
+                {
+                    if(OppVal.Quote_Count__c == 0)
+                    {
+                        CAPrjOpp = CAPrjOpp+1;
+                        }
+            }
+          }
+        }
+        
+        
+    /*   string query2 = 'SELECT Id,Name , ';
+               query2+='(Select Id, Project_Name__c from Opportunities__r where (StageName like \'%Need Analysis%\' OR StageName like \'%Drawings - Requested%\' OR StageName like \'%Drawings - Provided%\') AND (Quote_Count__c = 0) AND StageName !='')';
+               query2+=' FROM Project__c';
+               query2+=' WHERE (Purchaser_Account__c =:objAccId) ';
+   
+              CAProjOppList = database.query(query2);    */ 
+       /***** End Section *************/
+
         opportunityCRSet();
         
         oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
@@ -404,6 +431,12 @@ public class HierarchyController_nishant1 {
  */   
     public HierarchyController_nishant1(ApexPages.StandardController con){
         
+     CAProjOppList = new List<Project__c>();
+     CAPrjOpp=0;
+     CAgetProOpp='';   
+    
+
+
         tmpList = new List<Hierarchy>();
         ProjectList = new List<Hierarchy>();
         ordFnzDtMax = null;
@@ -413,12 +446,14 @@ public class HierarchyController_nishant1 {
         OppId = new Set<ID>();
         oppIdSet = new Set<ID>();
         oppAccSet = new Set<ID>();
+        CAoppId = new Set<ID>();
+        
         AccSiteList = new List <Account>();
         ordList = new LIST<Order>();
         contrls = new List<Contact>();
         prjList2 = new List<Project__c>();
         oppList2 = new List<Opportunity>();
-        oppList3 = new List<List<Opportunity>>();
+       // oppList3 = new List<List<Opportunity>>();
         AccRelatedList = new Account();
         ProjSiteList = new List<Project__c>();
         ProjectListBkp = new List<Hierarchy>();
@@ -426,7 +461,6 @@ public class HierarchyController_nishant1 {
        
        // SetTest =new set<Id>();
         prjId =new Set<Id>();
-        Oppstatus1 = 0;
         totalAmount = 0.0;
         amountWon = 0.0;
         cnt=0;
