@@ -31,7 +31,7 @@ public class HierarchyController_nishant1 {
     public LIST<Project__c> GetPrjList{get;set;}
     public LIST<Opportunity> oppList2{get;set;}
    
-    public List<Project__c> CAProjOppList{get;set;}
+    public List<Opportunity> CAProjOppList{get;set;}
     public Integer CAPrjOpp{get;set;}
     public String CAgetProOpp{get;set;}
     public Set<ID> CAoppId{get;set;}
@@ -340,7 +340,14 @@ public class HierarchyController_nishant1 {
 
 
         /*********************NIshant Code****************/
-    String query2 = 'Select Id,Name, (Select Name, StageName,Amount,Quote_Count__c from opportunities__r where (StageName Like \'Need Analysis%\' OR StageName LIKE \'Drawings - Requested%\' OR StageName LIKE \'Drawings - Provided%\'))from project__c where Purchaser_Account__c = :objAccId';
+        
+        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
+        
+        /* String query2 = 'select id, name, stagename , Quote_Count__c,';
+        query2 += 'Project_Name__r.Purchaser_Account__c ,';
+        query2 += ' from opportunity';
+        query2 += 'where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c = ::objAccId' AND Quote_Count__c=0';
+            String query2 = 'Select Id,Name, (Select Name, StageName,Amount,Quote_Count__c from opportunities__r where (StageName Like \'Need Analysis%\' OR StageName LIKE \'Drawings - Requested%\' OR StageName LIKE \'Drawings - Provided%\'))from project__c where Purchaser_Account__c = :objAccId';
         
         CAProjOppList = database.query(query2);
                 
@@ -359,7 +366,7 @@ public class HierarchyController_nishant1 {
         }
         
         
-    /*   string query2 = 'SELECT Id,Name , ';
+      string query2 = 'SELECT Id,Name , ';
                query2+='(Select Id, Project_Name__c from Opportunities__r where (StageName like \'%Need Analysis%\' OR StageName like \'%Drawings - Requested%\' OR StageName like \'%Drawings - Provided%\') AND (Quote_Count__c = 0) AND StageName !='')';
                query2+=' FROM Project__c';
                query2+=' WHERE (Purchaser_Account__c =:objAccId) ';
@@ -431,7 +438,7 @@ public class HierarchyController_nishant1 {
  */   
     public HierarchyController_nishant1(ApexPages.StandardController con){
         
-     CAProjOppList = new List<Project__c>();
+     CAProjOppList = new List<Opportunity>();
      CAPrjOpp=0;
      CAgetProOpp='';   
     

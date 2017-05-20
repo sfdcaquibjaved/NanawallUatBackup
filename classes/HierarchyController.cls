@@ -24,6 +24,9 @@ public class HierarchyController{
     private String sortDirection = 'DESC';
     private String sortExp = 'PCrtDt';
     public List<String> acclist;
+    /* QuoteLess opportunities List */
+    public List<Opportunity> CAProjOppList{get;set;}
+    /*---------- */
     public List<Order> ordList{get;set;}
     public LIST<Contact> contrls{get;set;}
     public LIST<Project__c> prjList2{get;set;}
@@ -323,6 +326,10 @@ public class HierarchyController{
             else
             query1+= ' ASC';
         }
+        
+     /*********QuoteLess Opprotunities *******************/
+        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
+     /**********End Section *****************************/   
      /******** Pass query data to ProjectSiteList ********/   
         ProjSiteList = database.query(query1);
         
@@ -389,6 +396,8 @@ public class HierarchyController{
  * Define Contructor & initialize the varibale & list
  */   
     public HierarchyController(ApexPages.StandardController con){
+        
+        CAProjOppList = new List<Opportunity>(); // Initialize List 
         
         tmpList = new List<Hierarchy>();
         ProjectList = new List<Hierarchy>();

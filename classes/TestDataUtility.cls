@@ -378,6 +378,16 @@ public with sharing class TestDataUtility {
         Zipcode8.User__c= testuser.id;
         lstzipCode.add(zipCode8);
         
+        Zip_Codes_Master__c zipCode9 = new Zip_Codes_Master__c();
+        zipCode9.City__c = 'Cleveland';
+        zipCode9.Country__c = 'United States';
+        zipCode9.State__c = 'Ohio';
+        zipCode9.Zip_Code__c = '44030' ;
+        
+        Zipcode9.User__c= testuser.id;
+        lstzipCode.add(zipCode9);
+        
+        
         
         Zip_Codes_Master__c zipCode2 = new Zip_Codes_Master__c();
         zipCode2.Country__c = 'Canada';

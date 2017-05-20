@@ -237,7 +237,7 @@
    </apex:pageBlock>
    <Apex:pageBlock title="Qutes Opportunity">
    <Apex:pageblockTable value="{!CAProjOppList }" var="opp">
-   <Apex:column headervalue="Project Name"/>
+   <Apex:column headervalue="Project Name" value="{!opp.name}"/>
    <Apex:column headervalue="Opportunity Name"/>
    <Apex:column headervalue="Status"/>
    <Apex:column headervalue="Amount"/>

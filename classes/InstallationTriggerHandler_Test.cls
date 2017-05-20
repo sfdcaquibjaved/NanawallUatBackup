@@ -27,7 +27,9 @@ public class InstallationTriggerHandler_Test {
     public static list < Shipping_Order__c > sOrderList;
 
     public static testMethod void myUnitTest() {
-        
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -139,6 +141,9 @@ public class InstallationTriggerHandler_Test {
      Purpose: To cover the code coverage for Installation trigger
      *****/
     public static testMethod void myUnitTest2(){
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -380,7 +385,9 @@ public class InstallationTriggerHandler_Test {
      Purpose: To cover the code coverage for Entitlement part in Installation trigger
      *****/
     public static testMethod void myUnitTest3(){
-    
+    insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -558,6 +565,9 @@ public class InstallationTriggerHandler_Test {
     
     public static testMethod void myUnitTest4(){
        
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -686,6 +696,9 @@ public class InstallationTriggerHandler_Test {
     
     public static testMethod void myUnitTest5(){
     
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
     Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -920,6 +933,9 @@ public class InstallationTriggerHandler_Test {
     
     public static testMethod void myUnitTest6(){
     
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -1153,6 +1169,9 @@ public class InstallationTriggerHandler_Test {
    }
     public static testMethod void myUnitTest7(){
   
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
             insert tmList;
         list<Account> acclist = TestDataUtility.createAccountTestData();
@@ -1161,6 +1180,12 @@ public class InstallationTriggerHandler_Test {
         list<Contact> contest = TestDataUtility.createConTestData();
         contest[0].AccountId = acclist[0].id;
         insert contest;
+        Project__c prolist = new Project__c();
+        prolist.Project_Zip_Code__c = '94040';
+        prolist.Name = 'Test Project CompetitorHelper_Test';
+             prolist.Application__c = 'Automotive';
+             prolist.Application_2__c = 'Dealership';
+        insert prolist;
         list<Opportunity> opplist = TestDataUtility.createOppTestData();
         insert opplist;
         test.startTest();
@@ -1171,11 +1196,13 @@ public class InstallationTriggerHandler_Test {
         list<Installation__c> inst = TestDataUtility.createInsTestData();
         for(Integer i=0;i<inst.size();i++){
             inst[i].Bypass_Flow__c = true;
+            inst[i].Project__c = prolist.id;
         }
         inst[0].Quote_Name__c = quolist[0].id;
         inst[0].Installer_Account__c = acclist[0].id;
         inst[0].contact__c = contest[0].id;
         inst[0].Assigned_to__c = testUnew.id;
+       
         insert inst;
         Entitlement ent = new Entitlement();
         ent.Name = '0001sl';
@@ -1192,6 +1219,10 @@ public class InstallationTriggerHandler_Test {
   
         list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
             insert tmList;
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
+        
         list<Account> acclist = TestDataUtility.createAccountTestData();
         acclist[0].Certified_Installer__c = true;
         insert acclist;
@@ -1214,12 +1245,12 @@ public class InstallationTriggerHandler_Test {
         list<Installation__c> inst1 = TestDataUtility.createInsTestData();
         for(Integer i=0;i<inst1.size();i++){
             inst1[i].Bypass_Flow__c = true;
+            inst1[i].Project__c = prolist.id;
         }
         inst1[0].Quote_Name__c = quolist[0].id;
         inst1[0].Installer_Account__c = acclist[0].id;
         inst1[0].contact__c = contest[0].id;
         inst1[0].Assigned_to__c = testUnew.id;
-        inst1[0].Project__c = prolist.id;
         inst1[0].Installation_Date__c = null;
         insert inst1;
         Entitlement ent = new Entitlement();
@@ -1230,13 +1261,17 @@ public class InstallationTriggerHandler_Test {
         insert ent;
         inst1[0].Installer_Contact__c = contest[0].id;
         update inst1[0];
-        
+        //insert inst1;
         test.stopTest();
     }
     public static testMethod void myUnitTest9(){
   
         list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
             insert tmList;
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
+        
         list<Account> acclist = TestDataUtility.createAccountTestData();
         acclist[0].Certified_Installer__c = true;
         insert acclist;
@@ -1266,12 +1301,13 @@ public class InstallationTriggerHandler_Test {
         for(Integer j=0;j<inst1.size();j++){
           inst1[j].Quote_Name__c = quolist[j].id;
             inst1[j].Bypass_Flow__c = true;
+            inst1[j].Project__c = prolist.id;
         }
         inst1[0].Installer_Account__c = acclist[0].id;
         inst1[0].contact__c = contest[0].id;
         inst1[0].Assigned_to__c = testUnew.id;
-        inst1[0].Project__c = prolist.id;
-        inst1[0].Installation_Date__c = null;
+       // inst1[0].Project__c = prolist.id;
+        inst1[0].Installation_Date__c = System.today();
         insert inst1;
         Entitlement ent = new Entitlement();
         ent.Name = '0001sl';
@@ -1280,6 +1316,64 @@ public class InstallationTriggerHandler_Test {
         ent.Nana_Quote__c = quolist[0].id;
         insert ent;
         inst1[0].Installer_Contact__c = contest[0].id;
+        update inst1[0];
+        
+        test.stopTest();
+    }
+    public static testMethod void myUnitTest10(){
+  
+        list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
+            insert tmList;
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
+        User newUser = TestDataUtility.createUser('System Administrator','newuser@gmail.com');
+        insert newUser;
+        list<Account> acclist = TestDataUtility.createAccountTestData();
+        acclist[0].Certified_Installer__c = true;
+        insert acclist;
+        list<Contact> contest = TestDataUtility.createConTestData();
+        contest[0].AccountId = acclist[0].id;
+        insert contest;
+        Project__c prolist = new Project__c();
+        prolist.Project_Country__c = 'United States';
+        prolist.Project_Zip_Code__c = '44030';
+        prolist.Name = 'Test Project CompetitorHelper_Test';
+             prolist.Application__c = 'Automotive';
+             prolist.Application_2__c = 'Dealership';
+        insert prolist;
+        list<Opportunity> opplist = TestDataUtility.createOppTestData();
+        insert opplist;
+                test.startTest();
+        list<Quote__C> quolist = TestDataUtility.createQuoteRecords(opplist);
+        insert quolist;
+        list<Quote_Detail__c> qdlist = TestDataUtility.createQuoteDetailData();
+        for(Integer i=0;i<qdlist.size();i++){
+        qdlist[i].Quote__c = quolist[i].id;
+        }
+        insert qdlist;
+        User testUnew = TestDataUtility.createUser('System Administrator','test@testingupdate.com');
+        insert testUnew;
+        list<Installation__c> inst1 = TestDataUtility.createInsTestData();
+        for(Integer j=0;j<inst1.size();j++){
+          inst1[j].Quote_Name__c = quolist[j].id;
+            inst1[j].Bypass_Flow__c = true;
+           inst1[j].Project__c = prolist.id;
+        }
+        inst1[0].Installer_Account__c = acclist[0].id;
+        inst1[0].contact__c = contest[0].id;
+        inst1[0].Assigned_to__c = testUnew.id;
+        //inst1[0].Project__c = prolist.id;
+        inst1[0].Installation_Date__c = null;
+        inst1[0].Assigned_To_Paul_Nalette__c = true;
+        insert inst1;
+        Entitlement ent = new Entitlement();
+        ent.Name = '0001sl';
+        ent.AccountId = acclist[0].id;
+        ent.StartDate = system.today();
+        ent.Nana_Quote__c = quolist[0].id;
+        insert ent;
+        inst1[0].OwnerId = newUser.id;
         update inst1[0];
         
         test.stopTest();

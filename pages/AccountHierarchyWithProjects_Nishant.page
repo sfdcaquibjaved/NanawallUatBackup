@@ -18,7 +18,7 @@
              <apex:column value="{!DuplPrj }" headerValue="Duplicate Projects"/>
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
-             <apex:column value="{!CAPrjOpp}" headerValue="Opportunity"/>
+             <apex:column value="{!CAProjOppList.size}" headerValue="Opportunity QuoteLess"/>
              <apex:column headerValue="Closure Rate">
                  <apex:outputText value="{0,Number,0.00}%"><apex:param value="{!(100*prjWon)/IF(ProjSiteList.size == 0, 1, ProjSiteList.size)}" /></apex:outputText> 
             </apex:column>
@@ -69,21 +69,17 @@
               
             <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" reRender="Acc_proj" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
           </apex:pageBlockSection>
-      
-     
-     
-    </apex:pageBlock>
-      
-    <apex:pageBlock >
-      <apex:pageBlockSection title="Total {!CAPrjOpp} are QuoteLess Opportunities">
-        <apex:pageBlockTable value="{!CAProjOppList}" var="Opp">
-            <apex:column headerValue="Project Name"></apex:column>
-            <apex:repeat var="c" value="{!Opp.opportunities__r}">
-                <apex:outputText value="c.Name">Nishant</apex:outputText>
-            </apex:repeat>
-        </apex:pageBlockTable>
-      </apex:pageBlockSection>
-    </apex:pageBlock>
+      </apex:pageBlock>
+      <Apex:pageBlock title="QuoteLess Opportunities : {!CAProjOppList.size}">
+   <Apex:pageblockTable value="{!CAProjOppList }" var="opp">
+   <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
+   <Apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
+   
+   <Apex:column headervalue="Stage Name" value="{!opp.StageName}"/>
+   
+   </Apex:pageblockTable>
+   </Apex:pageBlock>   
+   
     
   <apex:PageBlock id="Acc_proj" >    
      <apex:pageBlockSection columns="1">

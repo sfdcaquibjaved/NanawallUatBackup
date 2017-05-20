@@ -48,14 +48,17 @@ global without sharing class OrderCreationShopify {
         
         //In bodyString the data that is received from shopify is stored and you can see the output in the below debug
         System.debug('ordersssssssss' + bodyString);
-        
-        //The data in bodyString is in JSON format the below method is used to parse the json format to normal format
+        //string pt = JSON.serialize(bodyString);      
+        //system.debug('opp'+pt);
+        wrapperObjectShopify.Orders word = (wrapperObjectShopify.Orders) JSON.deserialize(bodyString,wrapperObjectShopify.Orders.class);
+        system.debug('deserializee'+word);
         JSONParser parser = JSON.createParser(bodyString);
         while (parser.nextToken() != null) {
             if (parser.getCurrentToken() == JSONToken.START_OBJECT) {
 
                 // Read entire orders object, including its array of line items.
                 wrapperObjectShopify.Orders ord = (wrapperObjectShopify.Orders) parser.readValueAs(wrapperObjectShopify.Orders.class);
+                ord = (wrapperObjectShopify.Orders) JSON.deserialize(bodyString,wrapperObjectShopify.Orders.class);
                 String emailname = parser.getText();
                 ordList.add(ord);
                 caseNo = ord.note;
@@ -69,19 +72,22 @@ global without sharing class OrderCreationShopify {
             }
         }
         System.debug('#################' + caseNo);
+         case cs;
+          map<string,id> servicePartmap = new map<string,id>();
+        if(caseNo!=NULL) {
         String sub = caseNo.substringAfter('#');
             System.debug('************' + sub);
-            caseNo = sub.left(8);
-             case cs;
+            caseNo = sub.left(8);         
              try{
              cs = [select id,ContactID,Other_Phone__c,Billing_Zipcode__c,Billing_Country__c,Billing_State__c,Billing_City__c,Billing_Street_End_Customer__c,Other_Shipping_Phone__c,Shipping_City_EndCustomer__c,Shipping_Street_End_Customer__c,Shipping_State_End_Customer__c,Shipping_Country__c,Shipping_Zip_End_Customer__c from case where CaseNumber = : caseNo];
                    
              }catch(exception e)
              {
              }
-             map<string,id> servicePartmap = new map<string,id>();
+            
              for(service_part__c sp : [select id,name,Part_Name__c from service_part__c where name!='' ]){
             servicePartmap.put(sp.name,sp.id);  
+         }
        }
         //If Salesrep creates an order in shopify with filling Case Number in Notes Section in Shopify
         if (cs!= NULL) {
@@ -271,7 +277,8 @@ global without sharing class OrderCreationShopify {
 
             //if the email address of customer in shopify is having multiple contacts with same email address in salesforce
             if (contactList.size() > 1) {
-            
+                system.debug('orderData.shipping_addresssss'+orderData.shipping_address);
+                system.debug('orderdattttt'+orderData);
                 //A Case will be inserted without relating case to any contact and a service quote and service quote detail is inserted
                 list<case> caseInsertList = new list<case>();
                 case c = new case ();

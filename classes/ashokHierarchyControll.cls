@@ -344,11 +344,23 @@ public class ashokHierarchyControll {
         /*********************NIshant Code****************/
         //select id, stagename, Quote_Count__c, Project_Name__r.Purchaser_Account__c  from opportunity where  (stagename ='Need Analysis' OR stagename='Drawings-Requested' OR stagename ='Drawings - Provided' )
  // Project_Name__r.Purchaser_Account__c='001A000001Ledoc'
- 	QuoteProject = [select id, stagename, Quote_Count__c, Project_Name__r.Purchaser_Account__c  from opportunity where stagename IN ('Need Analysis','Drawings-Requested','Drawings - Provided')];
-    String query2 = 'Select Id,Name, (Select Name, StageName,Amount,Quote_Count__c from opportunities__r where (StageName Like \'Need Analysis%\' OR StageName LIKE \'Drawings - Requested%\' OR StageName LIKE \'Drawings - Provided%\'))from project__c where Purchaser_Account__c = :objAccId';
-        
+    QuoteProject = [select id, name, stagename, Quote_Count__c, Project_Name__r.Purchaser_Account__c  from opportunity where  Project_Name__r.Purchaser_Account__c =:ObjAcc.id AND Quote_Count__c =0 AND (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') ];
+    system.debug('the value of the QuoteProject is Given Below'+QuoteProject );
+        String query2 = 'Select Id,Name, (Select Name, StageName,Amount,Quote_Count__c from opportunities__r where (StageName Like \'Need Analysis%\' OR StageName LIKE \'Drawings - Requested%\' OR StageName LIKE \'Drawings - Provided%\'))from project__c where Purchaser_Account__c = :objAccId';
+        system.debug('the value of QioteList' +QuoteProject);
+        for(opportunity opd : QuoteProject)
+        {
+            if(opd.StageName.Contains('Need Analysis') || opd.StageName.Contains('Drawings - Requested') || opd.StageName.Contains('Drawings - Provided'))
+
+            {           
+                if(opd.Quote_Count__c ==0)
+                 {
+                    CAPrjOpp = CAPrjOpp+1;                
+                }
+             }
+        }
         CAProjOppList = database.query(query2);
-        for(Project__c oppProj : CAProjOppList)
+     /*   for(Project__c oppProj : CAProjOppList)
         {
             for(opportunity oppProj1 :oppProj.opportunities__r)
             
@@ -360,7 +372,7 @@ public class ashokHierarchyControll {
                         }
             
           }
-        }
+        } */
         
         
     /*   string query2 = 'SELECT Id,Name , ';

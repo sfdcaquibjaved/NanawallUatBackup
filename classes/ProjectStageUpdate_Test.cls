@@ -17,6 +17,9 @@ private class ProjectStageUpdate_Test {
         list<Zip_Codes_Master__c> z= new list<Zip_Codes_Master__c>();
         z=TestDataUtility.getTerritoryMaster();
         insert z;
+         insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         
         list<project__c> olstTestProject2 = new list<project__c>();
         project__c p= new project__c();

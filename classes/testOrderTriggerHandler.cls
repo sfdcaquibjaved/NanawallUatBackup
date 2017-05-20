@@ -109,6 +109,9 @@ public class testOrderTriggerHandler {
     }
     static testmethod void method2(){
         
+        insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
+        insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'NY State',Zip_Code_del__c = 500,Zip_Code_End_Value__c = 15000);
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -212,6 +215,7 @@ public class testOrderTriggerHandler {
         instNew.Account__c =  acct.id ;
         instNew.Installation_Date__c = system.today() ;
         instNew.Order__c = ord.id;
+        instNew.Project__c = p1.id;
         insert instNew;       
          
          test.startTest();
