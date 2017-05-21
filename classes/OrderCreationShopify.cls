@@ -25,7 +25,7 @@ global without sharing class OrderCreationShopify {
     global static void doPost() {
     
         // Local Variables       
-        list < wrapperObjectShopify.Orders > ordList = new list < wrapperObjectShopify.Orders > ();
+        list < wrapperObjectShopify.Order > ordList = new list < wrapperObjectShopify.Order > ();
         string caseNo;
         string Notes;
         string orderEmail;
@@ -33,7 +33,7 @@ global without sharing class OrderCreationShopify {
         list < case >caseInsert = new list < case >();
         list < service_quote__c > serviceQuoteDirectInsert = new list < service_quote__c > ();
         list < Service_Quote_detail__c > sqDetailsDirectInsert = new list < Service_Quote_detail__c > ();
-        wrapperObjectShopify.Orders orderData;
+        wrapperObjectShopify.Order orderData;
         list < string > caseid = new list < string > ();
         string shopifyOrderCreationURL = label.Shopify_URL;
        
@@ -48,29 +48,16 @@ global without sharing class OrderCreationShopify {
         
         //In bodyString the data that is received from shopify is stored and you can see the output in the below debug
         System.debug('ordersssssssss' + bodyString);
-        //string pt = JSON.serialize(bodyString);      
-        //system.debug('opp'+pt);
-        wrapperObjectShopify.Orders word = (wrapperObjectShopify.Orders) JSON.deserialize(bodyString,wrapperObjectShopify.Orders.class);
-        system.debug('deserializee'+word);
-        JSONParser parser = JSON.createParser(bodyString);
-        while (parser.nextToken() != null) {
-            if (parser.getCurrentToken() == JSONToken.START_OBJECT) {
-
-                // Read entire orders object, including its array of line items.
-                wrapperObjectShopify.Orders ord = (wrapperObjectShopify.Orders) parser.readValueAs(wrapperObjectShopify.Orders.class);
-                ord = (wrapperObjectShopify.Orders) JSON.deserialize(bodyString,wrapperObjectShopify.Orders.class);
-                String emailname = parser.getText();
-                ordList.add(ord);
-                caseNo = ord.note;
-                Notes = ord.note;
-                orderData = ord;
-                String ss = JSON.serialize(ord);
-                system.debug('Serialized invoice: ' + ss);
-
-                // Skip the child start array and start object markers.
-                parser.skipChildren();
-            }
-        }
+        
+         shopifywrapper word = (shopifywrapper) JSON.deserialize(bodyString, shopifywrapper.class); 
+         system.debug('deserialize'+word);      
+               ordList.add(word.Order);
+               if(word.Order.note!=NULL){
+                caseNo = word.Order.note;           
+                Notes = word.Order.note;
+                }
+                orderData = word.Order;             
+              
         System.debug('#################' + caseNo);
          case cs;
           map<string,id> servicePartmap = new map<string,id>();
@@ -91,7 +78,7 @@ global without sharing class OrderCreationShopify {
        }
         //If Salesrep creates an order in shopify with filling Case Number in Notes Section in Shopify
         if (cs!= NULL) {
-            for (wrapperObjectShopify.Orders ord: ordList) {
+            for (wrapperObjectShopify.Order ord: ordList) {
                   orderEmail = ord.email;
                 }
               list<Contact> contactInsertList =  new list<Contact>();
@@ -193,7 +180,7 @@ global without sharing class OrderCreationShopify {
             list < Service_Quote_Detail__c > sqDetailDummyList = new list < Service_Quote_Detail__c > ();
             map < Service_Quote__c, list < Service_Quote_Detail__c >> serviceQuoteAnDetailMap = new map < Service_Quote__c, list < Service_Quote_Detail__c >> ();
 
-            for (wrapperObjectShopify.Orders ord: ordList) {
+            for (wrapperObjectShopify.Order ord: ordList) {
                 Service_Quote__c sq = new Service_Quote__c();
                 
                 if(ord.total_discounts!=0.00){
@@ -234,14 +221,14 @@ global without sharing class OrderCreationShopify {
                 Database.saveresult[] sr = Database.insert(sqInsert, False);
                 ErrorLogUtility.processErrorLogs(sr, sqInsert, 'OrderCreationShopify', 'doPost', 'Service_Quote__c', 'Insert');
             }
-      /*for (wrapperObjectShopify.Orders ord: ordList) {
+      /*for (wrapperObjectShopify.Order ord: ordList) {
                 for (wrapperObjectShopify.line_items lt: ord.line_items) {
                   servicePartName =lt.sku;
                 }
       }*/
       //list<service_part__c> sp = [select id,name,Part_Name__c from service_part__c where name=:servicePartName limit 1];
       
-            for (wrapperObjectShopify.Orders ord: ordList) {
+            for (wrapperObjectShopify.Order ord: ordList) {
                 for (wrapperObjectShopify.line_items lt: ord.line_items) {
                     Service_Quote_Detail__c sqd = new Service_Quote_Detail__c();
                     sqd.Discount__c = lt.total_discount;
@@ -269,7 +256,7 @@ global without sharing class OrderCreationShopify {
         
         //If an order is created dirctly on shopify that order needs to be saved in salesforce by mapping to relevant objects
         else {
-                for (wrapperObjectShopify.Orders ord: ordList) {
+                for (wrapperObjectShopify.Order ord: ordList) {
                 orderEmail = ord.email;
                 }
 
@@ -309,7 +296,7 @@ global without sharing class OrderCreationShopify {
                     ErrorLogUtility.processErrorLogs(sr, caseInsertList, 'OrderCreationShopify', 'doPost', 'case', 'Insert');
                 }
 
-                for (wrapperObjectShopify.Orders ord: ordList) {
+                for (wrapperObjectShopify.Order ord: ordList) {
                     Service_Quote__c sq = new Service_Quote__c();
                     if(ord.total_discounts!=0.00){
                   sq.Discount__c = ((ord.total_discounts/ord.total_line_items_price)*100);
@@ -342,14 +329,14 @@ global without sharing class OrderCreationShopify {
                     Database.saveresult[] sr = Database.insert(serviceQuoteDirectInsert, False);
                     ErrorLogUtility.processErrorLogs(sr, serviceQuoteDirectInsert, 'OrderCreationShopify', 'doPost', 'Service_Quote__c', 'Insert');
                 }
-        /*for (wrapperObjectShopify.Orders ord: ordList) {
+        /*for (wrapperObjectShopify.Order ord: ordList) {
                   for (wrapperObjectShopify.line_items lt: ord.line_items) {
                     servicePartName =lt.sku;
                   }
         }*/
          // list<service_part__c> sp = [select id,name,Part_Name__c from service_part__c where name=:servicePartName limit 1];
           
-                for (wrapperObjectShopify.Orders ord: ordList) {
+                for (wrapperObjectShopify.Order ord: ordList) {
                     for (wrapperObjectShopify.line_items lt: ord.line_items) {
                         Service_Quote_Detail__c sqd = new Service_Quote_Detail__c();
                         sqd.Discount__c = lt.total_discount;
@@ -373,7 +360,7 @@ global without sharing class OrderCreationShopify {
         
                 }
                 
-                //Class for posting Case Number on Shopify Orders (This functionality is commented at present)
+                //Class for posting Case Number on Shopify Order (This functionality is commented at present)
                     //PostingCaseNumberOnShopify.CaseNumberOnShopifyOrder(serviceQuoteDirectInsert[0].id, Notes);
             }
             
@@ -381,7 +368,7 @@ global without sharing class OrderCreationShopify {
             else if (contactList.size() == 1) {
                 list < order > orderList = [select id, contact__c from order where contact__c =: contactList[0].id];
 
-                //If there are multiple orders or no orders for the contact
+                //If there are multiple Order or no Order for the contact
                 if (orderList.size() > 1 || orderList.size() < 1) {
                     
                     //A case will be created and it is mapped to a contact and both service quote and service quote details are inserted
@@ -417,7 +404,7 @@ global without sharing class OrderCreationShopify {
                        ErrorLogUtility.processErrorLogs(sr, caseOrderList, 'OrderCreationShopify', 'doPost', 'case', 'Insert'); 
                     }
                    
-                    for (wrapperObjectShopify.Orders ord: ordList) {
+                    for (wrapperObjectShopify.Order ord: ordList) {
                         Service_Quote__c sq = new Service_Quote__c();
                         if(ord.total_discounts!=0.00){
                     sq.Discount__c = ((ord.total_discounts/ord.total_line_items_price)*100);
@@ -453,14 +440,14 @@ global without sharing class OrderCreationShopify {
 
                     //Class for posting Case Number on Shopify Orders (This functionality is commented at present)
                     //PostingCaseNumberOnShopify.CaseNumberOnShopifyOrder(serviceQuoteDirectInsert[0].id, Notes);
-          /*for (wrapperObjectShopify.Orders ord: ordList) {
+          /*for (wrapperObjectShopify.Order ord: ordList) {
                     for (wrapperObjectShopify.line_items lt: ord.line_items) {
                       servicePartName =lt.sku;
                     }
           }*/
           //list<service_part__c> sp = [select id,name,Part_Name__c from service_part__c where name=:servicePartName limit 1];
           
-                    for (wrapperObjectShopify.Orders ord: ordList) {
+                    for (wrapperObjectShopify.Order ord: ordList) {
                         for (wrapperObjectShopify.line_items lt: ord.line_items) {
                             Service_Quote_Detail__c sqd = new Service_Quote_Detail__c();
                             sqd.Discount__c = lt.total_discount;
@@ -521,7 +508,7 @@ global without sharing class OrderCreationShopify {
                          ErrorLogUtility.processErrorLogs(sr, caseInsertOrderList, 'OrderCreationShopify', 'doPost', 'case', 'Insert');              
                     }
 
-                    for (wrapperObjectShopify.Orders ord: ordList) {
+                    for (wrapperObjectShopify.Order ord: ordList) {
                         Service_Quote__c sq = new Service_Quote__c();
                         if(ord.total_discounts!=0.00){
                     sq.Discount__c = ((ord.total_discounts/ord.total_line_items_price)*100);
@@ -558,14 +545,14 @@ global without sharing class OrderCreationShopify {
                     //Class for posting Case Number on Shopify Orders (This functionality is commented at present)
                    //PostingCaseNumberOnShopify.CaseNumberOnShopifyOrder(serviceQuoteDirectInsert[0].id, Notes);
 
-                    /*for (wrapperObjectShopify.Orders ord: ordList) {
+                    /*for (wrapperObjectShopify.Order ord: ordList) {
                     for (wrapperObjectShopify.line_items lt: ord.line_items) {
                       servicePartName =lt.sku;
                     }
           }*/
           
       
-                    for (wrapperObjectShopify.Orders ord: ordList) {
+                    for (wrapperObjectShopify.Order ord: ordList) {
                         for (wrapperObjectShopify.line_items lt: ord.line_items) {
                           
                             Service_Quote_Detail__c sqd = new Service_Quote_Detail__c();
@@ -682,7 +669,7 @@ global without sharing class OrderCreationShopify {
                     ErrorLogUtility.processErrorLogs(sr, caseListInsert, 'OrderCreationShopify', 'doPost', 'Case', 'Insert');          
                 }
 
-                for (wrapperObjectShopify.Orders ord: ordList) {
+                for (wrapperObjectShopify.Order ord: ordList) {
                     Service_Quote__c sq = new Service_Quote__c();
                     if(ord.total_discounts!=0.00){
                   sq.Discount__c = ((ord.total_discounts/ord.total_line_items_price)*100);
@@ -724,14 +711,14 @@ global without sharing class OrderCreationShopify {
         
         
           
-        /*for (wrapperObjectShopify.Orders ord: ordList) {
+        /*for (wrapperObjectShopify.Order ord: ordList) {
                   for (wrapperObjectShopify.line_items lt: ord.line_items) {
                     servicePartname =lt.sku;
                   }
         }*/
         //list<service_part__c> sp = [select id,name,Part_Name__c from service_part__c where name=:servicePartname limit 1];
            
-                for (wrapperObjectShopify.Orders ord: ordList) {
+                for (wrapperObjectShopify.Order ord: ordList) {
                     for (wrapperObjectShopify.line_items lt: ord.line_items) {
                       
                         Service_Quote_Detail__c sqd = new Service_Quote_Detail__c();
@@ -758,5 +745,7 @@ global without sharing class OrderCreationShopify {
         }
 
     }
-
+    public class shopifywrapper{
+       public wrapperObjectShopify.Order Order;
+    }
 }

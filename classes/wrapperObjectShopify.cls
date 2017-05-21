@@ -6,7 +6,7 @@ Created Date: 08th June,2016
 public class wrapperObjectShopify{
 
 //Wrapper Class
- public class Orders {
+ public class Order {
         public string id;
         public string email;
         public DateTime created_at;
@@ -28,30 +28,7 @@ public class wrapperObjectShopify{
         public string cancel_reason;
         public List < fulfillments > fulfillments;
         public string name;
-
-        public Orders(Double price, DateTime dt, string ids, string em, List < line_items > lineItems2, Double discount, Double lineitemprice, Double weight, Double tax, String status, Double subtotal, String sub, billing_address baddress, shipping_address saddress, customer custlist, string n, list < note_attributes > na, String fullstatus, datetime cancel, string cancelreason, List < fulfillments > tdetails,string oName) {
-            total_price = price;
-            created_at = dt;
-            ids = id;
-            email = em;
-            total_discounts = discount;
-            total_line_items_price = lineitemprice;
-            total_weight = weight;
-            total_tax = tax;
-            financial_status = status;
-            subtotal_price = subtotal;
-            note = sub;
-            line_items = lineItems2.clone();
-            billing_address = baddress;
-            shipping_address = saddress;
-            customer = custlist;
-            note_attributes = na.clone();
-            fulfillment_status = fullstatus;
-            cancelled_at = cancel;
-            cancel_reason = cancelreason;
-            fulfillments = tdetails.clone();
-            name = oName;
-        }
+       
     }
 
     public class line_items {
@@ -98,24 +75,6 @@ public class wrapperObjectShopify{
         public String last_name;
         public String email;
  
-    }
-    
-    public class Customers {
-
-        public default_address default_address;
-        public String first_name;
-        public String last_name;
-        public String email;
-        public string id;
-
-        public Customers(default_address address, string fname, string lname, string e, string i) {
-            default_address = address;
-            first_name = fname;
-            last_name = lname;
-            email = e;
-            id = i;
-        }
-
     }
 
     public class default_address {

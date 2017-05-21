@@ -14,8 +14,8 @@ global without sharing class ShopifyCustomerCreation_WebService {
     global static void doPost() {
         // Local Variables       
         list < String > contactEmailList= new list < String > ();
-        list < wrapperObjectShopify.Customers > CustomerList = new list < wrapperObjectShopify.Customers > ();
-        map < string, wrapperObjectShopify.Customers > customerMap = new map < string, wrapperObjectShopify.Customers > ();
+        list < wrapperCustomerShopify.Customers > CustomerList = new list < wrapperCustomerShopify.Customers > ();
+        map < string, wrapperCustomerShopify.Customers > customerMap = new map < string, wrapperCustomerShopify.Customers > ();
         map < string, string > firstNameMap = new map < string, string > ();
         map < string, string > secondNameMap= new map < string, string > ();
         list < contact > contactInsert = new list < contact > ();
@@ -32,26 +32,11 @@ global without sharing class ShopifyCustomerCreation_WebService {
         //In bodyString the data that is received from shopify is stored and you can see the output in the below debug
         System.debug('customer' + bodyString);
         System.debug('responseee' + res);
-
-        //The data in bodyString is in JSON format the below method is used to parse the json format to normal format
-        JSONParser parser = JSON.createParser(bodyString);
-        while (parser.nextToken() != null) {
-            if (parser.getCurrentToken() == JSONToken.START_OBJECT) {
-                // Read entire orders object, including its array of line items.
-                wrapperObjectShopify.Customers cus = (wrapperObjectShopify.Customers) parser.readValueAs(wrapperObjectShopify.Customers.class);
-                String emailName = parser.getText();
-                CustomerList.add(cus);
-                // For debugging purposes, serialize again to verify what was parsed.
-                String ss = JSON.serialize(cus);
-                system.debug('Serialized invoice: ' + ss);
-
-                // Skip the child start array and start object markers.
-                parser.skipChildren();
-            }
-        }
+                shopifywrapper cuss = (shopifywrapper) JSON.deserialize(bodyString, shopifywrapper.class);              
+                CustomerList.add(cuss.Customers);            
 
         if (CustomerList.size() > 0) {
-            for (wrapperObjectShopify.Customers cus: CustomerList) {
+            for (wrapperCustomerShopify.Customers cus: CustomerList) {
                 contactEmailList.add(cus.email);
                 customerMap.put(cus.email, cus);
             }
@@ -60,7 +45,7 @@ global without sharing class ShopifyCustomerCreation_WebService {
         list < contact > contactList = [select id, email from contact where email IN: contactEmailList];       
         if (contactList.size() == 0) {
 
-            for (wrapperObjectShopify.Customers cus: CustomerList) {
+            for (wrapperCustomerShopify.Customers cus: CustomerList) {
 
                 account a = new account();
                 a.Name = cus.first_name + ' ' + cus.last_name;
@@ -126,5 +111,9 @@ global without sharing class ShopifyCustomerCreation_WebService {
              ErrorLogUtility.processErrorLogs(sr, contactInsert, 'ShopifyCustomerCreation_WebService', 'doPost', 'contact', 'Insert');     
         }
         System.debug('inserttttttt' + contactInsert);
+    }
+    
+    public class shopifyWrapper {
+      public wrapperCustomerShopify.Customers Customers;
     }
 }
