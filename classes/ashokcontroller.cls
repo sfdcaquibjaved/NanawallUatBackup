@@ -447,7 +447,7 @@ public class ashokcontroller{
         archFilter = '';
         sortFullExp = '';
       //Inilization of Pagination Select Option  
-        Paginationsize=10;
+        PaginationSize =10;
         paginationSizeOptions = new List<selectoption>();
         paginationSizeOptions.add(new selectoption('5','5'));
         paginationSizeOptions.add(new selectoption('10','10'));
@@ -467,7 +467,7 @@ public class ashokcontroller{
  */ 
     
     public ApexPages.StandardSetController setCon 
-	{
+    {
         get {
             if(setCon == null) {  
                
@@ -475,11 +475,27 @@ public class ashokcontroller{
                       [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]));
                 setCon.setPageSize(Paginationsize);  
                 noOfRecords = setCon.getResultSize();
+                siz = AccSiteList.size();
+        
+       
+        
+        
+        return setcon;
                 
             }            
             return setCon;
         }
         set;
+    }
+    //Changes the Paginationsize of pagination
+    public PageReference refreshPageSize() {
+         setCon.setPageSize(Paginationsize);
+         return null;
+    }
+    // Initialize setCon and return a list of record    
+     
+    public List<account> getOpportunities() {
+         return (List<account>) setCon.getRecords();
     }
     public void hierarchySetData(Project__c prj){
                                                           
