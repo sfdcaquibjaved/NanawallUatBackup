@@ -472,7 +472,7 @@ public class ashokcontroller{
             if(setCon == null) {  
                
                 setCon = new ApexPages.StandardSetController(Database.getQueryLocator(
-                      [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]));
+                      [SELECT Account.Name FROM Account WHERE parent.id='001A000001Ledoc' AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)]));
                 setCon.setPageSize(Paginationsize);  
                 noOfRecords = setCon.getResultSize();
                 siz = AccSiteList.size();
