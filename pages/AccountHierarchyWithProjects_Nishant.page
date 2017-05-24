@@ -44,6 +44,7 @@
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
             </apex:column>
          </apex:pageBlockTable>
+         <apex:commandLink value="Record Without Projects : {!AccSiteList.size}" action="{!RecwithoutProj}" />
      </apex:pageBlockSection>
     </apex:PageBlock>
   

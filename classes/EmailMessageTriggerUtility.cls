@@ -22,20 +22,16 @@ public class EmailMessageTriggerUtility {
         map < id, EmailMessage > emailmessageMap = new map < id, EmailMessage > ();
         set < Id > EmailId = new set < id > ();
         map < id, id > caseMapId = new map < id, id > ();
-        string mail;
+       
         if (HelperClass.firstRun) {
             
             for (EmailMessage em: NewEmail) {
                 if (em.Subject.containsIgnoreCase('Re:')) {
-                    if(em.ToAddress.containsIgnoreCase('Service')){
                     
-                    mail = Label.EmailTocase2;
-                    }
-                    else{
-                    mail = Label.Email2case;
-                    }
+                   string mail = Label.Email2case;
+                    
                     String Str = em.TextBody.substringBeforeLast(mail);
-                    //String Str2 = em.TextBody.substringBeforeLast(mail2);
+                   
                     
                     casecomment cc = new casecomment();
                     
@@ -46,13 +42,12 @@ public class EmailMessageTriggerUtility {
 
                 } else if (em.Status == 'New' ) {
 
-                          system.debug('Status value'+em.status);  
+                         
                         emailmessageset.add(em.Parentid);
 
 
                 } else {
-                    system.debug('I am here');
-                    system.debug('Status value'+em.status); 
+                   
                     emailMessageCommentSet.add(em.parentid);
                     emailmessageMap.put(em.parentid, em);
                 }
@@ -70,7 +65,7 @@ public class EmailMessageTriggerUtility {
             }
             if (emailMessageCommentSet.size() > 0)
             {
-                system.debug('The value of emailmessageMap' + emailmessageMap);
+               
                // caseAttachment.insertcasecomment(emailMessageCommentSet, emailmessageMap);
             }
             HelperClass.firstRun = false;

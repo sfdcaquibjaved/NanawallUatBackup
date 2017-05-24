@@ -425,7 +425,7 @@ public class CaseAttachmentTestNew {
         //creating test data for email messages
         Set < Id > emailIds = new Set < Id > ();
         EmailMessage[] newEmail = new EmailMessage[0];
-        newEmail.add(new EmailMessage(FromAddress = 'test@abc.org', Incoming = True, ToAddress = 'hello@670ocglw7xhomi4oyr5yw2zvf.8kp7yeag.8.case.salesforce.com', Subject = 'Test email', TextBody = '23456 ', ParentId = cases[0].Id));
+        newEmail.add(new EmailMessage(FromAddress = 'test@abc.org', Incoming = True, ToAddress = 'hello@670ocglw7xhomi4oyr5yw2zvf.8kp7yeag.8.case.salesforce.com', Subject = 'Re:Test email', TextBody = '23456 ', ParentId = cases[0].Id));
         try {
             insert newEmail;
         } catch (exception e) {

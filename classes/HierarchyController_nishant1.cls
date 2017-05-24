@@ -5,7 +5,14 @@
 ********************/
 public class HierarchyController_nishant1 {
 /*****************Constructor Variable initialization********************/
-    //public Set<Id> SetOr{get;set;}
+    //public Set<Id> SetOr{get;set;}private 
+    
+
+   
+    
+    
+    
+    
     public List<ProjectWrapper> records{get;set;} 
     public string sortFullExp{get;set;}
     public List <Account> AccSiteList{get;set;}
@@ -686,5 +693,15 @@ public class HierarchyController_nishant1 {
                   accTmpList.add(a);
         AccSiteList = accTmpList;    
     }
+  public PageReference RecwithoutProj(){
+
+    // create case, etc.
+
+    PageReference pr = new PageReference('/apex/RecordWithoutProject?ID='+ApexPages.currentPage().getParameters().get('ID'));
+    pr.setRedirect(true);
+    return pr;
+}  
+    
+    
 
 }

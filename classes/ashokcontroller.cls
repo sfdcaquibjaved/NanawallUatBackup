@@ -24,6 +24,7 @@ public class ashokcontroller{
     private String sortDirection = 'DESC';
     private String sortExp = 'PCrtDt';
     public List<String> acclist;
+    integer AccountCount{get;set;}
     /* QuoteLess opportunities List */
     public List<Opportunity> CAProjOppList{get;set;}
     /*---------- */
@@ -284,15 +285,13 @@ public class ashokcontroller{
         /* ************** Query fetch the record which has no project**************** */
         AccSiteList = [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
        
-        siz = AccSiteList.size();
+        siz = [SELECT count() FROM Account where parent.id='001A000001Ledoc'];//AccSiteList.size();
         
         List<Account> acctemp = new List<Account>();
         
-        for(Account a: AccSiteList)
-           if(a.Projects1__r.size()==0)
-              acctemp.add(a);
         
-        AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
+        
+      //  AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
        
         return AccSiteList;
     }
@@ -447,13 +446,13 @@ public class ashokcontroller{
         archFilter = '';
         sortFullExp = '';
       //Inilization of Pagination Select Option  
-        PaginationSize =10;
+        PaginationSize =50;
         paginationSizeOptions = new List<selectoption>();
-        paginationSizeOptions.add(new selectoption('5','5'));
-        paginationSizeOptions.add(new selectoption('10','10'));
-        paginationSizeOptions.add(new selectoption('20','20'));
         paginationSizeOptions.add(new selectoption('50','50'));
         paginationSizeOptions.add(new selectoption('100','100'));
+        paginationSizeOptions.add(new selectoption('150','150'));
+        paginationSizeOptions.add(new selectoption('200','200'));
+        paginationSizeOptions.add(new selectoption('250','250'));
          /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
         runQuery(objAcc.Id);
        
@@ -472,7 +471,7 @@ public class ashokcontroller{
             if(setCon == null) {  
                
                 setCon = new ApexPages.StandardSetController(Database.getQueryLocator(
-                      [SELECT Account.Name FROM Account WHERE parent.id='001A000001Ledoc' AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)]));
+                      [SELECT Account.Name FROM Account WHERE parent.id =:ObjAcc.id AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)]));
                 setCon.setPageSize(Paginationsize);  
                 noOfRecords = setCon.getResultSize();
                 siz = AccSiteList.size();

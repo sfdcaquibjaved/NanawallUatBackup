@@ -149,17 +149,25 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
 
 if(trigger.isAfter && trigger.isInsert){
     List<Case> casesToDelete=new List<Case>();
-   Group Queuename=[select Id from Group where Name = 'EmailtoSalesforce' and Type = 'Queue'];
+   	Group Queuename=[select Id from Group where Name = 'EmailtoSalesforce' and Type = 'Queue'];
  
-  
     for(case record: Trigger.new){
-       if(record.ownerId==Queuename.Id){
-            casesToDelete.add(record);
-}
-}
-   
-    delete casesToDelete;
-}    
+       
+        if(record.ownerId==Queuename.Id){
+            		casesToDelete.add(record);
+			}
+	}
+    
+    if(casesToDelete.size() > 0 ){
+        try{
+        		delete casesToDelete;
+        }
+        catch(exception e){
+           		 system.debug('Exception is:' + e.getMessage());
+        }
+    }
+    
+	}    
     
  
     
