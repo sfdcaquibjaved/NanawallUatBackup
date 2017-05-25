@@ -71,19 +71,11 @@
             <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" reRender="Acc_proj" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
           </apex:pageBlockSection>
       </apex:pageBlock>
-      <Apex:pageBlock title="QuoteLess Opportunities : {!CAProjOppList.size}">
-   <Apex:pageblockTable value="{!CAProjOppList }" var="opp">
-   <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
-   <Apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
-   
-   <Apex:column headervalue="Stage Name" value="{!opp.StageName}"/>
-   
-   </Apex:pageblockTable>
-   </Apex:pageBlock>   
+     
    
     
-  <apex:PageBlock id="Acc_proj" >    
-     <apex:pageBlockSection columns="1">
+  <apex:PageBlock id="Acc_proj" title="Project Count : {!ProjectList.size}" >    
+     <apex:pageBlockSection columns="1" collapsible="true" title="Projects">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
@@ -242,36 +234,17 @@
         
          </apex:pageBlockTable>
      </apex:pageBlockSection> 
-   </apex:pageBlock>
-    
-       <apex:PageBlock >  
-    <apex:pageBlockSection title="{!AccSiteList.size} records found without Projects." collapsible="false"/>    
-     <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
-         <apex:pageBlockTable var="ac" value="{!AccSiteList}">
-          <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
-             <apex:column >
-             <apex:facet name="header">             
-             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer) with No Projects{!IF(sortExpression=='AccName',IF(sortDirection='DESC','▼','▲'),'')}" id="cmdSort">
-                 <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-               </apex:facet>
-             <apex:outputLink value="/{!ac.Id}">{!ac.Name}</apex:outputLink>
-             </apex:column>
-            <apex:column headerValue="Project Name"/>
-             <apex:column headerValue="Project Status"/>
-             <apex:column headerValue="Amount"/>
-             <apex:column headerValue="Project Created Date"/>
-             <apex:column headerValue="Order Finalized Date"/>
-             <apex:column headerValue="Application Industry"/>
-             <apex:column headerValue="Architect"/>
-             <apex:column headerValue="Purchaser Account"/>
-             <apex:column headerValue="Ordering Account"/>
-             <apex:column headerValue="Project Name"/>
-             <apex:column headerValue="Project City"/>
-             <apex:column headerValue="Project ZipCode"/>
-         </apex:pageBlockTable>
-        </apex:pageBlockSection>
-    </apex:PageBlock>
+  </apex:PageBlock>
+    <Apex:pageBlock title="QuoteLess Opportunities : {!CAProjOppList.size}">
+   <Apex:pageblockTable value="{!CAProjOppList }" var="opp">
+   <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
+   <Apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
+   
+   <Apex:column headervalue="Stage Name" value="{!opp.StageName}"/>
+   
+   </Apex:pageblockTable>
+   </Apex:pageBlock>    
+  
 
 </apex:form>   
 </apex:page>

@@ -1,20 +1,18 @@
 <apex:page standardController="Account" extensions="RecordWithoutProjectController" sidebar="false" >
     <apex:form >
-      <apex:PageBlock >  
-    <apex:pageBlockSection title="{!AccSiteList.size} records found without Projects." collapsible="false"/>    
-     <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
-         <apex:pageBlockTable var="ac" value="{!AccSiteList}">
-          <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
-             <apex:column >
-             <apex:facet name="header">             
-             <apex:commandLink action="{!viewData}" value="Corporate Account Site Location (End Customer) with No Projects{!IF(sortExpression=='AccName',IF(sortDirection='DESC','▼','▲'),'')}" id="cmdSort">
-                 <apex:param value="AccName" name="column" assignTo="{!sortExpression}" ></apex:param>
-               </apex:commandLink>
-               </apex:facet>
-             <apex:outputLink value="/{!ac.Id}">{!ac.Name}</apex:outputLink>
-             </apex:column>
-            <apex:column headerValue="Project Name"/>
-             <apex:column headerValue="Project Status"/>
+      <apex:PageBlock id="details">  
+          <apex:pageBlockButtons >
+            	<apex:commandButton value="Back to Main Page" action="{!ActionGoBack}"/>  
+            </apex:pageBlockButtons>
+          <apex:pageBlockSection title="Project without Records : {!siz}">
+            
+          
+      <apex:pageBlockTable value="{!AccSiteList}" var="accRec">
+      	  <apex:column >
+           <apex:facet name="header">Project Name</apex:facet>
+           <apex:outputText value="{!accRec.Name}"></apex:outputText>   
+          </apex:column>
+          <apex:column headerValue="Project Status"/>
              <apex:column headerValue="Amount"/>
              <apex:column headerValue="Project Created Date"/>
              <apex:column headerValue="Order Finalized Date"/>
@@ -25,8 +23,9 @@
              <apex:column headerValue="Project Name"/>
              <apex:column headerValue="Project City"/>
              <apex:column headerValue="Project ZipCode"/>
-         </apex:pageBlockTable>
-        </apex:pageBlockSection>
+          </apex:pageBlockTable> 
+              </apex:pageBlockSection>
+           
     </apex:PageBlock>
         </apex:form>
 </apex:page>
