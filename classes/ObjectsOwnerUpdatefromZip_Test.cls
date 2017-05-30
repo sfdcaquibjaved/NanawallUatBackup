@@ -167,7 +167,88 @@ private class ObjectsOwnerUpdatefromZip_Test {
     objectsOwnerUpdatefromZip.assignobjectowner(olstTerritoryMastereCode, olstTerritoryMastereCode2);
     }
   }
- /*static testMethod void testobjectsOwnerUpdatefromZip3(){
+    
+     static testMethod void testobjectsOwnerUpdatefromZip3(){
+    
+    testUser1 = TestDataUtility.createUser('System Administrator', 'testUser1@test.com');
+    insert testUser1 ;
+    
+    testUser2 = TestDataUtility.createUser('System Administrator', 'testUser2@test.com');
+    insert testUser2 ;
+        
+    olstTerritoryMastereCode = TestDataUtility.getTerritoryMaster() ;
+    olstTerritoryMastereCode[0].user__c = testUser1.Id ;
+    olstTerritoryMastereCode[1].user__c = testUser1.Id ;
+    insert olstTerritoryMastereCode ;
+    System.runAs(testUser1){
+    
+    olstTestAccount = TestDataUtility.createAccountTestData();
+    olstTestAccount[0].BillingCountry = 'United States';
+    olstTestAccount[0].BillingPostalCode = '04037';
+    olstTestAccount[1].BillingPostalCode = '08688';
+    olstTestAccount[2].BillingCountry = 'United States';
+        try{
+    insert olstTestAccount ;
+        }catch(DMLEXCEPTION e){}
+    
+    olstTestLead = TestDataUtility.createLeadTestData();
+    olstTestLead[0].Country = 'United States';
+    olstTestLead[0].PostalCode = '07007' ;
+    olstTestLead[1].Country = 'United States';
+   // olstTestLead[1].Country = '';
+    olstTestLead[0].OwnerId = testUser2.Id ;
+            olstTestLead[1].OwnerId = testUser2.Id ;
+     
+    olstTestLead[0].isConverted=False;
+              olstTestLead[1].isConverted=False;        
+   // olstTestLead[1].OwnerId = testUser1.Id ;
+    olstTestLead[0].Status= 'Open' ;
+     //olstTestLead[1].isConverted= false ;
+        try{
+        
+            
+    insert olstTestLead ;
+        }catch(DMLEXCEPTION e){}
+    
+    
+    olstTestContact = TestDataUtility.createConTestData();
+    olstTestContact[0].MailingCountry = 'United States';
+    olstTestContact[0].MailingPostalCode = '07007';
+    olstTestContact[1].MailingCountry = 'United States';
+            olstTestContact[1].OwnerId = testUser2.Id ;
+        try{
+    insert olstTestContact ;
+        }catch(DMLEXCEPTION e){}
+    
+    
+    olstTestProject = TestDataUtility.createProjectTestData();
+    olstTestProject[0].project_zip_code__c = '07007';
+    olstTestProject[0].project_country__c = 'United States';
+    olstTestProject[2].project_country__c = 'United States';
+    olstTestProject[0].Stage__c = 'Closed Lost - Project Cancelled';
+    olstTestProject[2].Stage__c = 'Closed Lost - Project Lost';
+       // olstTestProject[0].owid
+        try{    
+    insert olstTestProject ;
+        }catch(DMLEXCEPTION e){}
+
+    
+     olstTerritoryMastereCode2 = TestDataUtility.getTerritoryMaster() ;
+    olstTerritoryMastereCode2[0].user__c = testUser2.Id ;
+    olstTerritoryMastereCode2[1].user__c = testUser2.Id ;
+    olstTerritoryMastereCode2[1].Zip_Code__c = '12345' ;
+    olstTerritoryMastereCode2[1].Country__c = 'United States' ;
+    insert olstTerritoryMastereCode2 ;
+    olstTerritoryMastereCode2[1].user__c = testUser1.Id ;
+    update olstTerritoryMastereCode2 ;
+    
+    
+    objectsOwnerUpdatefromZip.assignobjectowner(olstTerritoryMastereCode, olstTerritoryMastereCode2);
+    }
+  }
+    
+   /* 
+static testMethod void testobjectsOwnerUpdatefromZip3(){
     testUser1 = TestDataUtility.createUser('System Administrator', 'testUser1@test.com');
     insert testUser1 ;
     
@@ -194,12 +275,12 @@ Lead l = new Lead();
         l.project_name__c = 'Test Proj';
         l.FirstName = 'testfirst';
         l.LastName = 'testlast';
-        l.PostalCode = '12345';
-        l.CountryCode = 'US';
+        l.PostalCode = ''; 
+        l.CountryCode = 'United States';
         l.Type_of_record__c = 'Commercial';
         l.Project_Application_Industry__c = 'Automotive';
         l.Project_Application__c = 'Dealership';
-        l.Project_Site_Zip_Code__c= '94040';
+        l.Project_Site_Zip_Code__c= '07007';
         l.OwnerId = testUser1.Id ;
         l.isConverted= false ;
 insert l;
@@ -226,7 +307,7 @@ insert l;
              p1.Application_2__c = 'Dealership';
              p1.Project_Zip_Code__c = '94040' ;
              p1.OwnerId = testUser1.Id;
-             p1.Stage__c = 'Closed won - Order Signed';
+             p1.Stage__c = 'Closed Lost - Project Cancelled';
             insert p1;
 }
 }

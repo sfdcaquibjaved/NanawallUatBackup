@@ -28,6 +28,7 @@ public static list < Zip_Codes_Master__c > territorymaster;
         insert a;
         
         Contact con = new Contact();
+        con.AccountID = a.id;
         con.SyncInProgress__c = false;
         con.FirstName = 'foo';
         con.LastName = 'bar';
@@ -276,7 +277,8 @@ o.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('
         con.MailingPostalCode = '08619';
         con.MailingCountryCode = 'US';
         con.email = 'one@testorg.com';
-    
+            con.AccountID = a.id;
+
         insert con;
         
          System.runas(user1){

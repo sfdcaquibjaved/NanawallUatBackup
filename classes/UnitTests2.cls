@@ -14,17 +14,7 @@ public with sharing class UnitTests2 {
         z=TestDataUtility.getTerritoryMaster();
         insert z;
     	
-		List<Contact> conts = new List<Contact>(); 
-		Contact c = new Contact();
-		c.FirstName = 'TestFirst';
-		c.LastName = 'TestLast';
-		c.MailingPostalCode = '12345';
-		c.MailingCountryCode = 'US';
-//		c.Zip__c = '1';
-//		c.Country__c = 'USA';
-		conts.add(c);
-
-        insert conts;        
+		 
         
         List<Opportunity> opps2 = new List<Opportunity>();
         Opportunity o = new Opportunity();
@@ -35,13 +25,6 @@ public with sharing class UnitTests2 {
         o.Postal_Code__c = 'TEST';
         opps2.add( o );  
         insert opps2;
-        
-        
-        List<nrOpportunityContactRole__c> ocrs = new List<nrOpportunityContactRole__c>();
-		nrOpportunityContactRole__c ocr = new nrOpportunityContactRole__c();
-		ocr.Opportunity__c = opps2[0].id;
-		ocr.Contact__c = conts[0].id;
-        ocrs.add( ocr );
         
         List<nrOpportunityTeamMember__c> otms = new List<nrOpportunityTeamMember__c>();
         nrOpportunityTeamMember__c nrotm = new nrOpportunityTeamMember__c();        
@@ -63,7 +46,26 @@ public with sharing class UnitTests2 {
         accs.add(a); 
         insert accs; 
         
+        List<Contact> conts = new List<Contact>(); 
+		Contact c = new Contact();
+		c.FirstName = 'TestFirst';
+		c.LastName = 'TestLast';
+		c.MailingPostalCode = '12345';
+		c.MailingCountryCode = 'US';
+        c.AccountId = accs[0].id;
+//		c.Zip__c = '1';
+//		c.Country__c = 'USA';
+		conts.add(c);
+
+        insert conts;       
+        
         Account acc = [SELECT id FROM Account LIMIT 1 ];
+        
+        List<nrOpportunityContactRole__c> ocrs = new List<nrOpportunityContactRole__c>();
+		nrOpportunityContactRole__c ocr = new nrOpportunityContactRole__c();
+		ocr.Opportunity__c = opps2[0].id;
+		ocr.Contact__c = conts[0].id;
+        ocrs.add( ocr );
         
     	//end objects
     	
@@ -187,15 +189,29 @@ public with sharing class UnitTests2 {
         lcc.ConvertLead(convertacc.id);  
 /* */       
 
+        Project__c p1 = new Project__c();
+         p1.Name = 'Test Project CompetitorHelper_Test';
+         p1.Application__c = 'Automotive';
+         p1.Application_2__c = 'Dealership';
+         p1.Stage__c = 'Considered';
+         p1.Project_Zip_Code__c = '94040' ;
+         insert p1;
+        
         Quote__c q = new Quote__c();
         q.Opportunity__c = opps2[0].Id;
         q.Contact__c = conts[0].id;
-        q.Quote_ID__c = 999999;
+        q.Name = 'Test Quote';
+       // q.Quote_ID__c = 999999;
+        q.Primary_Quote__c=True;
+         q.Project__c = p1.id;
+         q.Shipping_Min__c = 12;
         string id='';
         try{
         insert q;
         id=q.id;
-        }catch (Exception ex){}
+        }catch (Exception ex){
+            System.debug('Exception is:'+ex);
+        }
         
         Quote_Detail__c qd = new Quote_Detail__c();
         qd.Code__c = '';
@@ -227,8 +243,9 @@ public with sharing class UnitTests2 {
 	        delete otms;
 		}  catch( Exception ex ) {}
 
-        delete accs;
         delete conts;
+        delete accs;
+        
         delete opps2;
         
    test.stopTest(); }

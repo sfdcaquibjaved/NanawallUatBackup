@@ -41,5 +41,44 @@
         }
        }
      
+     static testMethod void QuoteVisitRequestMethod2(){
+      
+        zipcode=TestDataUtility.getTerritoryMaster();
+       // insert zipcode;
+        accounts=TestDataUtility.createAccountTestData();
+       // insert accounts;
+        
+        contacts=TestDataUtility.createConTestData();
+       // contacts[0].AccountID = accounts[0].id;
+      //  insert contacts[0];        
+        
+        
+       
+       // project=TestDataUtility.createProjectTestData();
+       // insert project;
+       //
+       // 
+     list<Project__c>  project= new list<Project__c>();
+         project[0].name='hey';
+         insert project;
+       
+         //   project=TestDataUtility.createProjectTestData();
+       // insert project; 
+       
+         opportunity=TestDataUtility.createOppTestData();
+        insert opportunity;
+        
+        quote=TestDataUtility.createQuoteRecords(opportunity);
+        
+       // insert quote;
+        
+        test.startTest();
+        QuoteVisitRequest.CreatePreInstallation(quote[0].id,project[0].id,contacts[0].id);
+        test.stopTest();
+    
+  
+ 
+       }
+     
     
 }

@@ -1,4 +1,4 @@
-global class normalizeContactRoles implements Database.Batchable<sObject>{
+global class normalizeContactRoles /* implements Database.Batchable<sObject>*/ { /*
     
     global Database.QueryLocator start(Database.BatchableContext BC)
     {
@@ -77,6 +77,6 @@ global class normalizeContactRoles implements Database.Batchable<sObject>{
          }
     global void finish(Database.BatchableContext BC)
     {
-    }
+    } */
 
 }

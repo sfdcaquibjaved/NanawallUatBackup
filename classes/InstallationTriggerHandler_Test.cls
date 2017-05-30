@@ -563,7 +563,7 @@ public class InstallationTriggerHandler_Test {
      Method:myUnitTest3
      ******/
     
-    public static testMethod void myUnitTest4(){
+    /*public static testMethod void myUnitTest4(){
        
         insert new Zip_Code_Range_for_Paul_Nalette__c(Name = 'Zip Range',Start_Value__c = 40000,End_Value__c = 48000);
         insert new Zip_Code_Range_for_Bill_Leon__c(Name = 'Northern NJ',Zip_Code_del__c = 7000,Zip_Code_End_Value__c = 8999);
@@ -692,7 +692,7 @@ public class InstallationTriggerHandler_Test {
        insert inst ; 
               Test.stopTest() ;  
         
-    }  
+    }  */
     
     public static testMethod void myUnitTest5(){
     

@@ -3,12 +3,10 @@ Apex Test Class: ProjectCommissionsBatch
 Description: This class is used to run the batch on the project to insert project Split records .
 Created Date: July 13thth , 2015            
 ***********************************************************************/
-global class ProjectCommissionsBatch implements Database.Batchable<sObject>{
-     /*************************************************
-    Method Name: start
-    Description: This method is used to query the records on which the Batch is going to run 
-    Input Parameter: Batchable Context
-    *************************************************/
+global class ProjectCommissionsBatch /* implements Database.Batchable<sObject> */ { /*
+     
+   // Description: This method is used to query the records on which the Batch is going to run 
+    
     global Database.QueryLocator start(Database.BatchableContext BC)
     {
         //Constructing the query
@@ -18,11 +16,9 @@ global class ProjectCommissionsBatch implements Database.Batchable<sObject>{
         return Database.getQueryLocator(query);
     }
   
-    /*************************************************
-    Method Name: execute
-    Description: This method created the Project Split records for all the records queried
-    Input Parameter: Batchable Context , List of Project
-    *************************************************/
+    
+  //  Description: This method created the Project Split records for all the records queried
+   
     global void execute(Database.BatchableContext BC, List<Project__c> scope)
     {
          map<String,project_split__c> projSplitMap = new map<String,project_split__c>();       
@@ -111,5 +107,5 @@ global class ProjectCommissionsBatch implements Database.Batchable<sObject>{
     }        
     global void finish(Database.BatchableContext BC)
     {
-    }
+    } */
 }
