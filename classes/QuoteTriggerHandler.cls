@@ -16,7 +16,7 @@ public class QuoteTriggerHandler {
          Input Parameter: List of Quote
          Created Date   : August 2016
          */
-    
+    /*
     public static void CreateInstallation(List < Quote__c > newTrigger) {
         list<Installation__c> lstInstallation = new list<Installation__c>();
         set<ID> cotactID = new set<ID> () ;
@@ -60,7 +60,7 @@ public class QuoteTriggerHandler {
     }
     
 
-    
+    */
    
     
 

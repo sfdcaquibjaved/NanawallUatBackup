@@ -583,11 +583,20 @@ public class CaseCommentEmailHelper_Test {
 
         Cases[0].Ship_To__c = 'Other';
         update cases;
+        
+        
+        //Creating Tax Rates
+        
         //Create a Service Quote
         Service_Quote__c sqt = new Service_Quote__c();      
         sqt.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt.Case__c = cases[0].id; 
+        sqt.Ship_To_State__c = 'ARKANSAS';
         insert sqt;
+        
+        sqt.Ship_To_State__c ='Alberta';
+        update sqt ; 
+        
 		Service_Quote__c sqt1 = new Service_Quote__c(); 
      	sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt1.Case__c = cases[0].id; 

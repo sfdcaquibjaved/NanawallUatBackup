@@ -130,7 +130,17 @@ global class AttachmentUtility {
         {
             system.debug('Exception is ' +e);
         }
-        
+        set<Id>Insformids = new set<Id>();
+        for(FeedItem fi:FeedItemContentList){
+            Insformids.add(fi.ParentId);
+        }
+        List<Installation_Form__c>inflist = [Select id, Name, Signature_Check__c from Installation_Form__c where id in:Insformids];
+        if(inflist.size()>0){
+            for(Installation_form__c iform:inflist){
+                iform.Signature_Check__c = true;
+            }
+        }
+        update inflist;
     }
     /*  
          Method Name    : moveuploads

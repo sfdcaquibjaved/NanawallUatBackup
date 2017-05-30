@@ -15,7 +15,7 @@ public class QuoteToInstaller {
          Created Date   : August 2016
          */
     public static void SendQuote(List < Quote__c > newTrigger) {
-        List < Messaging.SingleEmailMessage > mails = new List < Messaging.SingleEmailMessage > ();
+       /* List < Messaging.SingleEmailMessage > mails = new List < Messaging.SingleEmailMessage > ();
         List < string > toAddresses = new List < string > ();
         for (Quote__c q: newTrigger) {
             Messaging.EmailFileAttachment attach = new Messaging.EmailFileAttachment();
@@ -44,7 +44,7 @@ public class QuoteToInstaller {
             } catch (exception e) {
                 system.debug('Exception is:' + e);
             }
-        }
+        }*/
     }
     
     /*  

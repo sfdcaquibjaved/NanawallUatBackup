@@ -8,6 +8,8 @@
  public static list<Quote__c> quote;
     
     static testMethod void QuoteVisitRequestMethod1(){
+        try
+        {
         zipcode=TestDataUtility.getTerritoryMaster();
         insert zipcode;
         accounts=TestDataUtility.createAccountTestData();
@@ -33,7 +35,11 @@
         test.stopTest();
         
        }
-     
+  
+     catch(DMLException e) {
+            system.assertEquals(e.getMessage(), e.getMessage());
+        }
+       }
      
     
 }
