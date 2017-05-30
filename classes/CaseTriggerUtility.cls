@@ -102,4 +102,24 @@ public class CaseTriggerUtility {
 
         
     }
+    
+    /*********************************************
+    Method: EmailToCaseDelete
+    Purpose: Delete Case created by Email to Case
+    Related Triggers:CaseTrigger
+    **********************************************/
+    @future
+    public static void EmailToCaseDelete(list<ID> caselist){
+        system.debug('I am inside EmailToCaseDelete');
+        if(caselist.size() > 0 ){
+           	system.debug('Value of caseList' +caseList);
+            Database.delete(caseList);
+            
+        }
+        
+    }
+    
+    
+    
+    
 }

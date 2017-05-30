@@ -251,7 +251,7 @@ public class createNewProject_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+       //  qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;

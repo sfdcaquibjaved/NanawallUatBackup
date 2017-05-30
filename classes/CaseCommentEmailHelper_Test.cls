@@ -534,7 +534,6 @@ public class CaseCommentEmailHelper_Test {
      unitTest4
      */
     public static testMethod void myUnitTest6() {
-        test.startTest();
         
         //Creating test data for Territory mASTER
         territorymaster = TestDataUtility.getTerritoryMaster();
@@ -580,7 +579,8 @@ public class CaseCommentEmailHelper_Test {
         cases[0].Dummy__c = true;
         cases[0].Ship_To__c = 'Other';       
         insert cases;
-        
+                test.startTest();
+
         Cases[0].Ship_To__c = 'Other';
         update cases;
         //Create a Service Quote
@@ -612,5 +612,5 @@ public class CaseCommentEmailHelper_Test {
         }       
         
         Test.stopTest();
-    }
+    } 
 }

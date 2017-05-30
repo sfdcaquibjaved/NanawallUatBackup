@@ -2,36 +2,6 @@
 public class ServiceQuote_Home_Controller4_Test {
     
     public static testMethod void projectDetail() {
-        
-        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
-        
         //Create Test Data
         profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -191,7 +161,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+//         qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -378,16 +348,6 @@ public class ServiceQuote_Home_Controller4_Test {
         
          test.startTest();
         
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
-        
          order order1=new order();
          order1.AccountId=acc.id;
          order1.BillingState = 'New York';
@@ -500,35 +460,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
      public static testMethod void projectDetail1() {
-         
-         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
         
          profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -677,7 +608,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+         //qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -863,17 +794,6 @@ public class ServiceQuote_Home_Controller4_Test {
          insert qList;
         
          test.startTest();
-         
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
-         
          order order1=new order();
          order1.AccountId=acc.id;
          order1.BillingState = 'New York';
@@ -979,35 +899,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
     public static testMethod void projectDetail2() {
-        
-         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
         
          profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -1155,7 +1046,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+         //qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -1340,16 +1231,6 @@ public class ServiceQuote_Home_Controller4_Test {
          qList.add(qt);
          insert qList;
         
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
-        
          order order1=new order();
          order1.AccountId=acc.id;
          order1.BillingState = 'New York';
@@ -1438,35 +1319,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
        public static testMethod void projectDetail3() {
-           
-        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
         
          profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -1615,7 +1467,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+         //qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -1799,17 +1651,6 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Opportunity__c=oppList[0].id;
          qList.add(qt);
          insert qList;
-           
-           
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
         
          order order1=new order();
          order1.AccountId=acc.id;
@@ -1911,35 +1752,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
     public static testMethod void projectDetail4() {
-        
-        Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
         
          profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -2087,7 +1899,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+         //qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -2273,17 +2085,6 @@ public class ServiceQuote_Home_Controller4_Test {
          insert qList;
          
          test.startTest();
-        
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
-         
          order order1=new order();
          order1.AccountId=acc.id;
          order1.BillingState = 'New York';
@@ -2386,35 +2187,6 @@ public class ServiceQuote_Home_Controller4_Test {
     }
     
       public static testMethod void projectDetail5() {
-          
-          Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
         
          profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -2562,7 +2334,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+        // qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -2747,18 +2519,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qList.add(qt);
          insert qList;
         
-         test.starttest();
-         
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
-         
+         test.starttest();   
          order order1=new order();
          order1.AccountId=acc.id;
          order1.BillingState = 'New York';
@@ -2859,35 +2620,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
         public static testMethod void ProjectDetail6() {
-            
-         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
-        mo.Name = 'Richmond';
-        //mo.LatestNumber__c = 40200;
-        mo.LatestOrderNumber__c='40209';
-        insert mo;
-        
-        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
-        mo1.Name = 'Solarlux';
-        //mo1.LatestNumber__c = 20001;
-        mo1.LatestOrderNumber__c='20017';
-        insert mo1;
-        
-        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
-        mo2.Name = 'Teuffel';
-        //mo2.LatestNumber__c = 75400;
-        mo2.LatestOrderNumber__c='75401';
-        insert mo2;
-        
-        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
-        mo3.Name = 'Wizard';
-        //mo3.LatestNumber__c = 97000;
-        mo3.LatestOrderNumber__c='97001';
-        insert mo3;
-        
-        ModelManufacturer__c mm=new ModelManufacturer__c();
-        mm.Name='HSW 45';
-        mm.Manufacturer__c='Solarlux';
-        insert mm;
         
          profile prof = [select id from Profile where name = 'Standard User'];
          
@@ -3037,7 +2769,7 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Balanced_Received_Date__c=date.today();
          qt.Balance_Received__c=20.66;
          qt.CAD_Opened__c=system.now();
-         qt.CAD_Sent__c=system.now();
+        // qt.CAD_Sent__c=system.now();
          qt.CAD_Viewed__c=false;
          qt.Canadian_Tax_Status__c='Company';
          qt.Cancelled__c=true;
@@ -3221,18 +2953,8 @@ public class ServiceQuote_Home_Controller4_Test {
          qt.Opportunity__c=oppList[0].id;
          qList.add(qt);
          insert qList;
-            
-         
-         Quote q1 = new Quote();
-         q1.Name = 'Test Quote';
-         q1.OpportunityId = oppList[0].Id;
-         q1.Nana_Quote__c = qList[0].Id;
-         q1.First_Threshold_Price__c = 1;        
-         q1.ContactId = Con.id;
-         q1.Tax = 1.0;
-         q1.Order_Number__c = 12345;
-         insert q1;
         
+            
          order order1=new order();
          order1.AccountId=acc.id;
          order1.BillingState = 'New York';

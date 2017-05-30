@@ -147,29 +147,14 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
  /************************Delete the cases which are created by Email to case Functionality*************/   
     
 
-if(trigger.isAfter && trigger.isInsert){
-    List<Case> casesToDelete=new List<Case>();
-   	Group Queuename=[select Id from Group where Name = 'EmailtoSalesforce' and Type = 'Queue'];
- 
-    for(case record: Trigger.new){
-       
-        if(record.ownerId==Queuename.Id){
-            		casesToDelete.add(record);
-			}
-	}
-    
-    if(casesToDelete.size() > 0 ){
-        try{
-        		delete casesToDelete;
+    if(trigger.isAfter && ((trigger.isInsert) ) ){
+       list<ID> caseDelete = new list<ID>();
+        for(case c:trigger.new){
+            if(c.OwnerId ==[select Id from Group where Name = 'EmailtoSalesforce' and Type = 'Queue'].ID){
+                caseDelete.add(c.ID);
+            }
+            
         }
-        catch(exception e){
-           		 system.debug('Exception is:' + e.getMessage());
-        }
-    }
-    
-	}    
-    
- 
-    
-    
+        caseTriggerUtility.EmailToCaseDelete(caseDelete);	
+    }       
 }

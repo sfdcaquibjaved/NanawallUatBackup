@@ -67,7 +67,8 @@
                <apex:outputLabel value="Ordering Account :"/><apex:inputText value="{!ordFilter}"/>
               </apex:panelGrid>
               
-            <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" reRender="Acc_proj,acc_withoutprj" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem> 
+            <!-- reRender="Acc_proj,acc_withoutprj" -->
           </apex:pageBlockSection>
       
      
@@ -86,7 +87,7 @@
                  </apex:pageBlockSection>
    </apex:pageBlock>
       <!---------------End Section------------ -->
-  <apex:PageBlock id="Acc_proj" >    
+  <apex:PageBlock > <!-- <apex:PageBlock id="Acc_proj" > -->    
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
@@ -248,7 +249,7 @@
      </apex:pageBlockSection> 
    </apex:pageBlock>
     
-       <apex:PageBlock id="acc_withoutprj" >  
+       <apex:PageBlock >  <!-- <apex:PageBlock id="acc_withoutprj" >  -->
     <apex:pageBlockSection title="{!AccSiteList.size} records found without Projects." collapsible="false"/>    
      <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
          <apex:pageBlockTable var="ac" value="{!AccSiteList}">

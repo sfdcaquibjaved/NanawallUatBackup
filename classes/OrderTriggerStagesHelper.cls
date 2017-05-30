@@ -533,13 +533,14 @@ public with sharing class OrderTriggerStagesHelper{
        system.debug(mapQuoteModel.get(string.valueof(oNew.NanaQuote__c)));
                //check if manufacturing is from richmond and assign ordernumber with incremental value
                //based  on model get the manufacturer from custom settings
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000 && rd<75000)){
+                if(rd != null && ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000 && rd<75000)){
                     
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name=string.valueof(rd+1);
                     oNew.Manufacturing__c='Richmond';
                      //store incremental value 
-                    rd =decimal.valueOf(oNew.Name);
+                     
+                    //rd =decimal.valueOf(oNew.Name);
                     system.debug('Richmonddata'+ oNew.Manufacturing__c+oNew.Name+rd);
                     counterR+=1;
                 }
@@ -549,18 +550,18 @@ public with sharing class OrderTriggerStagesHelper{
                         oNew.Name='40200';
                     oNew.Manufacturing__c='Richmond';
                      //store incremental value 
-                    rd =decimal.valueOf(oNew.Name);
+                    //rd =decimal.valueOf(oNew.Name);
                     counterR+=1;
                     system.debug('Richmonddata'+ oNew.Manufacturing__c+oNew.Name+rd);
 
                 }
                 //check if manufacturing is from solarlux and assign ordernumber with incremental value
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux') && (sd >=20000 && sd<40000)){
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux') && sd!=null && (sd >=20000 && sd<40000)){
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))  
                         oNew.Name=string.valueof(sd+1);
                     oNew.Manufacturing__c='Solarlux';
                     //store incremental value 
-                    sd = decimal.valueOf(oNew.Name);
+                   // sd = decimal.valueOf(oNew.Name);
                     system.debug('solardata'+ oNew.Manufacturing__c+oNew.Name+sd);
                     counterS+=1;
                   
@@ -570,18 +571,19 @@ public with sharing class OrderTriggerStagesHelper{
                         oNew.Name='20000';
                     oNew.Manufacturing__c='Solarlux';
                      //store incremental value 
-                    sd = decimal.valueOf(oNew.Name);
+                     system.debug('@@@@@@@@@123  '+onew.name);
+                    //sd = decimal.valueOf(oNew.Name);
                     system.debug('solardata'+ oNew.Manufacturing__c+oNew.Name+sd);
                      counterS+=1;
                 }
                 //check if manufacturing is from teuffel and assign ordernumber with incremental value
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Teuffel') && (td>=75000 && td<90000)){
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Teuffel') &&Td != null && (td>=75000 && td<90000)){
                 
                    oNew.Manufacturing__c='Teuffel';
                    if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name=string.valueof(td+1);
                      //store incremental value 
-                    td = decimal.valueOf(oNew.Name);
+                    //td = decimal.valueOf(oNew.Name);
                     system.debug('Rtueffeldata'+ oNew.Manufacturing__c+oNew.Name+td);
                      counterT+=1;
                   
@@ -591,17 +593,17 @@ public with sharing class OrderTriggerStagesHelper{
                             oNew.name='75400';
                         oNew.Manufacturing__c='Teuffel';
                      //store incremental value 
-                    td = decimal.valueOf(oNew.Name);
+                    //td = decimal.valueOf(oNew.Name);
                     system.debug('Rtueffeldata'+ oNew.Manufacturing__c+oNew.Name+td);
                      counterT+=1;
                 }
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('seiki')&& (wd>=97000 && wd<99000)){
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('seiki')&& wd!=null && (wd>=97000 && wd<99000)){
                 
                    oNew.Manufacturing__c='Seiki';
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name=string.valueof(wd+1);
                      //store incremental value 
-                    wd = decimal.valueOf(oNew.Name);
+                    //wd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                    counterW+=1;
                 }
@@ -611,7 +613,7 @@ public with sharing class OrderTriggerStagesHelper{
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name=string.valueof(wd+1);
                      //store incremental value 
-                    wd = decimal.valueOf(oNew.Name);
+                   // wd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                    counterW+=1;
                 }
@@ -621,17 +623,17 @@ public with sharing class OrderTriggerStagesHelper{
                         oNew.Name='97000';
                     oNew.Manufacturing__c='Wizard';
                      //store incremental value 
-                    wd = decimal.valueOf(oNew.Name);
+                   // wd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+wd);
                      counterW+=1;
                 }
-                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('VQ') && (vd>=93000 && vd<97000)){
+                if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('VQ') && vd != null && (vd>=93000 && vd<97000)){
                 
                    oNew.Manufacturing__c='VQ';
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name=string.valueof(vd+1);
                      //store incremental value 
-                    vd = decimal.valueOf(oNew.Name);
+                    //vd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+vd);
                    //counterW+=1;
                 }
@@ -640,7 +642,7 @@ public with sharing class OrderTriggerStagesHelper{
                         oNew.Name='93000';
                     oNew.Manufacturing__c='VQ';
                      //store incremental value 
-                    vd = decimal.valueOf(oNew.Name);
+                    //vd = decimal.valueOf(oNew.Name);
                     system.debug('Wizarddata'+ oNew.Manufacturing__c+oNew.Name+vd);
                      //counterW+=1;
                 }

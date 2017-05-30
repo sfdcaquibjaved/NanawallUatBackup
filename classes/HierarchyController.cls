@@ -311,7 +311,8 @@ public class HierarchyController{
         
         String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
                query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
+               query1+='(Select Id, Name, AccountId,Project_Name__c,Project_Name__r.Ordering_Account__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\') AND (Project_Name__r.Ordering_Account__c!=null) )';
+               /*query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Complete%\') AND (NOT StageName LIKE \'%Influencer%\') AND )';*/
                query1+=' FROM Project__c';
                query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
                query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
@@ -529,13 +530,13 @@ public class HierarchyController{
             cnt = 0;
             
             if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
-            if(prjFilter!=''){prjFilter = prjFilter; cnt++;} 
+            if(prjFilter!=''){prjFilter = prjFilter.trim(); cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
             if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
             if(project_drp_Stage!='' && project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
-            if(archFilter!=''){archFilter = archFilter; cnt++;}
+            if(archFilter!=''){archFilter = archFilter.trim(); cnt++;}
             if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
             
@@ -545,7 +546,7 @@ public class HierarchyController{
                 flag++; 
             
             if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
-                if(hr.ProjectName.Name.containsOnly(prjFilter) || hr.architect.Name.contains( prjFilter))
+                if( hr.ProjectName.Name.containsIgnoreCase( prjFilter))
                     flag++;
 
             if(cityFilter!='' && hr.projectCity!=null) 
