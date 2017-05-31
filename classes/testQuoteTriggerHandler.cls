@@ -36,6 +36,7 @@ public class testQuoteTriggerHandler {
         con.MailingstateCode = 'CA';
         con.MailingPostalCode = '12345';
         con.MailingCountryCode = 'US';
+        con.AccountID = a.id;
         insert con;
         
         Project__c p1 = new Project__c();

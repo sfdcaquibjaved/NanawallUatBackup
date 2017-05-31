@@ -2,7 +2,7 @@
 public class ServiceQuote_Home_Controller4_Test {
     
     public static testMethod void projectDetail() {
-        test.startTest();
+        
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -74,6 +74,7 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+        test.startTest();
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;
@@ -216,7 +217,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
      public static testMethod void projectDetail1() {
-         test.startTest();
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -288,6 +288,7 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+                  test.startTest();
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;
@@ -425,7 +426,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     public static testMethod void projectDetail2() {
         
-          test.startTest();
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -497,6 +497,7 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+                  test.startTest();
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;
@@ -622,7 +623,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     
        public static testMethod void projectDetail3() {
-        test.startTest();
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -694,6 +694,7 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+                   test.startTest();
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;
@@ -833,7 +834,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
     public static testMethod void projectDetail4() {
         
-         test.startTest();
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -905,6 +905,8 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+                 test.startTest();
+
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;
@@ -1038,7 +1040,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
       public static testMethod void projectDetail5() {
         
-            test.startTest();
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -1110,6 +1111,7 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+                      test.startTest();
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;
@@ -1241,7 +1243,6 @@ public class ServiceQuote_Home_Controller4_Test {
     
         public static testMethod void ProjectDetail6() {
         
-                test.startTest();
         Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
         mo.Name = 'Richmond';
         //mo.LatestNumber__c = 40200;
@@ -1313,6 +1314,7 @@ public class ServiceQuote_Home_Controller4_Test {
          o.Country__c = 'USA';
          o.Postal_Code__c = 'TEST';
          insert o;
+                            test.startTest();
          Quote__c q = new Quote__c();
          q.Name = 'Test Quote';
          q.Opportunity__c = o.Id;

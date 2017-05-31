@@ -84,7 +84,7 @@ trigger Quote_Delete on Quote__c (after delete, before delete) {
             {
             
                 integer adjustedQuoteCount = 0;
-system.debug('Opportunity ' + OppId + ' has ' + TriggerVariables.Opportunity_To_QuoteList.get(OppID).size() + ' total quotes to check');
+				system.debug('Opportunity ' + OppId + ' has ' + TriggerVariables.Opportunity_To_QuoteList.get(OppID).size() + ' total quotes to check');
                 for( Id qId  : TriggerVariables.Opportunity_To_QuoteList.get(OppID) )
                 {
                     if( deletingQuotes.contains(qId) )
