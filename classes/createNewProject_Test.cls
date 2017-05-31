@@ -371,74 +371,6 @@ public class createNewProject_Test {
     }
     public  static testMethod void myUnitTest2() {
         
-        /* project__c newProject =new project__c();
-        newProject.Stage__c='Prospecting';
-        //newProject.RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Residential Project').getRecordTypeId();
-        newProject.Application__c='Automotive';
-        newProject.Application_2__c='Other';
-        newProject.Project_Country__c='United States';
-        newProject.Project_Zip_Code__c='12345';
-        insert newProject;*/
-        
-       /* list<Project__c> projList=new list<Project__c>();
-         Project__c proj = new Project__c();
-         proj.Name='Test Project';
-         proj.RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Residential Project').getRecordTypeId();
-         proj.Actual_Project_Need_Date__c=date.today();
-         proj.Amount__c=10;
-         proj.Architect_Considered__c=true;
-         proj.Architect_On_Project__c=true;
-         proj.Award_Date__c=date.today();
-         proj.Bid_Date__c=date.today();
-         proj.Budget_Quote_Provided__c=true;
-         proj.Choices__c='NoValue';
-         proj.Corporate_Account__c=true;
-         proj.Dodge_Number__c='123';
-         proj.Installer_Email_Viewed__c=true;
-         proj.Lead_Source__c='cold';
-         proj.Model_Home__c=true;
-         proj.Nearby_Showrooms__c=12;
-         proj.Office_Interior__c=true;
-         proj.OldProjectId__c='abc';
-         proj.Opportunity_ID__c='test old';
-         //proj.Opportunity_Name__c=opp1.id;
-         proj.Estimated_Project_Need_Date__c=date.today();
-         proj.Expected_Install_Date__c=date.today();
-         proj.Expected_Open_Date__c=date.today();
-         proj.Explicit_Score__c='a';
-         proj.HighRise__c=true;
-         proj.How_Many_Models__c='4';
-         proj.Preliminary_Drawings_Date__c=date.today();
-         proj.Preliminary_Drawings__c=true;
-         proj.Prizm_4__c=4;
-         proj.Project_City__c='city';
-         proj.Project_Country__c='United States';
-         proj.Project_Has_Competitor__c=true;
-         proj.Project_Implicit_Score__c=5;
-         proj.Project_State__c='Indiana';
-         proj.Project_Street_Address__c='street address';
-         proj.Public_Spec_d_Job__c=true;
-         proj.Publicly_Specified_Jobs__c='Nana only';
-         proj.Purchasing_Method__c='Glass House';
-         proj.Reason_Project_Lost__c='Competitor';
-         proj.Residential_Vertical__c=true;
-         proj.Sale_Resulting_From_Model__c=true;
-         proj.Stage__c='Design';
-         proj.Use_Ordering_Account_Address__c=true;
-         proj.Use_Project_Address__c=true;
-         proj.Use_Shipping_Address__c=true;    
-         proj.Web_Project__c=true;
-         proj.Split_Stage__c='New Order';
-         proj.Influencer_Count__c=3;    
-         proj.Opportunity_Count__c=3;
-         proj.TerritoryName__c='territory';
-         proj.Application__c='Automotive';
-         proj.Application_2__c='Other';
-         proj.Project_Zip_Code__c='12345';
-         //proj.accountid=acc.id;
-         proj.Close_Date__c=Date.newInstance(2016, 12, 12);
-         projList.add(proj);
-         insert projList;*/
         
          profile p = [select id from Profile where name = 'Standard User'];
          
@@ -557,9 +489,9 @@ public class createNewProject_Test {
          proj.Influencer_Count__c=3;    
          proj.Opportunity_Count__c=3;
          proj.TerritoryName__c='territory';
-         proj.Application__c='Automotive';
+         proj.Application__c='Multifamily - remodel';
         // proj.Application__c=''
-         proj.Application_2__c='Other';
+         proj.Application_2__c='Living Room';
          proj.Primary_Campaign_Source__c=camp.Id;
          proj.Project_Coordinator__c=u.id;
          proj.Ultimate_Parent__c=acc.id;
@@ -814,7 +746,7 @@ public class createNewProject_Test {
         createNew.getrecType();
         createNew.getAppItems();
         createNew.getApplications();
-        createNew.createproject();
+       // createNew.createproject();
         
         
     }

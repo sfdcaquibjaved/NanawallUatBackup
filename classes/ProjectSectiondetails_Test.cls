@@ -105,7 +105,6 @@ public class ProjectSectiondetails_Test {
         con.add(c2);
         insert con[2];*/
 
- Test.startTest();
 
         list < Project__c > Pro = new list < Project__c > ();
         Project__c proj = new Project__c();
@@ -429,7 +428,8 @@ public class ProjectSectiondetails_Test {
         qt.Opportunity__c = oppList[0].id;
         qt.Stage__c = 'Open';
         qList.add(qt);
-          
+           Test.startTest();
+
         insert qList;
         
         

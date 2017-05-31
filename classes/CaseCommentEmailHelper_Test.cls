@@ -336,10 +336,10 @@ public class CaseCommentEmailHelper_Test {
         sqt.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt.Case__c = cases[0].id; 
         insert sqt;
-		Service_Quote__c sqt1 = new Service_Quote__c(); 
-     	sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
+        Service_Quote__c sqt1 = new Service_Quote__c(); 
+        sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt1.Case__c = cases[0].id; 
-     	insert sqt1;
+        insert sqt1;
      
         //Create a Service Part
         spartList = TestDataUtility.createServicePartTestData();
@@ -421,10 +421,10 @@ public class CaseCommentEmailHelper_Test {
         sqt.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt.Case__c = cases[0].id; 
         insert sqt;
-		Service_Quote__c sqt1 = new Service_Quote__c(); 
-     	sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
+        Service_Quote__c sqt1 = new Service_Quote__c(); 
+        sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt1.Case__c = cases[0].id; 
-     	insert sqt1;
+        insert sqt1;
         
         //Create a Service Part
         spartList = TestDataUtility.createServicePartTestData();
@@ -505,10 +505,10 @@ public class CaseCommentEmailHelper_Test {
         sqt.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt.Case__c = cases[0].id; 
         insert sqt;
-		Service_Quote__c sqt1 = new Service_Quote__c(); 
-     	sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
+        Service_Quote__c sqt1 = new Service_Quote__c(); 
+        sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt1.Case__c = cases[0].id; 
-     	insert sqt1;
+        insert sqt1;
         //Create a Service Part
         spartList = TestDataUtility.createServicePartTestData();
         try{
@@ -531,7 +531,7 @@ public class CaseCommentEmailHelper_Test {
         Test.stopTest();
     }
         /*
-     unitTest4
+     unitTest6
      */
     public static testMethod void myUnitTest6() {
         
@@ -586,6 +586,15 @@ public class CaseCommentEmailHelper_Test {
         
         
         //Creating Tax Rates
+        TaxRate__c TR = new TaxRate__c() ; 
+        TR.State__c = 'Alberta';
+        TR.Service_Quote_Tax_Rate__c = 5 ;
+        insert TR ;
+        
+        TaxRate__c TR1 = new TaxRate__c() ; 
+        TR1.State__c = 'ARKANSAS';
+        TR1.Service_Quote_Tax_Rate__c = 5 ;
+        insert TR1 ;
         
         //Create a Service Quote
         Service_Quote__c sqt = new Service_Quote__c();      
@@ -595,12 +604,15 @@ public class CaseCommentEmailHelper_Test {
         insert sqt;
         
         sqt.Ship_To_State__c ='Alberta';
+       
         update sqt ; 
         
-		Service_Quote__c sqt1 = new Service_Quote__c(); 
-     	sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
+        Service_Quote__c sqt1 = new Service_Quote__c(); 
+        sqt1.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
         sqt1.Case__c = cases[0].id; 
-     	insert sqt1;
+        insert sqt1;
+         
+        
         //Create a Service Part
         spartList = TestDataUtility.createServicePartTestData();
         try{
@@ -622,4 +634,107 @@ public class CaseCommentEmailHelper_Test {
         
         Test.stopTest();
     } 
+    
+     public static testMethod void myUnitTest7() {
+        
+        //Creating test data for Territory mASTER
+        territorymaster = TestDataUtility.getTerritoryMaster();
+        insert territorymaster;
+        
+        //Creating test data for user
+        testUser = TestDataUtility.createUser('Standard User', 'testUserName@testing.com');
+        insert testUser;
+        
+        //Creating test data for Countrys
+        countrys = TestDataUtility.getTestCountryCodes();
+        insert countrys;
+        
+        //Creating test data for states
+        states = TestDataUtility.getTestStateCodes();
+        insert states;
+
+        //Create an Account 
+        accounts = TestDataUtility.createAccountTestData();
+        accounts[0].ShippingState = '';
+        accounts[0].ShippingCountryCode='US';
+        accounts[0].ShippingPostalCode='12345';
+        try{
+        insert accounts;
+        }catch(Exception e){
+        system.debug('Exception is:' + e);
+        } 
+        
+        //Create a Contact
+        contacts = TestDataUtility.createConTestData();
+        contacts[0].Accountid = accounts[0].id;
+        contacts[1].Accountid = accounts[0].id;
+        try{
+        insert contacts;
+        }catch(Exception e){
+        }
+        
+        // Create a CASE
+        cases = TestDataUtility.createCaseTestData();
+        cases[0].Who_is_Calling__c = 'Architect';
+        cases[0].AccountId = accounts[0].id;
+        cases[0].ContactId = contacts[0].id;
+        cases[0].Dummy__c = true;
+        cases[0].Ship_To__c = 'Other';       
+        insert cases;
+                test.startTest();
+
+        Cases[0].Ship_To__c = 'Other';
+        update cases;
+        
+        
+        //Creating Tax Rates
+        TaxRate__c TR = new TaxRate__c() ; 
+        TR.State__c = 'Alberta';
+        TR.Service_Quote_Tax_Rate__c = 5 ;
+        insert TR ;
+        
+        TaxRate__c TR1 = new TaxRate__c() ; 
+        TR1.State__c = 'ARKANSAS';
+        TR1.Service_Quote_Tax_Rate__c = 5 ;
+        insert TR1 ;
+        
+        //Create a Service Quote
+        Service_Quote__c sqt = new Service_Quote__c();      
+        sqt.RecordTypeId=Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Custom Service Quote').getRecordTypeId();
+        sqt.Case__c = cases[0].id; 
+      
+        
+        insert sqt;
+        
+        sqt.Shopify_Ship_To_Country__c = 'United States';
+        sqt.Shopify_Ship_To_State__c = 'Alberta';
+       
+        update sqt ; 
+        
+        
+        
+        //Create a Service Part
+        spartList = TestDataUtility.createServicePartTestData();
+        try{
+        insert spartList;
+        }catch(Exception e){
+            system.debug('Exception is:' + e);
+        }
+        system.assert(spartList.size() != null);
+
+        //Create a Service Quote Detail under Service Quote
+        sqdList = TestDataUtility.createserviceQuoteDetailTestData();
+        sqdList[0].Service_Part__c = spartList[0].id;
+        sqdList[0].Service_Quote__c = sqt.id;
+        try{
+        insert sqdList;
+        }catch(Exception e){
+            system.debug('Exception is:' + e);
+        }       
+        
+        Test.stopTest();
+    } 
+    
+    
+    
 }

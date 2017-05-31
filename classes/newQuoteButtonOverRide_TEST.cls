@@ -61,11 +61,14 @@ public class newQuoteButtonOverRide_TEST {
            insert qt[0];
      	
      PageReference Pcon = Page.quote_button_overide;
-         Test.setCurrentPage(Pcon);
-     //ApexPages.currentPage().getParameters().put('set',qt[0].Id);
-
-         ApexPAges.StandardController sc = new ApexPages.StandardController(qt[0]);
-        newQuoteButtonOverRide testController = new newQuoteButtonOverRide(sc);
-       testController.redirect();
+     Test.setCurrentPage(Pcon);
+   //  ApexPages.currentPage().getParameters().put('set',qt[0].Id);
+		
+      //String id1 =  ApexPages.currentPage().getParameters().put('CF00NA0000001O58u') 
+     
+     
+       ApexPAges.StandardController sc = new ApexPages.StandardController(qt[0]);
+       newQuoteButtonOverRide testController = new newQuoteButtonOverRide(sc);
+        testController.redirect();
  }
 }

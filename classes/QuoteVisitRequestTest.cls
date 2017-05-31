@@ -41,44 +41,40 @@
         }
        }
      
-     static testMethod void QuoteVisitRequestMethod2(){
-      
+       static testMethod void QuoteVisitRequestMethod2(){
+        try
+        {
         zipcode=TestDataUtility.getTerritoryMaster();
-       // insert zipcode;
+        insert zipcode;
         accounts=TestDataUtility.createAccountTestData();
-       // insert accounts;
+        insert accounts;
         
         contacts=TestDataUtility.createConTestData();
-       // contacts[0].AccountID = accounts[0].id;
-      //  insert contacts[0];        
+        contacts[0].AccountID = accounts[0].id;
+        insert contacts[0];        
         
         
        
-       // project=TestDataUtility.createProjectTestData();
-       // insert project;
-       //
-       // 
-     list<Project__c>  project= new list<Project__c>();
-         project[0].name='hey';
-         insert project;
-       
-         //   project=TestDataUtility.createProjectTestData();
-       // insert project; 
-       
-         opportunity=TestDataUtility.createOppTestData();
+        project=TestDataUtility.createProjectTestData();
+        insert project;
+        opportunity=TestDataUtility.createOppTestData();
         insert opportunity;
         
         quote=TestDataUtility.createQuoteRecords(opportunity);
         
-       // insert quote;
+        //insert quote;
         
         test.startTest();
-        QuoteVisitRequest.CreatePreInstallation(quote[0].id,project[0].id,contacts[0].id);
+        QuoteVisitRequest.CreatePreInstallation(quote[1].id,project[0].id,contacts[0].id);
         test.stopTest();
-    
+        
+       }
   
- 
+     catch(DMLException e) {
+            system.assertEquals(e.getMessage(), e.getMessage());
+        }
        }
      
+   
     
 }

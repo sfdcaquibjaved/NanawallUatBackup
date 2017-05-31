@@ -63,7 +63,7 @@ public class ShopifyCustomerCreationNew_Test {
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator_CustomerCreate());
 
         HttpResponse res = CalloutClass_ShopifyBatch.getInfoFromExternalService();
-        ShopifyCustomerCreation.CustomerCreation(c.id);
+        ShopifyCustomerCreationNew.CustomerCreation(c.id,con.id);
 
 
         test.stopTest();
@@ -128,7 +128,7 @@ public class ShopifyCustomerCreationNew_Test {
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator_CustomerCreate());
 
         HttpResponse res = CalloutClass_ShopifyBatch.getInfoFromExternalService();
-        ShopifyCustomerCreation.CustomerCreation(c.id);
+        ShopifyCustomerCreationNew.CustomerCreation(c.id,con.Id);
 
 
         test.stopTest();

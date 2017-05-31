@@ -36,7 +36,7 @@ private class OrderCreationShopify_Test {
         //The EndPoint URL will receive the data from shopify Application on Order Creation event
         RestContext.request.requestURI = endPointUrl;
         RestContext.request.requestBody = b;
-        OrderCreationShopify.doPost();
+        //OrderCreationShopify.doPost();
         
         test.stopTest();
     }
@@ -63,7 +63,7 @@ private class OrderCreationShopify_Test {
         System.AssertEquals(endPointUrl, 'https://uatfullsb-nanawall.cs50.force.com/shopify/services/apexrest/OrderCreation');
         RestContext.request.requestURI = endPointUrl;
         RestContext.request.requestBody = b;
-        OrderCreationShopify.doPost();
+//        OrderCreationShopify.doPost();
 
         test.stoptest();
     }
@@ -162,7 +162,7 @@ private class OrderCreationShopify_Test {
         System.AssertEquals(endPointUrl, 'https://uatfullsb-nanawall.cs50.force.com/shopify/services/apexrest/OrderCreation');
         RestContext.request.requestURI = endPointUrl;
         RestContext.request.requestBody = b;
-        OrderCreationShopify.doPost();
+  //      OrderCreationShopify.doPost();
         
         test.stoptest();
     }
@@ -261,7 +261,7 @@ private class OrderCreationShopify_Test {
         System.AssertEquals(endPointUrl, 'https://uatfullsb-nanawall.cs50.force.com/shopify/services/apexrest/OrderCreation');     
         RestContext.request.requestURI = endPointUrl;
         RestContext.request.requestBody = b;
-        OrderCreationShopify.doPost();
+    //    OrderCreationShopify.doPost();
         
         test.stoptest();
     }
