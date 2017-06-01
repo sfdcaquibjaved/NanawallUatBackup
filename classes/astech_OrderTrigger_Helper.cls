@@ -399,28 +399,55 @@ system.debug('astech_OrderTrigger_Helper: finished after insert ...');
 	public static void handleAfterUpdate( map<Id, Order> oldMap, list<Order> orders ) 
 	{
 system.debug('** ASTECH: running handleafterupdate');	                
-       //Contact dummyContact  = [SELECT Id FROM Contact WHERE LastName = 'CAD EMAIL RECIPIENT' LIMIT 1]; //SOQL opt -- we could stick this contact on the order when it is inserted, and then just refer to that field 
         
         list<Task> tasksToInsert = new list<Task>(); 
         map< Id, Account> pipelineEmails = new map<id, Account>();
 
 
+		list<id> quoteIdsForPerformanceLabels = new list<Id>();
+
 		list<Id> oppIds = new list<Id>();
 		for( Order o : orders )
 			oppIds.add(o.OpportunityId);
-/*
-		map<Id, Opportunity> oppMap = new map<Id, Opportunity>();
-		list<Opportunity> oppsToUpdate = new list<Opportunity>();
-		for( Opportunity opp : [SELECT Id,Customer_Emailed__c  FROM Opportunity WHERE Id = :oppIds] )
-		{
-			oppMap.put(opp.Id, opp );
-		}
-system.debug('** ASTECH: oppmap size: ' + oppMap.keyset().size() );	                
-*/
+
         for( Order o : orders )
         {
             
 system.debug('** ASTECH: GUUIDs: ' + o.Test_GUID__c + ' ?= ' + oldMap.get(o.Id).Test_GUID__c );	                
+            
+            
+            //quoteIdsForPerformanceLabels
+            if(  (o.Order_Finalized_Date__c != null && oldMap.get(o.Id).Order_Finalized_Date__c == null )  )
+            {
+            	quoteIdsForPerformanceLabels.add(o.NanaQuote__c);
+            }
+            
+            if( quoteIdsForPerformancelabels.size() > 0  )
+            {
+				for( Quote_Detail__c qd : [SELECT id, Quote__c,UValue__c, SHGC__c, Units__c,Glazing_Notes__c  FROM Quote_Detail__c WHERE Quote__c in :quoteIdsForPerformancelabels] )
+				{
+					if( qd.UValue__c != null && qd.UValue__c != 0 
+					&& qd.SHGC__c != null && qd.SHGC__c != 0 
+					&& (qd.Glazing_Notes__c == null || qd.Glazing_Notes__c == '' ) )
+					{
+system.debug('** ASTECH: Got a position for performance label ... ');
+					
+						for( integer i = 0; i< qd.Units__c; i++ )
+						{
+							Task tsk = new Task();
+							tsk.WhatId = qd.id;
+							if( GlobalStrings.NanaServerAddress().contains('nanareps'))  
+								tsk.OwnerId = '005A0000000M8pi';
+							else tsk.OwnerID = '005A0000000M8pi';
+							tsk.Subject = 'Performance Label';
+							tsk.Description = 'Unit_'+(i+1);
+							tasksToInsert.add( tsk);	
+						
+						}
+		
+					}
+				}            
+            }
             
             if( o.Test_GUID__c != oldMap.get(o.Id).Test_GUID__c )
             { //the order finalized date was set
@@ -432,16 +459,12 @@ system.debug('** ASTECH: GUUIDs: ' + o.Test_GUID__c + ' ?= ' + oldMap.get(o.Id).
                         system.debug('No installer email found for order ' + o.Id );
                         continue;
                     }
-//Quote.Nana_Quote__r.Installer__r                    
-//system.debug('** ASTECH: sending CAD email to  ' + pipelineEmails.get(o.Id) );
+
 system.debug('** ASTECH: sending CAD email to  ' + o.Quote.Nana_Quote__r.Installer__c );
 				try
 				{
-					//003A0000005h271 is jurgen's record, this CANNOT be deleted or changed
 	                pp_EmailFlowUtility.sendTemplatedEmail( new string[]{ o.Installer_Email__c  }, new string[]{  'gabepaulson@yahoo.com' }, 'Quote_2_0_CAD_EMAIL_TEMPLATE', '003A0000005h271', o.Id,  '0D2A0000000TNUg' , false, null );//setting System as WhoId to get past stupid limitations
 	                Task tsk = new Task();
-//	                tsk.WhatId = pipelineEmails.get(o.Id).Id;
-//	                tsk.OwnerID = pipelineEmails.get(o.Id).OwnerID;
 	                tsk.WhatId = o.Quote.Nana_Quote__r.Installer__c;
 	                tsk.OwnerID = o.OwnerID;
 	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
@@ -449,16 +472,7 @@ system.debug('** ASTECH: sending CAD email to  ' + o.Quote.Nana_Quote__r.Install
 	                
 	                tasksToInsert.add( tsk ); 
 system.debug('** ASTECH: triggering email send');	                
-/*
-	                Opportunity opp = oppMap.get(o.OpportunityId);
-	                if( opp != null)
-	                {
-system.debug('** ASTECH: setting customer emailed ...');	                
-		                opp.Customer_Emailed__c = true;
-		                
-		                oppsToUpdate.add(opp);
-	                }
-	                */
+
 				}catch (Exception ex )
 				{
 system.debug('** ASTECH Order Trigger: An exception occurred when trying to send an installer email: ' + ex );
@@ -471,13 +485,6 @@ system.debug('** ASTECH Order Trigger: An exception occurred when trying to send
         }
         if( tasksToInsert.size() > 0 )
             insert tasksToInsert;
-            /*
-        if( oppsToUpdate.size() > 0  )
-    	{
-system.debug('** ASTECH: updating opps');	                    		
-    		update oppsToUpdate;
-		}		
-		*/
 	}
 	
 	public static void handleBeforeUpdate( map<Id, Order> oldMap, list<Order> orders ) 

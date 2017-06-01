@@ -104,7 +104,7 @@ private class ObjectsOwnerUpdatefromZip_Test {
     testUser2 = TestDataUtility.createUser('System Administrator', 'testUser2@test.com');
     insert testUser2 ;
     
-    System.runAs(testUser1){
+     System.runAs(testUser1){
     
     olstTestAccount = TestDataUtility.createAccountTestData();
     olstTestAccount[0].BillingCountry = 'United States';
