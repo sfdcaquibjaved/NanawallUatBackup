@@ -71,6 +71,8 @@ static testmethod void taxratesmethod(){
         
         test.startTest();
          insert sqList;
+    sqList1[0].Ship_To_State__c = 'Alabama';
+    update sqList1;
         test.stopTest();
         
 }
@@ -160,7 +162,7 @@ static testmethod void taxratesmethod(){
          
         test.startTest();
         insert sqList;
-        sq1.Shopify_Ship_to_State__c = 'Arizona';
+        sq1.Shopify_Ship_to_State__c = 'colorado';
         update sq1;
         test.stopTest();
         

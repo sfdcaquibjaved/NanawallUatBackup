@@ -312,6 +312,74 @@ insert l;
 }
 }
 */
+    static testMethod void testobjectsOwnerUpdatefromZip4(){
+  
+    testUser1 = TestDataUtility.createUser('System Administrator', 'testUser1@test.com');
+    insert testUser1 ;
+    
+    testUser2 = TestDataUtility.createUser('System Administrator', 'testUser2@test.com');
+    insert testUser2 ;
+    
+    System.runAs(testUser1){
+    
+    olstTestAccount = TestDataUtility.createAccountTestData();
+    olstTestAccount[0].BillingCountry = 'United States';
+    olstTestAccount[0].BillingPostalCode = '04037';
+    olstTestAccount[1].BillingPostalCode = '08688';
+    olstTestAccount[2].BillingCountry = 'United States';
+        try{
+    insert olstTestAccount ;
+        }catch(DMLEXCEPTION e){}
+    
+    olstTestLead = TestDataUtility.createLeadTestData();
+    olstTestLead[0].Country = 'United States';
+    olstTestLead[0].PostalCode = '04037' ;
+    olstTestLead[2].Country = 'United States';
+    olstTestLead[1].PostalCode = '08688';    
+    olstTestLead[0].OwnerId = testUser1.Id ;
+    olstTestLead[1].OwnerId = testUser1.Id ;
+        try{
+    insert olstTestLead ;
+        }catch(DMLEXCEPTION e){}
+    
+    
+    olstTestContact = TestDataUtility.createConTestData();
+    olstTestContact[0].MailingCountry = 'United States';
+    olstTestContact[0].MailingPostalCode = '04037';
+    olstTestContact[2].MailingCountry = 'United States';
+    olstTestContact[1].MailingPostalCode = '08688';
+        try{
+    insert olstTestContact ;
+        }catch(DMLEXCEPTION e){}
+    
+    olstTestProject = TestDataUtility.createProjectTestData();
+    olstTestProject[0].project_zip_code__c = '04037';
+    olstTestProject[0].project_country__c = 'United States';
+    olstTestProject[2].project_country__c = 'United States';
+        try{
+    insert olstTestProject ;
+        }catch(DMLEXCEPTION e){}
+    
+    olstTerritoryMastereCode = TestDataUtility.getTerritoryMaster() ;
+    olstTerritoryMastereCode[0].user__c = testUser1.Id ;
+    olstTerritoryMastereCode[1].user__c = testUser1.Id ;
+    insert olstTerritoryMastereCode ;
+    
+    olstTerritoryMastereCode2 = TestDataUtility.getTerritoryMaster() ;
+    olstTerritoryMastereCode2[0].user__c = testUser2.Id ;
+    olstTerritoryMastereCode2[1].user__c = testUser2.Id ;
+    olstTerritoryMastereCode2[1].Zip_Code__c = '' ;
+    olstTerritoryMastereCode2[1].Country__c = 'United States' ;
+    insert olstTerritoryMastereCode2 ;
+    olstTerritoryMastereCode2[1].user__c = testUser1.Id ;
+    try{
+    update olstTerritoryMastereCode2 ;
+    }catch(Exception e){}
+    
+    
+    objectsOwnerUpdatefromZip.assignobjectowner(olstTerritoryMastereCode, olstTerritoryMastereCode2);
+    }
+  }
 
     
 }

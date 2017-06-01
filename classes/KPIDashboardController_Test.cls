@@ -31,7 +31,8 @@ public class KPIDashboardController_Test {
         ProjectList[0].amount__c = 12456;
         ProjectList[0].RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Commercial Projects').getRecordTypeId();
          insert ProjectList[0];
-        
+        set<id>prid = new set<id>();
+       prid.add(ProjectList[0].id);
         list<Opportunity> OpportunityList = TestDataUtility.createOppTestData();
         OpportunityList[0].AccountId = olstAccount[0].Id ;
         OpportunityList[0].Project_Name__c = ProjectList[0].Id;
@@ -117,7 +118,7 @@ public class KPIDashboardController_Test {
         insert kpf;
         
         Test.startTest(); 
-        
+       // SuccessRatioDynamicHelperClass.projectFetchingForTrends(ws,prid);
         KPIDashboardController kpi=new KPIDashboardController();
         kpi.usedCheck=FALSE;
         kpi.successCheck=FALSE;

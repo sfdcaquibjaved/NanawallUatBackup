@@ -22,6 +22,7 @@ private class Territory_owner_change_controller_Test {
         testClass.closePopup();
         testClass.dosort();
         testClass.updateZipOwner();
+       // testClass.territory_owner_change_controller();
         testClass.showPopup();
         try{
         testClass.SearchObjects();

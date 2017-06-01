@@ -33,7 +33,10 @@ public class SuccessRatioDynamicControllerTest
         ProjectList[4].amount__c = 19087;
         ProjectList[4].RecordTypeId=Schema.SObjectType.Project__c.getRecordTypeInfosByName().get('Commercial Projects').getRecordTypeId();
         insert ProjectList;
-        
+        set<id> prid = new set<Id>();
+        for(Project__c pc:ProjectList){
+            prid.add(pc.id);
+        }
         list<Opportunity> OpportunityList = TestDataUtility.createOppTestData();
         OpportunityList[0].AccountId = olstAccount[0].Id ;
         OpportunityList[0].Project_Name__c = ProjectList[0].Id;
@@ -90,7 +93,9 @@ public class SuccessRatioDynamicControllerTest
         ws.name = 'Rob Laris';
         insert ws;
         insert tplist;
-        
+        SuccessRatioDynamicHelperClass.projectFetchingForTrends(mes.Name,prid);
+        set<id> returnids = SuccessRatioDynamicHelperClass.projectFetchingFromQuotes();
+        set<id> returnids2 = SuccessRatioDynamicHelperClass.SiteVisitCalculateHelper();
         SuccessRatioDynamicController sd = new SuccessRatioDynamicController();
         sd.regionname='Midwest Sales';
         sd.projecttype='Commercial';

@@ -1,4 +1,19 @@
 <apex:page standardController="Account" extensions="HierarchyController" sidebar="false" >
+<style>
+                                                                .container
+                                                                {
+                                                                  overflow:auto; 
+                                                                  height:100px;   
+                                                                }
+                                                                .headerRow .headerStyle
+                                                                {
+                                                                                color: #CC0000 !important;
+                                                                                position:relative;
+                                                                                TOP: expression(this.offsetParent.scrollTop-2);        
+                                                                }
+ 
+                                                                </style>
+
 <apex:form >
  <apex:PageBlock >
      <apex:pageBlockSection columns="1">
@@ -76,8 +91,8 @@
     </apex:pageBlock>
       <!-- Quoteless Opportunities -->
          <apex:pageBlock >
-             <apex:pageBlockSection title="QuoteLess Opportunities : {!CAProjOppList.size}">
-   <apex:pageblockTable value="{!CAProjOppList }" var="opp">
+             <apex:pageBlockSection title="QuoteLess Opportunities : {!CAProjOppList.size}" >
+   <apex:pageblockTable value="{!CAProjOppList }" var="opp" style="width:100%">
    <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
    

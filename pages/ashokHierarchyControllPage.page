@@ -1,5 +1,19 @@
 <apex:page standardController="Account" extensions="ashokcontroller" sidebar="false" >
-<apex:form >
+<style>
+                                                                .container
+                                                                {
+                                                                  overflow:auto; 
+                                                                  height:100px;   
+                                                                }
+                                                                .headerRow .headerStyle
+                                                                {
+                                                                                color: #CC0000 !important;
+                                                                                position:relative;
+                                                                                TOP: expression(this.offsetParent.scrollTop-2);        
+                                                                }
+ 
+                                                                </style>
+    <apex:form >
         <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId"/>
 
  <apex:PageBlock >
