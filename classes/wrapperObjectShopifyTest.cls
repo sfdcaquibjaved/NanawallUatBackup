@@ -1,17 +1,23 @@
 @istest
 public class wrapperObjectShopifyTest {
     static testMethod void shopifyWrapperMethod() {
-        wrapperObjectShopify wrapper = new wrapperObjectShopify();
+        ShopifyBatch.shopifywrapper shopwpr = new ShopifyBatch.shopifywrapper();
+        shopwpr.Order.email = 'test@nanawall.com';
+        shopwpr.Order.total_price = 100;
+        shopwpr.Order.subtotal_price = 100;
+        shopwpr.Order.total_weight = 100;
+        shopwpr.Order.total_tax = 100;
+       // wrapperObjectShopify wrapper = new wrapperObjectShopify();
        // wrapper.default_address;
         
-        wrapperObjectShopify.order tmpObj = new wrapperObjectShopify.order();
+       // wrapperObjectShopify.order tmpObj = new wrapperObjectShopify.order();
     //wrapperObjectShopify wrapper = new wrapperObjectShopify();
     //string email = 'test@nanawall.com';
    // wrapper.default_address orderObj = new wrapper.default_address();
       //  orderObj.first_name = ' ';
        
         //orderObj.id;
-        tmpObj.email = 'test@nanawall.com';
+       // tmpObj.email = 'test@nanawall.com';
         /*&orderObj.created_at = '2017-30-05';
         orderObj.note = ' ';
         orderObj.total_price = 100;
