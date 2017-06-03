@@ -234,6 +234,16 @@ function fnChangeAccount(a)
   <apex:selectList value="{!selectedContact}"  multiselect="false" size="1" rendered="{!((accountURLSelected && NOT(conURLSelected)) || oppURLSelected)}">
       <apex:selectOptions value="{!contactList}"/>
     </apex:selectList>
+    
+     
+     
+   
+ <apex:selectList label="Contact Role" value="{!selectedContactRole}"  multiselect="false" size="1" rendered="{!selectedAccountSection }">
+      <apex:selectOptions value="{!ContactRoleOptions}"/>
+    </apex:selectList>
+          
+       
+       
    </apex:pageBlockSection>  
   </apex:outputpanel>
   <apex:outputPanel id="newContactSection" rendered="{!createNewContact}">

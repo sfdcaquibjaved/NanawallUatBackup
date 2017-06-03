@@ -567,6 +567,7 @@ public with sharing class OrderTriggerStagesHelper{
                   
                 }
                 else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Solarlux')){
+                    System.debug('Why Solarlux by default?'+oNew.Name);
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name='20000';
                     oNew.Manufacturing__c='Solarlux';

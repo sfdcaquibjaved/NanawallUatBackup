@@ -12,7 +12,7 @@ static testmethod void test1() {
     
 static testmethod void test2(){
         test.StartTest();       
-        Scheduler_class_oppCountOnProjectsBatch.scheduleMe();
+      //  Scheduler_class_oppCountOnProjectsBatch.scheduleMe();
         test.StopTest();
     }
 }

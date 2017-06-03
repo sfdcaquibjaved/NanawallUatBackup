@@ -31,7 +31,10 @@ public with sharing class Quote_WizardController_Clone {
     
     public List < SelectOption > contactList {get;set;}
     
+    public List < SelectOption > contactRoleList {get;set;}
+    
     public String selectedContact {get;set;}
+    public String selectedContactRole {get;set;}
     
     public Contact con2 {
         get;
@@ -237,6 +240,7 @@ public with sharing class Quote_WizardController_Clone {
         set;
     }
     
+   
     
     /***********************************************************************************************************************************************
              Method Name :- Constructor of the class.
@@ -244,6 +248,24 @@ public with sharing class Quote_WizardController_Clone {
              @param :- NA
     ***********************************************************************************************************************************************/
 
+    public List<SelectOption> getContactRoleOptions() {
+       
+       List<SelectOption> contactRole = new List<SelectOption>();
+        
+        Schema.DescribeFieldResult RoleFieldDescription = Schema.Contact.LeadType__c.getDescribe();
+        
+        for (Schema.Picklistentry picklistEntry: RoleFieldDescription.getPicklistValues()) {
+            
+            contactRole.add(new SelectOption(pickListEntry.getValue(), pickListEntry.getLabel()));
+            if (con.LeadType__c != null ) {
+                    selectedContactRole = con.LeadType__c ;
+                }
+        }
+       
+        return contactRole;
+    }
+    
+    
     public Quote_WizardController_clone() {
 
         //Default value of the variables
@@ -287,7 +309,7 @@ public with sharing class Quote_WizardController_Clone {
            system.debug('checkBaseConURL'+ conUrlId);
            if(conUrlId != null){
            
-           con = [Select Id, AccountId,Name, FirstName,Phone, Email,LastName,MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : conUrlId];
+           con = [Select Id, AccountId,Name, LeadType__c ,FirstName,Phone, Email,LastName,MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : conUrlId];
           
            contactWrapper.conId = con.Id ;
            oppConRole.Contact__c = con.Id ;
@@ -330,12 +352,17 @@ public with sharing class Quote_WizardController_Clone {
             accountWrapper.accId = accUrlId ;
             
             contactList = new List < SelectOption>();
+           
+                
             contactList.add(new SelectOption('--None--', '--None--'));
             
-            for (Contact con : [Select Id, AccountId,Name, FirstName,Phone, Email,LastName,MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where AccountId = : accUrlId]){
+                
+            for (Contact con : [Select Id, LeadType__c ,AccountId,Name, FirstName,Phone, Email,LastName,MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where AccountId = : accUrlId]){
              contactList.add(new SelectOption(con.Id, 'Select Contact:' + ' ' + con.Name));
-            }
              
+            }
+                 
+                
             accountCreated = true ;
             con.AccountId = acc.Id ;
             selectedAccountSection = true; //setting the variable true so that the account section is shown on the page
@@ -371,7 +398,7 @@ public with sharing class Quote_WizardController_Clone {
                 contactList = new List < SelectOption>();
                 contactList.add(new SelectOption('--None--', '--None--'));
             
-                for (Contact con : [Select Id, AccountId,Name, FirstName,Phone, Email,LastName,MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where AccountId = : opp.AccountId]){
+                for (Contact con : [Select Id, LeadType__c ,AccountId,Name, FirstName,Phone, Email,LastName,MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where AccountId = : opp.AccountId]){
                   contactList.add(new SelectOption(con.Id, 'Select Contact:' + ' ' + con.Name));
                 }
                 
@@ -650,7 +677,9 @@ public with sharing class Quote_WizardController_Clone {
 
         if (oppConRole.Contact__c != null) {
             try{
-            con = [Select Id,Name, AccountId,FirstName,Phone, Email,LastName, MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : oppConRole.Contact__c];
+                system.debug('I am here inside syncContact');
+            con = [Select Id,Name, LeadType__c , AccountId,FirstName,Phone, Email,LastName, MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : oppConRole.Contact__c];
+            
             }catch(exception e){
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'selected Contact is not in Your Territory'));
             } 
@@ -715,18 +744,19 @@ public with sharing class Quote_WizardController_Clone {
         if (contactCreateOption == 'Existing Contact') {
             system.debug('opp con role'+oppConRole.Contact__c);
             if (oppConRole.Contact__c != null) {
-                con = [Select Id,Name, FirstName,LastName,Phone, Email,AccountId, MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : oppConRole.Contact__c];
+                con = [Select Id,Name, LeadType__c, FirstName,LastName,Phone, Email,AccountId, MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : oppConRole.Contact__c];
                 system.debug('contact role'+con.id+'oppconrole'+oppConRole.Contact__c);
                 if (con.AccountId != null) {
-                    acc = [Select Id, Name, Owner.Name, BillingCountryCode, BillingStateCode, BillingStreet, BillingCity, BillingPostalCode from Account where Id = : con.AccountId];
+                    acc = [Select Id, Name,  Owner.Name, BillingCountryCode, BillingStateCode, BillingStreet, BillingCity, BillingPostalCode from Account where Id = : con.AccountId];
                 }
             }
             
             if(accountURLSelected || oppURLSelected){
                 system.debug('selectedContact'+oppURLSelected);
+                
              if(selectedContact != null){
              try{
-             con = [Select Id,Name, FirstName,LastName,Phone, Email,AccountId, MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : selectedContact];
+             con = [Select Id,Name, FirstName,LastName, LeadType__c , Phone, Email,AccountId, MailingCountryCode, MailingStateCode, MailingStreet, MailingCity, MailingPostalCode from Contact where Id = : selectedContact];
              system.debug('contactinfo'+con.id);
              }
              Catch(Exception ex){
@@ -967,6 +997,7 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
+                oppConRole.Role__c = selectedContactRole ;
                 insert oppConRole;
                 }
                 system.debug('#$!'+oppUrlId+'projectCreateOption'+projectCreateOption+'insufficentPrivilege'+insufficentPrivilege+' showQuoteSection'+showQuoteSection);
@@ -996,6 +1027,7 @@ public with sharing class Quote_WizardController_Clone {
                         nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                         oppConRole.Contact__c = con.Id; 
                         oppConRole.Opportunity__c = opp.Id;
+                         oppConRole.Role__c = selectedContactRole ;
                         insert oppConRole;  
                      }
                  }
@@ -1028,6 +1060,7 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
+                oppConRole.Role__c = selectedContactRole ;
                 insert oppConRole;  
                  }
                 }
@@ -1045,6 +1078,7 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
+                oppConRole.Role__c = selectedContactRole ;
                 system.debug('###########'+ oppConRole.Opportunity__c +opp.Id+con.id);
                 insert oppConRole;  
                  }
@@ -1271,6 +1305,7 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
+                oppConRole.Role__c = selectedContactRole ;
                 insert oppConRole;
                 }
                 system.debug('#$!'+oppUrlId+'projectCreateOption'+projectCreateOption+'insufficentPrivilege'+insufficentPrivilege+' showQuoteSection'+showQuoteSection);
@@ -1300,6 +1335,7 @@ public with sharing class Quote_WizardController_Clone {
                             
                         nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                         oppConRole.Contact__c = con.Id; 
+                        oppConRole.Role__c = selectedContactRole ; 
                         oppConRole.Opportunity__c = opp.Id;
                         insert oppConRole;  
                      }
@@ -1333,6 +1369,7 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
+                 oppConRole.Role__c = selectedContactRole ;
                 insert oppConRole;  
                  }
                 }
@@ -1350,7 +1387,9 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                system.debug('###########'+ oppConRole.Opportunity__c +opp.Id+con.id);
+                oppConRole.Role__c = selectedContactRole ;
+                
+                     system.debug('###########'+ oppConRole.Opportunity__c +opp.Id+con.id);
                 insert oppConRole;  
                  }
                 }
