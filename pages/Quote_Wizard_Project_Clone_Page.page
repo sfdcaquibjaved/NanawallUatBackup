@@ -274,7 +274,13 @@ function fnChangeAccount(a)
                             <div class="requiredInput"><div class="requiredBlock"></div>
                         <apex:inputfield value="{!con.Email}" />
                         </div></apex:outputPanel>
+  
                         </apex:pageBlockSectionItem>
+         				
+         						<apex:selectList label="Contact Role" value="{!selectedContactRole}"  multiselect="false" size="1" >
+     									 <apex:selectOptions value="{!ContactRoleOptions}"/>
+    							</apex:selectList>
+                       
                     </apex:pageBlockSection>
                    <apex:pageBlockSection title="Address Information"  id="contactAddressId" columns="2">
                    <apex:pageBlockSectionItem >
