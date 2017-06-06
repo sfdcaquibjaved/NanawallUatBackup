@@ -265,7 +265,7 @@
    </apex:pageBlock>
     
        <apex:PageBlock id="pbId" >  
-    <apex:pageBlockSection title="{!AccSiteList.size} records found without Projects." collapsible="false"/>    
+    <apex:pageBlockSection title="{!siz} records found without Projects." collapsible="false"/>    
      <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects">
          <apex:pageBlockTable var="ac" value="{!Opportunities}">
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
@@ -291,19 +291,19 @@
              <apex:column headerValue="Project ZipCode"/>
          </apex:pageBlockTable>
          <apex:panelGrid columns="5">
-         <apex:selectList value="{!PaginationSize}" multiselect="false" size="1" onchange="refreshPageSize();">
-                    <apex:selectOptions value="{!paginationSizeOptions}"/>
+        <!-- <apex:selectList value="{!PaginationSize}" multiselect="false" size="1" onchange="refreshPageSize();">
+                   <apex:selectOptions value="{!paginationSizeOptions}"/> -->
                     <apex:commandButton status="fetchStatus" reRender="pbId" value="First" action="{!setCon.first}" disabled="{!!setCon.hasPrevious}" title="First Page"/> 
   
                 <apex:commandButton status="fetchStatus" reRender="pbId" value="Previous" action="{!setCon.previous}" disabled="{!!setCon.hasPrevious}" title="Previous Page"/> 
-  
+                <apex:outputText >{!(setCon.pageNumber * PaginationSize)+1-PaginationSize}-{!IF((setCon.pageNumber * PaginationSize)>noOfRecords, noOfRecords,
+                     (setCon.pageNumber * PaginationSize))} of {!noOfRecords}
+                </apex:outputText> 
                 <apex:commandButton status="fetchStatus" reRender="pbId" value="Next" action="{!setCon.next}" disabled="{!!setCon.hasNext}" title="Next Page"/> 
   
                 <apex:commandButton status="fetchStatus" reRender="pbId" value="Last" action="{!setCon.last}" disabled="{!!setCon.hasNext}" title="Last Page"/> 
-              <apex:outputText >{!(setCon.pageNumber * PaginationSize)+1-PaginationSize}-{!IF((setCon.pageNumber * PaginationSize)>noOfRecords, noOfRecords,
-                     (setCon.pageNumber * PaginationSize))} of {!noOfRecords}
-                </apex:outputText>  
-                </apex:selectList>
+               
+                <!--</apex:selectList> -->
          </apex:panelGrid>
         </apex:pageBlockSection>
     </apex:PageBlock>

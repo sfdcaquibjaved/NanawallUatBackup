@@ -24,6 +24,7 @@ public class HierarchyController{
     private String sortDirection = 'DESC';
     private String sortExp = 'PCrtDt';
     public List<String> acclist;
+    integer AccountCount{get;set;}
     /* QuoteLess opportunities List */
     public List<Opportunity> CAProjOppList{get;set;}
     /*---------- */
@@ -74,7 +75,10 @@ public class HierarchyController{
         return Options;    
     }      
 
-
+//Pagination varibles and List
+    public integer PaginationSize {get;set;}
+    public integer NoOfRecords {get;set;}
+    public List<selectoption> PaginationSizeOptions {get;set;}
 
 
    // Public Set<Id> SetTest{get;set;}
@@ -209,7 +213,7 @@ public class HierarchyController{
  * Generate summary data with latest orderfinalized date
  */
     public void summary(){
-        
+     
         for(Project__c proj: ProjSiteList){
             
             if(proj.Id!=null){ 
@@ -254,7 +258,7 @@ public class HierarchyController{
                     DuplPrj = DuplPrj +1;
                 }   
 
-            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
+            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Considered')|| proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
                 
                 prjStgQtd = prjStgQtd + 1;
                 
@@ -279,17 +283,15 @@ public class HierarchyController{
  */
     public List<Account> noProjectAccounts(){
         /* ************** Query fetch the record which has no project**************** */
-        AccSiteList = [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
+       // AccSiteList = [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
        
-        siz = AccSiteList.size();
+       siz = [SELECT count() FROM Account where parent.id=:objacc.id];//AccSiteList.size();
         
         List<Account> acctemp = new List<Account>();
         
-        for(Account a: AccSiteList)
-           if(a.Projects1__r.size()==0)
-              acctemp.add(a);
         
-        AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
+        
+      //  AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
        
         return AccSiteList;
     }
@@ -311,8 +313,7 @@ public class HierarchyController{
         
         String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
                query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c,Project_Name__r.Ordering_Account__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\') AND (Project_Name__r.Ordering_Account__c!=null) )';
-               /*query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Complete%\') AND (NOT StageName LIKE \'%Influencer%\') AND )';*/
+               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
                query1+=' FROM Project__c';
                query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
                query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
@@ -444,51 +445,52 @@ public class HierarchyController{
         purFilter = '';
         archFilter = '';
         sortFullExp = '';
+      //Inilization of Pagination Select Option  
+        PaginationSize =10;
+      
          /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
         runQuery(objAcc.Id);
        
-        summary();
-                           
-                           /*prjList2 = [Select Id, Ordering_Account__c, (Select Name, Id, StageName from Opportunities__r where
-                                                     StageName like '%Won%' OR StageName like '%Complete%' OR StageName like '%Paid%' )                          
-                                        from Project__c where ID IN :SetTest AND Ordering_Account__c != null];
-                            
-                            SetTest = new Set<ID>();
-        
-                            for (Project__c prj2 : prjList2)
-                            for (List<Opportunity> oppList : prj2.Opportunities__r)
-                            {
-                            for (Opportunity opp : oppList)
-                            {
-                                SetTest.add(opp.Id);
-                            }
-                        }
-        
-                              oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
-                                    from Opportunity where Id IN:SetTest AND  AccountId IN:SetOr];
-                                   
-                        /*for (Opportunity op : oppList2){
-                                        for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
-                                        for(OpportunityContactRole ocr : ocrs ){ 
-                                                hier.ocr.add(ocr); 
-                                }
-                            }
-                        }  */            
-
-              /*   for (Order od : ordList){ 
-                   if(od.Project__r.Id == prj.Id){
-                        hier.ordFnzDt.add(od.Order_Finalized_Date__c);
-                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
-                   }
-               }*/
-                         
-                 
+        summary();                      
+               
      }
     /** This method 
  * 
  * Set Hierarchy Wrapper class data
  * 
  */ 
+    
+    public ApexPages.StandardSetController setCon 
+    {
+        get {
+            if(setCon == null) {  
+               
+                setCon = new ApexPages.StandardSetController(Database.getQueryLocator(
+                      [SELECT Account.Name FROM Account WHERE parent.id =:ObjAcc.id AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)]));
+                setCon.setPageSize(Paginationsize);  
+                noOfRecords = setCon.getResultSize();
+         //       siz = AccSiteList.size();
+        
+       
+        
+        
+        return setcon;
+                
+            }            
+            return setCon;
+        }
+        set;
+    }
+    //Changes the Paginationsize of pagination
+    public PageReference refreshPageSize() {
+         setCon.setPageSize(Paginationsize);
+         return null;
+    }
+    // Initialize setCon and return a list of record    
+     
+    public List<account> getOpportunities() {
+         return (List<account>) setCon.getRecords();
+    }
     public void hierarchySetData(Project__c prj){
                                                           
                        Hierarchy hier = new Hierarchy();
@@ -530,13 +532,13 @@ public class HierarchyController{
             cnt = 0;
             
             if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
-            if(prjFilter!=''){prjFilter = prjFilter.trim(); cnt++;} 
+            if(prjFilter!=''){prjFilter = prjFilter; cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
             if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
             if(project_drp_Stage!='' && project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
-            if(archFilter!=''){archFilter = archFilter.trim(); cnt++;}
+            if(archFilter!=''){archFilter = archFilter; cnt++;}
             if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
             
@@ -546,7 +548,7 @@ public class HierarchyController{
                 flag++; 
             
             if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
-                if( hr.ProjectName.Name.containsIgnoreCase( prjFilter))
+                if(hr.ProjectName.Name.containsIgnoreCase(prjFilter))
                     flag++;
 
             if(cityFilter!='' && hr.projectCity!=null) 
@@ -615,7 +617,7 @@ public class HierarchyController{
  */
     public void filterAcc(){
         
-        AccSiteList = noProjectAccounts();
+       // AccSiteList = noProjectAccounts();
         
         List<Account> accTmpList = new List<Account>();
         

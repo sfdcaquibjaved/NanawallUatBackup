@@ -112,7 +112,7 @@ public class CaseTriggerUtility {
     public static void EmailToCaseDelete(list<ID> caselist){
         system.debug('I am inside EmailToCaseDelete');
         if(caselist.size() > 0 ){
-           	system.debug('Value of caseList' +caseList);
+            system.debug('Value of caseList' +caseList);
             Database.delete(caseList);
             
         }

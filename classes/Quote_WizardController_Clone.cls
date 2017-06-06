@@ -828,7 +828,8 @@ public with sharing class Quote_WizardController_Clone {
     public pageReference saveAndCreateQuote() {
     
     System.debug('%%%%%%%%%%%%%');
-
+    
+        
         Boolean validate = validateProjects(); // checking all the validation required for projects
         
         if (validate == false) {
@@ -877,9 +878,19 @@ public with sharing class Quote_WizardController_Clone {
          system.debug('NidhiShouldNotSeeThis');  
     System.debug('$$$$$$$'+opp.Project_Name__c);
     System.debug('$$$$$$$'+projectCreateOption);
-
+    System.debug('The value of opportunity ID is' +opp.ID + 'Opportunity :' +opp);
+            
             if (opp.Project_Name__c != null && projectCreateOption == 'Existing Project') {
                 proj = [select id, name, Close_Date__c,RecordTypeId from Project__c where Id = : opp.Project_Name__c];
+                
+               Map<Id, List<OpportunityContactRole>> MapOppConROle = new Map<Id, List<OpportunityContactRole>>(); 
+                
+                for(Opportunity o : [SELECT Id, (SELECT id, ContactID, OpportunityID FROM OpportunityContactRoles) FROM Opportunity WHERE Project_Name__c =: opp.Project_Name__c]){
+                    MapOppConROle.put(o.ID , o.OpportunityContactRoles) ;
+                }
+                
+                
+                    
             }
 
             try {

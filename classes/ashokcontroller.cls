@@ -213,7 +213,7 @@ public class ashokcontroller{
  * Generate summary data with latest orderfinalized date
  */
     public void summary(){
-        
+     
         for(Project__c proj: ProjSiteList){
             
             if(proj.Id!=null){ 
@@ -283,15 +283,15 @@ public class ashokcontroller{
  */
     public List<Account> noProjectAccounts(){
         /* ************** Query fetch the record which has no project**************** */
-        AccSiteList = [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
+       AccSiteList = [Select Name, Id from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
        
-        siz = [SELECT count() FROM Account where parent.id='001A000001Ledoc'];//AccSiteList.size();
+       siz = AccSiteList.size();
         
         List<Account> acctemp = new List<Account>();
         
         
         
-      //  AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
+        AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
        
         return AccSiteList;
     }
@@ -375,22 +375,26 @@ public class ashokcontroller{
  * 
  * retrieve OpportunityContactRoles ID & add into hierarchy wrapper class
  */  
-    public void retrieveContactRoles(Hierarchy hier, Project__c prj){
+    public void retrieveContactRoles(Hierarchy hier, Project__c prj)
+    {
                 
-            for (Order od : prj.Orders__r){ 
+         /*  for (Order od : prj.Orders__r)
+            { 
                         hier.ordFnzDt.add(od.Order_Finalized_Date__c);
-                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
-                   }
+                        hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
+            } */
             
             for (Opportunity op : oppList2)
             if(op.Project_Name__c == prj.id)
             {
-                  for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
-                            for(OpportunityContactRole ocr : ocrs ){ 
+                  for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles)
+                        {
+                            for(OpportunityContactRole ocr : ocrs )
+                            { 
                                hier.ocr.add(ocr);
                             }
                         }
-                    }
+            }
         ProjectList.add(hier);
     }
    /** This method 
@@ -446,13 +450,13 @@ public class ashokcontroller{
         archFilter = '';
         sortFullExp = '';
       //Inilization of Pagination Select Option  
-        PaginationSize =50;
+        PaginationSize =25;
         paginationSizeOptions = new List<selectoption>();
-        paginationSizeOptions.add(new selectoption('50','50'));
-        paginationSizeOptions.add(new selectoption('100','100'));
-        paginationSizeOptions.add(new selectoption('150','150'));
-        paginationSizeOptions.add(new selectoption('200','200'));
-        paginationSizeOptions.add(new selectoption('250','250'));
+        paginationSizeOptions.add(new selectoption('25','25'));
+      //  paginationSizeOptions.add(new selectoption('100','100'));
+      //  paginationSizeOptions.add(new selectoption('150','150'));
+     //   paginationSizeOptions.add(new selectoption('200','200'));
+     //   paginationSizeOptions.add(new selectoption('250','250'));
          /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
         runQuery(objAcc.Id);
        
@@ -474,7 +478,7 @@ public class ashokcontroller{
                       [SELECT Account.Name FROM Account WHERE parent.id =:ObjAcc.id AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)]));
                 setCon.setPageSize(Paginationsize);  
                 noOfRecords = setCon.getResultSize();
-                siz = AccSiteList.size();
+         //       siz = AccSiteList.size();
         
        
         
@@ -553,7 +557,7 @@ public class ashokcontroller{
                 flag++; 
             
             if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
-                if(hr.ProjectName.Name.containsOnly(prjFilter) || hr.architect.Name.contains( prjFilter))
+                if(hr.ProjectName.Name.containsOnly(prjFilter) || hr.ProjectName.Name.contains( prjFilter))
                     flag++;
 
             if(cityFilter!='' && hr.projectCity!=null) 
@@ -622,7 +626,7 @@ public class ashokcontroller{
  */
     public void filterAcc(){
         
-        AccSiteList = noProjectAccounts();
+      //  AccSiteList = noProjectAccounts();
         
         List<Account> accTmpList = new List<Account>();
         
