@@ -573,7 +573,7 @@ public class HierarchyController{
                     System.debug('Arctitec'+ hr.architect.Name);
                     
             if(archFilter!='' && hr.architect.Name!=null)
-                if(hr.architect.Name.containsOnly( archFilter) || hr.architect.Name.contains( archFilter))
+                if(hr.architect.Name.containsIgnoreCase( archFilter) || hr.architect.Name.contains( archFilter))
                     flag++;
                     
             if(purFilter!='' && hr.purchaser.Name!=null && hr.purchaser.Name!=null)

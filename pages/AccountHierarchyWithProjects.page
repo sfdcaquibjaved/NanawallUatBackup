@@ -91,7 +91,7 @@
     </apex:pageBlock>
       <!-- Quoteless Opportunities -->
          <apex:pageBlock >
-             <apex:pageBlockSection title="QuoteLess Opportunities : {!CAProjOppList.size}">
+             <apex:pageBlockSection title="Quoteless Opportunities : {!CAProjOppList.size}" columns="2">
    <apex:pageblockTable value="{!CAProjOppList }" var="opp">
    <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>

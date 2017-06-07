@@ -3,7 +3,7 @@ public class sendResponsefromCaseClass {
         Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
         String insfprefix;
         BrandTemplate bt = [select id, name from BrandTemplate where name = 'Nana Logos New-Service' limit 1];
-        emailtemplate et = [select BrandTemplateId from emailtemplate where brandtemplateId =: bt.id];
+        emailtemplate et = [select BrandTemplateId from emailtemplate where brandtemplateId =: bt.id limit 1];
         //Getting ID of Case Object
         for(Schema.SObjectType stype : gd.values()){
                 Schema.DescribeSObjectResult r = stype.getDescribe();

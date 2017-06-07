@@ -1,0 +1,95 @@
+<apex:page standardController="Account" extensions="NanaWallCLass" >
+    <apex:form >
+     <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId"/>
+         <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="acc" value="{!Account}" >
+         <apex:column headerValue="Corporate Account Name">
+         <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
+         </apex:column>
+             <apex:column headerValue="Site Count" value="{!SiteCount}"/>
+             <apex:column headerValue="Projects Count" value="{!AccountWithProjects.size}"/>
+             <apex:column headerValue="Most Recent Order Date">
+             
+             </apex:column>
+             <apex:column headerValue="Projects Won (Order Paid)"/> 
+             <apex:column headerValue="Projects (Order In Progress)"/>
+             <apex:column headerValue="Projects (Quote in Progress)"/>
+             <apex:column headerValue="Project Lost"/>
+             <apex:column headerValue="Duplicate Projects"/>
+             <apex:column headerValue="QuoteLess Opportunities"/>
+           
+             <apex:column headerValue="Closure Rate">
+                 
+            </apex:column>
+         
+            <apex:column headerValue="Amount (Projects Won)">
+                
+            </apex:column>
+            <apex:column headerValue="Amount (Order In Progress)">
+                 
+            </apex:column>
+            <apex:column headerValue="Amount (Quote In Progress)">
+                 
+            </apex:column>
+            <apex:column headerValue="Amount (Lost)">
+                 
+            </apex:column>
+           
+           <apex:column headerValue="Total Amount">
+                 
+            </apex:column>
+         </apex:pageBlockTable>
+     </apex:pageBlockSection>
+    </apex:PageBlock>   
+       <apex:pageBlock >
+           <apex:pageBlockSection title="QuoteLess Opportunities : {!CAProjOppList.size}">
+               <apex:pageBlockTable value="{!CAProjOppList }" var="opp">
+                   <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
+                    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>   
+                    <apex:column headervalue="Stage Name" value="{!opp.StageName}"/>
+               </apex:pageBlockTable>>
+            </apex:pageBlockSection>>
+        </apex:pageBlock>>
+        <apex:pageBlock id="pbId">
+            <apex:pageBlockSection title=" {!noOfRecords} Account Which Does Not Have Project" columns="1">
+                <apex:pageBlockTable value="{!AccountsData}" var="acc">
+                    <apex:column headerValue="Account Without Project">
+                    <apex:outputField value="{!acc.Name}"/>
+                    </apex:column>
+                    <apex:column headerValue="Project Name"/>
+                     <apex:column headerValue="Project Status"/>
+                     <apex:column headerValue="Amount"/>
+                     <apex:column headerValue="Project Created Date"/>
+                     <apex:column headerValue="Order Finalized Date"/>
+                     <apex:column headerValue="Application Industry"/>
+                     <apex:column headerValue="Architect"/>
+                     <apex:column headerValue="Purchaser Account"/>
+                     <apex:column headerValue="Ordering Account"/>
+                     <apex:column headerValue="Project Name"/>
+                     <apex:column headerValue="Project City"/>
+                     <apex:column headerValue="Project ZipCode"/>
+                    </apex:pageBlockTable>
+                    <apex:panelGrid columns="8"> 
+                    <apex:selectList value="{!paginationSizeOptions}" multiselect="false" size="1" onchange="refreshPageSize();">
+                    <apex:selectOptions value="{!paginationSizeOptions}"/>
+                </apex:selectList>
+                 
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="First" action="{!setCon.first}" disabled="{!!setCon.hasPrevious}" title="First Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Previous" action="{!setCon.previous}" disabled="{!!setCon.hasPrevious}" title="Previous Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Next" action="{!setCon.next}" disabled="{!!setCon.hasNext}" title="Next Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Last" action="{!setCon.last}" disabled="{!!setCon.hasNext}" title="Last Page"/> 
+  
+                <apex:outputText >{!(setCon.pageNumber * Paginationsize)+1-Paginationsize}-{!IF((setCon.pageNumber * Paginationsize)>noOfRecords, noOfRecords,
+                     (setCon.pageNumber * Paginationsize))} of {!noOfRecords}
+                </apex:outputText> 
+                 
+               
+        </apex:panelGrid>  
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
