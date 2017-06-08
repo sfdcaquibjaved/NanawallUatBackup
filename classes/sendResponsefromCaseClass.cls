@@ -1,5 +1,5 @@
 public class sendResponsefromCaseClass {
-    public static void sendreplytofromCase(list<EmailMessage> newtrigger){
+   /* public static void sendreplytofromCase(list<EmailMessage> newtrigger){
         Map<String, Schema.SObjectType> gd =  Schema.getGlobalDescribe();
         String insfprefix;
         BrandTemplate bt = [select id, name from BrandTemplate where name = 'Nana Logos New-Service' limit 1];
@@ -28,5 +28,5 @@ public class sendResponsefromCaseClass {
     }
 }
           Messaging.sendEmail(mails);
-    } 
+    } */
 }

@@ -883,14 +883,66 @@ public with sharing class Quote_WizardController_Clone {
             if (opp.Project_Name__c != null && projectCreateOption == 'Existing Project') {
                 proj = [select id, name, Close_Date__c,RecordTypeId from Project__c where Id = : opp.Project_Name__c];
                 
-               Map<Id, List<OpportunityContactRole>> MapOppConROle = new Map<Id, List<OpportunityContactRole>>(); 
+               
                 
-                for(Opportunity o : [SELECT Id, (SELECT id, ContactID, OpportunityID FROM OpportunityContactRoles) FROM Opportunity WHERE Project_Name__c =: opp.Project_Name__c]){
-                    MapOppConROle.put(o.ID , o.OpportunityContactRoles) ;
+                map<ID,nrOpportunityContactRole__c> mapOppConROle = new map<ID, nrOpportunityContactRole__c>();
+                
+                for(nrOpportunityContactRole__c o : [SELECT  Contact__c, Role__c , Opportunity__c From nrOpportunityContactRole__c Where Opportunity__r.Project_Name__c =: opp.Project_Name__c]  ){
+                    
+                    mapOppConROle.put(o.Contact__c , o);
+                       
                 }
                 
+                List<nrOpportunityContactRole__c> ListOppConROleInsert = new List<nrOpportunityContactRole__c> () ; 
+               
+                List<nrOpportunityContactRole__c> ListOppConROleUpdate = new List<nrOpportunityContactRole__c> () ;
                 
+                for(nrOpportunityContactRole__c o : mapOppConROle.Values()){
+                     
+                    //if the contact is not in the list of opportunitycontactrole related to the existing opportunity
+                    // insert a new OpportunityContactRole
+                    if(!mapOppConROle.keySet().contains(con.ID)  ){
+                        nrOpportunityContactRole__c OCR = new nrOpportunityContactRole__c() ; 
+                        OCR.Contact__c = con.ID ; 
+                        OCR.Opportunity__c = o.Opportunity__c ; 
+                        OCR.Role__c = selectedContactRole ; 
+                        ListOppConROleInsert.add(ocr);
+                        break ; 
+                        
+                    }
+                    else{
+                        //if the contact is present in OpportunityContactRole but Role is different then update the existing 
+                        // OpportunityContactRole with the new selected role
+                        
+                        if(o.Contact__c == con.ID){
+                            system.debug('I am inside here 1');
+                            if(o.Role__c != selectedContactRole){
+                                
+                                o.ROle__c = selectedContactRole  ; 
+                                ListOppConROleUpdate.add(o);
+                            }
+                        }
+                    }
                     
+                }
+                
+                system.debug('Value in ListOppConROleUpdate'+ ListOppConROleUpdate);
+                //DMLs outside the for loop
+                try{
+                    
+                    if(ListOppConROleInsert .size() > 0 ){
+                        system.debug('inside insert try');
+                        insert ListOppConROleInsert ; 
+                    }
+                    if(ListOppConROleUpdate.size() > 0 ){
+                        system.debug('inside update try');
+                       update ListOppConROleUpdate ; 
+                        system.debug('ivalue of ListOppConROleUpdate after update ' + ListOppConROleUpdate);
+                    }
+                }
+                catch(exception e){
+                    system.debug('Exception is:'+e.getMessage());
+                }
             }
 
             try {
@@ -1104,7 +1156,7 @@ public with sharing class Quote_WizardController_Clone {
                 }
             }
             Catch(Exception ex) {
-                System.debug('$$$$$$$$$$$$$' + ex);
+                System.debug('$$$$$$$$$$$$$' + ex.getLineNumber() +' &&&' +ex.getMessage());
                 return null;
             }
 

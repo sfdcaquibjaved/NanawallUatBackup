@@ -32,7 +32,7 @@
              <apex:column value="{!prjStgQtd}" headerValue="Projects (Quote in Progress)"/>
              <apex:column value="{!prjStglost}" headerValue="Project Lost"/>
              <apex:column value="{!DuplPrj }" headerValue="Duplicate Projects"/>
-             <apex:column value="{!CAProjOppList.size}" headerValue="QuoteLess Opportunities"/>
+           <!--  <apex:column value="{!CAProjOppList.size}" headerValue="QuoteLess Opportunities"/> -->
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
              <apex:column headerValue="Closure Rate">
@@ -91,7 +91,7 @@
     </apex:pageBlock>
       <!-- Quoteless Opportunities -->
          <apex:pageBlock >
-             <apex:pageBlockSection title="Quoteless Opportunities : {!CAProjOppList.size}" columns="2">
+             <apex:pageBlockSection title="Quoteless Projects : {!CAProjOppList.size}" columns="2">
    <apex:pageblockTable value="{!CAProjOppList }" var="opp">
    <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
@@ -199,7 +199,7 @@
                 </apex:column>
                  <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Purchaser Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Installed at Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="Purch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -285,7 +285,7 @@
              <apex:column headerValue="Order Finalized Date"/>
              <apex:column headerValue="Application Industry"/>
              <apex:column headerValue="Architect"/>
-             <apex:column headerValue="Purchaser Account"/>
+             <apex:column headerValue="Installed at Account"/>
              <apex:column headerValue="Ordering Account"/>
              <apex:column headerValue="Project Name"/>
              <apex:column headerValue="Project City"/>

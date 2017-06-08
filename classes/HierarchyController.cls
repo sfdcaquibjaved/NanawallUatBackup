@@ -496,7 +496,7 @@ public class HierarchyController{
                        Hierarchy hier = new Hierarchy();
                        hier.crtdt = date.newInstance(prj.CreatedDate.year(), prj.CreatedDate.month(), prj.CreatedDate.day()) ;                                 
                         hier.accountName.Id = prj.End_Customer_Account__c;
-                hier.accountName.Name = prj.End_Customer_Account__r.Name;
+                        hier.accountName.Name = prj.End_Customer_Account__r.Name;
                         hier.projectName = prj;
                         hier.architect.Name = prj.Architect_Account__r.Name;
                         hier.purchaser.Name = prj.Purchaser_Account__r.Name;

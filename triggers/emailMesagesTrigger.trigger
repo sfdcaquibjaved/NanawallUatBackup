@@ -17,7 +17,7 @@ trigger emailMesagesTrigger on EmailMessage( before insert , after insert) {
     }
     if(emlist.size()>0){
         System.debug('emlist'+emlist);
-        sendResponsefromCaseClass.sendreplytofromCase(emlist);
+        //sendResponsefromCaseClass.sendreplytofromCase(emlist);
     }
     }
     

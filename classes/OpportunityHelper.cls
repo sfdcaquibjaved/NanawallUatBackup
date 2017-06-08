@@ -1310,7 +1310,7 @@ public class OpportunityHelper {
     Input Parameter: Set of Ids    
     *************************************************/   
     public static void UpdateDiscountOnProject(List < opportunity > oppRec) {
-    try{
+    //try{
     List < Project__c > updateProjList = new List < Project__c > ();
     set < id > projectIDs = new set < id > ();
        for (opportunity opp: oppRec) {
@@ -1362,9 +1362,10 @@ public class OpportunityHelper {
     //Set the Project Status to Project Specified for all Qualified opps
     if (updateProjList.size() > 0) {
         //Updating Project
-        Database.saveresult[] sr = Database.update(updateProjList, False);
+        update updateProjList;
+       // Database.saveresult[] sr = Database.update(updateProjList, False);
     }
-    }catch(exception e){}
+    //}catch(exception e){}
     }
 
 /*************************************************

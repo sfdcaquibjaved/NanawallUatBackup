@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="HierarchyController_nishant1" sidebar="false" >
+<apex:page standardController="Account" extensions="HierarchyController" sidebar="false" >
 <style>
                                                                 .container
                                                                 {
@@ -16,7 +16,7 @@
     <apex:form >
         <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId"/>
 
- <apex:PageBlock >
+ <apex:PageBlock id="summaryAcc">
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="acc" value="{!Account}" >
          <apex:column headerValue="Corporate Account Name">
@@ -32,7 +32,7 @@
              <apex:column value="{!prjStgQtd}" headerValue="Projects (Quote in Progress)"/>
              <apex:column value="{!prjStglost}" headerValue="Project Lost"/>
              <apex:column value="{!DuplPrj }" headerValue="Duplicate Projects"/>
-             <apex:column value="{!CAProjOppList.size}" headerValue="QuoteLess Opportunities"/>
+           <!--  <apex:column value="{!CAProjOppList.size}" headerValue="QuoteLess Opportunities"/> -->
             <!-- <apex:column value="{!siz}" headerValue="Project Count"/> -->
            <!--  <apex:column value="{!prjWon}" headerValue="Projects Won"/> -->
              <apex:column headerValue="Closure Rate">
@@ -63,18 +63,10 @@
      </apex:pageBlockSection>
     </apex:PageBlock>
   
-  <html>
- <body>
-     <div>
-         <label>Show the record without Projects</label>
-         <input type="radio" name="chkradio" value="Yes"> Yes</input>
-         <input type="radio" name="chkradio" value="No"> No</input>
-     </div>
- </body>     
- </html>
-   <apex:pageBlock >
+  
+   <apex:pageBlock id="accFilter">
    <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
-          <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
+          <apex:pageBlockSection collapsible="true" title="Filters : {!ProjectList.size}" columns="1" >
               <apex:panelGrid columns="6" cellspacing="10">
               <apex:outputLabel value="Account Name:" style="align:center;"/><apex:inputText value="{!accFilter}"/>
               <apex:outputLabel value="Project Name:"/><apex:inputText value="{!prjFilter}"/>
@@ -91,7 +83,7 @@
                <apex:outputLabel value="Ordering Account :"/><apex:inputText value="{!ordFilter}"/>
               </apex:panelGrid>
               
-            <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" reRender="Acc_proj,acc_withoutprj" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem ><apex:commandButton action="{!filter}" value="Apply Filter" reRender="summaryAcc,Acc_proj" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;"/> <apex:commandButton value="Reset" action="{!refresh}" styleClass="buttonStyle" style="background:LightBlue;width:100px;height:30px;" /></apex:pageBlockSectionItem>
           </apex:pageBlockSection>
       
      
@@ -99,7 +91,7 @@
     </apex:pageBlock>
       <!-- Quoteless Opportunities -->
          <apex:pageBlock >
-             <apex:pageBlockSection title="QuoteLess Opportunities : {!CAProjOppList.size}" columns="2">
+             <apex:pageBlockSection title="Quoteless Opportunities : {!CAProjOppList.size}" columns="2">
    <apex:pageblockTable value="{!CAProjOppList }" var="opp">
    <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
@@ -111,7 +103,7 @@
    </apex:pageBlock>
       <!---------------End Section------------ -->
   <apex:PageBlock id="Acc_proj" >    
-     <apex:pageBlockSection columns="1">
+     <apex:pageBlockSection columns="1" title="Record found : {!ProjectList.Size} ">
          <apex:pageBlockTable var="pr" value="{!ProjectList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
@@ -207,7 +199,7 @@
                 </apex:column>
                  <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Purchaser Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Installed at Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="Purch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
@@ -271,7 +263,7 @@
          </apex:pageBlockTable>
         
      </apex:pageBlockSection> 
-   </apex:pageBlock>
+   </apex:PageBlock>
     
        <apex:PageBlock id="pbId" >  
        
