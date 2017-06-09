@@ -1,5 +1,7 @@
 public class NanaWallCLass 
 {       
+   // wrapper class to hold all data
+    public list<wrapperClass> WrapperList{get;set;}
     // Count The Project Won
         public integer ProjWon{get;set;}
     // Count The Project Order In Process
@@ -38,9 +40,9 @@ public class NanaWallCLass
         public integer NoOfRecords {get;set;}
         // record select options for pagination Account which does not have projects
         public List<selectoption> PaginationSizeOptions {get;set;}      
-        
+    public  NanaWallCLass(){}
        // Main class Constructor for all data inilization
-        public NanaWallCLass(ApexPages.StandardController setCon) 
+        public  NanaWallCLass(ApexPages.StandardController setCon) 
         {
             AccId = ApexPages.currentPage().getParameters().get('id');
             
@@ -89,8 +91,9 @@ public class NanaWallCLass
             paginationSizeOptions.add(new selectoption('150','150'));
             paginationSizeOptions.add(new selectoption('200','200'));
             paginationSizeOptions.add(new selectoption('250','250'));
-            
-            
+            list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
+
+          
             for(project__c proj : AccountWithProjects)
             {
             
@@ -116,7 +119,42 @@ public class NanaWallCLass
             
             }
         }
+    // Wrapper List Method that will get the data from Project and contacts Role
+   /* public LIST <wrapperClass> getWrapperData()
+    {
+                        
+                 WrapperList = new list<wrapperClass>();  
+                // collect all contact role name whose opportunity stage is close and won
+                list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
+                for(project__c  P :AccountWithProjects)
+            {
+                                for(opportunityContactRole opp1 : opp)
+            
+                    {
+                                        WrapperList.add( new wrapperClass(P, opp1) );
+                                
+                        
+                        }
+                        
+                
+            }
+               system.debug('The Wrapper List'+WrapperList);
+             return WrapperList;
+       
+    } */
     
+    // wrapper class to combine all data
+    public class wrapperClass
+    {
+        public project__c pr;
+        public opportunityContactRole opp1;
+        public wrapperClass(project__C GP)
+        {
+            this.pr = GP;
+        //    this.opp1 =opp;
+        }
+        
+    }
     
     public ApexPages.StandardSetController setCon 
     {

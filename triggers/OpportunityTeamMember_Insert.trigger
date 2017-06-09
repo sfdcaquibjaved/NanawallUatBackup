@@ -11,26 +11,26 @@ trigger OpportunityTeamMember_Insert on OpportunityTeamMember (after insert, bef
     //Create the Project Share records on the After Insert event of the OpportunityTeamMember
     Project_Sharing.share_record(Trigger.new);
     for(OpportunityTeamMember oTm : trigger.new){
-    	oppIds.add(oTm.OpportunityId);
+        oppIds.add(oTm.OpportunityId);
     }
     if(Trigger.isInsert && oppTeamHelper.runoppTeamUpdate){
-    	oppTeamHelper.oppTeamUpdate(oppIds);
+        oppTeamHelper.oppTeamUpdate(oppIds);
     }
     }
     if(Trigger.isDelete && Trigger.isBefore){
-    	for(OpportunityTeamMember oTm : trigger.old){
-    	oppIds.add(oTm.OpportunityId);
-    	}
-    	oppteamHelper.validateDeletion(oppIds,trigger.old);
+        for(OpportunityTeamMember oTm : trigger.old){
+        oppIds.add(oTm.OpportunityId);
+        }
+        oppteamHelper.validateDeletion(oppIds,trigger.old);
     } 
    
     if(Trigger.isAfter && Trigger.isDelete && oppTeamHelper.rundelOppTeamMembers){
-    	for(OpportunityTeamMember oTm : trigger.old){
-    	oppIds.add(oTm.OpportunityId);
-    	userIds.add(oTm.UserId);
-    	}
-    	oppteamHelper.delOppTeamMembers(oppIds, trigger.old);
-    	
+        for(OpportunityTeamMember oTm : trigger.old){
+        oppIds.add(oTm.OpportunityId);
+        userIds.add(oTm.UserId);
+        }
+        oppteamHelper.delOppTeamMembers(oppIds, trigger.old);
+        
    } 
      if (trigger.isAfter && trigger.isDelete){
       Project_Sharing.delete_share_record(Trigger.old);

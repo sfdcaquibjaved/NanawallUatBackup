@@ -2,6 +2,9 @@
 * Author : CloudAlyze Solutions LLC
 * Version : 1.0
 * Class: Display the data Project , Opportunity ,order , ContactRoles
+* Created Date : 20 May 2017
+* Last modified By : Nishant Dubey
+* Last Modified Date : 7 Jun 2017
 ********************/
 public class HierarchyController_nishant{
 /*****************Constructor Variable initialization********************/
@@ -337,6 +340,8 @@ public class HierarchyController_nishant{
         
         opportunityCRSet();
         
+        /* Get ContactRoles from whose Opportunity has Opportunity */
+        
         oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
                                     from Opportunity where Id IN:oppIDSet]; //AND  AccountId IN:oppAccSet         
     for(Project__c prj:ProjSiteList ) { hierarchySetData(prj);  }  
@@ -353,7 +358,7 @@ public class HierarchyController_nishant{
             System.debug('Amount:'+hr.amount);
         }*/
     }
-    
+    /* Retreive the data from Opportunity whose has Opportunity */
     public void opportunityCRSet(){
         
         for(Project__c plist: ProjSiteList){
