@@ -3,7 +3,7 @@
 * Version : 1.0
 * Class: Display the data Project , Opportunity ,order , ContactRoles
 ********************/
-public class ashokcontroller{
+public class HierarchyController_demo{
 /*****************Constructor Variable initialization********************/
     //public Set<Id> SetOr{get;set;}
     public List<ProjectWrapper> records{get;set;} 
@@ -54,12 +54,11 @@ public class ashokcontroller{
     public Date ordFnzDtMax{get;set;}
     public String ordby;
     public Set<ID> oppIDSet{get;set;}
-    public Set<ID> oppAccSet{get;set;}
+   /* public Set<ID> oppAccSet{get;set;}*/
     public Hierarchy [] ProjectList{get;set;}
     public List<Hierarchy> tmpList{get;set;}
     public integer cnt{get;set;}
     public Set<ID> prjId{get;set;}
-   public list<account> accountdata{get;set;}
 
     public String project_drp_Stage {get;set;}
     
@@ -74,7 +73,19 @@ public class ashokcontroller{
             options.add(new selectOption(f.getLabel(),f.getValue()));                    
         }    
         return Options;    
-    }      
+    } 
+    public List<SelectOption> getApplicationDrp()    
+    {    
+        List<SelectOption> options =  new List<SelectOption>();    
+        options.add(new selectOption('None','--- None ---'));    
+        Schema.DescribeFieldResult fieldResult = project__c.Application__c.getDescribe();    
+        List<Schema.picklistEntry> ple = fieldResult.getPicklistValues();    
+        for(Schema.picklistEntry f:ple)    
+        {    
+            options.add(new selectOption(f.getLabel(),f.getValue()));                    
+        }    
+        return Options;    
+    }   
 
 //Pagination varibles and List
     public integer PaginationSize {get;set;}
@@ -213,7 +224,6 @@ public class ashokcontroller{
  * 
  * Generate summary data with latest orderfinalized date
  */
-  //      accountdata = :  [SELECT Account.Name FROM Account WHERE parent.id =:ObjAcc.id AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)];
     public void summary(){
      
         for(Project__c proj: ProjSiteList){
@@ -260,7 +270,7 @@ public class ashokcontroller{
                     DuplPrj = DuplPrj +1;
                 }   
 
-            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
+            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Awarded')|| proj.Stage__c.contains('Considered') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
                 
                 prjStgQtd = prjStgQtd + 1;
                 
@@ -285,16 +295,15 @@ public class ashokcontroller{
  */
     public List<Account> noProjectAccounts(){
         /* ************** Query fetch the record which has no project**************** */
-       AccSiteList = [Select Name, Id from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
-               accountdata =[SELECT Account.Name FROM Account WHERE parent.id =:ObjAcc.id AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)];
-
-       siz = AccSiteList.size();
+       // AccSiteList = [Select Name, Id, (Select id from Projects1__r) from Account where parent.Id=:string.valueOf(ObjAcc.Id).left(15)]; //OR id=:string.valueOf(ObjAcc.Id).left(15) */
+       
+       siz = [SELECT count() FROM Account where parent.id=:objacc.id];//AccSiteList.size();
         
         List<Account> acctemp = new List<Account>();
         
         
         
-        AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
+      //  AccSiteList = acctemp; /* Assign acctemp list to AccSiteList which contain record without project*/
        
         return AccSiteList;
     }
@@ -313,10 +322,10 @@ public class ashokcontroller{
  * 
  */
     public void runQuery(ID objAccId){
-        
+        /* Main Query get all the data from project & opportunity */
         String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
                query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
+               query1+='(Select Id, Name, AccountId,Project_Name__c,Project_Name__r.Ordering_Account__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\')AND (Project_Name__r.Ordering_Account__c!=Null))';
                query1+=' FROM Project__c';
                query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
                query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
@@ -334,12 +343,13 @@ public class ashokcontroller{
         
      /*********QuoteLess Opprotunities *******************/
        CAProjOppList =[select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c,Project_Name__r.Architect_Account__c,Project_Name__r.CreatedDate  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
+       /* CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];*/
      /**********End Section *****************************/   
      /******** Pass query data to ProjectSiteList ********/   
         ProjSiteList = database.query(query1);
         
         opportunityCRSet();
-        
+        /* Retreive from projectList those contactRoles whose opportunity size is greater than 0 */
         oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
                                     from Opportunity where Id IN:oppIDSet]; //AND  AccountId IN:oppAccSet         
     for(Project__c prj:ProjSiteList ) { hierarchySetData(prj);  }  
@@ -368,7 +378,7 @@ public class ashokcontroller{
                 for(Opportunity opp: prj.Opportunities__r){
                         
                         oppIDSet.add(opp.Id);
-                        oppAccSet.add(prj.Ordering_Account__c);
+                       /* oppAccSet.add(prj.Ordering_Account__c);*/
                     }
                 }
            }
@@ -378,33 +388,29 @@ public class ashokcontroller{
  * 
  * retrieve OpportunityContactRoles ID & add into hierarchy wrapper class
  */  
-    public void retrieveContactRoles(Hierarchy hier, Project__c prj)
-    {
+    public void retrieveContactRoles(Hierarchy hier, Project__c prj){
                 
-         /*  for (Order od : prj.Orders__r)
-            { 
+            for (Order od : prj.Orders__r){ 
                         hier.ordFnzDt.add(od.Order_Finalized_Date__c);
-                        hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
-            } */
+                                hier.ordCrtDt.add(date.newInstance(od.CreatedDate.year(), od.CreatedDate.month(), od.CreatedDate.day()));
+                   }
             
             for (Opportunity op : oppList2)
             if(op.Project_Name__c == prj.id)
             {
-                  for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles)
-                        {
-                            for(OpportunityContactRole ocr : ocrs )
-                            { 
+                  for(List<OpportunityContactRole> ocrs : op.OpportunityContactRoles){
+                            for(OpportunityContactRole ocr : ocrs ){ 
                                hier.ocr.add(ocr);
                             }
                         }
-            }
+                    }
         ProjectList.add(hier);
     }
    /** This method 
  * 
  * Define Contructor & initialize the varibale & list
  */   
-    public ashokcontroller(ApexPages.StandardController con){
+    public HierarchyController_demo(ApexPages.StandardController con){
         
         CAProjOppList = new List<Opportunity>(); // Initialize List 
         
@@ -414,7 +420,7 @@ public class ashokcontroller{
         ordby='CreatedDate';
         DuplPrj =0;
         oppIdSet = new Set<ID>();
-        oppAccSet = new Set<ID>();
+        /*oppAccSet = new Set<ID>();*/
         AccSiteList = new List <Account>();
         ordList = new LIST<Order>();
         contrls = new List<Contact>();
@@ -453,13 +459,8 @@ public class ashokcontroller{
         archFilter = '';
         sortFullExp = '';
       //Inilization of Pagination Select Option  
-        PaginationSize =250;
-        paginationSizeOptions = new List<selectoption>();
-        paginationSizeOptions.add(new selectoption('25','25'));
-      //  paginationSizeOptions.add(new selectoption('100','100'));
-      //  paginationSizeOptions.add(new selectoption('150','150'));
-     //   paginationSizeOptions.add(new selectoption('200','200'));
-     //   paginationSizeOptions.add(new selectoption('250','250'));
+        PaginationSize =10;
+      
          /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
         runQuery(objAcc.Id);
        
@@ -544,12 +545,12 @@ public class ashokcontroller{
             cnt = 0;
             
             if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
-            if(prjFilter!=''){prjFilter = prjFilter; cnt++;} 
+            if(prjFilter!=''){prjFilter = prjFilter.trim(); cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
-            if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
-            if(project_drp_Stage!='' && project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
+            if(appIndFilter !='None'){appIndFilter = appIndFilter.trim(); cnt++;}
+            if(project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
             if(archFilter!=''){archFilter = archFilter; cnt++;}
             if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
@@ -560,7 +561,7 @@ public class ashokcontroller{
                 flag++; 
             
             if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
-                if(hr.ProjectName.Name.containsOnly(prjFilter) || hr.ProjectName.Name.contains( prjFilter))
+                if(hr.ProjectName.Name.containsIgnoreCase(prjFilter))
                     flag++;
 
             if(cityFilter!='' && hr.projectCity!=null) 
@@ -629,7 +630,7 @@ public class ashokcontroller{
  */
     public void filterAcc(){
         
-      //  AccSiteList = noProjectAccounts();
+       // AccSiteList = noProjectAccounts();
         
         List<Account> accTmpList = new List<Account>();
         

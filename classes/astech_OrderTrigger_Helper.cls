@@ -470,7 +470,7 @@ system.debug('** ASTECH: sending CAD email to  ' + o.Quote.Nana_Quote__r.Install
 	                tsk.Subject = 'CAD Email Sent for Order ' + o.Name;
 	                tsk.Description = '';
 	                
-	                tasksToInsert.add( tsk ); 
+//	                tasksToInsert.add( tsk ); 
 system.debug('** ASTECH: triggering email send');	                
 
 				}catch (Exception ex )

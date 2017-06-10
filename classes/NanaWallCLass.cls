@@ -120,39 +120,70 @@ public class NanaWallCLass
             }
         }
     // Wrapper List Method that will get the data from Project and contacts Role
-   /* public LIST <wrapperClass> getWrapperData()
+    public LIST <wrapperClass> getWrapperData()
     {
                         
                  WrapperList = new list<wrapperClass>();  
-                // collect all contact role name whose opportunity stage is close and won
-                list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
-                for(project__c  P :AccountWithProjects)
-            {
-                                for(opportunityContactRole opp1 : opp)
+               String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
+               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
+               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
+               query1+=' FROM Project__c';
+               query1+=' WHERE (Architect_Account__c = :AccId OR Brand_Name_Account__c = :AccId OR End_Customer_Account__c = :AccId '; 
+               query1+=' OR Franchise_Account__c = :AccId OR Franchisor_Account__c = :AccId OR Other_Influencer_Account__c = :AccId '; 
+               query1+=' OR Purchaser_Account__c =:AccId OR Ordering_Account__c =:AccId ) ';
             
+            //Assign Query REsults to the project List type Projects
+             AccountWithProjects = database.query(query1);
+        
+          /***Nishant Comment***/
+          
+          /*****End Section*****/        
+                // collect all contact role name whose opportunity stage is close and won
+                list<opportunity> opp= [select stagename, opportunity.project_name__r.purchaser_account__c,opportunity.project_name__r.name,(select contact.name from OpportunityContactRoles) from opportunity where stagename = 'Closed/Won' AND opportunity.project_name__r.purchaser_account__c=:accid and opportunity.project_name__r.ordering_Account__c !=null];
+                //list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
+                for(project__c  P :AccountWithProjects)
+                { 	
+                    if (p.Name == 'sa')
                     {
-                                        WrapperList.add( new wrapperClass(P, opp1) );
-                                
                         
-                        }
+                    }
                         
+                        
+                }
+              
+       //         {   
+                   
+     //                 for(opportunity opp1 : opp)
+            
+        //            {
+      //                    if (p.Name == opp.project_name__r.name)
+                             {
+                             //              wrapperClass wr = new wrapperClass(p,opp);
+                                  //         WrapperList.add(p, opp);
+                                           // WrapperList.add( new wrapperClass(P) );
+                             }     
+                        
+          //            }
                 
-            }
+   //             }
+                // WrapperList.add( new wrapperClass(P) );
+         //   }
                system.debug('The Wrapper List'+WrapperList);
              return WrapperList;
        
-    } */
+    } 
     
     // wrapper class to combine all data
     public class wrapperClass
     {
-        public project__c pr;
-        public opportunityContactRole opp1;
-        public wrapperClass(project__C GP)
+        public project__c pr{get;set;}
+        public opportunity opp1{get;set;}
+        public wrapperClass(project__C GP ,opportunity opp)
         {
-            this.pr = GP;
-        //    this.opp1 =opp;
+            pr = GP;
+            opp1 =opp;
         }
+         
         
     }
     
@@ -162,7 +193,7 @@ public class NanaWallCLass
             if(setCon == null) {  
                
                 setCon = new ApexPages.StandardSetController(Database.getQueryLocator(
-                      [SELECT Account.Name FROM Account WHERE parent.id =:AccId AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c)]));
+                      [SELECT Account.Name FROM Account WHERE parent.id =:AccId AND Account.Id NOT IN (SELECT project__C.End_Customer_Account__c FROM project__c) ]));
                 setCon.setPageSize(Paginationsize);  
                 noOfRecords = setCon.getResultSize(); 
                 return setcon;
