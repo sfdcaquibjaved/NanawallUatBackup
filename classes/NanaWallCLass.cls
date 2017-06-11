@@ -2,6 +2,10 @@ public class NanaWallCLass
 {       
    // wrapper class to hold all data
     public list<wrapperClass> WrapperList{get;set;}
+    public list<opportunity> AllData {get;set;}
+   // public set<opportunity> AllData{get;set;}
+    //map for id and accountcontactroel
+    public map<id,list<opportunityContactRole>> mapdata;
     // Count The Project Won
         public integer ProjWon{get;set;}
     // Count The Project Order In Process
@@ -91,9 +95,7 @@ public class NanaWallCLass
             paginationSizeOptions.add(new selectoption('150','150'));
             paginationSizeOptions.add(new selectoption('200','200'));
             paginationSizeOptions.add(new selectoption('250','250'));
-            list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
-
-          
+                     
             for(project__c proj : AccountWithProjects)
             {
             
@@ -135,21 +137,16 @@ public class NanaWallCLass
             //Assign Query REsults to the project List type Projects
              AccountWithProjects = database.query(query1);
         
+       
+        
           /***Nishant Comment***/
           
           /*****End Section*****/        
                 // collect all contact role name whose opportunity stage is close and won
-                list<opportunity> opp= [select stagename, opportunity.project_name__r.purchaser_account__c,opportunity.project_name__r.name,(select contact.name from OpportunityContactRoles) from opportunity where stagename = 'Closed/Won' AND opportunity.project_name__r.purchaser_account__c=:accid and opportunity.project_name__r.ordering_Account__c !=null];
-                //list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
-                for(project__c  P :AccountWithProjects)
-                { 	
-                    if (p.Name == 'sa')
-                    {
-                        
-                    }
-                        
-                        
-                }
+               // list<opportunity> opp= [select opportunity.project_name__r.name from opportunity where opportunity.project_name__r.Purchaser_Account__c=:AccId];
+               AllData = [select opportunity.project_name__r.Purchaser_Account__c from opportunity where opportunity.project_name__r.Purchaser_Account__c=:AccId];
+                  
+        //list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
               
        //         {   
                    
@@ -178,10 +175,10 @@ public class NanaWallCLass
     {
         public project__c pr{get;set;}
         public opportunity opp1{get;set;}
-        public wrapperClass(project__C GP ,opportunity opp)
+        public wrapperClass(list<project__C> GP)
         {
-            pr = GP;
-            opp1 =opp;
+            //pr = GP;
+            //opp1 =opp;
         }
          
         

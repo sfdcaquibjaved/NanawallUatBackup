@@ -139,22 +139,7 @@ public class HierarchyController_demo{
  * while clicking header on project list
  * 
  */
-    public String sortExpression {
-
-             get { return sortExp; }
-
-             set { 
-
-               if (value == sortExp) 
-                   
-                   sortDirection = (sortDirection == 'ASC')? 'DESC' : 'ASC';
-
-               else sortDirection = 'ASC';
-
-               sortExp = value;
-           }
-       }
-
+   
     /**
  * This method return
  * 
@@ -163,62 +148,13 @@ public class HierarchyController_demo{
  * while clicking header on project list
  * 
  */
-        public String getSortDirection() 
-        {  
-                if (sortExpression == null || sortExpression == '') 
-                    return 'ASC';
-
-            else return sortDirection;
-
-         }
-
-         public void setSortDirection(String value) 
-         { 
-                    sortDirection = value;
-         }
-
+       
     /**
  * This method return
  * 
  * bind the data and show in the project list after ascending & descending 
  * order(Sorting) decide which list to sort
  */
-        public PageReference ViewData()
-        {
-           sortFullExp = sortExpression  + ' ' + sortDirection;  
-  
-           if(sortExp.equalsIgnoreCase('AccName')){ noProjectAccounts(); ordby = 'End_Customer_Account__r.Name'; }
-        
-           else if (sortExp.equalsIgnoreCase('PrjName')) ordby = 'Name';
-            
-           else  if (sortExp.equalsIgnoreCase('Amount')) ordby = 'Amount__c';
-            
-           else if (sortExp.equalsIgnoreCase('Stage')) ordby = 'Stage__c';   
-            
-            else if (sortExp.equalsIgnoreCase('PCrtDt')) ordby = 'CreatedDate';
-            
-            else if (sortExp.equalsIgnoreCase('Arch')) ordby = 'Architect_Account__c';
-            
-            else if (sortExp.equalsIgnoreCase('Purch')) ordby = 'Purchaser_Account__c';
-            
-            else if (sortExp.equalsIgnoreCase('Ordering')) ordby = 'Ordering_Account__c';
-            
-            else if (sortExp.equalsIgnoreCase('City')) ordby = 'Project_City__c';
-            
-            else if (sortExp.equalsIgnoreCase('State')) ordby = 'Project_State__c';
-            
-            else if (sortExp.equalsIgnoreCase('Zipcode')) ordby = 'Project_Zip_Code__c';
-            
-            else if (sortExp.equalsIgnoreCase('AppIndustry')) ordby = 'Application__c';
-                 
-       ProjectList.clear();
-            
-            runQuery(ObjAcc.Id);
-      
-            //PageReference pr = new PageReference(ProjectList);
-            
-            return null;
-     }
     /**
  * This method return
  * 
@@ -332,14 +268,7 @@ public class HierarchyController_demo{
                query1+=' OR Purchaser_Account__c =:objAccId OR Ordering_Account__c =:objAccId) '; 
              If(prjId.size()!=0)
                query1+=' AND (Id IN : prjId) ';    
-        if(sortExp!=''){
-            query1+='order by ';
-            query1+=ordby;
-            if(sortDirection!='')    
-            query1+= ' '+sortDirection;
-            else
-            query1+= ' ASC';
-        }
+        
         
      /*********QuoteLess Opprotunities *******************/
        CAProjOppList =[select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c,Project_Name__r.Architect_Account__c,Project_Name__r.CreatedDate  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
@@ -556,11 +485,11 @@ public class HierarchyController_demo{
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
             
             
-            if(accFilter!='' && hr.accountName!=null && hr.accountName.Name!=null) 
+            if(accFilter!='' && hr.accountName.Name!=null) 
                if(hr.accountName.Name.containsIgnoreCase(accFilter))
                 flag++; 
             
-            if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
+            if(prjFilter!='' && hr.ProjectName.Name!=null) 
                 if(hr.ProjectName.Name.containsIgnoreCase(prjFilter))
                     flag++;
 
