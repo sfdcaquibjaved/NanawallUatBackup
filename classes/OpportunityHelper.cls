@@ -413,7 +413,7 @@ public class OpportunityHelper {
         System.debug(projectStageMap);
         System.debug(mapStageProj);
         //system.debug(mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c));
-        if(projectStageMap != null && projectStageMap.containskey(proj.ID) && mapStageProj != null && mapStageProj.containsKey(proj.stage__c) && mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c) > 0 && mapStageProj.get(proj.stage__c) < mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c)){
+        if(projectStageMap != null && projectStageMap.containskey(proj.ID) && mapStageProj != null && mapStageProj.containsKey(proj.stage__c) && mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c) >0 && mapStageProj.get(proj.stage__c) < mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c)){
             system.debug('project stage is' + proj.id + proj.stage__c);
             system.debug('#################'+mapStageProj.get(proj.stage__c));
             system.debug('#################'+mapStageProj.get(opp_proj_stages__c.getinstance(projectStageMap.get(proj.ID).stageName).proj_stages__c));

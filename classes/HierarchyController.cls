@@ -1,6 +1,9 @@
 /*****************Class Declaration
 * Author : CloudAlyze Solutions LLC
 * Version : 1.0
+* Last Modified By : Nishant Dubey
+* Last Modified Date : 12 Jun 2017
+* Modification : Comment & Structure the code
 ********************/
 public class HierarchyController{
 /*****************Constructor Variable initialization********************/
@@ -58,9 +61,152 @@ public class HierarchyController{
     public List<Hierarchy> tmpList{get;set;}
     public integer cnt{get;set;}
     public Set<ID> prjId{get;set;}
-
-    public String project_drp_Stage {get;set;}
     
+     /******Pagination varibles and List********/
+    public String project_drp_Stage {get;set;}
+    public integer PaginationSize {get;set;}
+    public integer NoOfRecords {get;set;}
+    public List<selectoption> PaginationSizeOptions {get;set;}
+
+ /** This method 
+ * 
+ * Define as Contructor of the class "HierarchyController" & initialize the varibale & list
+ */   
+    public HierarchyController(ApexPages.StandardController con){
+        
+        CAProjOppList = new List<Opportunity>(); // Initialize List 
+        
+        tmpList = new List<Hierarchy>();
+        ProjectList = new List<Hierarchy>();
+        ordFnzDtMax = null;
+        ordby='CreatedDate';
+        DuplPrj =0;
+        oppIdSet = new Set<ID>();
+        oppAccSet = new Set<ID>();
+        AccSiteList = new List <Account>();
+        ordList = new LIST<Order>();
+        contrls = new List<Contact>();
+        prjList2 = new List<Project__c>();
+        oppList2 = new List<Opportunity>();
+        oppList3 = new List<List<Opportunity>>();
+        AccRelatedList = new Account();
+        ProjSiteList = new List<Project__c>();
+        ProjectListBkp = new List<Hierarchy>();
+        objAcc = (Account)con.getRecord();
+       // SetTest =new set<Id>();
+        prjId =new Set<Id>();
+        totalAmount = 0.0;
+        amountWon = 0.0;
+        cnt=0;
+        siz = 0;
+        psiz = 0;
+        prjWon = 0;
+        prjStgQtd = 0;
+        prjStglost=0; 
+        prjStgPrg = 0;
+        prjStgWon = 0;
+        prjStgQtdAmt = 0.0;
+        prjStglostAmt = 0.0;
+        prjStgPrgAmt = 0.0;
+        prjStgWonAmt = 0.0;
+        relType='';
+        accFilter = '';
+        prjFilter = '';
+        cityFilter = '';
+        stateFilter = '';
+        appIndFilter = '';
+        prjStsFilter = '';
+        ordFilter = '';
+        purFilter = '';
+        archFilter = '';
+        sortFullExp = '';
+      //Inilization of Pagination Select Option  
+        PaginationSize =10;
+      
+         /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
+        runQuery(objAcc.Id);
+       
+        summary();                      
+               
+     }
+
+ /**
+ * This method provide
+ * 
+ * summary data with latest orderfinalized date & related data
+ */
+    public void summary(){
+     
+        for(Project__c proj: ProjSiteList){
+            
+            if(proj.Id!=null){ 
+            
+            ordList = proj.Orders__r;
+                
+            ordList.sort();
+               
+            Integer sz = ordList.size();    
+                
+            if((ordFnzDtMax!=null) && sz > 0 &&(ordFnzDtMax < ordList.get(sz-1).Order_Finalized_Date__c)){
+                             
+                             ordFnzDtMax = date.newInstance(ordList.get(sz-1).Order_Finalized_Date__c.year(), ordList.get(sz-1).Order_Finalized_Date__c.month(), ordList.get(sz-1).Order_Finalized_Date__c.day());
+                         }
+                             
+                         else if (ordFnzDtMax==null && sz > 0 && ordList.get(sz-1).Order_Finalized_Date__c!=null){
+                                    
+                             ordFnzDtMax = date.newInstance(ordList.get(sz-1).Order_Finalized_Date__c.year(), ordList.get(sz-1).Order_Finalized_Date__c.month(), ordList.get(sz-1).Order_Finalized_Date__c.day());
+                         }
+           
+           /*******Total amount related to Amount (Projects Won) ,Amount (Order In Progress),Amount(Quote In Progress),Amount (Lost)*******/                           
+           if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
+            
+           /** Total Amount related to Amount (Order In Progress) ****/  
+            if(proj.Stage__c.contains('Closed Won - Order In Process') || proj.Stage__c.contains('Closed Won - Order Signed') || proj.Stage__c.contains('Order - Negotiation') || proj.Stage__c.contains('Project On Hold') && proj.Orders__r.size()>0)
+                {
+                prjStgPrg = prjStgPrg +1; 
+                    
+                if(proj.Amount__c!=null)    
+                    
+                prjStgPrgAmt = prjStgPrgAmt + proj.Amount__c;     
+            }
+            
+            /** Total Amount related to Amount (Projects Won)****/      
+            if (proj.Stage__c != null && (proj.Stage__c.contains('Closed Complete - Ordered - Paid')))
+                {
+                    prjWon = prjWon + 1;
+                    amountWon = amountWon + proj.Amount__c;  
+                    prjStgWon = prjStgWon + 1;
+                    prjStgWonAmt = prjStgWonAmt + proj.Amount__c; 
+                }
+                
+        if(proj.Stage__c.contains('Duplicate'))
+                {
+                    DuplPrj = DuplPrj +1;
+                }   
+            
+            /** Total Amount related to Amount (Quote In Progress)****/ 
+            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Considered')|| proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
+                
+                prjStgQtd = prjStgQtd + 1;
+                
+                if(proj.Amount__c!=NULL){
+                prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
+            }}
+            
+            /** Total Amount related to Amount (Lost)****/ 
+            if(proj.Stage__c.contains('Closed Lost - Project Lost')||proj.Stage__c.contains('Closed - Inactivity')||proj.Stage__c.contains('Cancelled')){
+                
+                prjStglost = prjStglost + 1;
+                
+                if(proj.Amount__c!=NULL)
+                prjStglostAmt = prjStglostAmt + proj.Amount__c;
+            }
+            }
+        }
+        
+    }
+
+  /***Method that populate the Picklist with project status ****/
    public List<SelectOption> getStageDrp()    
     {    
         List<SelectOption> options =  new List<SelectOption>();    
@@ -74,50 +220,6 @@ public class HierarchyController{
         return Options;    
     }      
 
-//Pagination varibles and List
-    public integer PaginationSize {get;set;}
-    public integer NoOfRecords {get;set;}
-    public List<selectoption> PaginationSizeOptions {get;set;}
-
-
-   // Public Set<Id> SetTest{get;set;}
-  /**
- * This Hierarchy wrapper class
- * 
- * to get the list of ProjectList & OpportunityContactRoles
- *
- */ 
-    public class Hierarchy {
-        
-        public Account accountName{get;set;}
-        public Project__c projectName{get;set;}
-        public Double amount{get;set;}
-        public String status{get;set;}
-        public Account endCustomer{get;set;}
-        public Account purchaser{get;set;}
-        public Account orderingAccount{get;set;}
-        public Account architect{get;set;}
-        public String projectCity{get;set;}
-        public String projectState{get;set;}
-        public String projectZipCode{get;set;}
-        public String applicationIndustry{get;set;}
-        public List<Date> ordFnzDt {get;set;}
-        public List<Date> ordCrtDt {get;set;}
-        public List<OpportunityContactRole> ocr {get;set;}
-        public Date crtdt{get;set;}
-        
-        public Hierarchy()
-        {
-                        this.accountName = new Account();
-                        this.purchaser = new Account();
-                        this.orderingAccount = new Account();
-                        ordFnzDt = new List<Date>();
-                        ordCrtDt = new List<Date>();
-                        ocr = new List<OpportunityContactRole>();
-                        this.architect = new Account();
-                        this.purchaser = new Account();
-        }
-    }
 /**
  * This method return
  * 
@@ -206,76 +308,7 @@ public class HierarchyController{
             
             return null;
      }
-    /**
- * This method return
- * 
- * Generate summary data with latest orderfinalized date
- */
-    public void summary(){
-     
-        for(Project__c proj: ProjSiteList){
-            
-            if(proj.Id!=null){ 
-            
-            ordList = proj.Orders__r;
-                
-            ordList.sort();
-               
-            Integer sz = ordList.size();    
-                
-            if((ordFnzDtMax!=null) && sz > 0 &&(ordFnzDtMax < ordList.get(sz-1).Order_Finalized_Date__c)){
-                             
-                             ordFnzDtMax = date.newInstance(ordList.get(sz-1).Order_Finalized_Date__c.year(), ordList.get(sz-1).Order_Finalized_Date__c.month(), ordList.get(sz-1).Order_Finalized_Date__c.day());
-                         }
-                             
-                         else if (ordFnzDtMax==null && sz > 0 && ordList.get(sz-1).Order_Finalized_Date__c!=null){
-                                    
-                             ordFnzDtMax = date.newInstance(ordList.get(sz-1).Order_Finalized_Date__c.year(), ordList.get(sz-1).Order_Finalized_Date__c.month(), ordList.get(sz-1).Order_Finalized_Date__c.day());
-                         }
-                                      
-           if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
-            
-            if(proj.Stage__c.contains('Closed Won - Order In Process') || proj.Stage__c.contains('Closed Won - Order Signed') || proj.Stage__c.contains('Order - Negotiation') || proj.Stage__c.contains('Project On Hold') && proj.Orders__r.size()>0)
-                {
-                prjStgPrg = prjStgPrg +1; 
-                    
-                if(proj.Amount__c!=null)    
-                    
-                prjStgPrgAmt = prjStgPrgAmt + proj.Amount__c;     
-            }
-                
-            if (proj.Stage__c != null && (proj.Stage__c.contains('Closed Complete - Ordered - Paid')))
-                {
-                    prjWon = prjWon + 1;
-                    amountWon = amountWon + proj.Amount__c;  
-                    prjStgWon = prjStgWon + 1;
-                    prjStgWonAmt = prjStgWonAmt + proj.Amount__c; 
-                }
-                
-        if(proj.Stage__c.contains('Duplicate'))
-                {
-                    DuplPrj = DuplPrj +1;
-                }   
-
-            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Considered')|| proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0)){
-                
-                prjStgQtd = prjStgQtd + 1;
-                
-                if(proj.Amount__c!=NULL){
-                prjStgQtdAmt = prjStgQtdAmt + proj.Amount__c;
-            }}
-            
-            if(proj.Stage__c.contains('Closed Lost - Project Lost')||proj.Stage__c.contains('Closed - Inactivity')||proj.Stage__c.contains('Cancelled')){
-                
-                prjStglost = prjStglost + 1;
-                
-                if(proj.Amount__c!=NULL)
-                prjStglostAmt = prjStglostAmt + proj.Amount__c;
-            }
-            }
-        }
-        
-    }
+   
     /** This method return
  * 
  * finding account with no project
@@ -304,7 +337,7 @@ public class HierarchyController{
      /**
  * This method
  * 
- * fetch the data from database for the project list(project , order related order & opportunities)
+ * fetch the data from database from project__c and add to ProjSiteList(project , order related order & opportunities)
  *
  * 
  */
@@ -327,11 +360,8 @@ public class HierarchyController{
             else
             query1+= ' ASC';
         }
-        
-     /*********QuoteLess Opprotunities *******************/
-        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
-     /**********End Section *****************************/   
-     /******** Pass query data to ProjectSiteList ********/   
+
+       /****** Add query data to ProjSiteList ******/      
         ProjSiteList = database.query(query1);
         
         opportunityCRSet();
@@ -345,7 +375,12 @@ public class HierarchyController{
         if(sortExp!='AccName')
         noProjectAccounts();
         
-        ProjectListBkp = ProjectList;
+        ProjectListBkp = ProjectList;   
+        
+     /*********QuoteLess Opprotunities *******************/
+        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
+     /**********End Section *****************************/   
+    
         
        /* For(Hierarchy hr : ProjectList){
             
@@ -392,67 +427,7 @@ public class HierarchyController{
                     }
         ProjectList.add(hier);
     }
-   /** This method 
- * 
- * Define Contructor & initialize the varibale & list
- */   
-    public HierarchyController(ApexPages.StandardController con){
-        
-        CAProjOppList = new List<Opportunity>(); // Initialize List 
-        
-        tmpList = new List<Hierarchy>();
-        ProjectList = new List<Hierarchy>();
-        ordFnzDtMax = null;
-        ordby='CreatedDate';
-        DuplPrj =0;
-        oppIdSet = new Set<ID>();
-        oppAccSet = new Set<ID>();
-        AccSiteList = new List <Account>();
-        ordList = new LIST<Order>();
-        contrls = new List<Contact>();
-        prjList2 = new List<Project__c>();
-        oppList2 = new List<Opportunity>();
-        oppList3 = new List<List<Opportunity>>();
-        AccRelatedList = new Account();
-        ProjSiteList = new List<Project__c>();
-        ProjectListBkp = new List<Hierarchy>();
-        objAcc = (Account)con.getRecord();
-       // SetTest =new set<Id>();
-        prjId =new Set<Id>();
-        totalAmount = 0.0;
-        amountWon = 0.0;
-        cnt=0;
-        siz = 0;
-        psiz = 0;
-        prjWon = 0;
-        prjStgQtd = 0;
-        prjStglost=0; 
-        prjStgPrg = 0;
-        prjStgWon = 0;
-        prjStgQtdAmt = 0.0;
-        prjStglostAmt = 0.0;
-        prjStgPrgAmt = 0.0;
-        prjStgWonAmt = 0.0;
-        relType='';
-        accFilter = '';
-        prjFilter = '';
-        cityFilter = '';
-        stateFilter = '';
-        appIndFilter = '';
-        prjStsFilter = '';
-        ordFilter = '';
-        purFilter = '';
-        archFilter = '';
-        sortFullExp = '';
-      //Inilization of Pagination Select Option  
-        PaginationSize =10;
-      
-         /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
-        runQuery(objAcc.Id);
-       
-        summary();                      
-               
-     }
+  
     /** This method 
  * 
  * Set Hierarchy Wrapper class data
@@ -627,5 +602,43 @@ public class HierarchyController{
                   accTmpList.add(a);
         AccSiteList = accTmpList;    
     }
+/**
+ * This Hierarchy wrapper class which contain Account ,Project & OpportunityContactRole
+ * 
+ * to get the list of ProjectList & OpportunityContactRoles
+ *
+ */ 
+    public class Hierarchy {
+        
+        public Account accountName{get;set;}
+        public Project__c projectName{get;set;}
+        public Double amount{get;set;}
+        public String status{get;set;}
+        public Account endCustomer{get;set;}
+        public Account purchaser{get;set;}
+        public Account orderingAccount{get;set;}
+        public Account architect{get;set;}
+        public String projectCity{get;set;}
+        public String projectState{get;set;}
+        public String projectZipCode{get;set;}
+        public String applicationIndustry{get;set;}
+        public List<Date> ordFnzDt {get;set;}
+        public List<Date> ordCrtDt {get;set;}
+        public List<OpportunityContactRole> ocr {get;set;}
+        public Date crtdt{get;set;}
+        
+        /*****Contructor define for wrapper class & intialisation of varible *****/
+        public Hierarchy()
+        {
+                        this.accountName = new Account();
+                        this.purchaser = new Account();
+                        this.orderingAccount = new Account();
+                        ordFnzDt = new List<Date>();
+                        ordCrtDt = new List<Date>();
+                        ocr = new List<OpportunityContactRole>();
+                        this.architect = new Account();
+                        this.purchaser = new Account();
+        }
+    }    
 
 }

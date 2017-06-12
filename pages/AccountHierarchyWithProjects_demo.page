@@ -1,4 +1,26 @@
 <apex:page standardController="Account" extensions="HierarchyController_demo" sidebar="false" >
+    <script>
+ var newWin=null;
+ function openLookupPopup(name, id)
+ {
+  var url="/apex/LookupAccountPopup?namefield=" + name + "&idfield=" + id;
+  newWin=window.open(url, 'Popup','height=500,width=600,left=100,top=100,resizable=no,scrollbars=yes,toolbar=no,status=no');
+  if (window.focus) 
+  {
+   newWin.focus();
+  }
+    
+     return false;
+    }
+       
+ function closeLookupPopup()
+ {
+    if (null!=newWin)
+    {
+       newWin.close();
+    }  
+ }
+</script>
     <style>
                                                                 .container
                                                                 {
@@ -14,39 +36,39 @@
   
 /* tables */
 .tablesorter {
-	font-family:arial;
-	background-color: #CDCDCD;
-	margin:10px 0pt 15px;
-	font-size: 8pt;
-	width: 100%;
-	text-align: left;
+    font-family:arial;
+    background-color: #CDCDCD;
+    margin:10px 0pt 15px;
+    font-size: 8pt;
+    width: 100%;
+    text-align: left;
 }
 .tablesorter thead tr th, .tablesorter tfoot tr th {
-	background-color: #e6EEEE;
-	border: 1px solid #FFF;
-	font-size: 8pt;
-	padding: 4px;
+    background-color: #e6EEEE;
+    border: 1px solid #FFF;
+    font-size: 8pt;
+    padding: 4px;
 }
 .tablesorter thead tr .header {
-	background-image: url(bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
+        background-image: url(<apex:image url="{!URLFOR($Resource.NanawallStyle,'bg.jpg')}"/>);
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
 }
 .tablesorter tbody td {
-	color: #3D3D3D;
-	padding: 4px;
-	background-color: #FFF;
-	vertical-align: top;
+    color: #3D3D3D;
+    padding: 4px;
+    background-color: #FFF;
+    vertical-align: top;
 }
 .tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
+    background-color:#F0F0F6;
 }
 .tablesorter thead tr .headerSortUp {
-	background-image: url(asc.gif);
+    background-image: url(<apex:image url="{!URLFOR($Resource.NanawallStyle,'asc.gif')}"/>);
 }
 .tablesorter thead tr .headerSortDown {
-	background-image: url(desc.gif);
+    background-image: url( <apex:image url="{!URLFOR($Resource.NanawallStyle,'desc.gif')}"/>);
 }
 .tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 background-color: #8dbdd8;
@@ -62,7 +84,7 @@ background-color: #E3DCDB;
     <!--<apex:includeScript value="{!$Resource.TableColSorter}"></apex:includeScript> -->
      <apex:includeScript value="{!URLFOR($Resource.NanawallTableSorter,'jquery-latest.js')}" />
   <apex:includeScript value="{!URLFOR($Resource.NanawallTableSorter,'jquery.tablesorter.min.js')}" />
-    <apex:includeScript value="{!URLFOR($Resource.NanawallStyle,'Nanastyle.css')}" />
+    <!--<apex:includeScript value="{!URLFOR($Resource.NanawallStyle,'Nanastyle.css')}" /> -->
    <apex:image url="{!URLFOR($Resource.NanawallStyle,'asc.gif')}"/>
     
     <apex:form >
@@ -123,7 +145,7 @@ background-color: #E3DCDB;
    <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
           <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
               <apex:panelGrid columns="6" cellspacing="10">
-              <apex:outputLabel value="Account Name:" style="align:center;"/><apex:inputText value="{!accFilter}"/>
+              <apex:outputLabel value="Account Name:" style="align:center;"/><apex:inputHidden value="{!account.Id}" id="targetId" /><apex:inputText value="{!accFilter}" id="targetName" /><apex:inputfield value="{!objAcc.name}"/><a href="#" onclick="openLookupPopup('{!$Component.targetName}', '{!$Component.targetId}'); return false">Lookup</a>
               <apex:outputLabel value="Project Name:"/><apex:inputText value="{!prjFilter}"/>
                <apex:outputLabel value="Project/Account City:"/><apex:inputText value="{!cityFilter}"/>
                <apex:outputLabel value="Project/Account State:"/><apex:inputText value="{!stateFilter}"/>
@@ -167,7 +189,8 @@ background-color: #E3DCDB;
         
         <!--Start Section------- -->
 <apex:datatable value="{!ProjectList}" var="pr1" id="accsTable" styleclass="tablesorter" >  
-        <apex:column headerValue="Name">
+        <apex:column headerValue="Name" >
+           
       <apex:outputField value="{!pr1.accountName.Name}" />
     </apex:column>
     <apex:column headerValue="Project Name">

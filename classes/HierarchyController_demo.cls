@@ -62,6 +62,7 @@ public class HierarchyController_demo{
 
     public String project_drp_Stage {get;set;}
     
+   
    public List<SelectOption> getStageDrp()    
     {    
         List<SelectOption> options =  new List<SelectOption>();    

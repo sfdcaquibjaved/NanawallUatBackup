@@ -1,11 +1,10 @@
 public class NanaWallCLass 
 {       
-   // wrapper class to hold all data
-    public list<wrapperClass> WrapperList{get;set;}
+    
     public list<opportunity> AllData {get;set;}
-   // public set<opportunity> AllData{get;set;}
+   public set<opportunity> RemoveDuplicateData{get;set;}
     //map for id and accountcontactroel
-    public map<id,list<opportunityContactRole>> mapdata;
+    public list<opportunity> AllDataWithoutDuplicate{get;set;}
     // Count The Project Won
         public integer ProjWon{get;set;}
     // Count The Project Order In Process
@@ -32,7 +31,8 @@ public class NanaWallCLass
         // Latest Order Finalaize Date
         public list<order> latestOrderDate {get;set;}
        // Store all the data ragarding Account which have project except contact role 
-        public list <project__c> AccountWithProjects{get;set;}
+        //public list <project__c> AccountWithProjects{get;set;}
+    public list <Opportunity> AccountWithProjects{get;set;}
         // Account the number site on particular account
          public integer SiteCount {get;set;}
         // hold the value for the queotelss account
@@ -69,22 +69,38 @@ public class NanaWallCLass
             
             //get the latest order finalize Date from orders
             latestOrderDate = [select Order_Finalized_Date__c, project__r.Purchaser_Account__c, account.id from order where project__r.Purchaser_Account__c=:AccId  AND Order_Finalized_Date__c!=null order By Order_Finalized_Date__c DESC LIMIT 1]; 
+          
+          // Fire Query on Project Object and get all related data 
+/* String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
+  query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
+  query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
+  query1+=' FROM Project__c';
+  query1+=' WHERE (Architect_Account__c = :AccId OR Brand_Name_Account__c = :AccId OR End_Customer_Account__c = :AccId '; 
+  query1+=' OR Franchise_Account__c = :AccId OR Franchisor_Account__c = :AccId OR Other_Influencer_Account__c = :AccId '; 
+  query1+=' OR Purchaser_Account__c =:AccId OR Ordering_Account__c =:AccId ) '; */
             
-            // Fire Query on Project Object and get all related data except contact Role
-               String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
-               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
-               query1+=' FROM Project__c';
-               query1+=' WHERE (Architect_Account__c = :AccId OR Brand_Name_Account__c = :AccId OR End_Customer_Account__c = :AccId '; 
-               query1+=' OR Franchise_Account__c = :AccId OR Franchisor_Account__c = :AccId OR Other_Influencer_Account__c = :AccId '; 
-               query1+=' OR Purchaser_Account__c =:AccId OR Ordering_Account__c =:AccId ) ';
+           // Fire Query on Project Object and get all related data 
+               String query1 ='select opportunity.name,opportunity.project_name__r.name, opportunity.project_name__r.amount__c,opportunity.project_name__r.Stage__c,';
+               query1+='opportunity.project_name__r.id, opportunity.project_name__r.Architect_Account__c,opportunity.project_name__r.End_Customer_Account__c,';
+               query1+='opportunity.project_name__r.Purchaser_Account__c ,opportunity.project_name__r.Franchise_Account__c,opportunity.project_name__r.Franchisor_Account__c,opportunity.project_name__r.Other_Influencer_Account__c,';
+               query1+='opportunity.project_name__r.Project_City__c,opportunity.project_name__r.Project_State__c,opportunity.project_name__r.Project_Zip_Code__c,opportunity.project_name__r.CreatedDate,opportunity.project_name__r.Application__c,';
+               query1+='(select contact.name from OpportunityContactRoles),(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders) from opportunity';
+               query1+=' where opportunity.project_name__r.Architect_Account__c=:AccId OR opportunity.project_name__r.Brand_Name_Account__c=:AccId OR opportunity.project_name__r.End_Customer_Account__c=:AccId OR opportunity.project_name__r.Purchaser_Account__c=:AccId  '; 
+              query1+='OR opportunity.project_name__r.Ordering_Account__c=:AccId OR opportunity.project_name__r.Franchisor_Account__c=:AccId ';
+              query1+='OR opportunity.project_name__r.Franchise_Account__c=:AccId OR opportunity.project_name__r.Other_Influencer_Account__c=:AccId  LIMIT 1000';
+             
+                 
+                
+            AllData = database.query(query1);
             
             //Assign Query REsults to the project List type Projects
-             AccountWithProjects = database.query(query1);
+         //   AccountWithProjects = database.query(query1);
+       //  RemoveDuplicateData.addAll(AllData);
+      //    AllDataWithoutDuplicate.addAll(RemoveDuplicateData);
             
             
             /*********QuoteLess Opprotunities *******************/
-            CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:AccId AND Quote_Count__c=0];
+        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:AccId AND Quote_Count__c=0];
             // Pagination Default Page Size 
             PaginationSize =25;
             // User Can select Pagination Size from this options
@@ -95,7 +111,7 @@ public class NanaWallCLass
             paginationSizeOptions.add(new selectoption('150','150'));
             paginationSizeOptions.add(new selectoption('200','200'));
             paginationSizeOptions.add(new selectoption('250','250'));
-                     
+          /*           
             for(project__c proj : AccountWithProjects)
             {
             
@@ -119,70 +135,12 @@ public class NanaWallCLass
                     ProjDuplicate = ProjDuplicate + 1;
                 }   
             
-            }
+            }*/
         }
-    // Wrapper List Method that will get the data from Project and contacts Role
-    public LIST <wrapperClass> getWrapperData()
-    {
-                        
-                 WrapperList = new list<wrapperClass>();  
-               String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
-               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\'))';
-               query1+=' FROM Project__c';
-               query1+=' WHERE (Architect_Account__c = :AccId OR Brand_Name_Account__c = :AccId OR End_Customer_Account__c = :AccId '; 
-               query1+=' OR Franchise_Account__c = :AccId OR Franchisor_Account__c = :AccId OR Other_Influencer_Account__c = :AccId '; 
-               query1+=' OR Purchaser_Account__c =:AccId OR Ordering_Account__c =:AccId ) ';
-            
-            //Assign Query REsults to the project List type Projects
-             AccountWithProjects = database.query(query1);
-        
-       
-        
-          /***Nishant Comment***/
-          
-          /*****End Section*****/        
-                // collect all contact role name whose opportunity stage is close and won
-               // list<opportunity> opp= [select opportunity.project_name__r.name from opportunity where opportunity.project_name__r.Purchaser_Account__c=:AccId];
-               AllData = [select opportunity.project_name__r.Purchaser_Account__c from opportunity where opportunity.project_name__r.Purchaser_Account__c=:AccId];
-                  
-        //list<opportunityContactRole> opp = [select contact.name, opportunity.stagename, opportunity.project_name__r.Purchaser_Account__c from OpportunityContactRole where opportunity.stagename ='Closed/Won' AND opportunity.project_name__r.Purchaser_Account__c=:accid];
-              
-       //         {   
-                   
-     //                 for(opportunity opp1 : opp)
-            
-        //            {
-      //                    if (p.Name == opp.project_name__r.name)
-                             {
-                             //              wrapperClass wr = new wrapperClass(p,opp);
-                                  //         WrapperList.add(p, opp);
-                                           // WrapperList.add( new wrapperClass(P) );
-                             }     
-                        
-          //            }
-                
-   //             }
-                // WrapperList.add( new wrapperClass(P) );
-         //   }
-               system.debug('The Wrapper List'+WrapperList);
-             return WrapperList;
-       
-    } 
+ 
     
-    // wrapper class to combine all data
-    public class wrapperClass
-    {
-        public project__c pr{get;set;}
-        public opportunity opp1{get;set;}
-        public wrapperClass(list<project__C> GP)
-        {
-            //pr = GP;
-            //opp1 =opp;
-        }
-         
-        
-    }
+    
+    
     
     public ApexPages.StandardSetController setCon 
     {
