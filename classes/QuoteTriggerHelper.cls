@@ -180,6 +180,8 @@ public with sharing class QuoteTriggerHelper{
         try{
         list<Quote__c > quoList = [select id ,Project__c,Order_Number__c,SubTotal__c from Quote__c where Project__c IN : projectIds AND  Order_Number__c > 0];
         List <Project__c> projList = [SELECT Id, Amount__c, (SELECT Id, Amount, AccountId, StageName FROM Opportunities__r) FROM Project__c WHERE Id IN: projectIds];
+        //list<Quote__c > quoList = [select id ,Project__c,Order_Number__c,SubTotal__c from Quote__c where Project__c IN : projectIds AND  Order_Number__c > 0];
+            
             //Query over Project with Related Opportunities
             if(!(quoList.size()>0)){
             //List <Project__c> projList = [SELECT Id, Amount__c, (SELECT Id, Amount, AccountId, StageName FROM Opportunities__r) FROM Project__c WHERE Id IN: projectIds];
@@ -249,7 +251,7 @@ public with sharing class QuoteTriggerHelper{
     /* */
     public static void CheckInfluencerOppOrder(list<Quote__c> Quotelist){
     
-     /*Map < Id, String > MapProjRecTypeID = new Map < Id, String > ();
+     Map < Id, String > MapProjRecTypeID = new Map < Id, String > ();
         Set < Id > projId = new Set < Id > ();
         set < Id > oppId = new set < Id >();
         
@@ -296,7 +298,7 @@ public with sharing class QuoteTriggerHelper{
         System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
            update Opplist; 
           }
-        }*/
+        }
      }
      /********************************************************
      Purpose:Creating entitlements for the Quote detail records

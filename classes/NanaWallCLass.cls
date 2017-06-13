@@ -93,10 +93,20 @@ public class NanaWallCLass
                 
             AllData = database.query(query1);
             
+            Set<opportunity> myset = new Set<opportunity>();
+           List<opportunity> result = new List<opportunity>();
+            for (opportunity s : AllData )
+             {
+              if (myset.add(s))
+               {
+                        result.add(s);
+               }
+            }
+            
             //Assign Query REsults to the project List type Projects
          //   AccountWithProjects = database.query(query1);
-       //  RemoveDuplicateData.addAll(AllData);
-      //    AllDataWithoutDuplicate.addAll(RemoveDuplicateData);
+      // RemoveDuplicateData.addAll(AllData);
+       //  AllDataWithoutDuplicate.addAll(RemoveDuplicateData);
             
             
             /*********QuoteLess Opprotunities *******************/

@@ -6,7 +6,7 @@
 * Modification : Comment & Structure the code
 ********************/
 public class HierarchyController{
-/*****************Constructor Variable initialization********************/
+/*****************Constructor Variable declaration********************/
     //public Set<Id> SetOr{get;set;}
     public List<ProjectWrapper> records{get;set;} 
     public string sortFullExp{get;set;}
@@ -129,7 +129,61 @@ public class HierarchyController{
         summary();                      
                
      }
+ /**
+ * This method
+ * 
+ * fetch the data from database from project__c and add to ProjSiteList(project , order related order & opportunities)
+ *
+ * 
+ */
+    public void runQuery(ID objAccId){
+        
+        String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
+               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
+               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\')AND (Project_Name__r.Ordering_Account__c!=Null))';
+               query1+=' FROM Project__c';
+               query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
+               query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
+               query1+=' OR Purchaser_Account__c =:objAccId OR Ordering_Account__c =:objAccId) '; 
+             If(prjId.size()!=0)
+               query1+=' AND (Id IN : prjId) ';    
+        if(sortExp!=''){
+            query1+='order by ';
+            query1+=ordby;
+            if(sortDirection!='')    
+            query1+= ' '+sortDirection;
+            else
+            query1+= ' ASC';
+        }
 
+       /****** Add query data to ProjSiteList ******/      
+        ProjSiteList = database.query(query1);
+        
+        opportunityCRSet();
+        
+        oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
+                                    from Opportunity where Id IN:oppIDSet]; //AND  AccountId IN:oppAccSet         
+    for(Project__c prj:ProjSiteList ) { hierarchySetData(prj);  }  
+        
+        psiz = ProjSiteList.size();
+        
+        if(sortExp!='AccName')
+        noProjectAccounts();
+        
+        ProjectListBkp = ProjectList;   
+        
+     /*********QuoteLess Opprotunities *******************/
+        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
+     /**********End Section *****************************/   
+    
+        
+       /* For(Hierarchy hr : ProjectList){
+            
+            System.debug('Amount:'+hr.amount);
+        }*/
+    }
+    
+    
  /**
  * This method provide
  * 
@@ -334,59 +388,7 @@ public class HierarchyController{
     
     
     }
-     /**
- * This method
- * 
- * fetch the data from database from project__c and add to ProjSiteList(project , order related order & opportunities)
- *
- * 
- */
-    public void runQuery(ID objAccId){
-        
-        String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
-               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\')AND (Project_Name__r.Ordering_Account__c!=Null))';
-               query1+=' FROM Project__c';
-               query1+=' WHERE (Architect_Account__c = :objAccId OR Brand_Name_Account__c = :objAccId OR End_Customer_Account__c = :objAccId'; 
-               query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
-               query1+=' OR Purchaser_Account__c =:objAccId OR Ordering_Account__c =:objAccId) '; 
-             If(prjId.size()!=0)
-               query1+=' AND (Id IN : prjId) ';    
-        if(sortExp!=''){
-            query1+='order by ';
-            query1+=ordby;
-            if(sortDirection!='')    
-            query1+= ' '+sortDirection;
-            else
-            query1+= ' ASC';
-        }
-
-       /****** Add query data to ProjSiteList ******/      
-        ProjSiteList = database.query(query1);
-        
-        opportunityCRSet();
-        
-        oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
-                                    from Opportunity where Id IN:oppIDSet]; //AND  AccountId IN:oppAccSet         
-    for(Project__c prj:ProjSiteList ) { hierarchySetData(prj);  }  
-        
-        psiz = ProjSiteList.size();
-        
-        if(sortExp!='AccName')
-        noProjectAccounts();
-        
-        ProjectListBkp = ProjectList;   
-        
-     /*********QuoteLess Opprotunities *******************/
-        CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:objAccId AND Quote_Count__c=0];
-     /**********End Section *****************************/   
     
-        
-       /* For(Hierarchy hr : ProjectList){
-            
-            System.debug('Amount:'+hr.amount);
-        }*/
-    }
     
     public void opportunityCRSet(){
         
@@ -483,7 +485,7 @@ public class HierarchyController{
                         hier.applicationIndustry = prj.Application__c;
                         hier.architect.Id = prj.Architect_Account__c; 
                         hier.purchaser.Id = prj.Purchaser_Account__c;
-            hier.orderingAccount.Id = prj.Ordering_Account__c;
+                        hier.orderingAccount.Id = prj.Ordering_Account__c;
                         retrieveContactRoles(hier,prj);
     }
 
@@ -506,7 +508,7 @@ public class HierarchyController{
             cnt = 0;
             
             if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
-            if(prjFilter!=''){prjFilter = prjFilter; cnt++;} 
+            if(prjFilter.trim()!=''){prjFilter = prjFilter.trim(); cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
@@ -521,10 +523,10 @@ public class HierarchyController{
                if(hr.accountName.Name.containsIgnoreCase(accFilter))
                 flag++; 
             
-            if(prjFilter!='' && hr.ProjectName!=null && hr.ProjectName.Name!=null) 
+            if(prjFilter.trim()!='' && hr.ProjectName.Name.trim()!=null) 
                 if(hr.ProjectName.Name.containsIgnoreCase(prjFilter))
                     flag++;
-
+                 
             if(cityFilter!='' && hr.projectCity!=null) 
                 if(hr.projectCity.containsIgnoreCase(cityFilter))
                     flag++;
@@ -544,7 +546,7 @@ public class HierarchyController{
             if(project_drp_Stage!='' && hr.status!=null )
                 if(hr.status.containsIgnoreCase(project_drp_Stage))
                     flag++;
-                    System.debug('Arctitec'+ hr.architect.Name);
+                    //System.debug('Arctitec'+ hr.architect.Name);
                     
             if(archFilter!='' && hr.architect.Name!=null)
                 if(hr.architect.Name.containsIgnoreCase( archFilter) || hr.architect.Name.contains( archFilter))

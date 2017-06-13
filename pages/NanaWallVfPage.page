@@ -44,7 +44,7 @@
         
          <apex:PageBlock id="pbId1" >  
       <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) ">
-         <apex:pageBlockTable var="ac" value="{!AccountWithProjects }">
+         <apex:pageBlockTable var="ac" value="{!AllData }">
               <apex:column headerValue="Corporate Account Site Location (End Customer) with No Projects "/>   
             <apex:column headerValue="Project Name"/>
              <apex:column headerValue="Project Status"/>
