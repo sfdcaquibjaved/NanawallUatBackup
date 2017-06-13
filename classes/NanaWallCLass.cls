@@ -4,6 +4,7 @@ public class NanaWallCLass
     public list<opportunity> AllData {get;set;}
    public set<opportunity> RemoveDuplicateData{get;set;}
     //map for id and accountcontactroel
+    map<id,opportunity> mapData{get;set;}
     public list<opportunity> AllDataWithoutDuplicate{get;set;}
     // Count The Project Won
         public integer ProjWon{get;set;}
@@ -92,23 +93,8 @@ public class NanaWallCLass
                  
                 
             AllData = database.query(query1);
-            
-            Set<opportunity> myset = new Set<opportunity>();
-           List<opportunity> result = new List<opportunity>();
-            for (opportunity s : AllData )
-             {
-              if (myset.add(s))
-               {
-                        result.add(s);
-               }
-            }
-            
-            //Assign Query REsults to the project List type Projects
-         //   AccountWithProjects = database.query(query1);
-      // RemoveDuplicateData.addAll(AllData);
-       //  AllDataWithoutDuplicate.addAll(RemoveDuplicateData);
-            
-            
+            mapData.putAll(AllData);
+        
             /*********QuoteLess Opprotunities *******************/
         CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:AccId AND Quote_Count__c=0];
             // Pagination Default Page Size 

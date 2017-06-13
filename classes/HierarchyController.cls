@@ -508,7 +508,7 @@ public class HierarchyController{
             cnt = 0;
             
             if(accFilter!=''){accFilter = accFilter.trim(); cnt++;} 
-            if(prjFilter.trim()!=''){prjFilter = prjFilter.trim(); cnt++;} 
+            if(prjFilter!='' ){prjFilter = prjFilter.trim(); cnt++;} 
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
@@ -523,8 +523,8 @@ public class HierarchyController{
                if(hr.accountName.Name.containsIgnoreCase(accFilter))
                 flag++; 
             
-            if(prjFilter.trim()!='' && hr.ProjectName.Name.trim()!=null) 
-                if(hr.ProjectName.Name.containsIgnoreCase(prjFilter))
+            if(prjFilter.trim()!='' && hr.projectName.Name!=null ) 
+                if(hr.projectName.Name.containsIgnoreCase(prjFilter))
                     flag++;
                  
             if(cityFilter!='' && hr.projectCity!=null) 
