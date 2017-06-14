@@ -66,8 +66,12 @@ public class HierarchyController_demo{
    public List<Account> AccountList{get;set;}
     
    public String passString { get; set; }
+    
 public PageReference passValue() {    
-return page.AccountHierarchyWithProjects_demo;
+    PageReference pgref = new PageReference('/apex/AccountHierarchyWithProjects_demo');
+  
+    pgref.setRedirect(true);
+    return pgref;
 } 
     
    public List<SelectOption> getStageDrp()    

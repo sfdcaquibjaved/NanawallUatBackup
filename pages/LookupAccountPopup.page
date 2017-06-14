@@ -28,6 +28,9 @@ function fillIn(name, id)
         alert("hi");
 if(elm != ''){
 $('[id$=input_to_change]').val(elm);
+    var assignVal = $('[id$=input_to_change]').val(elm);
+    
+    alert(elm);
 }
 }
 </script>
@@ -38,7 +41,7 @@ $('[id$=input_to_change]').val(elm);
      <apex:inputText id="input_to_change" label="Account Name: " value="{!passString}"/>
    <apex:pageBlockSectionItem >
        <apex:commandButton value="Search" reRender="accsTable" style="background:LightBlue;width:100px;height:30px;"/>
-       <apex:commandButton value="Add" onClick="window.top.close();" action="{!passValue}"   style="background:LightBlue;width:100px;height:30px;"/>
+       <apex:commandButton value="Add"  action="{!passValue}" onClick="window.top.close();"  style="background:LightBlue;width:100px;height:30px;"/>
      </apex:pageBlockSectionItem>
  </apex:pageblocksection>
     <apex:pageBlockSection columns="1">

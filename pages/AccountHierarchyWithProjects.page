@@ -129,7 +129,7 @@
               <!--  <apex:column headerValue="Project Name" value="{!pr.projectName.Name}"/> -->
              <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Project Status {!IF(sortExpression=='Stage',IF(sortDirection='DESC','▼','▲'),'')}" >
+                <apex:commandLink action="{!viewData}" value="Project Stage {!IF(sortExpression=='Stage',IF(sortDirection='DESC','▼','▲'),'')}" >
                  <apex:param value="Stage" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
