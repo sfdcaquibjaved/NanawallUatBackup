@@ -1,5 +1,26 @@
 <apex:page standardController="Account" extensions="HierarchyController_demo" sidebar="false" >
+    <script>
+ var newWin=null;
+ function LookupAccountPopup(name, id)
+ {
+  var url="/apex/LookupAccountPopup?id={!Account.Id}";
+  newWin=window.open(url, 'Popup','height=500,width=600,left=100,top=100,resizable=no,scrollbars=yes,toolbar=no,status=no');
+  if (window.focus)
+  {
+   newWin.focus();
+  }
     
+     return false;
+    }
+       
+ function closeLookupPopup()
+ {
+    if (null!=newWin)
+    {
+       newWin.close();
+    } 
+ }
+</script>
     <style>
                                                                 .container
                                                                 {
@@ -61,8 +82,8 @@ background-color: #E3DCDB;
 }-->
                                                                 </style>
     <!--<apex:includeScript value="{!$Resource.TableColSorter}"></apex:includeScript> -->
-     <apex:includeScript value="{!URLFOR($Resource.NanawallTableSorter,'jquery-latest.js')}" />
-  <apex:includeScript value="{!URLFOR($Resource.NanawallTableSorter,'jquery.tablesorter.min.js')}" />
+     <apex:includeScript value="{!URLFOR($Resource.NanawallVFPage,'jquery-latest.js')}" />
+  <apex:includeScript value="{!URLFOR($Resource.NanawallVFPage,'jquery.tablesorter.min.js')}" />
     <!--<apex:includeScript value="{!URLFOR($Resource.NanawallStyle,'Nanastyle.css')}" /> -->
    <apex:image url="{!URLFOR($Resource.NanawallStyle,'asc.gif')}"/>
     
@@ -124,7 +145,7 @@ background-color: #E3DCDB;
    <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
           <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
               <apex:panelGrid columns="6" cellspacing="10">
-              <apex:outputLabel value="Account Name:"/><apex:inputText value="{!accFilter}" /><apex:inputfield value="{!Account.Name}"/>
+              <apex:outputLabel value="Account Name:"/><apex:inputText value="{!passString}"  /><apex:outputText value="{!passString}"/><a href="#" onclick="LookupAccountPopup('{!$Component.targetName}', '{!$Component.targetId}'); return false">Lookup</a>
               <apex:outputLabel value="Project Name:"/><apex:inputText value="{!prjFilter}"/>
                <apex:outputLabel value="Project/Account City:"/><apex:inputText value="{!cityFilter}"/>
                <apex:outputLabel value="Project/Account State:"/><apex:inputText value="{!stateFilter}"/>

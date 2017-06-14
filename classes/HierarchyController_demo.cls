@@ -59,10 +59,17 @@ public class HierarchyController_demo{
     public List<Hierarchy> tmpList{get;set;}
     public integer cnt{get;set;}
     public Set<ID> prjId{get;set;}
-
-    public String project_drp_Stage {get;set;}
+    Public string recordId{get;set;}
     
-   
+    public String project_drp_Stage {get;set;}
+    /*****textbox******/
+   public List<Account> AccountList{get;set;}
+    
+   public String passString { get; set; }
+public PageReference passValue() {    
+return page.AccountHierarchyWithProjects_demo;
+} 
+    
    public List<SelectOption> getStageDrp()    
     {    
         List<SelectOption> options =  new List<SelectOption>();    
@@ -343,7 +350,7 @@ public class HierarchyController_demo{
     public HierarchyController_demo(ApexPages.StandardController con){
         
         CAProjOppList = new List<Opportunity>(); // Initialize List 
-        
+        AccountList = new List<Account>();
         tmpList = new List<Hierarchy>();
         ProjectList = new List<Hierarchy>();
         ordFnzDtMax = null;
@@ -390,8 +397,9 @@ public class HierarchyController_demo{
         sortFullExp = '';
       //Inilization of Pagination Select Option  
         PaginationSize =10;
-      
-         /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
+        recordID = ApexPages.CurrentPage().getparameters().get('id');
+         /*************** Pass Account Id from the runQuery method to fetch all related data *************/  
+        AccountList = [Select name from account where parentid =:ApexPages.CurrentPage().getparameters().get('id')]; 
         runQuery(objAcc.Id);
        
         summary();                      

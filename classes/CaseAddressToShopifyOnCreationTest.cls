@@ -74,13 +74,13 @@ public class CaseAddressToShopifyOnCreationTest{
  insert q1;
  
  
- /*order ord = new order();
+ order ord = new order();
  ord.Status = 'draft';
  ord.EffectiveDate = system.today();
  ord.AccountId = acc.id;
  ord.Order_Finalized_Date__c = date.newInstance(2017,01,10);
  ord.Nanaquote__c = q.id;
- insert ord;*/
+ insert ord;
          
  case c = new case ();
   c.Origin = 'Phone';
@@ -92,27 +92,23 @@ public class CaseAddressToShopifyOnCreationTest{
    c.subject = 'Test';
    c.Description = 'Test Description'; 
  //  c.Order__c = ord.id; 
-c.Category__c='';
-c.Sub_Category__c=''; 
-c.Other_Phone__c='';
- c.Other_Email__c=''; 
-c.Other_Shipping_Phone__c='';
-c.Other_Shipping_Email__c='';
- c.Billing_Street_End_Customer__c='';
-c.Shipping_Country__c=''; 
-c.Billing_Country__c='';
-c.Billing_Zipcode__c=''; 
-c.Billing_State__c='';
- /*Billing_City__c,
- c.Shipping_Address_Country__c, 
-c.Shipping_Zip_End_Customer__c,
- c.Shipping_City_EndCustomer__c,
- c.Shipping_Street_End_Customer__c,
- c.Shipping_State_End_Customer__c*/
-
-
-   
-   insert c;       
+   c.Category__c='';
+   c.Sub_Category__c=''; 
+   c.Other_Phone__c='';
+   c.Other_Email__c=''; 
+   c.Other_Shipping_Phone__c='';
+   c.Other_Shipping_Email__c='';
+   c.Billing_Street_End_Customer__c='';
+   c.Shipping_Country__c=''; 
+   c.Billing_Country__c='';
+   c.Billing_Zipcode__c=''; 
+   c.Billing_State__c='';
+   c.Billing_City__c='';
+   c.Shipping_Zip_End_Customer__c='';
+   c.Shipping_City_EndCustomer__c='';
+   c.Shipping_Street_End_Customer__c='';
+   c.Shipping_State_End_Customer__c='';
+insert c;       
  
  
  }

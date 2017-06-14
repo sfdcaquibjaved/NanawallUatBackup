@@ -202,7 +202,7 @@ public class ashokcontroller{
                  
        ProjectList.clear();
             
-            runQuery(ObjAcc.Id);
+          runQuery(ObjAcc.Id);
       
             //PageReference pr = new PageReference(ProjectList);
             
@@ -453,13 +453,13 @@ public class ashokcontroller{
         archFilter = '';
         sortFullExp = '';
       //Inilization of Pagination Select Option  
-        PaginationSize =250;
+        PaginationSize =1000;
         paginationSizeOptions = new List<selectoption>();
         paginationSizeOptions.add(new selectoption('25','25'));
-      //  paginationSizeOptions.add(new selectoption('100','100'));
-      //  paginationSizeOptions.add(new selectoption('150','150'));
-     //   paginationSizeOptions.add(new selectoption('200','200'));
-     //   paginationSizeOptions.add(new selectoption('250','250'));
+       paginationSizeOptions.add(new selectoption('100','100'));
+        paginationSizeOptions.add(new selectoption('150','150'));
+        paginationSizeOptions.add(new selectoption('200','200'));
+       paginationSizeOptions.add(new selectoption('250','250'));
          /*************** Pass Account Id from the runQuery method to fetch all related data *************/       
         runQuery(objAcc.Id);
        
