@@ -6,8 +6,8 @@ global class oppCountOnProjectsBatchClass implements Database.Batchable < sObjec
     
      //Start method of the batch class
      global Database.QueryLocator start(Database.BatchableContext BC) {
-        
-        this.query = 'SELECT Id from Project__c Order By CreatedDate desc' ;
+        String filters = 'a1sQ00000077b8sIAA';
+        this.query = 'SELECT Id from Project__c where id =: filters';
         
         return Database.getQueryLocator(query);
     }
@@ -59,10 +59,16 @@ global class oppCountOnProjectsBatchClass implements Database.Batchable < sObjec
             if(mapComResOpps.containsKey(prjToUpdate.Id)){
                 prjToUpdate.Opportunity_Count__c = mapComResOpps.get(prjToUpdate.Id).size();
                 
+            }else{
+                prjToUpdate.Opportunity_Count__c = null;
             }
+            
             if(mapInfluOpps.containsKey(prjToUpdate.Id)){
                 prjToUpdate.Influencer_Count__c = mapInfluOpps.get(prjToUpdate.Id).size();
+            }else{
+                prjToUpdate.Influencer_Count__c = null;
             }
+            
             if(mapComResOpps.containsKey(prjToUpdate.Id) || mapInfluOpps.containsKey(prjToUpdate.Id)){
                 listProjToUpdateCount.add(prjToUpdate);
             }
