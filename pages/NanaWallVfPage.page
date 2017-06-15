@@ -1,7 +1,7 @@
 <apex:page showHeader="false" sidebar="false" controller="paginationjquery" tabStyle="Account">
     <apex:form >
     <apex:pageBlock >
-        <apex:pageBlockTable value="{!acc}" var="opp">
+        <apex:pageBlockTable value="{!FinalList}" var="opp">
            <apex:column value="{!opp.project_name__r.name}"/>>
             <apex:column value="{!opp.project_name__r.Amount__c}"/>>
              <apex:column value="{!opp.project_name__r.Stage__c}"/>>

@@ -7,7 +7,7 @@ global class oppCountOnProjectsBatchClass implements Database.Batchable < sObjec
      //Start method of the batch class
      global Database.QueryLocator start(Database.BatchableContext BC) {
         String filters = 'a1sQ00000077b8sIAA';
-        this.query = 'SELECT Id from Project__c where id =: filters';
+        this.query = 'SELECT Id from Project__c Order By CreatedDate desc';
         
         return Database.getQueryLocator(query);
     }

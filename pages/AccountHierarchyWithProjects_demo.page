@@ -140,6 +140,7 @@ background-color: #E3DCDB;
      </apex:pageBlockSection>
     </apex:PageBlock>
   
+<input id="details" name="details" />
   
    <apex:pageBlock id="accFilter">
    <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>

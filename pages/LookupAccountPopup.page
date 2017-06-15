@@ -29,19 +29,27 @@ function fillIn(name, id)
 if(elm != ''){
 $('[id$=input_to_change]').val(elm);
     var assignVal = $('[id$=input_to_change]').val(elm);
+ window.opener.document.getElementById('details').value = assignVal;
+ window.close();
     
     alert(elm);
 }
 }
+    function CloseWin(s)
+    {
+        window.top.close();
+     }
 </script>
 <apex:form >
+    <input name="details" value=""/>
+     <input type="button" value="Copy input to parent opener" onClick="populatevouchernum(this.form.details);" />
 <apex:pageBlock >
  <apex:pageblocksection >
  
-     <apex:inputText id="input_to_change" label="Account Name: " value="{!passString}"/>
+     <apex:inputText id="input_to_change" label="Account Name: " value="{!passString}" />
    <apex:pageBlockSectionItem >
        <apex:commandButton value="Search" reRender="accsTable" style="background:LightBlue;width:100px;height:30px;"/>
-       <apex:commandButton value="Add"  action="{!passValue}" onClick="window.top.close();"  style="background:LightBlue;width:100px;height:30px;"/>
+       <apex:commandButton value="Add"  action="{!passValue}" onClick="populatevouchernum(this.form);"  style="background:LightBlue;width:100px;height:30px;"/>
      </apex:pageBlockSectionItem>
  </apex:pageblocksection>
     <apex:pageBlockSection columns="1">
