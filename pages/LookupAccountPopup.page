@@ -1,4 +1,4 @@
-<apex:page sidebar="false" standardController="Account" showheader="false" extensions="HierarchyController_demo">
+<apex:page sidebar="false" standardController="Account" showheader="false" extensions="LookupAccountPopController">
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" />
 <script>
 function fillIn(name, id)
@@ -29,10 +29,11 @@ function fillIn(name, id)
 if(elm != ''){
 $('[id$=input_to_change]').val(elm);
     var assignVal = $('[id$=input_to_change]').val(elm);
- window.opener.document.getElementById('details').value = assignVal;
- window.close();
+    //window.opener.document.getElementById('details').value = assignVal;
+ 
     
     alert(elm);
+    // window.close();
 }
 }
     function CloseWin(s)
@@ -46,14 +47,14 @@ $('[id$=input_to_change]').val(elm);
 <apex:pageBlock >
  <apex:pageblocksection >
  
-     <apex:inputText id="input_to_change" label="Account Name: " value="{!passString}" />
+     <apex:inputText id="input_to_change" label="Account Name: "  />
    <apex:pageBlockSectionItem >
        <apex:commandButton value="Search" reRender="accsTable" style="background:LightBlue;width:100px;height:30px;"/>
-       <apex:commandButton value="Add"  action="{!passValue}" onClick="populatevouchernum(this.form);"  style="background:LightBlue;width:100px;height:30px;"/>
+       <apex:commandButton value="Go"  action="{!passValue}" onClick="populatevouchernum(this.form);"  style="background:LightBlue;width:100px;height:30px;"/>
      </apex:pageBlockSectionItem>
  </apex:pageblocksection>
     <apex:pageBlockSection columns="1">
-         <apex:pageBlockTable var="pr" value="{!ProjSiteList}" >
+         <apex:pageBlockTable var="pr" value="{!AccountList}" >
           <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
              <apex:column >
                  <apex:outputLink onclick="populatevouchernum('{!pr.Name}'); return false;" >{!pr.Name}</apex:outputLink>

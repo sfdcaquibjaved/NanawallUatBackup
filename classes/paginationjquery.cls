@@ -41,7 +41,7 @@ public with sharing class paginationjquery {
                     system.debug('the Value of Original List'  + aMap);
                     
        FinalList=aMap.values();
-       FinalList.addall(OCR );
+       
      //   system.debug('the value of FinalList is' + FinalList.size());
       //  system.debug('the value of FinalList is' +   FinalList);
  

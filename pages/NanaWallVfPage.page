@@ -25,12 +25,12 @@
             <apex:column value="{!opp.project_name__r.Project_Zip_Code__c}"/>>
             <apex:column value="{!opp.project_name__r.CreatedDate}"/>>
             <apex:column value="{!opp.project_name__r.Application__c}"/>>
-            <apex:Column headerValue="Contact Role Names">
+            
+                 <apex:Column headerValue="Contact Role Names">
                     <apex:repeat value="{!opp.OpportunityContactRoles}" var="c">
                         {!c.contact.name}  <br />
                     </apex:repeat>
-                </apex:Column>
-                  
+                </apex:Column> 
              
                         
         </apex:pageBlockTable>
