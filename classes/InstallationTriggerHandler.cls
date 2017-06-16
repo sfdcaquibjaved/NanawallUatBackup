@@ -214,6 +214,7 @@ public class InstallationTriggerHandler {
         system.debug(zipCodeList);
         for(Installation__c i : newTrigger){
             if(zipCodeList.size() > 0){
+                system.debug('I am here with zipCodeList' +zipCodeList);
                 for(Zip_Codes_Master__c zip : zipCodeList){
                     Integer projectzip;
                     if(!i.Project_Country_Canada__c){
@@ -223,6 +224,7 @@ public class InstallationTriggerHandler {
                          if((projectzip <= end1 && projectzip >= start1) || (projectzip <= end2 && projectzip >= start2)){
                              i.Assigned_to_Bill_Leon__c = true;
                                i.OwnerId = Label.Bill_Leon_UserId;
+                             system.debug('I am here with projectzip' +projectzip);
                          }
                          else if(projectzip <= end3 && projectzip >= start3){
                                i.Assigned_to_Paul_Nalette__c = true;

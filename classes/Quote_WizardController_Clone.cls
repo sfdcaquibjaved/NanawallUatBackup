@@ -1552,7 +1552,7 @@ public with sharing class Quote_WizardController_Clone {
             
             if (proj.Project_Zip_Code__c != null &&  proj.Project_Zip_Code__c != '' && proj.Project_Country__c=='United States') {
                 
-                if(proj.Project_Country__c=='United States'){
+                if(proj.Project_Country__c=='United States' && proj.Project_Zip_Code__c.length()>4 ){
                     prozips.add(proj.Project_Zip_Code__c.substring(0,5));
                 }
                 
@@ -1641,7 +1641,7 @@ public with sharing class Quote_WizardController_Clone {
            }
            if (con.MailingPostalCode != null &&  con.MailingPostalCode != '' && con.MailingCountryCode=='US') {
                 
-                if(con.MailingCountryCode=='US'){
+                if(con.MailingCountryCode=='US'&& con.MailingPostalCode.length()>4){
                     conzips.add(con.MailingPostalCode.substring(0,5));
                 }
              
@@ -1700,7 +1700,7 @@ public with sharing class Quote_WizardController_Clone {
            }
            if (acc.BillingPostalCode != null &&  acc.billingPostalCode != '' && acc.BillingcountryCode=='US') {
                 
-                if(acc.billingCountryCode=='US'){
+                if(acc.billingCountryCode=='US' && acc.BillingPostalCode.length()>4){
                     zipsAll.add(acc.BillingPostalCode.substring(0,5));
                 }
              

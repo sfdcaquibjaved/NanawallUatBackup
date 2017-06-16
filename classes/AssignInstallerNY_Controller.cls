@@ -1,5 +1,5 @@
 public class AssignInstallerNY_Controller {
-	public String selectedInstaller{get;set;}
+    public String selectedInstaller{get;set;}
     public list<SelectOption> options{get;set;}
     public String Bill;
     public String Paul;
@@ -9,6 +9,7 @@ public class AssignInstallerNY_Controller {
     public list < selectOption > getRegionlist() {
         List < SelectOption > options = new List < SelectOption > ();
         options.add(new SelectOption('--None--', '--None--'));
+        options.add(new SelectOption('No Installer to be assigned', 'No Installer to be assigned'));
         list < Assign_Installer__c > tnlist = Assign_Installer__c.getall().values();
         String uid = UserInfo.getUserId();
         Bill = Label.Bill_Leon_UserId;
@@ -35,7 +36,7 @@ System.debug('options'+options);
     /*public List <SelectOption > getTypeOptions() {
         //list<SelectOption> inscompany = new list<SelectOption>();
         //System.debug('list'+lstCS);
-		String strCurrentUserId = UserInfo.getUserId();
+        String strCurrentUserId = UserInfo.getUserId();
         System.debug('user id'+strCurrentUserId);
         for (Assign_Installer__c ai: Assign_Installer__c.getall().values()) {
                system.debug('valu?'+ai);
@@ -44,7 +45,7 @@ System.debug('options'+options);
                }
            }
         System.debug('inscompany'+inscompany);
-		return null;
+        return null;
     }*/
     
     public PageReference save(){
@@ -53,15 +54,24 @@ System.debug('options'+options);
       //  ID InstallerContactID = [SELECT ID FROM CONTACT WHERE Account.Name =: selectedInstaller].ID;
         List <Contact> InstallerContact = [SELECT ID , AccountID , Account.Name FROM Contact WHERE Account.Name =: selectedInstaller AND Default_Installer__c = TRUE ] ;
         List <Installation__c> lstInstall = [SELECT ID, Installer_Account__c , Installer_Contact__c FROM Installation__c WHERE ID =: pageid] ; 
-       	
+        System.debug('is Contact'+InstallerContact);
+        System.debug('The installation'+lstInstall);
         List < Installation__c> lstUpdateInstall = new List < Installation__c> () ;
         
         for(Installation__c i : lstInstall){
+            
+            if(selectedInstaller == 'No Installer to be assigned'){
+                i.Status__c = 'No Installer To Be Assigned' ; 
+                lstUpdateInstall.add(i) ; 
+            }
+            else {
             for(Contact c : InstallerContact ){
+                System.debug('Should be in else'+c);
                  i.Installer_Account__c =  c.AccountID ; 
                  i.Installer_Contact__c = c.ID ; 
                  lstUpdateInstall.add(i);
             } 
+         }
         }
         
         try{

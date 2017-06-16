@@ -8,7 +8,7 @@
 public class HierarchyController{
 /*****************Constructor Variable declaration********************/
     //public Set<Id> SetOr{get;set;}
-    public List<ProjectWrapper> records{get;set;} 
+   // public List<ProjectWrapper> records{get;set;} 
     public string sortFullExp{get;set;}
     public List <Account> AccSiteList{get;set;}
     public  integer DuplPrj{get;set;}    
@@ -18,7 +18,7 @@ public class HierarchyController{
     public Integer prjWon {get;set;}
     public Integer siz {get;set;}
     public Integer psiz {get;set;}
-    public String rltype {get;set;}
+  //  public String rltype {get;set;}
     public Account AccRelatedList{get;set;}  
     public Hierarchy [] ProjectListBkp{get;set;}
     public Double amountWon{get;set;}
@@ -26,7 +26,7 @@ public class HierarchyController{
     private String sortDirection = 'DESC';
     private String sortExp = 'PCrtDt';
     public List<String> acclist;
-    integer AccountCount{get;set;}
+  //  integer AccountCount{get;set;}
     /* QuoteLess opportunities List */
     public List<Opportunity> CAProjOppList{get;set;}
     /*---------- */
@@ -275,7 +275,7 @@ public class HierarchyController{
     }      
 
 /**
- * This method return
+ * This return
  * 
  * sorting expression in ascending and descending order
  *
@@ -338,11 +338,11 @@ public class HierarchyController{
             
            else if (sortExp.equalsIgnoreCase('Stage')) ordby = 'Stage__c';   
             
-            else if (sortExp.equalsIgnoreCase('PCrtDt')) ordby = 'CreatedDate';
+           
             
-            else if (sortExp.equalsIgnoreCase('Arch')) ordby = 'Architect_Account__c';
+            else if (sortExp.equalsIgnoreCase('Zipcode')) ordby = 'Project_Zip_Code__c';
             
-            else if (sortExp.equalsIgnoreCase('Purch')) ordby = 'Purchaser_Account__c';
+            
             
             else if (sortExp.equalsIgnoreCase('Ordering')) ordby = 'Ordering_Account__c';
             
@@ -350,9 +350,12 @@ public class HierarchyController{
             
             else if (sortExp.equalsIgnoreCase('State')) ordby = 'Project_State__c';
             
-            else if (sortExp.equalsIgnoreCase('Zipcode')) ordby = 'Project_Zip_Code__c';
+            else if (sortExp.equalsIgnoreCase('Purch')) ordby = 'Purchaser_Account__c';
             
             else if (sortExp.equalsIgnoreCase('AppIndustry')) ordby = 'Application__c';
+            
+            else if (sortExp.equalsIgnoreCase('Arch')) ordby = 'Architect_Account__c';
+             else if (sortExp.equalsIgnoreCase('PCrtDt')) ordby = 'CreatedDate';
                  
        ProjectList.clear();
             
@@ -512,12 +515,12 @@ public class HierarchyController{
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
-            if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
+       
             if(project_drp_Stage!='' && project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
             if(archFilter!=''){archFilter = archFilter; cnt++;}
             if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
-            
+            if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
             
             if(accFilter!='' && hr.accountName!=null && hr.accountName.Name!=null) 
                if(hr.accountName.Name.containsIgnoreCase(accFilter))
@@ -616,7 +619,7 @@ public class HierarchyController{
         public Project__c projectName{get;set;}
         public Double amount{get;set;}
         public String status{get;set;}
-        public Account endCustomer{get;set;}
+   //     public Account endCustomer{get;set;}
         public Account purchaser{get;set;}
         public Account orderingAccount{get;set;}
         public Account architect{get;set;}

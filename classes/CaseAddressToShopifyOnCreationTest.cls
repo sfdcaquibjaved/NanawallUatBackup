@@ -62,6 +62,13 @@ public class CaseAddressToShopifyOnCreationTest{
   q.Project__c = pro.id;
   q.Shipping_Min__c = 12;
   insert q;
+  
+    Quote_Detail__c qd = new Quote_Detail__c();
+        qd.Model__c = 'WA63';   
+        qd.Quote__c=q.id;
+        insert qd;
+        
+  
         
  Quote q1 = new Quote();
  q1.Name = 'Test Quote';
