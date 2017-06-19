@@ -1,40 +1,22 @@
-<apex:page showHeader="false" sidebar="false" controller="paginationjquery" tabStyle="Account">
-    <apex:form >
-    <apex:pageBlock >
-        <apex:pageBlockTable value="{!FinalList}" var="opp">
-           <apex:column value="{!opp.project_name__r.name}"/>>
-            <apex:column value="{!opp.project_name__r.Amount__c}"/>>
-             <apex:column value="{!opp.project_name__r.Stage__c}"/>>
-             <apex:column value="{!opp.project_name__r.Architect_Account__c}"/>>
-             <apex:column value="{!opp.project_name__r.End_Customer_Account__c}"/>>
-             <apex:column value="{!opp.project_name__r.Purchaser_Account__c}"/>>
-             
-            <apex:Column headerValue="Order Created Date">
-                    <apex:repeat value="{!opp.Orders}" var="c">
-                        {!c.CreatedDate}  <br />
-                    </apex:repeat>
-                </apex:Column>
-             <apex:column headerValue="Order Finalized Date">
-             
-                    <apex:repeat value="{!opp.Orders}" var="c">
-                        {!c.Order_Finalized_Date__c}  <br />
-                    </apex:repeat>
-                </apex:Column>
-             <apex:column value="{!opp.project_name__r.Project_City__c}"/>>
-            <apex:column value="{!opp.project_name__r.Project_State__c}"/>>
-            <apex:column value="{!opp.project_name__r.Project_Zip_Code__c}"/>>
-            <apex:column value="{!opp.project_name__r.CreatedDate}"/>>
-            <apex:column value="{!opp.project_name__r.Application__c}"/>>
+<apex:page controller="NanaWallCLass">
+    <apex:PageBlock id="pbId1" >  
+      <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) ">
+         <apex:pageBlockTable var="ac" value="{!WrapperList}">
+              <apex:column headerValue="Corporate Account Site Location (End Customer) with No Projects "/>   
+            <apex:column headerValue="Project Name" />
+             <apex:column headerValue="Project Status"/>
+             <apex:column headerValue="Amount"/>
+             <apex:column headerValue="Project Created Date"/>
+             <apex:column headerValue="Order Finalized Date"/>
+             <apex:column headerValue="Application Industry"/>
+             <apex:column headerValue="Architect"/>
+             <apex:column headerValue="Purchaser Account"/>
+             <apex:column headerValue="Ordering Account"/>
+             <apex:column headerValue="Project Name"/>
+             <apex:column headerValue="Project City"/>
+             <apex:column headerValue="Project ZipCode"/>
+         </apex:pageBlockTable>
+         </apex:pageBlockSection>
             
-                 <apex:Column headerValue="Contact Role Names">
-                    <apex:repeat value="{!opp.OpportunityContactRoles}" var="c">
-                        {!c.contact.name}  <br />
-                    </apex:repeat>
-                </apex:Column> 
-             
-                        
-        </apex:pageBlockTable>
-   
-</apex:pageBlock>
-    </apex:form>
+    </apex:PageBlock>
 </apex:page>

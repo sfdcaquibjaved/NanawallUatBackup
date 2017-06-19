@@ -453,7 +453,7 @@ public class ashokcontroller{
         archFilter = '';
         sortFullExp = '';
       //Inilization of Pagination Select Option  
-        PaginationSize =1000;
+        PaginationSize =50;
         paginationSizeOptions = new List<selectoption>();
         paginationSizeOptions.add(new selectoption('25','25'));
        paginationSizeOptions.add(new selectoption('100','100'));

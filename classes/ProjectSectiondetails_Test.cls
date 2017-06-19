@@ -560,7 +560,7 @@ public class ProjectSectiondetails_Test {
        Contacts[2].Accountid=accounts[2].id;
        insert contacts;
         
- Test.startTest();
+// Test.startTest();
  
         list < Project__c > Pro = new list < Project__c > ();
         Project__c proj = new Project__c();
@@ -645,7 +645,7 @@ public class ProjectSectiondetails_Test {
         
         insert oppList;
        
-        
+        Test.startTest();
 
         List < nrOpportunityContactRole__c > nrlist = new List < nrOpportunityContactRole__c > ();
 

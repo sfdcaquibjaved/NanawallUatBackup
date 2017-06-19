@@ -6,7 +6,7 @@ Created Date: 08th June,2016
 public class wrapperObjectShopify{
 
 //Wrapper Class
- public class Order {
+ //public class Order {
         public string id;
         public string email;
         public DateTime created_at;
@@ -29,7 +29,7 @@ public class wrapperObjectShopify{
         public List < fulfillments > fulfillments;
         public string name;
        
-    }
+  //  }
 
     public class line_items {
         public Double price;

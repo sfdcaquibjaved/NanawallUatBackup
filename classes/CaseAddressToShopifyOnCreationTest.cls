@@ -153,9 +153,24 @@ insert c;
         sq.recordtypeid = Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Shopify Service Quote').getRecordTypeId();
         sq.Status__c = 'Order Created';
         sq.Shopify_ID__c = '2853431619';
-        
+        sq.Shopify_Order_NO__c='123456';
  
  insert sq;
+ 
+ 
+  Service_Quote__c sq1 = new Service_Quote__c();
+        sq1.Case__c=c.id;
+        sq1.Quote__c=q.id;
+        sq1.Order__c=ord.id;
+        sq1.Total_Amount__c = 134;
+        sq1.Discount__c = 20;
+        sq1.shopify__c = true;
+        sq1.recordtypeid = Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Shopify Service Quote').getRecordTypeId();
+        sq1.Status__c = 'Order Created';
+        sq1.Shopify_ID__c = '2853431619';
+        sq1.Shopify_Order_NO__c='123456';
+        
+        insert sq1;
  
  
  

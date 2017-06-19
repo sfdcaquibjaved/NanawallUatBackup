@@ -40,7 +40,7 @@ global class batchProjectShares implements Database.Batchable < sObject > {
         System.debug('list to insert'+ShareProject);
         try{
             if(!prosharelist.isEmpty()){
-               delete prosharelist;
+               //delete prosharelist;
                System.debug('Success delete');
             }
         }

@@ -67,6 +67,7 @@ public class HierarchyController{
     public integer PaginationSize {get;set;}
     public integer NoOfRecords {get;set;}
     public List<selectoption> PaginationSizeOptions {get;set;}
+   
 
  /** This method 
  * 
@@ -114,7 +115,9 @@ public class HierarchyController{
         prjFilter = '';
         cityFilter = '';
         stateFilter = '';
+        zipFilter = '';
         appIndFilter = '';
+        project_drp_Stage = '';
         prjStsFilter = '';
         ordFilter = '';
         purFilter = '';
@@ -158,8 +161,7 @@ public class HierarchyController{
 
        /****** Add query data to ProjSiteList ******/      
         ProjSiteList = database.query(query1);
-        System.debug(' ProjSiteList Nishant and Ashok::: '+ProjSiteList);
-            
+        
         opportunityCRSet();
         
         oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
@@ -211,7 +213,7 @@ public class HierarchyController{
                                     
                              ordFnzDtMax = date.newInstance(ordList.get(sz-1).Order_Finalized_Date__c.year(), ordList.get(sz-1).Order_Finalized_Date__c.month(), ordList.get(sz-1).Order_Finalized_Date__c.day());
                          }
-           System.debug('abhijeet:::'+proj.Orders__r.size());
+           
            /*******Total amount related to Amount (Projects Won) ,Amount (Order In Progress),Amount(Quote In Progress),Amount (Lost)*******/                           
            if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
             
@@ -282,7 +284,7 @@ public class HierarchyController{
  *
  * while clicking header on project list
  * 
- */
+ */ 
     public String sortExpression {
 
              get { return sortExp; }
@@ -297,7 +299,7 @@ public class HierarchyController{
 
                sortExp = value;
            }
-       }
+       } 
 
     /**
  * This method return
@@ -318,6 +320,7 @@ public class HierarchyController{
 
          public void setSortDirection(String value) 
          { 
+            	 
                     sortDirection = value;
          }
 

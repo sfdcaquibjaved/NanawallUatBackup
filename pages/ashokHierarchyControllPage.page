@@ -226,7 +226,7 @@
        <apex:PageBlock id="pbId" >  
        
      <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects : {!noOfRecords}">
-         <apex:pageBlockTable var="ac" value="{!Opportunities}" id="testTable">
+         <apex:pageBlockTable var="ac" value="{!Opportunities}" id="testTable1">
                 <apex:outputlink value="/{!ac.Id}">{!ac.Name}</apex:outputlink>
                     <apex:column value="{!ac.name}" headerValue="Corporate Account Site Location (End Customer)"/>  
  

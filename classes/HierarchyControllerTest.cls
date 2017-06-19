@@ -8,7 +8,7 @@
  * */
 
 
-@isTest (seeAllData=true)
+@isTest (seeAllData=false)
 public class HierarchyControllerTest {
     
     
@@ -79,7 +79,7 @@ public class HierarchyControllerTest {
                               Project__c = objProject.Id, NanaQuote__c= objQuote.ID, 
                               Order_Finalized_Date__c = System.today()
                             );
-         insert objOrder;
+   //      insert objOrder;
     
     }
     
@@ -93,11 +93,12 @@ public class HierarchyControllerTest {
         objHC.appIndFilter = 'Retail';
         PageReference pageRef = Page.AccountHierarchyWithProjects; // VF Page.
   		pageRef.getParameters().put('id', String.valueOf(objAcc.Id));
+        pageRef.getParameters().put('appIndFilter','Office');
         pageRef.getParameters().put('ordFnzDtMax', '01/01/2016');
         pageRef.getParameters().put('project_drp_Stage', 'Closed Complete - Ordered - Paid'); 
         pageRef.getParameters().put('sortExpression', '');
         pageRef.getParameters().put('accFilter', 'Test Account');
-        pageRef.getParameters().put('appIndFilter','ASC');
+        
         
         Test.setCurrentPage(pageRef);
         // Methods 

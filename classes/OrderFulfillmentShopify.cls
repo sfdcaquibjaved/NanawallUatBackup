@@ -17,7 +17,7 @@ global without sharing class OrderFulfillmentShopify {
     global static void doPost() {
         // Local Variables       
         list < string > orderId = new list < string > ();
-        list < wrapperObjectShopify.Order > ordList = new list < wrapperObjectShopify.Order > ();
+        list < wrapperObjectShopify > ordList = new list < wrapperObjectShopify > ();
         list < Service_Quote__c > sqUpdate = new list < Service_Quote__c > ();
 
         //Requesting REST Service to fetch the data send by shopify to this web service class
@@ -33,13 +33,13 @@ global without sharing class OrderFulfillmentShopify {
         System.debug('ordersssssssss2222222' + res);
 
         //The data in bodyString is in JSON format the below method is used to parse the json format to normal format.
-                shopifywrapper order = (shopifywrapper) JSON.deserialize(bodyString, shopifywrapper.class);
-                ordList.add(order.Order);
-                orderId.add(order.Order.id);
+                wrapperObjectShopify order = (wrapperObjectShopify) JSON.deserialize(bodyString, wrapperObjectShopify.class);
+                ordList.add(order);
+                orderId.add(order.id);
                
         //Updating Service Quote on Shopify Order Fulfillment
         for (Service_Quote__c sq: [select id, status__c from Service_Quote__c where Shopify_ID__c =: orderId]) {
-            for (wrapperObjectShopify.Order ord: ordList) {
+            for (wrapperObjectShopify ord: ordList) {
                 if (ord.fulfillment_status == fulfilledStatus) {
                     sq.status__c = orderStatus;
                     sq.Financial_Status__c = financialStatus;
@@ -60,7 +60,5 @@ global without sharing class OrderFulfillmentShopify {
         }
 
     }
-    public class shopifywrapper{
-       public wrapperObjectShopify.Order Order;
-    }
+    
  }

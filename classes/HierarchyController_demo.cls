@@ -20,6 +20,7 @@ public class HierarchyController_demo{
     public Integer psiz {get;set;}
     public String rltype {get;set;}
     public Account AccRelatedList{get;set;}  
+    Public Project__c PrjRelated{get;set;}
     public Hierarchy [] ProjectListBkp{get;set;}
     public Double amountWon{get;set;}
     public Double totalAmount{get;set;}
@@ -368,6 +369,7 @@ public class HierarchyController_demo{
         oppList2 = new List<Opportunity>();
         oppList3 = new List<List<Opportunity>>();
         AccRelatedList = new Account();
+       // AccRelatedList = [Select name from account where parentid =:ApexPages.CurrentPage().getparameters().get('id')];
         ProjSiteList = new List<Project__c>();
         ProjectListBkp = new List<Hierarchy>();
         objAcc = (Account)con.getRecord();
@@ -408,14 +410,22 @@ public class HierarchyController_demo{
         summary();                      
                
      }
+    
+     public void fetchAccountDetails(){
+        AccRelatedList = [Select name from account where parentid =:ApexPages.CurrentPage().getparameters().get('id')];
+        //interest.Member_Name__c = AccountMem.Name;
+    }
+    
     /** This method 
  * 
  * Set Hierarchy Wrapper class data
  * 
  */ 
     
+    
     public ApexPages.StandardSetController setCon 
     {
+         
         get {
             if(setCon == null) {  
                

@@ -4,7 +4,7 @@ Description: This is Wrapper Class for all shopify customer creation Classes
 Created Date: 20th May,2017            
 ***********************************************************************/
 public class wrapperCustomerShopify{
-     public class customer{
+    // public class customer{
         public default_address default_address;
         public decimal orders_count;
         public string state;
@@ -22,7 +22,7 @@ public class wrapperCustomerShopify{
         public String last_name;
         public String email;
         public string id;
-    }
+   // }
      public class default_address{
 
         public String first_name;

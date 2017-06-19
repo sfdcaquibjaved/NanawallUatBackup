@@ -30,9 +30,10 @@ if(elm != ''){
 $('[id$=input_to_change]').val(elm);
     var assignVal = $('[id$=input_to_change]').val(elm);
     //window.opener.document.getElementById('details').value = assignVal;
- 
+ opener.document.frm.txt_acc_val.value = document.frm.inputVal.value;
     
     alert(elm);
+    self.close();
     // window.close();
 }
 }
@@ -41,13 +42,13 @@ $('[id$=input_to_change]').val(elm);
         window.top.close();
      }
 </script>
-<apex:form >
+<apex:form id="frm1">
     <input name="details" value=""/>
      <input type="button" value="Copy input to parent opener" onClick="populatevouchernum(this.form.details);" />
 <apex:pageBlock >
  <apex:pageblocksection >
- 
-     <apex:inputText id="input_to_change" label="Account Name: "  />
+     <input type="text" name="inputVal" id="input_to_change" /> 
+    <!-- <apex:inputText id="input_to_change" name="inputVal" label="Account Name: "  /> -->
    <apex:pageBlockSectionItem >
        <apex:commandButton value="Search" reRender="accsTable" style="background:LightBlue;width:100px;height:30px;"/>
        <apex:commandButton value="Go"  action="{!passValue}" onClick="populatevouchernum(this.form);"  style="background:LightBlue;width:100px;height:30px;"/>

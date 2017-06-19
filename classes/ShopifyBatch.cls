@@ -22,7 +22,7 @@ global class ShopifyBatch implements Database.Batchable < sObject > , Database.A
         //local variable
         string orderData;
         list < string > orderDataList = new list < string > ();
-        list < wrapperObjectShopify.Order > ordList = new list < wrapperObjectShopify.Order > ();
+        list < wrapperObjectShopify > ordList = new list < wrapperObjectShopify > ();
         map < string, list < wrapperObjectShopify.fulfillments >> orderTrackNumberMap = new map < string, list < wrapperObjectShopify.fulfillments >> ();
         list < Service_Quote__c > sqList = new list < Service_Quote__c > ();
 
@@ -60,11 +60,11 @@ global class ShopifyBatch implements Database.Batchable < sObject > , Database.A
             }
         
             // Parse entire JSON response.
-                    shopifywrapper ord = (shopifywrapper) JSON.deserialize(orderData, shopifywrapper.class);
+                    wrapperObjectShopify ord = (wrapperObjectShopify) JSON.deserialize(orderData, wrapperObjectShopify.class);
                     if (ord != NULL)
-                        ordList.add(ord.Order);
-                    if (ord.Order.id != NULL)
-                        orderTrackNumberMap.put(ord.Order.id, ord.Order.fulfillments);
+                        ordList.add(ord);
+                    if (ord.id != NULL)
+                        orderTrackNumberMap.put(ord.id, ord.fulfillments);
          }           
         //Update the Service Quote tracking and shipping method details with the shopify details
         if (ordList.size() > 0) {
@@ -99,7 +99,4 @@ global class ShopifyBatch implements Database.Batchable < sObject > , Database.A
 
     }  
     
-      public class shopifywrapper{
-       public wrapperObjectShopify.Order Order;
-    }  
 }
