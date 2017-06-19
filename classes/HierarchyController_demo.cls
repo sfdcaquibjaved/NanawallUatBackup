@@ -6,6 +6,8 @@
 public class HierarchyController_demo{
 /*****************Constructor Variable initialization********************/
     //public Set<Id> SetOr{get;set;}
+     public project__c projectRec{get;set;}
+
     public List<ProjectWrapper> records{get;set;} 
     public string sortFullExp{get;set;}
     public List <Account> AccSiteList{get;set;}
@@ -348,7 +350,9 @@ public class HierarchyController_demo{
  */   
     public HierarchyController_demo(ApexPages.StandardController con){
         
-        CAProjOppList = new List<Opportunity>(); // Initialize List 
+       projectRec = new Project__c();
+       
+       CAProjOppList = new List<Opportunity>(); // Initialize List 
         
         tmpList = new List<Hierarchy>();
         ProjectList = new List<Hierarchy>();

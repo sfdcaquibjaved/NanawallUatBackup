@@ -61,9 +61,9 @@ public class HierarchyController{
     public List<Hierarchy> tmpList{get;set;}
     public integer cnt{get;set;}
     public Set<ID> prjId{get;set;}
-    
-     /******Pagination varibles and List********/
     public String project_drp_Stage {get;set;}
+     /******Pagination varibles and List********/
+   
     public integer PaginationSize {get;set;}
     public integer NoOfRecords {get;set;}
     public List<selectoption> PaginationSizeOptions {get;set;}
@@ -158,7 +158,8 @@ public class HierarchyController{
 
        /****** Add query data to ProjSiteList ******/      
         ProjSiteList = database.query(query1);
-        
+        System.debug(' ProjSiteList Nishant and Ashok::: '+ProjSiteList);
+            
         opportunityCRSet();
         
         oppList2 = [Select Id, Name, AccountId,Project_Name__c, (Select Contact.Name, ContactId from OpportunityContactRoles ) 
@@ -210,7 +211,7 @@ public class HierarchyController{
                                     
                              ordFnzDtMax = date.newInstance(ordList.get(sz-1).Order_Finalized_Date__c.year(), ordList.get(sz-1).Order_Finalized_Date__c.month(), ordList.get(sz-1).Order_Finalized_Date__c.day());
                          }
-           
+           System.debug('abhijeet:::'+proj.Orders__r.size());
            /*******Total amount related to Amount (Projects Won) ,Amount (Order In Progress),Amount(Quote In Progress),Amount (Lost)*******/                           
            if (proj.Amount__c != null) totalAmount = totalAmount + proj.Amount__c;
             
@@ -404,7 +405,7 @@ public class HierarchyController{
                 for(Opportunity opp: prj.Opportunities__r){
                         
                         oppIDSet.add(opp.Id);
-                        oppAccSet.add(prj.Ordering_Account__c);
+                       // oppAccSet.add(prj.Ordering_Account__c);
                     }
                 }
            }
@@ -515,12 +516,12 @@ public class HierarchyController{
             if(cityFilter!=''){cityFilter = cityFilter.trim(); cnt++;} 
             if(stateFilter!=''){stateFilter = stateFilter.trim(); cnt++;} 
             if(zipFilter!=''){zipFilter = zipFilter.trim(); cnt++;}
-       
+            if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
             if(project_drp_Stage!='' && project_drp_Stage!='None'){project_drp_Stage = project_drp_Stage.trim(); cnt++;}
-            if(archFilter!=''){archFilter = archFilter; cnt++;}
+            if(archFilter!=''){archFilter = archFilter.trim(); cnt++;}
             if(purFilter!=''){purFilter = purFilter.trim(); cnt++;}
             if(ordFilter!=''){ordFilter = ordFilter.trim(); cnt++;}
-            if(appIndFilter!=''){appIndFilter = appIndFilter.trim(); cnt++;}
+            
             
             if(accFilter!='' && hr.accountName!=null && hr.accountName.Name!=null) 
                if(hr.accountName.Name.containsIgnoreCase(accFilter))

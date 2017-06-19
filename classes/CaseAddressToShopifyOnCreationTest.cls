@@ -3,6 +3,36 @@ public class CaseAddressToShopifyOnCreationTest{
   
  static testmethod void method1(){
  
+ Manufacturer_OrderNb__c mo = new Manufacturer_OrderNb__c();
+        mo.Name = 'Richmond';
+        //mo.LatestNumber__c = 40200;
+        mo.LatestOrderNumber__c='40209';
+        insert mo;
+        
+        Manufacturer_OrderNb__c mo1 = new Manufacturer_OrderNb__c();
+        mo1.Name = 'Solarlux';
+        //mo1.LatestNumber__c = 20001;
+        mo1.LatestOrderNumber__c='20017';
+        insert mo1;
+        
+        Manufacturer_OrderNb__c mo2 = new Manufacturer_OrderNb__c();
+        mo2.Name = 'Teuffel';
+        //mo2.LatestNumber__c = 75400;
+        mo2.LatestOrderNumber__c='75401';
+        insert mo2;
+        
+        Manufacturer_OrderNb__c mo3 = new Manufacturer_OrderNb__c();
+        mo3.Name = 'Wizard';
+        //mo3.LatestNumber__c = 97000;
+        mo3.LatestOrderNumber__c='97001';
+        insert mo3;
+        
+        ModelManufacturer__c mm=new ModelManufacturer__c();
+        mm.Name='HSW 45';
+        mm.Manufacturer__c='Solarlux';
+        insert mm;
+ 
+ 
   list<Zip_Codes_Master__c> tmList = TestDataUtility.getTerritoryMaster();
   insert tmList;
   
@@ -61,16 +91,11 @@ public class CaseAddressToShopifyOnCreationTest{
   q.Primary_Quote__c=True;
   q.Project__c = pro.id;
   q.Shipping_Min__c = 12;
+   q.Order_Number__c = 12345;
   insert q;
   
-    Quote_Detail__c qd = new Quote_Detail__c();
-        qd.Model__c = 'WA63';   
-        qd.Quote__c=q.id;
-        insert qd;
-        
   
-        
- Quote q1 = new Quote();
+  Quote q1 = new Quote();
  q1.Name = 'Test Quote';
  q1.OpportunityId = o.Id;
  q1.Nana_Quote__c = q.Id;
@@ -83,6 +108,7 @@ public class CaseAddressToShopifyOnCreationTest{
  
  order ord = new order();
  ord.Status = 'draft';
+ ord.Name='12345';
  ord.EffectiveDate = system.today();
  ord.AccountId = acc.id;
  ord.Order_Finalized_Date__c = date.newInstance(2017,01,10);
@@ -116,6 +142,21 @@ public class CaseAddressToShopifyOnCreationTest{
    c.Shipping_Street_End_Customer__c='';
    c.Shipping_State_End_Customer__c='';
 insert c;       
+ 
+   Service_Quote__c sq = new Service_Quote__c();
+        sq.Case__c=c.id;
+        sq.Quote__c=q.id;
+        sq.Order__c=ord.id;
+        sq.Total_Amount__c = 134;
+        sq.Discount__c = 20;
+        sq.shopify__c = true;
+        sq.recordtypeid = Schema.SObjectType.Service_Quote__c.getRecordTypeInfosByName().get('Shopify Service Quote').getRecordTypeId();
+        sq.Status__c = 'Order Created';
+        sq.Shopify_ID__c = '2853431619';
+        
+ 
+ insert sq;
+ 
  
  
  }

@@ -533,6 +533,7 @@ public with sharing class OrderTriggerStagesHelper{
        system.debug(mapQuoteModel.get(string.valueof(oNew.NanaQuote__c)));
                //check if manufacturing is from richmond and assign ordernumber with incremental value
                //based  on model get the manufacturer from custom settings
+         //      System.debug('ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c'+ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c);
                 if(rd != null && ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')&& (rd >=40000 && rd<75000)){
                     
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
@@ -544,7 +545,8 @@ public with sharing class OrderTriggerStagesHelper{
                     system.debug('Richmonddata'+ oNew.Manufacturing__c+oNew.Name+rd);
                     counterR+=1;
                 }
-                else if(ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')){
+         
+                else if( ModelManufacturer__c.getinstance(mapQuoteModel.get(oNew.NanaQuote__c)).Manufacturer__c.equalsIgnoreCase('Richmond')){
                     
                     if(checkDupOrderfieldMap!= null && checkDupOrderfieldMap.containsKey(oNew.NanaQuote__c) && checkDupOrderfieldMap.get(oNew.NanaQuote__c))
                         oNew.Name='40200';

@@ -123,6 +123,8 @@ public class GetUserFromAddress
     public static string GetUser(string country2,string zip2)
     
     {
+    	
+    	
         System.Debug ('get user zip2 = ' + zip2 + ' country='+country2);
         if (zip2==null || country2==null)
             return '005A0000000MOJpIAO';
@@ -134,6 +136,16 @@ public class GetUserFromAddress
 
             
         string country = country2.toLowerCase();
+        
+/*
+        for (Zip_Codes_Master__c z: [Select Zip_Code__c, user__c, state__c, country__c, Territory__c from Zip_Codes_Master__c WHERE (Zip_Code__c = :zip2 AND country__c  = :country2)])        
+      	{
+      		return z.user__c;
+      	}
+      	
+      	return null; 
+      	  
+*/
         if (country=='mexico' || country=='mex' || country == 'mx')
         {
             if (zip2 >= '21000' && zip <'24000')
@@ -669,7 +681,7 @@ else if (subzip>='89000' && subzip <='89199')
 }
 else if (subzip>='89300' && subzip <='89899') 
 {
-    return '005A0000000N1l5IAC';
+    return '005Q000000PTwxUIAT'; // 005A0000000N1l5IAC => 	005Q000000PTwxUIAT
 }
 else if (subzip>='90000' && subzip <='93599') 
 {
@@ -677,7 +689,7 @@ else if (subzip>='90000' && subzip <='93599')
 }
 else if (subzip>='93600' && subzip <='96199') 
 {
-    return '005A0000000N1l5IAC';
+    return '005Q000000PTwxUIAT'; // 005A0000000N1l5IAC => 	005Q000000PTwxUIAT
 }
 else if (subzip>='96700' && subzip <='99999') 
 {
