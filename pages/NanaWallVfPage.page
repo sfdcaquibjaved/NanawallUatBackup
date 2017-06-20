@@ -1,22 +1,5 @@
-<apex:page controller="NanaWallCLass">
+<apex:page standardController="Account" extensions="NanaWallCLass">
     <apex:PageBlock id="pbId1" >  
-      <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) ">
-         <apex:pageBlockTable var="ac" value="{!WrapperList}">
-              <apex:column headerValue="Corporate Account Site Location (End Customer) with No Projects "/>   
-            <apex:column headerValue="Project Name" />
-             <apex:column headerValue="Project Status"/>
-             <apex:column headerValue="Amount"/>
-             <apex:column headerValue="Project Created Date"/>
-             <apex:column headerValue="Order Finalized Date"/>
-             <apex:column headerValue="Application Industry"/>
-             <apex:column headerValue="Architect"/>
-             <apex:column headerValue="Purchaser Account"/>
-             <apex:column headerValue="Ordering Account"/>
-             <apex:column headerValue="Project Name"/>
-             <apex:column headerValue="Project City"/>
-             <apex:column headerValue="Project ZipCode"/>
-         </apex:pageBlockTable>
-         </apex:pageBlockSection>
-            
+     
     </apex:PageBlock>
 </apex:page>

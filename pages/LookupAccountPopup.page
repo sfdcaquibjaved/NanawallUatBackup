@@ -29,12 +29,13 @@ function fillIn(name, id)
 if(elm != ''){
 $('[id$=input_to_change]').val(elm);
     var assignVal = $('[id$=input_to_change]').val(elm);
+     alert(elm);
     //window.opener.document.getElementById('details').value = assignVal;
- opener.document.frm.txt_acc_val.value = document.frm.inputVal.value;
+ opener.document.frm.txt_acc_val.value = document.frm1.inputVal.value;
     
     alert(elm);
-    self.close();
-    // window.close();
+    
+    window.close();
 }
 }
     function CloseWin(s)
@@ -51,7 +52,7 @@ $('[id$=input_to_change]').val(elm);
     <!-- <apex:inputText id="input_to_change" name="inputVal" label="Account Name: "  /> -->
    <apex:pageBlockSectionItem >
        <apex:commandButton value="Search" reRender="accsTable" style="background:LightBlue;width:100px;height:30px;"/>
-       <apex:commandButton value="Go"  action="{!passValue}" onClick="populatevouchernum(this.form);"  style="background:LightBlue;width:100px;height:30px;"/>
+       <apex:commandButton value="Go"  action="{!passValue}" onClick="populatevouchernum(this.frm1);"  style="background:LightBlue;width:100px;height:30px;"/>
      </apex:pageBlockSectionItem>
  </apex:pageblocksection>
     <apex:pageBlockSection columns="1">

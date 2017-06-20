@@ -140,6 +140,17 @@ background-color: #E3DCDB;
      </apex:pageBlockSection>
     </apex:PageBlock>
   
+<apex:pageBlock >
+    <apex:pageBlockSection >
+       <apex:pageBlockTable value="{!AccRelatedList}"  var="pr1">
+        <apex:inputField value="{!pr1.name}" />
+        </apex:pageBlockTable>
+        
+
+   
+    </apex:pageBlockSection>
+</apex:pageBlock>
+
 
   
    <apex:pageBlock id="accFilter">
@@ -149,7 +160,7 @@ background-color: #E3DCDB;
    <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
           <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
               <apex:inputField value="{!Account.ParentID}" />
-              <apex:inputField value="{!Account.Name}" />  
+              <apex:inputField value="{!Account.ID}" />  
               <apex:panelGrid columns="6" cellspacing="10">
                   <apex:outputLabel value="Account Name:"/>
                   <input type="text" name="txt_acc_val" /> 

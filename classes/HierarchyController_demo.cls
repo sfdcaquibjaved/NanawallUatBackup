@@ -21,6 +21,7 @@ public class HierarchyController_demo{
     public String rltype {get;set;}
     public Account AccRelatedList{get;set;}  
     Public Project__c PrjRelated{get;set;}
+    
     public Hierarchy [] ProjectListBkp{get;set;}
     public Double amountWon{get;set;}
     public Double totalAmount{get;set;}
@@ -406,7 +407,7 @@ public class HierarchyController_demo{
          /*************** Pass Account Id from the runQuery method to fetch all related data *************/  
         
         runQuery(objAcc.Id);
-       
+     //  fetchAccountDetails();
         summary();                      
                
      }
