@@ -1,5 +1,192 @@
 <apex:page standardController="Account" extensions="NanaWallCLass">
-    <apex:PageBlock id="pbId1" >  
-     
+    <apex:form >
+    <apex:PageBlock >
+     <apex:pageBlockSection columns="1">
+         <apex:pageBlockTable var="acc" value="{!Account}" >
+         <apex:column headerValue="Corporate Account Name">
+         <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
+         </apex:column>
+             <apex:column headerValue="Site Count" value="{!SiteCount}"/>
+             <apex:column headerValue="Projects Count" value="{!AccountWithProjects.size}"/>
+             <apex:column headerValue="Most Recent Order Date" value="{!latestOrderDate[0].Order_Finalized_Date__c}">
+             </apex:column>
+             <apex:column headerValue="Projects Won (Order Paid)" value="{!ProjWon }"/> 
+             <apex:column headerValue="Projects (Order In Progress)" value="{! ProjOrderInProgress }"/>
+             <apex:column headerValue="Projects (Quote in Progress)" value="{!ProjQuoteInProgress}"/>
+             <apex:column headerValue="Project Lost" value="{!ProjLost}"/>
+             <apex:column headerValue="Duplicate Projects" value="{!ProjDuplicate}"/>
+             
+            
+           
+            <apex:column headerValue="Closure Rate">
+                 <apex:outputText value="{0,Number,0.00}%"><apex:param value="{!(100*ProjWon )/IF(AccountWithProjects.size == 0, 1, AccountWithProjects.size)}" /></apex:outputText> 
+            </apex:column>
+            
+            <apex:column headerValue="Amount (Projects Won)">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!ProjAmountWon}" /></apex:outputText> 
+            </apex:column>
+         
+             <apex:column headerValue="Amount (Order In Progress)">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!ProjAmountOrderInProgress}" /></apex:outputText> 
+            </apex:column>
+            
+           <apex:column headerValue="Amount (Quote In Progress)">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!ProjAmounQuoteInProgress}" /></apex:outputText> 
+            </apex:column>
+            
+             <apex:column headerValue="Amount (Lost)">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!ProjAmountLost}" /></apex:outputText> 
+            </apex:column>
+                     
+            
+             <apex:column headerValue="Total Amount">
+                 <apex:outputText value="{0, Number, Currency}"><apex:param value="{!ProjTotalAmount}" /></apex:outputText> 
+            </apex:column> 
+            
+           
+           
+         </apex:pageBlockTable>
+     </apex:pageBlockSection>
     </apex:PageBlock>
+   <apex:pageBlock >
+        <apex:pageBlockSection title="Quoteless Opportunities : {!CAProjOppList.size}" columns="2">
+            <apex:pageblockTable value="{!CAProjOppList }" var="opp">
+                <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
+                    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>   
+                <apex:column headervalue="Stage Name" value="{!opp.StageName}"/>   
+            </apex:pageblockTable>
+        </apex:pageBlockSection>
+   </apex:pageBlock> 
+   
+   
+    <apex:PageBlock >  
+     <apex:stylesheet value="https://cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+    <apex:includeScript value="https://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.NanawallVFPage,'/jquery.tablefilter.min.js')}"/>
+ <style type="text/css" media="screen">
+        table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1 {
+            background-color: #F1F1F1;
+        }
+ 
+    </style>
+    <script type="text/javascript" charset="utf8">
+    var oTable;
+    var currentNumberDisplayed = 5;
+ 
+    $(document).ready(function() {
+        $('#load').click( function () {
+            var oSettings = oTable.fnSettings();
+            currentNumberDisplayed += 5;
+            oSettings._iDisplayLength = currentNumberDisplayed;
+            oTable.fnDraw();
+        });
+ 
+        oTable = $('[id$=testTable]').dataTable({
+            "iDisplayLength": 5
+        });
+    });
+ 
+</script>
+      <apex:pageBlockSection columns="1" >
+         <apex:pageBlockTable var="pr" value="{!AccountWithProjects }" id="testTable">
+               <apex:column headerValue="Corporate Account Site Location (End Customer)">
+             
+             <apex:outputLink value="/{!pr.End_Customer_Account__r.name}">{!pr.End_Customer_Account__r.name}</apex:outputLink>
+             
+             </apex:column>  
+             <apex:column headerValue="Project Name">
+           
+            <apex:outputLink value="/{!pr.Name}">{!pr.Name}</apex:outputLink>
+            </apex:column>
+             <apex:column headerValue="Project Status" >
+                
+              <apex:outputLink value="/{!pr.Stage__c}">{!pr.Stage__c}</apex:outputLink>
+
+                </apex:column>
+             <apex:column headerValue="Amount">            
+               <apex:outputText value="{0, Number, Currency}"><apex:param value="{!pr.Amount__c}"/></apex:outputText>
+                 </apex:column>
+             <apex:column headerValue="Project Created Date">                
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!pr.createddate}"/></apex:outputText>
+                  </apex:column>
+             <apex:Column headerValue="Order Finalized Date">
+                    <apex:repeat value="{!pr.Orders__r}" var="c">
+                          <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!c.Order_Finalized_Date__c}"/></apex:outputText>
+                    </apex:repeat>
+                </apex:Column>
+                  
+          <apex:Column headerValue="Order Created Date">
+                    <apex:repeat value="{!pr.Orders__r}" var="c">
+                         <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!c.CreatedDate}"/></apex:outputText>
+                   
+                    </apex:repeat>
+                </apex:Column>
+             <apex:column headerValue="Application Industry">                
+                 
+                 <apex:outputText value="{!pr.Application__c}" />
+                </apex:column>
+          
+              <apex:column headerValue="Architect">
+                 <apex:outputLink value="/{!pr.Purchaser_Account__r.Name}">{!pr.Purchaser_Account__r.Name}</apex:outputLink>                 
+                </apex:column>
+                  <apex:column headerValue="Installed At Account">
+                 <apex:outputLink value="/{!pr.Architect_Account__r.Name}">{!pr.Architect_Account__r.Name}</apex:outputLink>                 
+                </apex:column>
+                <apex:column headerValue="Ordering Account">
+                 <apex:outputLink value="/{!pr.Ordering_Account__r.Name}">{!pr.Ordering_Account__r.Name}</apex:outputLink>                 
+                </apex:column>         
+                 
+            
+             <apex:column headerValue="Contact Role"/>
+             <apex:column headerValue="Project City" value="{!pr.Project_City__c}"/>
+            <apex:column headerValue="Project state" value="{!pr.Project_State__c}"/>
+             <apex:column headerValue="Project ZipCode" value="{!pr.Project_Zip_Code__c}"/>
+         </apex:pageBlockTable>
+         </apex:pageBlockSection>
+            
+    </apex:PageBlock> 
+   <apex:PageBlock id="pbId" >  
+       
+     <apex:pageBlockSection columns="1" title="Corporate Account Site Location (End Customer) with No Projects : {!noOfRecords}">
+         <apex:pageBlockTable var="ac" value="{!AccountsData}">
+          <!--   <apex:column headerValue="Corporate Account Site Location (End Customer)"> --> 
+             <apex:column headerValue="Corporate Account Site Location (End Customer) with No Projects">
+             
+             <apex:outputLink value="/{!ac.Id}">{!ac.Name}</apex:outputLink>
+             </apex:column>
+            <apex:column headerValue="Project Name"/>
+             <apex:column headerValue="Project Status"/>
+             <apex:column headerValue="Amount"/>
+             <apex:column headerValue="Project Created Date"/>
+             <apex:column headerValue="Order Finalized Date"/>
+             <apex:column headerValue="Application Industry"/>
+             <apex:column headerValue="Architect"/>
+             <apex:column headerValue="Installed at Account"/>
+             <apex:column headerValue="Ordering Account"/>
+             <apex:column headerValue="Project Name"/>
+             <apex:column headerValue="Project City"/>
+             <apex:column headerValue="Project ZipCode"/>
+         </apex:pageBlockTable>
+         <apex:panelGrid columns="5">
+       <!--  <apex:selectList value="{!PaginationSize}" multiselect="false" size="1" onchange="refreshPageSize();">
+                   <apex:selectOptions value="{!paginationSizeOptions}"/>-->
+                    <apex:commandButton status="fetchStatus" reRender="pbId" value="First" action="{!setCon.first}" disabled="{!!setCon.hasPrevious}" title="First Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Previous" action="{!setCon.previous}" disabled="{!!setCon.hasPrevious}" title="Previous Page"/> 
+                <apex:outputText >{!(setCon.pageNumber * PaginationSize)+1-PaginationSize}-{!IF((setCon.pageNumber * PaginationSize)>noOfRecords, noOfRecords,
+                     (setCon.pageNumber * PaginationSize))} of {!noOfRecords}
+                </apex:outputText> 
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Next" action="{!setCon.next}" disabled="{!!setCon.hasNext}" title="Next Page"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="Last" action="{!setCon.last}" disabled="{!!setCon.hasNext}" title="Last Page"/> 
+              <!-- <apex:outputText >{!(setCon.pageNumber * PaginationSize)+1-PaginationSize}-{!IF((setCon.pageNumber * PaginationSize)>noOfRecords, noOfRecords,
+                     (setCon.pageNumber * PaginationSize))} of {!noOfRecords}
+                </apex:outputText>--> 
+                <!--</apex:selectList>-->
+         </apex:panelGrid>
+        </apex:pageBlockSection>
+    </apex:PageBlock>
+  
+    </apex:form>
 </apex:page>

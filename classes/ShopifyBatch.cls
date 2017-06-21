@@ -70,9 +70,11 @@ global class ShopifyBatch implements Database.Batchable < sObject > , Database.A
         if (ordList.size() > 0) {
             list < wrapperObjectShopify.fulfillments > fulllist = new list < wrapperObjectShopify.fulfillments > ();
             for (Service_Quote__c squote: records) {
-                fulllist = orderTrackNumberMap.get(squote.Shopify_ID__c);
-                System.debug('fulllistt' + fulllist);
-                if (fulllist.size() > 0) {
+                if(orderTrackNumberMap.size() > 0 ){
+                	fulllist = orderTrackNumberMap.get(squote.Shopify_ID__c);
+                }
+                System.debug('fulllistt' + fulllist );
+                if ((fulllist.size() > 0) && (!fulllist.isEmpty()))  {
                     for (wrapperObjectShopify.fulfillments fl: fulllist) {
                         squote.Freight_Tracking_Number__c = fl.tracking_number;
                         squote.Tracking_Company__c = fl.tracking_company;

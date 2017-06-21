@@ -1,7 +1,7 @@
 public class NanaWallCLass 
 {       
-   // wrapper class to hold all data
-    public list<wrapperClass> WrapperList{get;set;}
+  
+   
     public list<opportunity> AllData {get;set;}
    // public set<opportunity> AllData{get;set;}
     //map for id and accountcontactroel
@@ -19,15 +19,15 @@ public class NanaWallCLass
     // Count The Project Closer Rate Percantage 
         public integer ProjClosureRate{get;set;}
     // Count The Project Amount Won
-        public integer ProjAmountWon{get;set;}
+        public Decimal ProjAmountWon{get;set;}
     // Count The Project Amount in Process
-        public integer ProjAmountInProgressWon{get;set;}
+        public Decimal ProjAmountOrderInProgress{get;set;}
     // Count The Project Won
-        public integer ProjQuoteAmountInProgress{get;set;}
+        public Decimal ProjAmounQuoteInProgress{get;set;}
     // Count The Project Won
-        public integer ProjAmountLost{get;set;}
+        public Decimal ProjAmountLost{get;set;}
     // Count The Project Total Amount
-        public integer ProjTotalAmount{get;set;}
+        public decimal ProjTotalAmount{get;set;}
     
         // Latest Order Finalaize Date
         public list<order> latestOrderDate {get;set;}
@@ -54,16 +54,16 @@ public class NanaWallCLass
             ProjWon =0;
             ProjOrderInProgress =0;
             ProjQuoteInProgress=0;
-            ProjTotalAmount=0;
             ProjLost=0;
+            ProjQuoteInProgress=0;            
             ProjDuplicate=0;
             ProjClosureRate=0;
             ProjAmountWon=0;
-            ProjAmountInProgressWon=0;
-            ProjQuoteAmountInProgress=0;
+            ProjAmountOrderInProgress=0;
+            ProjAmounQuoteInProgress=0;
             ProjAmountLost=0;
             ProjTotalAmount=0;
-            
+     
             // Count the total Site of the projects
             SiteCount=[select count() from account where parent.id =:accid];
             
@@ -80,8 +80,9 @@ public class NanaWallCLass
                query1+=' OR Purchaser_Account__c =:AccId OR Ordering_Account__c =:AccId ) ';
             
             //Assign Query REsults to the project List type Projects
-             AccountWithProjects = database.query(query1);
-            
+             AccountWithProjects = database.query(query1);   
+             
+      
             
             /*********QuoteLess Opprotunities *******************/
             CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c  from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:AccId AND Quote_Count__c=0];
@@ -95,45 +96,93 @@ public class NanaWallCLass
             paginationSizeOptions.add(new selectoption('150','150'));
             paginationSizeOptions.add(new selectoption('200','200'));
             paginationSizeOptions.add(new selectoption('250','250'));
+            
+            
+            summary();
                      
-            for(project__c proj : AccountWithProjects)
-            {
-            
-            // Count the Project Won
-             if (proj.Stage__c != null && (proj.Stage__c.contains('Closed Complete - Ordered - Paid')))
-                {
-                    ProjWon = ProjWon + 1;
-                    
-                }
-            
-            if(proj.Stage__c.contains('Closed Won - Order In Process') || proj.Stage__c.contains('Closed Won - Order Signed') || proj.Stage__c.contains('Order - Negotiation') || proj.Stage__c.contains('Project On Hold') && proj.Orders__r.size()>0)
-                {
-                ProjOrderInProgress = ProjOrderInProgress + 1; 
-                    
-                   
-            }
-            
-            // Count the Duplicate Project in this Account
-            if(proj.Stage__c.contains('Duplicate'))
-                {
-                    ProjDuplicate = ProjDuplicate + 1;
-                }   
-            
-            }
+           
         }
     
-    // wrapper class to combine all data
-    public class wrapperClass
+    public void summary()
     {
-        public project__c pr{get;set;}
-        public opportunity opp1{get;set;}
-        public wrapperClass(list<project__C> GP)
-        {
-            //pr = GP;
-            //opp1 =opp;
-        }
-         
-        
+    
+    
+                 for(Project__c proj: AccountWithProjects )
+           
+            
+            {
+            
+                     if(proj.Stage__c.contains('Closed Lost - Project Lost')||proj.Stage__c.contains('Closed - Inactivity')||proj.Stage__c.contains('Cancelled'))
+                       
+                       {
+             
+                               
+                                   ProjLost= ProjLost+ 1; 
+                                   if(proj.Amount__c!=NULL)
+                                   {
+                                    ProjAmountLost =ProjAmountLost + proj.Amount__c;
+                                   }
+              
+                     } 
+                
+            
+            
+                     if(proj.Stage__c.contains('Duplicate'))
+                     
+                    {
+                    
+                            ProjDuplicate= ProjDuplicate+1;
+                    
+                    }   
+            
+                if (proj.Stage__c != null && (proj.Stage__c.contains('Closed Complete - Ordered - Paid')))
+               
+                {
+                    
+                    ProjWon = ProjWon + 1;
+                    ProjAmountWon= ProjAmountWon+ proj.Amount__c; 
+                    
+                    
+                }
+                
+                if(proj.Stage__c.contains('Closed Won - Order In Process') || proj.Stage__c.contains('Closed Won - Order Signed') || proj.Stage__c.contains('Order - Negotiation') || proj.Stage__c.contains('Project On Hold') && proj.Orders__r.size()>0)
+              
+                {
+                          
+                            ProjOrderInProgress = ProjOrderInProgress +1; 
+                    
+                        if(proj.Amount__c!=null)
+                        {    
+                    
+                                ProjAmountOrderInProgress= ProjAmountOrderInProgress+ proj.Amount__c; 
+                         }    
+                }
+                
+                 /** Total Amount related to Amount (Quote In Progress)****/ 
+          
+          
+            if(proj.Stage__c.contains('Quoted') || proj.Stage__c.contains('Prospecting') || proj.Stage__c.contains('Design') || proj.Stage__c.contains('Bidding') || proj.Stage__c.contains('Considered')|| proj.Stage__c.contains('Awarded') || (proj.Stage__c.contains('On Hold') && proj.Orders__r.size()==0))
+          
+            {
+                
+                ProjQuoteInProgress= ProjQuoteInProgress+ 1;
+                
+                if(proj.Amount__c!=NULL)
+                {
+                        ProjAmounQuoteInProgress= ProjAmounQuoteInProgress+ proj.Amount__c;
+                }
+          
+           }
+           
+          
+                 if(proj.Amount__c!=NULL)
+                ProjTotalAmount= ProjTotalAmount+ proj.Amount__c;
+            
+            }
+      
+    
+    
+    
     }
     
     public ApexPages.StandardSetController setCon 

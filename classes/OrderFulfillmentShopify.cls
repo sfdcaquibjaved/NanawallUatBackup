@@ -33,9 +33,9 @@ global without sharing class OrderFulfillmentShopify {
         System.debug('ordersssssssss2222222' + res);
 
         //The data in bodyString is in JSON format the below method is used to parse the json format to normal format.
-                wrapperObjectShopify order = (wrapperObjectShopify) JSON.deserialize(bodyString, wrapperObjectShopify.class);
-                ordList.add(order);
-                orderId.add(order.id);
+                wrapperObjectShopify order1 = (wrapperObjectShopify) JSON.deserialize(bodyString, wrapperObjectShopify.class);
+                ordList.add(order1);
+                orderId.add(order1.id);
                
         //Updating Service Quote on Shopify Order Fulfillment
         for (Service_Quote__c sq: [select id, status__c from Service_Quote__c where Shopify_ID__c =: orderId]) {

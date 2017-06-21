@@ -251,7 +251,7 @@ public with sharing class Quote_WizardController_Clone {
     public List<SelectOption> getContactRoleOptions() {
        
        List<SelectOption> contactRole = new List<SelectOption>();
-        
+        contactRole.add(new SelectOption('','-None-'));
         Schema.DescribeFieldResult RoleFieldDescription = Schema.Contact.LeadType__c.getDescribe();
         
         for (Schema.Picklistentry picklistEntry: RoleFieldDescription.getPicklistValues()) {
@@ -260,6 +260,10 @@ public with sharing class Quote_WizardController_Clone {
             if (con.LeadType__c != null ) {
                     selectedContactRole = con.LeadType__c ;
                 }
+            else {
+                
+                selectedContactRole = '-None-' ;
+            }
         }
        
         return contactRole;
@@ -905,7 +909,13 @@ public with sharing class Quote_WizardController_Clone {
                         nrOpportunityContactRole__c OCR = new nrOpportunityContactRole__c() ; 
                         OCR.Contact__c = con.ID ; 
                         OCR.Opportunity__c = o.Opportunity__c ; 
-                        OCR.Role__c = selectedContactRole ; 
+                        if(selectedContactRole != '-None-' ){
+                            OCR.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            OCR.Role__c = 'Other' ;
+                        }
+                        
                         ListOppConROleInsert.add(ocr);
                         break ; 
                         
@@ -917,8 +927,14 @@ public with sharing class Quote_WizardController_Clone {
                         if(o.Contact__c == con.ID){
                             system.debug('I am inside here 1');
                             if(o.Role__c != selectedContactRole){
+                                if(selectedContactRole != '-None-' )
+									{
+                           			 O.Role__c = selectedContactRole ; 
+                        			}
+                        	else{
+                            		O.Role__c = 'Other' ;
+                       			 }
                                 
-                                o.ROle__c = selectedContactRole  ; 
                                 ListOppConROleUpdate.add(o);
                             }
                         }
@@ -1060,7 +1076,14 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                oppConRole.Role__c = selectedContactRole ;
+               
+                    if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                 insert oppConRole;
                 }
                 system.debug('#$!'+oppUrlId+'projectCreateOption'+projectCreateOption+'insufficentPrivilege'+insufficentPrivilege+' showQuoteSection'+showQuoteSection);
@@ -1090,7 +1113,13 @@ public with sharing class Quote_WizardController_Clone {
                         nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                         oppConRole.Contact__c = con.Id; 
                         oppConRole.Opportunity__c = opp.Id;
-                         oppConRole.Role__c = selectedContactRole ;
+                         if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                         insert oppConRole;  
                      }
                  }
@@ -1123,7 +1152,13 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                oppConRole.Role__c = selectedContactRole ;
+                if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                 insert oppConRole;  
                  }
                 }
@@ -1141,7 +1176,13 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                oppConRole.Role__c = selectedContactRole ;
+               if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                 system.debug('###########'+ oppConRole.Opportunity__c +opp.Id+con.id);
                 insert oppConRole;  
                  }
@@ -1368,7 +1409,13 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                oppConRole.Role__c = selectedContactRole ;
+                if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                 insert oppConRole;
                 }
                 system.debug('#$!'+oppUrlId+'projectCreateOption'+projectCreateOption+'insufficentPrivilege'+insufficentPrivilege+' showQuoteSection'+showQuoteSection);
@@ -1398,7 +1445,13 @@ public with sharing class Quote_WizardController_Clone {
                             
                         nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                         oppConRole.Contact__c = con.Id; 
-                        oppConRole.Role__c = selectedContactRole ; 
+                        if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                         oppConRole.Opportunity__c = opp.Id;
                         insert oppConRole;  
                      }
@@ -1432,7 +1485,13 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                 oppConRole.Role__c = selectedContactRole ;
+                 if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                 insert oppConRole;  
                  }
                 }
@@ -1450,7 +1509,13 @@ public with sharing class Quote_WizardController_Clone {
                 nrOpportunityContactRole__c oppConRole = new nrOpportunityContactRole__c();
                 oppConRole.Contact__c = con.Id; 
                 oppConRole.Opportunity__c = opp.Id;
-                oppConRole.Role__c = selectedContactRole ;
+                if(selectedContactRole != '-None-' )
+						{
+                            oppConRole.Role__c = selectedContactRole ; 
+                        }
+                        else{
+                            oppConRole.Role__c = 'Other' ;
+                        }
                 
                      system.debug('###########'+ oppConRole.Opportunity__c +opp.Id+con.id);
                 insert oppConRole;  

@@ -1,5 +1,28 @@
 <apex:page standardController="Account" extensions="HierarchyController_demo" sidebar="false" >
     <script>
+  
+function myFunction(id, k) {
+    //  alert('Nishant');
+  var input, filter, table, tr, td, i;
+  input = document.getElementById(id);
+    // alert(id);  
+  filter = input.value.toUpperCase();
+
+  table = document.getElementById("j_id0:frm:accsTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[k];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+    
  var newWin=null;
  function LookupAccountPopup(name, id)
  {
@@ -13,13 +36,7 @@
      return false;
     }
        
- function closeLookupPopup()
- {
-    if (null!=newWin)
-    {
-       newWin.close();
-    } 
- }
+ 
 </script>
     <style>
                                                                 .container
@@ -163,12 +180,12 @@ background-color: #E3DCDB;
               <apex:inputField value="{!Account.ID}" />  
               <apex:panelGrid columns="6" cellspacing="10">
                   <apex:outputLabel value="Account Name:"/>
-                  <input type="text" name="txt_acc_val" /> 
+                  <input type="text" name="txt_acc_val" id="txt_acc_val" onkeyup="myFunction(this.id,0)" />  
                 <!--  <apex:inputText value="{!accfilter}" name="txt_acc_val" /> -->
                  
                   
                   <a href="#" onclick="LookupAccountPopup('{!$Component.targetName}', '{!$Component.targetId}'); return false">Lookup</a>
-              <apex:outputLabel value="Project Name:"/><apex:inputText value="{!prjFilter}"/>
+              <apex:outputLabel value="Project Name:"/><!--<apex:inputText value="{!prjFilter}"/>--> <input type="text" name="txt_acc_val1" id="txt_acc_val1" onkeyup="myFunction(this.id,1)" />  
                <apex:outputLabel value="Project/Account City:"/><apex:inputText value="{!cityFilter}"/>
                <apex:outputLabel value="Project/Account State:"/><apex:inputText value="{!stateFilter}"/>
                <apex:outputLabel value="Project/Account Zipcode:"/><apex:inputText value="{!zipFilter}"/>
@@ -211,9 +228,9 @@ background-color: #E3DCDB;
         
         <!--Start Section------- -->
 <apex:datatable value="{!ProjectList}" var="pr1" id="accsTable" styleclass="tablesorter" >  
-        <apex:column headerValue="Name" >
+        <apex:column headerValue="Name" id="AccNameId">
            
-      <apex:outputField value="{!pr1.accountName.Name}" />
+      <apex:outputField value="{!pr1.accountName.Name}"  />
     </apex:column>
     <apex:column headerValue="Project Name">
       <apex:outputField value="{!pr1.projectName.Name}" />

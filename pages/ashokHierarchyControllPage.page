@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="ashokcontroller" sidebar="false" >
+<apex:page standardController="Account" extensions="AccountDemo" sidebar="false" >
 <style>
                                                                 .container
                                                                 {
@@ -180,7 +180,7 @@
                  <apex:outputText value="{!pr.applicationIndustry}" />
                 </apex:column>
 
-                 <apex:column headerValue="Installed at Account">
+                 <apex:column headerValue="Architect">
                  <apex:outputLink value="/{!pr.architect}">{!pr.architect.Name}</apex:outputLink>                 
                 </apex:column>
                  <apex:column headerValue="Ordering Account" >

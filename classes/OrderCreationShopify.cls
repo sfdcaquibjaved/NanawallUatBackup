@@ -18,7 +18,7 @@ global without sharing class OrderCreationShopify {
    static string financialPaid = 'Paid';
    static string zip = '12345';
    static string shipzip = '12345';
-   static string caseRep ='Travis Troen';
+  // static string caseRep ='Travis Troen';
    
    //This Method is used to Save Shopify Order in Salesforce
     @HttpPost
@@ -272,7 +272,7 @@ global without sharing class OrderCreationShopify {
                          c.Origin = caseOrigin;
                          c.Status = caseStatus;
                          c.Priority = casePriority; 
-                         c.Responsible_Rep__c = caseRep;
+                       //  c.Responsible_Rep__c = caseRep;
                          c.Shipping_City_EndCustomer__c = orderData.shipping_address.city;
                          c.Shipping_Street_End_Customer__c = orderData.shipping_address.address1;
                          c.Shipping_State_End_Customer__c =  orderData.shipping_address.province;
@@ -381,7 +381,7 @@ global without sharing class OrderCreationShopify {
                     c.Send_Quote_To__c = customer;
                     c.Ship_To__c = customer;
                     c.Bill_To__c = customer;
-                    c.Responsible_Rep__c = caseRep;
+                  //  c.Responsible_Rep__c = caseRep;
                          c.Shipping_City_EndCustomer__c = orderData.shipping_address.city;
                          c.Shipping_Street_End_Customer__c = orderData.shipping_address.address1;
                          c.Shipping_State_End_Customer__c =  orderData.shipping_address.province;
@@ -485,7 +485,7 @@ global without sharing class OrderCreationShopify {
                     c.Ship_To__c = customer;
                     c.Bill_To__c = customer;
                     c.order__c = orderList[0].id;
-                    c.Responsible_Rep__c = caseRep;
+              //      c.Responsible_Rep__c = caseRep;
                          c.Shipping_City_EndCustomer__c = orderData.shipping_address.city;
                          c.Shipping_Street_End_Customer__c = orderData.shipping_address.address1;
                          c.Shipping_State_End_Customer__c =  orderData.shipping_address.province;
@@ -647,7 +647,7 @@ global without sharing class OrderCreationShopify {
                 c.Send_Quote_To__c = customer;
                 c.Ship_To__c = customer;
                 c.Bill_To__c = customer;
-                c.Responsible_Rep__c = caseRep;
+            //    c.Responsible_Rep__c = caseRep;
                       c.Shipping_City_EndCustomer__c = orderData.shipping_address.city;
                          c.Shipping_Street_End_Customer__c = orderData.shipping_address.address1;
                          c.Shipping_State_End_Customer__c =  orderData.shipping_address.province;

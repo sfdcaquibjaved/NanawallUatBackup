@@ -21,7 +21,7 @@ global without sharing class OrderPaymentStatusShopify {
     global static void doPost() {
         // Local Variables       
         list < string > orderId = new list < string > ();
-        list < wrapperObjectShopify.Order > ordList = new list < wrapperObjectShopify.Order > ();
+        list < wrapperObjectShopify> ordList = new list < wrapperObjectShopify> ();
         list < Service_Quote__c > sqUpdate = new list < Service_Quote__c > ();
 
         //Requesting REST Service to fetch the data send by shopify to this web service class
@@ -37,13 +37,13 @@ global without sharing class OrderPaymentStatusShopify {
         System.debug('ordersssssssss2222222' + res);
 
         //The data in bodyString is in JSON format the below method is used to parse the json format to normal format.
-                shopifywrapper order = (shopifywrapper) JSON.deserialize(bodyString, shopifywrapper.class);
-                ordList.add(order.Order);
-                orderId.add(order.Order.id);
+                wrapperObjectShopify order = (wrapperObjectShopify) JSON.deserialize(bodyString, wrapperObjectShopify.class);
+                ordList.add(order);
+                orderId.add(order.id);
         
         //Updating Service Quote on Shopify Order Payment Change
         for (Service_Quote__c sq: [select id, status__c, Total_Amount__c, Discount__c from Service_Quote__c where Shopify_ID__c =: orderId]) {
-            for (wrapperObjectShopify.Order ord: ordList) {
+            for (wrapperObjectShopify ord: ordList) {
                 if (ord.financial_status == paid) {
                     sq.status__c = orderStatus;
                     sqUpdate.add(sq);
@@ -65,8 +65,5 @@ global without sharing class OrderPaymentStatusShopify {
               Database.saveresult[] sr = Database.update(sqUpdate, False);
               ErrorLogUtility.processErrorLogs(sr, sqUpdate, 'OrderPaymentStatusShopify', 'doPost', 'Service_Quote__c', 'Update');           
         }
-    }
-    public class shopifywrapper{
-       public wrapperObjectShopify.Order Order;
     }
 }
