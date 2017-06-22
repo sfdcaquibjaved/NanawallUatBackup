@@ -1,5 +1,30 @@
 public class GetUserFromAddress
 {
+
+	public static string GetUserIDFromZip_Offshore (string zip, string country)
+	{
+
+		country = country.toLowerCase();
+
+        if ( country=='mex' || country == 'mx')
+        {
+        	country = 'mexico';
+        	
+        } else if (  country=='can' || country=='ca' )
+        {
+        	country = 'canada';
+        } else if( country == 'us' || country == 'usa')
+        {
+        	country = 'united states';
+        }
+        
+        for (Zip_Codes_Master__c z: [Select Zip_Code__c, user__c,state__c,country__c,Territory__c from Zip_Codes_Master__c WHERE (Zip_Code__c = :zip AND country__c = :country )]) {
+        	return z.user__c;        	
+        }	
+        
+        return null;
+	}
+
        
     public static boolean IsCaribbeanCountry(string country) {
 
@@ -123,6 +148,8 @@ public class GetUserFromAddress
     public static string GetUser(string country2,string zip2)
     
     {
+    	    	
+    	return GetUserIDFromZip_Offshore( zip2, country2 );
     	
     	
         System.Debug ('get user zip2 = ' + zip2 + ' country='+country2);

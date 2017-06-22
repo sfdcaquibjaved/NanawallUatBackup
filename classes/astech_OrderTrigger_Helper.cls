@@ -10,7 +10,7 @@ public with sharing class astech_OrderTrigger_Helper {
 		for( Order o : orders )
 			quoteIds.add( o.QuoteID );
 			
-		for( Quote q : [SELECT Id, Dupe_Order__c, Order_Generated__c, AccountID, OpportunityID,Pricebook2Id, Name, ContactId,Order_Number__c,Subtotal,Tax,ShippingHandling,Expedited_Shipping__c,First_Threshold__c,Nana_Quote__c,GrandTotal,First_Threshold_Price__c,Drawing_Price__c,Packaging__c,Canada_Tax__c,Canada_Tax_Label__c,Ship_Label__c,Keyed_Alike__c,Grand_total__c,Shipping_Address__c,Shipping_Address_2__c, Shipping_City__c, Shipping_Country__c, Shipping_State__c, Shipping_Zip__c,Subtotal__c, Opportunity.AccountID, Opportunity.CloseDate, Opportunity.OwnerID, Opportunity.Project_Name__c, Opportunity.Account.BillingStreet, Opportunity.Account.BillingCity,Opportunity.Account.BillingState,Opportunity.Account.BillingPostalCode,Opportunity.Account.BillingCountry,Opportunity.Account.ShippingStreet,Opportunity.Account.ShippingCity,Opportunity.Account.ShippingState,Opportunity.Account.ShippingPostalCode,Opportunity.Account.ShippingCountry FROM Quote WHERE Id = :quoteIds ] )
+		for( Quote q : [SELECT Id,Local_Mfg_Germany__c, Dupe_Order__c, Order_Generated__c, AccountID, OpportunityID,Pricebook2Id, Name, ContactId,Order_Number__c,Subtotal,Tax,ShippingHandling,Expedited_Shipping__c,First_Threshold__c,Nana_Quote__c,GrandTotal,First_Threshold_Price__c,Drawing_Price__c,Packaging__c,Canada_Tax__c,Canada_Tax_Label__c,Ship_Label__c,Keyed_Alike__c,Grand_total__c,Shipping_Address__c,Shipping_Address_2__c, Shipping_City__c, Shipping_Country__c, Shipping_State__c, Shipping_Zip__c,Subtotal__c, Opportunity.AccountID, Opportunity.CloseDate, Opportunity.OwnerID, Opportunity.Project_Name__c, Opportunity.Account.BillingStreet, Opportunity.Account.BillingCity,Opportunity.Account.BillingState,Opportunity.Account.BillingPostalCode,Opportunity.Account.BillingCountry,Opportunity.Account.ShippingStreet,Opportunity.Account.ShippingCity,Opportunity.Account.ShippingState,Opportunity.Account.ShippingPostalCode,Opportunity.Account.ShippingCountry FROM Quote WHERE Id = :quoteIds ] )
 		{
 			quoteMap.put(  q.Id, q );
 		}
@@ -61,6 +61,8 @@ public with sharing class astech_OrderTrigger_Helper {
 			
 			o.OpportunityId = q.OpportunityId;			
 			o.QuoteId = q.Id;		
+			
+			o.Local_Mfg_Germany__c = q.Local_Mfg_Germany__c;
 			
 			
 			//check if we are cloning an order -- 
