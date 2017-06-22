@@ -149,9 +149,16 @@ trigger CaseTrigger on Case(before insert,before update, after update, after ins
 
     if(trigger.isAfter && ((trigger.isInsert) ) ){
        list<ID> caseDelete = new list<ID>();
+       list<Group> EmailToCaseQueue = [select Id from Group where( Name = 'EmailtoSalesforce' OR Name = 'Email To Case - User Inbox') and Type = 'Queue'];
+       set<ID> QueueID = new set<ID> () ;
+       
+        for(Group g : EmailToCaseQueue ) {
+            QueueID.add(g.ID) ; 
+        }
+        
         for(case c:trigger.new){
-            if(c.OwnerId ==[select Id from Group where Name = 'EmailtoSalesforce' and Type = 'Queue'].ID){
-                caseDelete.add(c.ID);
+            if(QueueID.contains(c.OwnerID)){
+                	caseDelete.add(c.ID);
             }
             
         }
