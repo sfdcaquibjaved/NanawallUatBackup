@@ -11,19 +11,33 @@
                                                                                 position:relative;
                                                                                 TOP: expression(this.offsetParent.scrollTop-2);        
                                                                 }
+    .normalClass {
+    background-color: ;
+}
+    .errorClass {
+    background-color: #3498DB;
+}
  
-                                                                </style>
+ </style>
+    <script>
+    function checkOnmouseOver()
+    {
+        
+        var a = document.getElementById('j_id0:j_id2:j_id4:j_id5:j_id6:CAccheader:sortDiv').text;
+         alert(a);
+    }
+    </script>
     <apex:form >
         <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId"/>
 
  <apex:PageBlock >
-     <apex:pageBlockSection columns="1">
-         <apex:pageBlockTable var="acc" value="{!Account}" >
-         <apex:column headerValue="Corporate Account Name">
+     <apex:pageBlockSection columns="1" >
+         <apex:pageBlockTable var="acc" value="{!Account}">
+         <apex:column headerValue="Corporate Account Name" id="CAcc" onmouseover="checkOnmouseOver()">
          <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
          </apex:column>
-             <apex:column value="{!siz}" headerValue="Site Count"/>
-             <apex:column value="{!ProjSiteList.size}" headerValue="Projects Count"/>
+             <apex:column value="{!siz}" headerValue="Site Count" />
+             <apex:column value="{!ProjSiteList.size}" headerValue="Projects Count" />
              <apex:column headerValue="Most Recent Order Date">
              <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!ordFnzDtMax}"/></apex:outputText>
              </apex:column>
@@ -44,13 +58,13 @@
             <apex:column headerValue="Amount (Projects Won)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
             </apex:column>
-            <apex:column headerValue="Amount (Order In Progress)">
+            <apex:column headerValue="Amount (Order In Progress)" >
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgPrgAmt}" /></apex:outputText> 
             </apex:column>
             <apex:column headerValue="Amount (Quote In Progress)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgQtdAmt}" /></apex:outputText> 
             </apex:column>
-            <apex:column headerValue="Amount (Lost)">
+            <apex:column headerValue="Amount (Lost)" title="Hello">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStglostAmt}" /></apex:outputText> 
             </apex:column>
            <!-- <apex:column headerValue="Amount Won">
@@ -89,12 +103,17 @@
     </apex:pageBlock>
       <!-- Quoteless Opportunities -->
          <apex:pageBlock >
-             <apex:pageBlockSection title="Quoteless Opportunities : {!CAProjOppList.size}" columns="2">
+             <apex:pageBlockSection title="Considered : {!CAProjOppList.size}" columns="2">
    <apex:pageblockTable value="{!CAProjOppList }" var="opp">
    <apex:column headervalue="Project Name" value="{!opp.Project_Name__r.Name}"/>    
    <apex:column headervalue="Opportunity Name" value="{!opp.name}"/>
-   
+       <!-- New requirement added on page dated : 23rdJun17 ---->
+   <apex:column headervalue="Created Dated ">
+   <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!opp.Project_Name__r.CreatedDate}" /> </apex:outputText>    
+       </apex:column>
    <apex:column headervalue="Stage Name" value="{!opp.StageName}"/>
+      <!-- New requirement added on page dated : 23rdJun17 ---->  
+   <apex:column headervalue="Architect" value="{!opp.Project_Name__r.Architect_Account__c}" styleClass="{!IF(opp.Project_Name__r.Architect_Account__c =='','errorClass','normalclass')}"/>    
    
    </apex:pageblockTable>
                  </apex:pageBlockSection>

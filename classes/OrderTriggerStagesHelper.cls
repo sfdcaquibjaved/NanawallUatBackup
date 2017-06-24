@@ -421,6 +421,7 @@ public with sharing class OrderTriggerStagesHelper{
     //loop over all orders and store the quote ids
     // addded new functionality by Praveen w.r.t. ticket 490
     map<id,boolean> checkDupOrderfieldMap = new map<id,boolean>();
+    boolean isLocal = false; // new functionality to handle local manufacturer and override solarlux
 
     set<id> qid = new set<id>();
        for(order o: orderList){
@@ -429,12 +430,16 @@ public with sharing class OrderTriggerStagesHelper{
        }
        system.debug(qid);
     // new functionality to check dupe order for ticket 490--Praveen
-    for(Quote qt : [select id, Nana_Quote__c,Dupe_Order__c from quote where Nana_Quote__c IN : qid]){
+    for(Quote qt : [select id, Nana_Quote__c,Nana_Quote__r.Local_Mfg_Germany__c,Dupe_Order__c from quote where Nana_Quote__c IN : qid]){
         if(qt.Dupe_Order__c != null)
             checkDupOrderfieldMap.put(qt.Nana_Quote__c,false);
         else
             checkDupOrderfieldMap.put(qt.Nana_Quote__c,true);
+        if(qt.Nana_Quote__r.Local_Mfg_Germany__c)
+            isLocal = true ; // new functionality for local
     } //end --praveen 
+
+    if(!isLocal){
     //string s;
     //map the quote and model and use them  to request the model manfacturer from custom settings
     map<string,string> mapQuoteModel = new map<string,string>();
@@ -496,6 +501,7 @@ public with sharing class OrderTriggerStagesHelper{
             
         
     }   
+
        
      //if(qdList.size()>0){s = ModelManufacturer__c.getinstance(qdList[0].model__c).Manufacturer__c;}
        
@@ -652,6 +658,29 @@ public with sharing class OrderTriggerStagesHelper{
             // }   
             
         }
+    }
+
+    else if(islocal){  // new functionality for local manufacturer
+        decimal loc;
+        list<order> ordLocal = [select id, Name , Manufacturing__c from order where Manufacturing__c = 'Local' AND name >= '85000' AND name <'90000' ORDER BY Name DESC NULLS last limit 1 ];
+            if(ordLocal.size()>0){ loc= decimal.valueOf(ordLocal[0].Name);}
+
+        for(order oNew: orderList){
+            if(loc!= null && loc  >= 85000 && loc <90000){
+                Onew.name = string.valueOf(loc +1);
+                Onew.Manufacturing__c ='Local';
+                loc= loc+1;
+
+            }
+            else {
+                onew.name = '85000';
+                Onew.Manufacturing__c ='Local';
+                loc = 85000;
+            }
+        }
+
+
+    }
         /*if(counterR >0){
         Manufacturer_OrderNb__c R = Manufacturer_OrderNb__c.getInstance('Richmond');
         R.LatestOrderNumber__c = string.valueOf(rd);

@@ -3,6 +3,7 @@ public with sharing class UtilityTEst {
 	@isTest(SeeAllData=false)
 	static  void RunTests () {
 		Utility.getUserForTerritory('USA', '31999');
+		/*
 		Utility.getUserForTerritory('USA', '96199'); 
 		Utility.getUserForTerritory('USA', '89899');
 		Utility.getUserForTerritory('USA', '07699');
@@ -136,6 +137,7 @@ public with sharing class UtilityTEst {
 		//utiliy get user special cases
 		Utility.getUserForTerritory('USA', '1');
 		Utility.getUserForTerritory('TEST', '1');
+*/
 
 	try {
 //		ResyncManager.ResyncException ex = new ResyncManager.ResyncException();

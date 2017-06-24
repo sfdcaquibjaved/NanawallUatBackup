@@ -1147,6 +1147,7 @@ public class OpportunityHelper {
     boolean recentcheck;
     integer countprimary;
     list<Opportunity> OppUpdatelist= new list<Opportunity>();
+    set<id> oppidsToUpdate = new set<id>();
     
     //Populating discount on Opportunity
         for(quote__c qt: quotelist)
@@ -1189,15 +1190,17 @@ public class OpportunityHelper {
                  }
                 
              }
-              if(primarycheck==TRUE)
+              if(primarycheck==TRUE && !oppidsToUpdate.contains(opp.id))
                  {
                      Opp.discounts__c=(avgquotedis_Primary/countprimary);
                      OppUpdatelist.add(Opp);
+                     oppidsToUpdate.add(opp.id);
                  }
-                 else
+                 else if(!oppidsToUpdate.contains(opp.id))
                  {
                      Opp.discounts__c=avgquotedis;
                      OppUpdatelist.add(Opp);
+                     oppidsToUpdate.add(opp.id);
                  }    
          }
          
@@ -1312,6 +1315,7 @@ public class OpportunityHelper {
     public static void UpdateDiscountOnProject(List < opportunity > oppRec) {
     //try{
     List < Project__c > updateProjList = new List < Project__c > ();
+    set<id> projToUpdate = new set<id>();
     set < id > projectIDs = new set < id > ();
        for (opportunity opp: oppRec) {
         projectIDs.add(opp.Project_Name__c);
@@ -1346,16 +1350,18 @@ public class OpportunityHelper {
             }
         }
         //Set the Project Discount to the average discount of all Opps
-        if (counter > 0 && sum > 0) {
+        if (counter > 0 && sum > 0 && !projToUpdate.contains(prj.id)) {
             prj.Average_Discount__c = sum;
             system.debug('#########'+prj.Average_Discount__c);
             updateProjList.add(prj);
+            projToUpdate.add(prj.id);
         }
         //Set the Project Discount to the average discount of all Opps
-        if (counter1 > 0 && sum1 > 0) {
+        if (counter1 > 0 && sum1 > 0 && !projToUpdate.contains(prj.id)) {
             prj.Average_Discount__c = sum1 / counter1;
             system.debug('$$$$$$$$$$$'+prj.Average_Discount__c);
             updateProjList.add(prj);
+            projToUpdate.add(prj.id);
         }
     }
     system.debug('updatelisttt'+updateProjList);

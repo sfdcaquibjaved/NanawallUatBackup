@@ -5,6 +5,7 @@ public with sharing class UnitTests3 {
     static  void RunTests () {
          //utility, test the zip codes
 		Utility.getUserForTerritory('USA', '31999'); 
+		/*
 		Utility.getUserForTerritory('USA', '96199');
 		Utility.getUserForTerritory('USA', '89899');
 		Utility.getUserForTerritory('USA', '07699');
@@ -127,6 +128,7 @@ public with sharing class UnitTests3 {
 		Utility.getUserForTerritory('USA', '96701');
 		Utility.getUserForTerritory('USA', '00601');
 		Utility.getUserForTerritory('USA', '666');
+		
         Utility.getUserForTerritory('canada', 'v4v');
         Utility.getUserForTerritory('canada', 'v99');
         Utility.getUserForTerritory('canada', '4v');
@@ -137,7 +139,7 @@ public with sharing class UnitTests3 {
             
         //utiliy get user special cases
         Utility.getUserForTerritory('USA', '1');
-
+*/
         Utility.HostName();
         
         Utility.StateOptions();

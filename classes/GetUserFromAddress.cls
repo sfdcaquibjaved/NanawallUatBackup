@@ -150,7 +150,8 @@ public class GetUserFromAddress
     {
     	    	
     	return GetUserIDFromZip_Offshore( zip2, country2 );
-    	
+
+/*    	
     	
         System.Debug ('get user zip2 = ' + zip2 + ' country='+country2);
         if (zip2==null || country2==null)
@@ -164,15 +165,6 @@ public class GetUserFromAddress
             
         string country = country2.toLowerCase();
         
-/*
-        for (Zip_Codes_Master__c z: [Select Zip_Code__c, user__c, state__c, country__c, Territory__c from Zip_Codes_Master__c WHERE (Zip_Code__c = :zip2 AND country__c  = :country2)])        
-      	{
-      		return z.user__c;
-      	}
-      	
-      	return null; 
-      	  
-*/
         if (country=='mexico' || country=='mex' || country == 'mx')
         {
             if (zip2 >= '21000' && zip <'24000')
@@ -728,8 +720,11 @@ else if (subzip>='96700' && subzip <='99999')
 
         else
        //     return GlobalStrings.CatchallUserIDForAssignment(); //this is for sandbox testing
+
         return '005A0000000MOJpIAO'; //this is for production releasing     
+        
+        */    
     }
 
-    
+
 }
