@@ -190,7 +190,7 @@ background-color: #FCF7F7;}
                 </apex:column>         
                  
             
-             <apex:column headerValue="Contact Role"/>
+             <apex:column headerValue="Contact Role" value="{!pr.Architect_Contact__r.firstname}"/>
              <apex:column headerValue="Project City" value="{!pr.Project_City__c}"/>
             <apex:column headerValue="Project state" value="{!pr.Project_State__c}"/>
              <apex:column headerValue="Project ZipCode" value="{!pr.Project_Zip_Code__c}"/>
