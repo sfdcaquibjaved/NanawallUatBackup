@@ -55,7 +55,13 @@
          <!--   <apex:column headerValue="Amount Quoted (Total)">
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!totalAmount}" /></apex:outputText> 
             </apex:column> -->
-            <apex:column headerValue="Amount (Projects Won)">
+            <apex:column >
+                                <apex:facet name="header">
+             	<apex:outputPanel >
+                    <apex:outputText value="Amount (Projects Won)" title="Total Amount where project Stage : Closed Complete - Ordered - Paid">
+                        <apex:image url="{!$Resource.Help}" width="10" height="10"  title="Total Amount where project Stage : Closed Complete - Ordered - Paid "/></apex:outputText>
+                 </apex:outputPanel>
+             </apex:facet>
                  <apex:outputText value="{0, Number, Currency}"><apex:param value="{!prjStgWonAmt}" /></apex:outputText> 
             </apex:column>
             <apex:column >
