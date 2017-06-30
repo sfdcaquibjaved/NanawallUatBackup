@@ -36,7 +36,7 @@
          <apex:column >
              <apex:facet name="header">
                 <apex:outputPanel >
-                    <apex:outputText value="Corporate Account Name" title="Head Quarter">
+                    <apex:outputText value="Corporate Account Name" title="HeadQuarter(HQ).">
                        </apex:outputText>
                  </apex:outputPanel>
                 </apex:facet>
@@ -413,7 +413,7 @@
                 </apex:column>
                  <apex:column >
                 <apex:facet name="header">
-                <apex:commandLink action="{!viewData}" value="Installed at Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" title="Installed Date.">
+                <apex:commandLink action="{!viewData}" value="Installed at Account {!IF(sortExpression=='Purch',IF(sortDirection='DESC','▼','▲'),'')}" title="Installed at Account.">
                  <apex:param value="Purch" name="column" assignTo="{!sortExpression}" ></apex:param>
                  </apex:commandLink>
                  </apex:facet>
