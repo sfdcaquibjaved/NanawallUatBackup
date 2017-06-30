@@ -214,7 +214,7 @@
                        </apex:outputText>
                  </apex:outputPanel>
                 </apex:facet>
-         <apex:outputLink value="/{!opp.Project_Name__r.Name}">{!opp.Project_Name__r.Name}</apex:outputLink>
+         <apex:outputLink value="/{!opp.Project_Name__r.Id}">{!opp.Project_Name__r.Name}</apex:outputLink>
        </apex:column>    
        <apex:column >
               <apex:facet name="header">
@@ -223,7 +223,7 @@
                        </apex:outputText>
                  </apex:outputPanel>
                 </apex:facet>
-         <apex:outputLink value="/{!opp.name}">{!opp.name}</apex:outputLink>
+         <apex:outputLink value="/{!opp.id}">{!opp.name}</apex:outputLink>
        </apex:column>    
        <!-- New requirement added on page dated : 23rdJun17 ---->
    <apex:column >
@@ -305,11 +305,12 @@
    <apex:column styleClass="{!IF(opp.Project_Name__r.Architect_Account__c =='','errorClass','normalclass')}">      
        <apex:facet name="header">
                 <apex:outputPanel >
-                    <apex:outputText value="Architect" title="Architect name related to project.">
+                    <apex:outputText value="Architect" title="Architect name related to Project.">
                        </apex:outputText>
                  </apex:outputPanel>
-                </apex:facet>
-       <apex:outputText value="{!opp.Project_Name__r.Architect_Account__c}"  />
+       </apex:facet>
+       <apex:outputField value="{!opp.Project_Name__r.Architect_Account__c}"/>
+     
        </apex:column>
        </apex:pageblockTable>
                  </apex:pageBlockSection>

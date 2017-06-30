@@ -197,8 +197,11 @@ background-color: #E3DCDB;
     <!--   <apex:repeat value="Account.Projects__r" var="prj">
        <apex:inputField value="{!prj.Name}" /> 
        </apex:repeat> -->
+  
    <apex:pageBlockSection title="{!ProjectList.size} records found." collapsible="false" rendered="{!if(AccFilter!=null || PrjFilter!=null || CityFilter!=null || StateFilter!=null || ZipFilter!=null ||archFilter!=null||purFilter!=null||ordFilter!=null||prjStsFilter!=null||appIndFilter!=null, true,false)}"/>
           <apex:pageBlockSection collapsible="true" title="Filters" columns="1" >
+              <apex:inputField value="{!Account.AccountChild__c}"/>
+              <apex:inputField value="{!Account.ParentAccount_CL__c}"/>
               <apex:inputField value="{!Account.ParentID}" />
               <apex:inputField value="{!Account.ID}" />  
               <apex:panelGrid columns="6" cellspacing="10">

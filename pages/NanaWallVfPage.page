@@ -1,21 +1,7 @@
 <apex:page standardController="Account" extensions="NanaWallCLass">
     <apex:form >
     
-   <style type="text/css"> 
-    .imgclass:hover{ 
-        background-image: url(/img/help/helpOrbs.gif); 
-        background-repeat: no-repeat; 
-        width: 16px; 
-        height: 15px; 
-        background-position: right; 
-    } 
-    .imgclass{ 
-        background-image: url(/img/help/helpOrbs.gif); 
-        background-repeat: no-repeat; 
-        width: 16px; 
-        height: 15px; 
-    } 
-  </style> 
+  
     <apex:PageBlock >
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="acc" value="{!Account}" >
