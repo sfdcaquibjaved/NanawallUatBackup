@@ -2,10 +2,10 @@ public class NanaWallCLass
 {       
   
    
-    public list<opportunity> AllData {get;set;}
-   // public set<opportunity> AllData{get;set;}
+    public list<opportunity> OppData {get;set;}
+  
     //map for id and accountcontactroel
-    public map<id,list<opportunityContactRole>> mapdata;
+
     // Count The Project Won
         public integer ProjWon{get;set;}
     // Count The Project Order In Process
@@ -82,7 +82,10 @@ public class NanaWallCLass
             //Assign Query REsults to the project List type Projects
              AccountWithProjects = database.query(query1);   
              
-      
+             // 
+             OppData = AccountWithProjects[0].Opportunities__r;
+             
+      system.debug('the size of the Oppdata list is '+OppData.size() );
             
             /*********QuoteLess Opprotunities *******************/
             CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c,Project_Name__r.Architect_Account__c,Project_Name__r.createddate   from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:AccId AND Quote_Count__c=0];
@@ -184,6 +187,9 @@ public class NanaWallCLass
     
     
     }
+    
+    
+    
     
     public ApexPages.StandardSetController setCon 
     {

@@ -1033,15 +1033,17 @@ for(Position__c pc:poslist){
 User usercon = [Select id,ContactId,Email from User where ContactId in:conIds Limit 1];
 string header = 'Position Name, Model , Panels, Configuration, Width Inches, Height Inches \n';
 string finalstr = header ;
+string subject;
 if(poslist.size()>0){
 for(Position__c p: poslist)
 {
        string recordString = '"'+p.Name+'","'+p.Model__c+'","'+p.Panels__c+'","'+p.Configuration__c+'","'+p.Width_Inches__c+'","'+p.Height_Inches__c+'"\n';
        finalstr = finalstr +recordString;
+       subject ='Nanawall : Shipping Details for '+p.Installation__r.Name;
 }
 Messaging.SingleEmailMessage email =new Messaging.SingleEmailMessage();
-for(Position__c p:poslist)
-{
+//for(Position__c p:poslist)
+//{
 Messaging.EmailFileAttachment csvAttc = new Messaging.EmailFileAttachment();
 blob csvBlob = Blob.valueOf(finalstr);
 string csvname= 'Positions.csv';
@@ -1049,13 +1051,13 @@ csvAttc.setFileName(csvname);
 csvAttc.setBody(csvBlob);
 
 //String[] toAddresses = new list<string> {'aditya.moro@absyz.com'};
-String subject ='Nanawall : Shipping Details for'+p.Installation__r.Name;
+
 String[] toAddress = new list<string>{usercon.Email,'aditya.moro@absyz.com'};
 email.setSubject(subject);
 email.setToAddresses( toAddress );
 email.setHTMLBody('Body');
 email.setFileAttachments(new Messaging.EmailFileAttachment[]{csvAttc});
-}
+//}
 Messaging.SendEmailResult [] r = Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
 }
 }
