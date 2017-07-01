@@ -136,6 +136,17 @@ trigger InstallationTrigger on Installation__c(before insert, after insert, afte
         InstallationTriggerHandler.CreateOwnerTask(Trigger.new);
         system.debug('DML 6' + Limits.getDMLStatements());
         system.debug('SOQL 6' + Limits.getQueries());
+        set<Id> insid = new set<Id>();
+        for(Installation__c ins: trigger.new){
+        if((ins.Freight_TrackingNumber__c != null || ins.ShippingCompany__c != null || ins.ShippingPhone__c != null) && ins.Assigned_to__c != null && ins.RecordTypeId != '012A0000000VrvRIAS'){
+        insid.add(ins.id);
+        }
+        }
+        if(insid.size()>0){
+        InstallationTriggerHandler.sendmailtoinstallerwithAttach(insid);
+        system.debug('DML 7' + Limits.getDMLStatements());
+        system.debug('SOQL 7' + Limits.getQueries());
+        }
     }
 
 

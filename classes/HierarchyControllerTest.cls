@@ -21,6 +21,7 @@ public class HierarchyControllerTest {
     private static Quote__c objQuote;
     private static Opportunity objOppy;
     private static List<SelectOption> soList ;
+    private static List < Project__c > lstProject = new List < Project__c >();
    
     
     // inserting test data.
@@ -46,8 +47,9 @@ public class HierarchyControllerTest {
                                       Ordering_Account__c = objAcc.Id, Project_Country__c = 'Canada', 
                                       Project_Zip_Code__c = 'T5A0A7'
                                    );
-        insert objProject;
         
+        //insert objProject;
+        lstProject.add( objProject );
         objProjectOne = new Project__c(  Name = 'Test Project', Application__c = 'Retail', 
                                       Stage__c = 'Closed Won - Order In Process',
                                       Amount__c = 1.2, Purchaser_Account__c = objAccOne.Id, 
@@ -55,8 +57,8 @@ public class HierarchyControllerTest {
                                       Ordering_Account__c = objAccOne.Id, Project_Country__c = 'Canada', 
                                       Project_Zip_Code__c = 'T5A0A7'
                                    );
-        insert objProjectOne;
-        
+        //insert objProjectOne;
+        lstProject.add( objProjectOne );
         objProjectTwo = new Project__c(  Name = 'Test Project', Application__c = 'Retail', 
                                       Stage__c = 'Quoted',
                                       Amount__c = 1.2, Purchaser_Account__c = objAccOne.Id, 
@@ -64,19 +66,20 @@ public class HierarchyControllerTest {
                                       Ordering_Account__c = objAccOne.Id, Project_Country__c = 'Canada', 
                                       Project_Zip_Code__c = 'T5A0A7'
                                    );
-        insert objProjectTwo;
-        
+        lstProject.add( objProjectTwo );
+        //insert objProjectTwo;
+        insert lstProject;
         objOppy = new Opportunity( Name = 'Test Opportunity', AccountId = objAcc.Id, 
-                                  Project_Name__c = objProject.Id, StageName = 'Need Analysis', 
+                                  Project_Name__c = lstProject[0].Id, StageName = 'Need Analysis', 
                                   ForecastCategoryName='Pipeline', CloseDate = System.today()
                                  );
         insert objOppy;
-        objQuote = new Quote__c( Name = 'Test Quote', Opportunity__c = objOppy.id, Project__c = objProject.Id); 
+        objQuote = new Quote__c( Name = 'Test Quote', Opportunity__c = objOppy.id, Project__c = lstProject[0].Id); 
         insert objQuote;
         
         objOrder = new Order( Name = 'Test Order', Status = 'Draft', 
                               AccountId = objAcc.Id, EffectiveDate = System.today(), 
-                              Project__c = objProject.Id, NanaQuote__c= objQuote.ID, 
+                              Project__c = lstProject[0].Id, NanaQuote__c= objQuote.ID, 
                               Order_Finalized_Date__c = System.today()
                             );
    //      insert objOrder;
@@ -114,6 +117,7 @@ public class HierarchyControllerTest {
         }catch(Exception e){
         }
         objHC.filterAcc();
+        System.assertEquals( 3, lstProject.size() );
     }
     
     
@@ -127,6 +131,7 @@ public class HierarchyControllerTest {
   		pageRef.getParameters().put('id', String.valueOf(objAccOne.Id));
         pageRef.getParameters().put('ordFnzDtMax', '01/01/2016');
         pageRef.getParameters().put('sortExpression', 'ASC');
+        System.assertEquals( 3, lstProject.size() );
     }
     
 
