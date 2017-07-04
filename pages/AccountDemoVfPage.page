@@ -1,0 +1,21 @@
+<apex:page controller="AccountDemo">
+<apex:PageBlock id="pbId" >  
+       
+     
+         <apex:pageBlockTable var="ac" value="{!WrapperCombineAllData}">
+        
+            <apex:column headerValue="Project Name" />
+             <apex:column headerValue="Project Status"/>
+             <apex:column headerValue="Amount"/>
+             <apex:column headerValue="Project Created Date"/>
+             <apex:column headerValue="Order Finalized Date"/>
+             <apex:column headerValue="Application Industry"/>
+             <apex:column headerValue="Architect"/>
+             <apex:column headerValue="Installed at Account"/>
+             <apex:column headerValue="Ordering Account"/>
+             <apex:column headerValue="Project Name"/>
+             <apex:column headerValue="Project City"/>
+             <apex:column headerValue="Project ZipCode"/>
+            </apex:pageblockTable>>
+         </apex:pageBlock>
+</apex:page>

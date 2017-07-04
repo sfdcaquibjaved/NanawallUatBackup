@@ -1,41 +1,26 @@
 <apex:page sidebar="false" standardController="Account" showheader="false" extensions="LookupAccountPopController">
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" />
 <script>
-function fillIn(name, id)
-   {
-      var winMain=window.opener;
-      if (null==winMain)
-      {
-         winMain=window.parent.opener;
-      }
-      var ele=winMain.document.getElementById('{!$CurrentPage.parameters.namefield}');
-      ele.value=name;
-      ele=winMain.document.getElementById('{!$CurrentPage.parameters.idfield}');
-      ele.value=id;
-      CloseWindow();
-   }
- 
-   function CloseWindow()
-   {
-      var winMain=window.opener;
-      if (null==winMain)
-      {
-         winMain=window.parent.opener;
-      }
-      winMain.closeLookupPopup();
-   }
-    function populatevouchernum(elm){
-        alert("hi");
+    function Goresult()
+    {
+        opener.document.frm.txt_acc_val.value = document.frm1.input_to_change.value;
+       
+       
+        
+    }
+ function populatevouchernum(elm){
+        
 if(elm != ''){
+    
 $('[id$=input_to_change]').val(elm);
     var assignVal = $('[id$=input_to_change]').val(elm);
-     alert(elm);
+   
     //window.opener.document.getElementById('details').value = assignVal;
- opener.document.frm.txt_acc_val.value = document.frm1.inputVal.value;
+    //opener.document.frm.txt_acc_val.value = document.frm1.inputVal.value;
     
-    alert(elm);
+    // alert(elm);
     
-    window.close();
+    // window.close();
 }
 }
     function CloseWin(s)
@@ -44,15 +29,14 @@ $('[id$=input_to_change]').val(elm);
      }
 </script>
 <apex:form id="frm1">
-    <input name="details" value=""/>
-     <input type="button" value="Copy input to parent opener" onClick="populatevouchernum(this.form.details);" />
+   
 <apex:pageBlock >
  <apex:pageblocksection >
-     <input type="text" name="inputVal" id="input_to_change" /> 
-    <!-- <apex:inputText id="input_to_change" name="inputVal" label="Account Name: "  /> -->
+    <input type="text" name="inputVal" id="input_to_change" />
+    <!--<apex:inputText id="input_to_change" name="inputVal" label="Account Name: "  />-->
    <apex:pageBlockSectionItem >
        <apex:commandButton value="Search" reRender="accsTable" style="background:LightBlue;width:100px;height:30px;"/>
-       <apex:commandButton value="Go"  action="{!passValue}" onClick="populatevouchernum(this.frm1);"  style="background:LightBlue;width:100px;height:30px;"/>
+       <apex:commandButton value="Go"  action="{!passValue}" onClick="Goresult();"  style="background:LightBlue;width:100px;height:30px;"/>
      </apex:pageBlockSectionItem>
  </apex:pageblocksection>
     <apex:pageBlockSection columns="1">

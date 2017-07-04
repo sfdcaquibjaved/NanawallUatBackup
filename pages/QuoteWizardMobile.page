@@ -313,7 +313,7 @@ function fnChangeAccount(a)
      <apex:actionSupport event="onchange" reRender="conField" oncomplete="fnChangeContact('{!oppConRole.Contact__c}');"/>
      </apex:inputfield>
      <apex:outputfield value="{!oppConRole.Contact__c}" rendered="{!conURLSelected}"/>
-      <apex:selectList value="{!selectedContact}" multiselect="false" size="1" rendered="{!((accountURLSelected && NOT(conURLSelected)) || oppURLSelected)}">
+      <apex:selectList value="{!selectedContact}" multiselect="false" size="1" rendered="{!((accountURLSelected) && NOT(conURLSelected)) || oppURLSelected}">
       <apex:selectOptions value="{!contactList}"/>
      </apex:selectList>
      </div>
