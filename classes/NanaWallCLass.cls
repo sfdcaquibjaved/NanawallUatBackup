@@ -2,7 +2,7 @@ public class NanaWallCLass
 {       
   
    
-    public list<opportunity> OppData {get;set;}
+    
   
     //map for id and accountcontactroel
 
@@ -27,7 +27,7 @@ public class NanaWallCLass
     // Count The Project Won
         public Decimal ProjAmountLost{get;set;}
     // Count The Project Total Amount
-        public decimal ProjTotalAmount{get;set;}
+        public decimal ProjTotalAmount{get;set;}     
     
         // Latest Order Finalaize Date
         public list<order> latestOrderDate {get;set;}
@@ -44,11 +44,24 @@ public class NanaWallCLass
         public integer NoOfRecords {get;set;}
         // record select options for pagination Account which does not have projects
         public List<selectoption> PaginationSizeOptions {get;set;}      
+        
+        
+         // public wrapper list to hold data from project and opportunityContactRole
+       
+       public list<wrapper> WrapperList{get;set;}
+       
+       public list<opportunity> OppData {get;set;}
+       public list<opportunitycontactrole> OppContRole{get;set;}
+        
+        
+        
+        
+        
     public  NanaWallCLass(){}
        // Main class Constructor for all data inilization
         public  NanaWallCLass(ApexPages.StandardController setCon) 
         {
-            AccId = ApexPages.currentPage().getParameters().get('id');
+            AccId = '001A000001ARmiu';
             
             // Inilize all summary Account Data to the Zero
             ProjWon =0;
@@ -82,10 +95,9 @@ public class NanaWallCLass
             //Assign Query REsults to the project List type Projects
              AccountWithProjects = database.query(query1);   
              
-             // 
-             OppData = AccountWithProjects[0].Opportunities__r;
+            
              
-      system.debug('the size of the Oppdata list is '+OppData.size() );
+    
             
             /*********QuoteLess Opprotunities *******************/
             CAProjOppList = [select id, name, stagename , Quote_Count__c,Project_Name__r.Name, Project_Name__r.Purchaser_Account__c,Project_Name__r.Architect_Account__c,Project_Name__r.createddate   from opportunity where (stagename='Need Analysis' OR stagename='Drawings - Provided' OR stagename='Drawings - Requested') AND Project_Name__r.Purchaser_Account__c =:AccId AND Quote_Count__c=0];
@@ -102,6 +114,7 @@ public class NanaWallCLass
             
             
             summary();
+            RetriveContactRole();
                      
            
         }
@@ -220,4 +233,49 @@ public class NanaWallCLass
     {
          return (List<Account>) setCon.getRecords();
     }
+    
+    
+    public void RetriveContactRole()
+    {
+            
+             for(project__c prj : AccountWithProjects )
+             
+             {
+             
+                 OppData = prj.Opportunities__r;
+             system.debug('the value of ashok' + Oppdata.size());
+             
+             }
+             
+             
+             system.debug('the value of ashok' + Oppdata.size());
+             
+             OppContRole = [select opportunity.id, opportunity.Project_Name__c,contact.name from opportunitycontactrole where opportunity.id IN :oppdata ];
+             
+             
+            
+    }         
+
+    public class wrapper
+    {
+    
+    public project__C prj {get;set;}
+    public list<opportunitycontactrole> OCR {get;set;}
+    
+    
+    public wrapper(project__C Wprj, List<opportunitycontactrole> WOCR)
+    {
+    
+        this.prj = Wprj;
+        this.OCR = WOCR;
+    
+    }
+    
+    
+    }
+
+
+
+
+
 }
