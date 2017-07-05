@@ -303,7 +303,16 @@ background-color: #E3DCDB;
       <apex:column headerValue="Project State" ><apex:outputText value="{!pr1.projectState}"/></apex:column>
       <apex:column headerValue="Project Zipcode" ><apex:outputText value="{!pr1.projectZipcode}"/></apex:column>
       </apex:datatable>
-     
+     <apex:panelGrid columns="5">
+    <apex:commandLink action="{!setCon.first}">First</apex:commandLink>
+    <apex:commandLink action="{!setCon.previous}" rendered="{!setCon.hasPrevious}">Previous</apex:commandLink>
+         <apex:outputText >{!(setCon.pageNumber * PaginationSize)+1-PaginationSize}-{!IF((setCon.pageNumber * PaginationSize)>noOfRecords, noOfRecords,
+                     (setCon.pageNumber * PaginationSize))} of {!noOfRecords}
+                </apex:outputText> 
+         
+    <apex:commandLink action="{!setCon.next}" rendered="{!setCon.hasNext}">Next</apex:commandLink>
+    <apex:commandLink action="{!setCon.last}">Last</apex:commandLink>
+    </apex:panelGrid>
       <!---------------End Section------------ -->
   
 

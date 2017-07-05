@@ -278,7 +278,7 @@ public class HierarchyController_demo{
                query1+=' OR Franchise_Account__c = :objAccId OR Franchisor_Account__c = :objAccId OR Other_Influencer_Account__c = :objAccId'; 
                query1+=' OR Purchaser_Account__c =:objAccId OR Ordering_Account__c =:objAccId) '; 
              If(prjId.size()!=0)
-               query1+=' AND (Id IN : prjId) ';    
+               query1+=' AND (Id IN : prjId) LIMIT 100';    
         
         
      /*********QuoteLess Opprotunities *******************/
