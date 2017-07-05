@@ -366,7 +366,7 @@ Private class TestCreateNewProjectExtension{
         //Fourth Method
     
 
-    Static testMethod void ProjectVfpage6(){
+   /* Static testMethod void ProjectVfpage6(){
          list<Zip_Codes_Master__c> z= new list<Zip_Codes_Master__c>();
         z=TestDataUtility.getTerritoryMaster();
         insert z;
@@ -442,5 +442,5 @@ Private class TestCreateNewProjectExtension{
         cnpe.opp.Project_Name__c = p.Id; 
         cnpe.saveProject();
  
-    }
+    } */
 }

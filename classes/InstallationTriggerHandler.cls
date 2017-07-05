@@ -1052,7 +1052,12 @@ for(Position__c p: poslist)
 Messaging.SingleEmailMessage email =new Messaging.SingleEmailMessage();
 //for(Position__c p:poslist)
 //{
-string body = 'Hi '+installercontact+',\n\nYou have been assigned an Installation job'+insname+'\n\nPlease find below details for this job -\n\nPlease contact the shipping company in case of any question or doubt regarding this shipment.\n\nRegards,\nNanawall Customer Support Team';
+string body = 'Hi '+installercontact;
+body += 'You have been assigned an Installation job'+insname;
+body += 'Please find below details for this job -';
+body += 'Please contact the shipping company in case of any question or doubt regarding this shipment.';
+body += 'Regards,';
+body += 'Nanawall Customer Support Team';
 Messaging.EmailFileAttachment csvAttc = new Messaging.EmailFileAttachment();
 blob csvBlob = Blob.valueOf(finalstr);
 string csvname= 'Positions.csv';
