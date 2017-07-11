@@ -148,18 +148,25 @@ background-color: #FCF7F7;}
              <apex:column headerValue="Project Created Date">                
                      <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!pr.createddate}"/></apex:outputText>
                   </apex:column>
-             <apex:Column headerValue="Order Finalized Date">
-                    <apex:repeat value="{!pr.Orders__r}" var="c">
-                          <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!c.Order_Finalized_Date__c}"/></apex:outputText>
-                    </apex:repeat>
-                </apex:Column>
+           
+                <apex:Column headerValue="Order Finalized Date">
+                 <apex:DataTable value="{!pr.Orders__r}" var="p">
+                  <apex:column >      
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.Order_Finalized_Date__c}"/></apex:outputText>
+                   </apex:column>  
+                 </apex:DataTable>
+                 </apex:column>
+                
+                  <apex:Column headerValue="Order Created Date">
+                 <apex:DataTable value="{!pr.Orders__r}" var="p">
+                  <apex:column >      
+                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!p.CreatedDate}"/></apex:outputText>
+                   </apex:column>  
+                 </apex:DataTable>
+                 </apex:column>
+                
                   
-          <apex:Column headerValue="Order Created Date">
-                    <apex:repeat value="{!pr.Orders__r}" var="c">
-                         <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!c.CreatedDate}"/></apex:outputText>
-                   
-                    </apex:repeat>
-                </apex:Column>
+        
              <apex:column headerValue="Application Industry">                
                  
                  <apex:outputText value="{!pr.Application__c}" />

@@ -1,0 +1,24 @@
+<apex:page standardController="Account" extensions="Apex_demo">
+<apex:pageBlock >
+    <apex:pageBlockSection >
+	<apex:pageBlockTable value="{!account}" var="acc1">
+        <apex:column headerValue="HeadQuater(HQ)" value="{!acc1.name}"/>
+        <apex:column headerValue="Site Count"/>
+        <apex:column headerValue="Project Count" value="{!ProjSiteList.Size}"></apex:column>
+        <apex:column headerValue="Most Recent Order Date"></apex:column>
+        <apex:column headerValue="Project Won(Order Paid"></apex:column>
+        <apex:column headerValue="Project(Order In Progress)"/>
+        <apex:column headerValue="Projects(Quote in Progress)"/>
+        <apex:column headerValue="Project Lost"></apex:column>
+        <apex:column headerValue="Duplicate Projects"/>
+        <apex:column headerValue="Closure Rate"/>
+        <apex:column headerValue="Amount(Project Won)"></apex:column>
+        <apex:column headerValue="Amount(Order in Progress)"/>
+        <apex:column headerValue="Amount(Quote In Progress"></apex:column>
+        <apex:column headerValue="Amount(Lost)"></apex:column>
+        <apex:column headerValue="Total Amount"></apex:column>
+    	
+   </apex:pageBlockTable>
+        </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:page>
