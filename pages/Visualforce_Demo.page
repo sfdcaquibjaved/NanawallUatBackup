@@ -1,13 +1,17 @@
 <apex:page standardController="Account" extensions="Apex_demo">
+    <apex:form >
 <apex:pageBlock >
     <apex:pageBlockSection >
-	<apex:pageBlockTable value="{!account}" var="acc1">
+    <apex:pageBlockTable value="{!account}" var="acc1">
         <apex:column headerValue="HeadQuater(HQ)" value="{!acc1.name}"/>
-        <apex:column headerValue="Site Count"/>
+        <apex:column headerValue="Site Count" value="{!ChildAccountCount}"/>
         <apex:column headerValue="Project Count" value="{!ProjSiteList.Size}"></apex:column>
-        <apex:column headerValue="Most Recent Order Date"></apex:column>
-        <apex:column headerValue="Project Won(Order Paid"></apex:column>
-        <apex:column headerValue="Project(Order In Progress)"/>
+       
+        <apex:column headerValue="Most Recent Order Date" value="{!orderRecentDate[0].Order_Finalized_Date__c}" >
+       <!--  <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!orderRecentDate}"/></apex:outputText> -->
+        </apex:column>
+        <apex:column headerValue="Project Won(Order Paid)" value="{!PrjWonOrderPaid}"></apex:column>
+        <apex:column headerValue="Project(Order In Progress)" value="{!PrjOrderProgress}"/>
         <apex:column headerValue="Projects(Quote in Progress)"/>
         <apex:column headerValue="Project Lost"></apex:column>
         <apex:column headerValue="Duplicate Projects"/>
@@ -17,8 +21,9 @@
         <apex:column headerValue="Amount(Quote In Progress"></apex:column>
         <apex:column headerValue="Amount(Lost)"></apex:column>
         <apex:column headerValue="Total Amount"></apex:column>
-    	
+        
    </apex:pageBlockTable>
         </apex:pageBlockSection>
 </apex:pageBlock>
+        </apex:form>
 </apex:page>

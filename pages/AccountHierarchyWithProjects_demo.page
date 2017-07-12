@@ -133,7 +133,7 @@ background-color: #E3DCDB;
          <apex:outputLink value="/{!acc.Id}">{!acc.Name}</apex:outputLink>
          </apex:column>
              
-             <apex:column value="{!siz}" headerValue="Site Count"  />
+                 <apex:column value="{!siz}" headerValue="Site Count"  />
              <apex:column value="{!ProjSiteList.size}" headerValue="Projects Count"  />
              <apex:column headerValue="Most Recent Order Date">
              <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!ordFnzDtMax}"/></apex:outputText>

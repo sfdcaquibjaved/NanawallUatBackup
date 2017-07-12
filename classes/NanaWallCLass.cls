@@ -1,9 +1,6 @@
 public class NanaWallCLass 
 {       
-  
-   
     
-  
     //map for id and accountcontactroel
 
     // Count The Project Won
@@ -51,6 +48,7 @@ public class NanaWallCLass
        public list<wrapper> WrapperList{get;set;}
        
        public list<opportunity> OppData {get;set;}
+    public set<id> oppdata1{get;set;}    
        public list<opportunitycontactrole> OppContRole{get;set;}
         
         
@@ -61,7 +59,7 @@ public class NanaWallCLass
        // Main class Constructor for all data inilization
         public  NanaWallCLass(ApexPages.StandardController setCon) 
         {
-            AccId = '001A000001ARmiu';
+            AccId = ApexPages.currentPage().getParameters().get('id');
             
             // Inilize all summary Account Data to the Zero
             ProjWon =0;
@@ -81,7 +79,7 @@ public class NanaWallCLass
             SiteCount=[select count() from account where parent.id =:accid];
             
             //get the latest order finalize Date from orders
-            latestOrderDate = [select Order_Finalized_Date__c, project__r.Purchaser_Account__c, account.id from order where project__r.Purchaser_Account__c=:AccId  AND Order_Finalized_Date__c!=null order By Order_Finalized_Date__c DESC LIMIT 1]; 
+            latestOrderDate  = [select Order_Finalized_Date__c, project__r.Purchaser_Account__c, account.id from order where project__r.Purchaser_Account__c=:AccId  AND Order_Finalized_Date__c!=null order By Order_Finalized_Date__c DESC LIMIT 1]; 
             
             // Fire Query on Project Object and get all related data except contact Role
                String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Architect_Contact__r.firstname,Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
@@ -243,7 +241,8 @@ public class NanaWallCLass
              {
              
                  OppData = prj.Opportunities__r;
-             system.debug('the value of ashok' + Oppdata.size());
+                
+                 system.debug('the value of ashok' + Oppdata.size());
              
              }
              

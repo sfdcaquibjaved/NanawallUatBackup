@@ -21,9 +21,16 @@ public with sharing class OrderTriggerStagesHelper{
         for(Quote__c quo :quList ){
              for(Order ord :quo.Orders1__r){
                UtilityClass.runQuoteTrigger = False;
-                if(quo.Id==ord.NanaQuote__c && (ord.Status == orderStatusMap.get(ord.id)) && quo.Stage__c !=UtilityClass.QuotOrderStage){
+                if(quo.Id==ord.NanaQuote__c && (ord.Status == orderStatusMap.get(ord.id))){
                 //Set default ordered value from static variable ,Commented Code
-                    quo.Stage__c = UtilityClass.QuotOrderStage;
+                    if(ord.status=='Order Created'){
+                      quo.Stage__c = UtilityClass.QuotOrderStage;
+                    }
+                    else if(ord.status=='Finalized'){
+                    quo.Stage__c = 'Order Finalized';
+                    }
+                    else{
+                    }
                     system.debug('AreYouHEREWITHANYUPDATE'+quo.Stage__c);
                     UpdateQuote.add(quo);
                 }

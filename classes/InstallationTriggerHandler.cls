@@ -1024,7 +1024,7 @@ for(Installation_Form__c iform:newtrigger){
 }*/
 public static void sendmailtoinstallerwithAttach(Set<Id> newtrigger)
 {
-List<Position__c> poslist = [Select id,Name,Model__c,Panels__c,Configuration__c,Width_Inches__c,Height_Inches__c,Installation__c,Installation__r.Name,Installation__r.Installer_Contact__c,Installation__r.Order_Number_Email__c,Installation__r.Project__c,Installation__r.Street_Address__c,Installation__r.City__c,Installation__r.State__c,Installation__r.Zip_Postal_Code__c,Installation__r.Model_List__c,Installation__r.Number_of_Positions__c,Installation__r.ShippingName__c,Installation__r.ShippingCompany__c,Installation__r.ShippingPhone__c,Installation__r.Freight_ETAJobsite__c,Installation__r.Freight_TrackingNumber__c,Installation__r.Drawings_Links__c from Position__c where Installation__c in: newtrigger]; 
+List<Position__c> poslist = [Select id,Name,Model__c,Panels__c,Configuration__c,Width_Inches__c,Height_Inches__c,Installation__c,Installation__r.Name,Installation__r.Installer_Contact__c,Installation__r.Order_Number_Email__c,Installation__r.Project__c,Installation__r.Project__r.Name,Installation__r.Street_Address__c,Installation__r.City__c,Installation__r.State__c,Installation__r.Zip_Postal_Code__c,Installation__r.Model_List__c,Installation__r.Number_of_Positions__c,Installation__r.ShippingName__c,Installation__r.ShippingCompany__c,Installation__r.ShippingPhone__c,Installation__r.Freight_ETAJobsite__c,Installation__r.Freight_TrackingNumber__c,Installation__r.Drawings_Links__c,Installation__r.Installer_Contact__r.Name from Position__c where Installation__c in: newtrigger]; 
 System.debug('Retrieved List'+poslist);
 Set<Id> conIds = new set<Id>();
 for(Position__c pc:poslist){
@@ -1046,18 +1046,20 @@ for(Position__c p: poslist)
        subject ='Nanawall : Shipping Details for '+p.Installation__r.Name;
        insname = p.Installation__r.Name;
        ordernumber = p.Installation__r.Order_Number_Email__c;
-       project = p.Installation__r.Project__c;
+       project = p.Installation__r.Project__r.Name;
        installercontact = p.Installation__r.Installer_Contact__r.Name;
 }
 Messaging.SingleEmailMessage email =new Messaging.SingleEmailMessage();
 //for(Position__c p:poslist)
 //{
-string body = 'Hi '+installercontact;
-body += 'You have been assigned an Installation job'+insname;
-body += 'Please find below details for this job -';
-body += 'Please contact the shipping company in case of any question or doubt regarding this shipment.';
-body += 'Regards,';
-body += 'Nanawall Customer Support Team';
+string body = 'Hi '+installercontact+',';
+body += '<br/>'+'<br/>'+'You have been assigned an Installation job '+insname+'.';
+body += '<br/>'+'<br/>'+'Please find below details for this job -';
+body += '<br/>'+'<br/>'+'Order Number - '+ordernumber;
+body += '<br/>'+'Project Name - '+project;
+body += '<br/>'+'<br/>'+'Please contact the shipping company in case of any question or doubt regarding this shipment.';
+body += '<br/>'+'<br/>'+'Regards,';
+body += '<br/>'+'Nanawall Customer Support Team';
 Messaging.EmailFileAttachment csvAttc = new Messaging.EmailFileAttachment();
 blob csvBlob = Blob.valueOf(finalstr);
 string csvname= 'Positions.csv';

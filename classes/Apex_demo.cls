@@ -1,23 +1,41 @@
 public class Apex_demo {
-    public List<Project__c> ProjSiteList{get;set;}
-    private final Account objAccId;
-    private Id accId{get;set;}
- //   public string objAccId{get;set;}
-public Apex_demo(ApexPages.StandardController con)
-{
-   ProjSiteList = new List<Project__c>();
-   this.objAccId = (Account)con.getRecord();
-   accId = objAccId.Id; 
- // objAccId=ApexPages.currentPage().getParameters().get('id'); 
-}
-    public void Queryresult()
+    Public List<Project__c> ProjSiteList{get;set;}
+    Public Integer ChildAccountCount{get;set;}
+    Public List<Account> accList{get;set;}
+    Public List<order> orderRecentDate{get;set;}
+    
+    Public Integer PrjWonOrderPaid{get;set;}
+    Public Integer PrjOrderProgress{get;set;}
+    
+    public Apex_demo(ApexPages.StandardController con)
     {
-        String query1 ='SELECT Id,(Select Id,Name,CreatedDate, Order_Finalized_Date__c From Orders__r), Name, Architect_Account__r.Name, Purchaser_Account__r.Name, Ordering_Account__r.Name, CreatedDate, RecordType.Name, Application__c, Amount__c, Stage__c, Project_City__c, Project_State__c, Project_Zip_Code__c,';
-               query1+='Architect_Account__c,Ordering_Account__c, Brand_Name_Account__c, End_Customer_Account__c,End_Customer_Account__r.Name, Franchise_Account__c, Franchisor_Account__c, Other_Influencer_Account__c, Purchaser_Account__c, ';
-               query1+='(Select Id, Name, AccountId,Project_Name__c,Project_Name__r.Ordering_Account__c from Opportunities__r where (StageName like \'%Won%\' OR StageName like \'%Complete%\' OR StageName like \'%Paid%\') AND (NOT StageName LIKE \'%Influencer%\')AND (Project_Name__r.Ordering_Account__c!=Null))';
-               query1+=' FROM Project__c WHERE End_Customer_Account__c =:'+ApexPages.currentPage().getParameters().get('id');
-               
+        ProjSiteList = new List<Project__c>();
+        orderRecentDate = new List<order>();
+        prjQuery(con.getId());
+        ChildAccountCount = [Select count() from Account where ParentId =: con.getId()];
         
-         ProjSiteList = database.query(query1);
-    }
+        PrjWonOrderPaid = 0;
+        PrjOrderProgress = 0;
+        SummarySection();
+        }
+   public void prjQuery(Id accId)
+   {
+      ProjSiteList =[Select name,(Select Order_Finalized_Date__c From Orders__r Order By Order_Finalized_Date__c),Stage__c,Amount__c from Project__c where Purchaser_Account__c =:accId]; 
+      orderRecentDate = [Select Order_Finalized_Date__c From Order where project__r.Purchaser_Account__c=:accId AND Order_Finalized_Date__c!=NUll  Order By Order_Finalized_Date__c DESC Limit 1];
+    
+   }
+   public void SummarySection()
+   {
+       for(Project__c projData : ProjSiteList)
+       {
+          if(projData.stage__c.contains('Closed Complete - Ordered - Paid') && projData.Stage__c != null )
+          {
+             PrjWonOrderPaid = PrjWonOrderPaid + 1;              
+          }
+          if(projData.Stage__c.contains('Closed Won - Order In Process') || projData.Stage__c.contains('Closed Won - Order Signed') || projData.Stage__c.contains('Order - Negotiation')|| projData.Stage__c.contains('Project On Hold'))
+          {
+              PrjOrderProgress = PrjOrderProgress + 1;
+          }
+       }
+   }
 }
