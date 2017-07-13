@@ -113,9 +113,21 @@ trigger updateQuoteStageTrigger on Order (before insert,before update,after inse
        OrderTriggerStagesHelper.validateDupeOrders(newOrderValues);
        }
    }
-   if(trigger.isAfter && trigger.isUpdate){
+   if(trigger.isBefore){
         //OrderTriggerStagesHelper.updateZeroedOutOrderNumber(trigger.old,trigger.newMap,trigger.oldMap);
-    }
+          for(order ordr : trigger.new){
+                  
+             if((Trigger.IsInsert && ordr.Order_Finalized_Date__c!=null) || (trigger.isUpdate && trigger.oldmap.get(ordr.id).Order_Finalized_Date__c==null && ordr.Order_Finalized_Date__c!=null)){
+                 ordr.Status='Finalized';                   
+             }
+             else if(trigger.isUpdate && (ordr.Balance_Received_Date__c!=null || ordr.IN_Actual_Delivery_Date_c__c!=null) && ordr.Status=='Finalized'){
+                 ordr.Status='Paid/Delivered';
+             }
+             else{
+             }
+          
+          }
+   }
    
     
 }

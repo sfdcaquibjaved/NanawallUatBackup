@@ -1,4 +1,4 @@
-public class AccountDemo
+public class AccountDemo1
     
 {
     public list<project__C> AllProjectData {get;set;}
@@ -10,7 +10,7 @@ public class AccountDemo
     public Map<id,list<opportunityContactRole>> uniqueData {get;set;}
     
     
-    public AccountDemo()
+    public AccountDemo1()
     {
         
         AccId = '001A000000ksAXI';
