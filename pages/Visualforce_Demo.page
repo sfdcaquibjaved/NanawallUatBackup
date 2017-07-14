@@ -41,14 +41,32 @@
        </apex:pageBlockTable>
    </apex:pageBlockSection>
 <table width="100%">
-    <tr> 
+	<tr>
+        <thead bgcolor="#8a9ebe">
+           	<th style="color:white" height="20">Considered</th>
+        </thead>
+    </tr>
+    <tr style="bgcolor:f2f2f2;">
+       <td >Project Name</td>
+       <td>Opportunity Name</td>
+    </tr>
+    <tr><td></td></tr>
+</table>    
+<apex:pageBlock title="Account With Projects">
+    <apex:dataTable value="{!ProjSiteList}" var="Accproj">
+    <apex:column headerValue="Corporate Account Site Location (End Customer)" value="{!Accproj.End_Customer_Account__r.Name}" />
+    </apex:dataTable>    
+</apex:pageBlock>
+<table width="100%">
+<tr> 
 <thead bgColor="#8a9ebe"> 
-   
-<th style="color:white" height="20">Account with Projects</th>
-
+   <th style="color:white" height="20">Account without Projects</th>
 </thead>
-</tr>    
-</table>
+</tr> 
+    <tr>
+    
+    </tr>
+</table>    
 </apex:pageBlock>
         
         

@@ -1,0 +1,20 @@
+<!--
+    * @Page Name: projectUpdateEmail
+    * @Description: Page is designed to display success message after reps clicks on button in the received mail 
+    *==========================================================================================================
+    *       Version   | Date        | Author             | Comments
+    *----------------------------------------------------------------------------------*-----------------
+    *       1.0       | 12/07/2017  | Aquib Javed        | 1. Created page 
+    *                 |             |                    |    
+    *==========================================================================================================
+    -->
+
+<apex:page id="Page" showHeader="false" controller="projectUpdateEmail_Controller" action="{!InitPage}" cache="false">
+
+    <apex:form >
+
+    <img class="irc_mi" src="http://www.cmdgroup.com/img/logos/KW%20Nanawall_Logo_Final_with_tagline.jpg" onload="google.aft&amp;&amp;google.aft(this)" style="margin-top: 7px;margin-left: 350px;" alt="Related image" width="680" height="250"/>
+            <img class="irc_mut iWEpvAfakYXM-HwpH6ZlgJaI" alt="Image result for thanks for your response!" onload="google.aft&amp;&amp;google.aft(this)" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo9X65ueDUB5q6mN7H_d6SCb9eDvqyw4HHyTWMqHajsXfVZjys" style="margin-top: 30px;margin-left: 470px;" width="430" height="80"/>
+
+    </apex:form>
+</apex:page>

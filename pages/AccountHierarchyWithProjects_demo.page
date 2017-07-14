@@ -1,4 +1,4 @@
-<apex:page standardController="Account" extensions="HierarchyController_demo" sidebar="false" >
+<apex:page standardController="Account" extensions="HierarchyController_demo" sidebar="false" readOnly="true" >
     <script>
   
 function myFunction(id, k) {
@@ -123,7 +123,7 @@ background-color: #E3DCDB;
      <apex:pageBlockSection columns="1">
          <apex:pageBlockTable var="acc" value="{!Account}" id="tb1">
             <apex:column > <apex:facet name="header">
-             	<apex:outputPanel >
+                <apex:outputPanel >
                     <apex:outputText value="Corporate Account Name">
                         <apex:image url="{!$Resource.Help}" width="10" height="10"  title="Corporate Account"/>
                     </apex:outputText>
@@ -157,7 +157,7 @@ background-color: #E3DCDB;
             </apex:column>
             <apex:column headerValue="">
                 <apex:facet name="header">
-             	<apex:outputPanel >
+                <apex:outputPanel >
                     <apex:outputText value="Amount (Order In Progress)" title="Total Amount where project Stage : Closed Won - Order In Process ,Closed Won - Order Signed,Order - Negotiation & Project On Hold ">
                         <apex:image url="{!$Resource.Help}" width="10" height="10"  title="Total Amount where project Stage : Closed Won - Order In Process ,Closed Won - Order Signed,Order - Negotiation & Project On Hold "/>                    </apex:outputText>
                  </apex:outputPanel>

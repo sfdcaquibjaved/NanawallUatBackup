@@ -120,7 +120,7 @@ trigger updateQuoteStageTrigger on Order (before insert,before update,after inse
              if((Trigger.IsInsert && ordr.Order_Finalized_Date__c!=null) || (trigger.isUpdate && trigger.oldmap.get(ordr.id).Order_Finalized_Date__c==null && ordr.Order_Finalized_Date__c!=null)){
                  ordr.Status='Finalized';                   
              }
-             else if(trigger.isUpdate && (ordr.Balance_Received_Date__c!=null || ordr.IN_Actual_Delivery_Date_c__c!=null) && ordr.Status=='Finalized'){
+             else if(trigger.isUpdate && (ordr.Balance_Received_Date__c!=null || ordr.IN_Actual_Delivery_Date_c__c!=null)){
                  ordr.Status='Paid/Delivered';
              }
              else{

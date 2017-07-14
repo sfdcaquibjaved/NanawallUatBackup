@@ -39,7 +39,12 @@ public class Apex_demo {
         }
    public void prjQuery(Id accId)
    {
-      ProjSiteList =[Select name,(Select Order_Finalized_Date__c From Orders__r Order By Order_Finalized_Date__c),Stage__c,Amount__c from Project__c where Purchaser_Account__c =:accId]; 
+      string ProjQuery = 'Select Name ,End_Customer_Account__c,End_Customer_Account__r.Name,Stage__c,Amount__c,';
+             ProjQuery +='(Select Order_Finalized_Date__c From Orders__r Order By Order_Finalized_Date__c)';
+             ProjQuery +=' FROM Project__c';
+             ProjQuery +=' where Purchaser_Account__c =:accId';
+      ProjSiteList = database.query(ProjQuery); 
+    //  ProjSiteList =[Select name,(Select Order_Finalized_Date__c From Orders__r Order By Order_Finalized_Date__c),End_Customer_Account__c,End_Customer_Account__r.Name,Stage__c,Amount__c from Project__c where Purchaser_Account__c =:accId]; 
       orderRecentDate = [Select Order_Finalized_Date__c From Order where project__r.Purchaser_Account__c=:accId AND Order_Finalized_Date__c!=NUll  Order By Order_Finalized_Date__c DESC Limit 1];
     
    }

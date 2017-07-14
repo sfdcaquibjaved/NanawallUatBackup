@@ -7,11 +7,11 @@ public class Quote_AutoQuoteControllerTest {
         PageReference pageRef = Page.Quote_AutoQuote;
         Test.setCurrentPage(pageRef);
         
-       // Quote_AutoQuoteController qac = new Quote_AutoQuoteController();
-        //qa.setAutoQuoteViewEnabled(true);
-        //qa.LoadInitialState();
-       // qa.TriggerAutoQuote();
-       // qac.AutoClose=true;
+        Quote_AutoQuoteController qac = new Quote_AutoQuoteController();
+        //qac.setAutoQuoteViewEnabled(true);
+        //qac.LoadInitialState();
+        //qac.TriggerAutoQuote();
+        //qac.AutoClose=true;
         
     }
 }
