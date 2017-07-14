@@ -41,10 +41,10 @@ public with sharing class QuoteTriggerHelper{
                     System.debug('$$$$$$$$$$$$' + mapStage.get(opp.Id)) ;
                     System.debug('###########' + opp.StageName);
                     if (mapStage.get(opp.Id) == 'Open' && opp.StageName!='Quote - Provided' && opp.StageName!= 'Quote - Negotiation/Review' && opp.StageName!= 'Order - Requested' && opp.StageName!= 'Order - Provided' && opp.StageName!=UtilityClass.opportunityWonStatus && string.valueOf(opp.recordTypeId).substring(0,15) != Label.Influencer_Opportunity_RecordTypeId)
-                        opp.StageName = 'Quote - Requested';
+                        opp.StageName = 'Quoted';
                     if (mapStage.get(opp.Id) == 'Open' && opp.StageName!='Quote - Provided' && opp.StageName!= 'Quote - Negotiation/Review' && opp.StageName!= 'Order - Requested' && opp.StageName!= 'Order - Provided' && opp.StageName!=UtilityClass.opportunityWonStatus && string.valueOf(opp.recordTypeId).substring(0,15) == Label.Influencer_Opportunity_RecordTypeId)
                         opp.StageName = 'Budget Quote - Requested';
-                    if (mapStage.get(opp.Id) == 'Presented'&& opp.StageName!= 'Quote - Negotiation/Review' && opp.StageName!= 'Order - Requested' && opp.StageName!= 'Order - Provided' && opp.StageName!=UtilityClass.opportunityWonStatus && string.valueOf(opp.recordTypeId).substring(0,15) != Label.Influencer_Opportunity_RecordTypeId)
+                    /*if (mapStage.get(opp.Id) == 'Presented'&& opp.StageName!= 'Quote - Negotiation/Review' && opp.StageName!= 'Order - Requested' && opp.StageName!= 'Order - Provided' && opp.StageName!=UtilityClass.opportunityWonStatus && string.valueOf(opp.recordTypeId).substring(0,15) != Label.Influencer_Opportunity_RecordTypeId)
                      opp.StageName = 'Quote - Provided';
                     if ((mapStage.get(opp.Id) == 'Presented'||mapStage.get(opp.Id) =='Presented/Viewed')&& opp.StageName!= 'Quote - Negotiation/Review' && opp.StageName!= 'Order - Requested' && opp.StageName!= 'Order - Provided' && opp.StageName!=UtilityClass.opportunityWonStatus && string.valueOf(opp.recordTypeId).substring(0,15) == Label.Influencer_Opportunity_RecordTypeId)
                      opp.StageName = 'Budget Quote - Provided';
@@ -195,7 +195,7 @@ public with sharing class QuoteTriggerHelper{
                     if (opp.Amount != null) {
                         counter++;
                         sum += opp.Amount;
-                    }
+                    }                 
                 }
                 //Set the Project Amount to the average amount of all Opps
                 if (counter > 0 && sum > 0) {

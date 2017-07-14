@@ -442,7 +442,7 @@ static {
                     opp.Project_Name__c = proj.Id;
                     opp.CloseDate= system.today() + 180;
                     
-                    Opp.stageName= 'Quote - Requested';
+                    Opp.stageName= 'Considered';
                     opp.recordTypeID = Schema.getGlobalDescribe().get('Opportunity').getDescribe().getRecordTypeInfosByName().get(Record_type_assign__c.getinstance(mainlead.type_of_record__c).Opportunity_record_type_name__c).getRecordTypeId();
                     update opp ;
                     

@@ -169,6 +169,9 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
                 /*******testing*******/
                    OpportunityHelper.CheckOppCorpAccFromNewOpportunityProject(trigger.new,proMap);
                 }
+                for(opportunity o : trigger.new){
+                o.stagename='Considered';
+                }
             //}
             //}
           }
@@ -365,7 +368,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
            for(Opportunity opp :[SELECT id,RecordTypeID,StageName FROM Opportunity WHERE Id IN :Trigger.Newmap.keyset()]){
                if(trigger.isAfter && (trigger.isInsert || (trigger.isUpdate && (trigger.oldmap.get(opp.id).RecordTypeID != opp.RecordTypeID) &&  (opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId) ))){
                     if((opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId) && (opp.StageName!= 'Budget Quote - Requested') && (opp.StageName!= 'Budget Quote - Provided') && (opp.StageName!= 'Drawings - Requested')){
-                        opp.StageName = 'Drawings - Requested';
+                        opp.StageName = 'Considered';
                         UpdateOppList.add(opp);
                     }
                     

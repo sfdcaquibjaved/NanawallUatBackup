@@ -64,7 +64,7 @@ public class OpportunityHelper {
                     system.debug('STAGECHECK'+opp.recordTypeId);
                     //Setting stage name and reason for other Opportunities related to Proj
                     if (Label.Influencer_Opportunity_RecordTypeId.containsIgnoreCase(String.valueOf(opp.recordTypeId).substring(0,15) )){
-                        opp.StageName = 'Won - Influencer';
+                        opp.StageName = 'Closed/Won - Influencer';
                         opp.Amount =mapWonAmount.get(prj.id);
                         system.debug('STAGECHECK'+opp.StageName);
                         utilityClass.updateFromInfluencer = true;
