@@ -363,7 +363,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
       }
     /********************************************************************************************************/
       // This Method is Added to Change the Stage name Based on Influencer Record Type Change 
-       list<Opportunity> UpdateOppList = new list<Opportunity>();
+       /*list<Opportunity> UpdateOppList = new list<Opportunity>();
        if(trigger.isAfter && (trigger.isInsert || trigger.isUpdate)){
            for(Opportunity opp :[SELECT id,RecordTypeID,StageName FROM Opportunity WHERE Id IN :Trigger.Newmap.keyset()]){
                if(trigger.isAfter && (trigger.isInsert || (trigger.isUpdate && (trigger.oldmap.get(opp.id).RecordTypeID != opp.RecordTypeID) &&  (opp.RecordTypeID == label.Influencer_Opportunity_RecordTypeId) ))){
@@ -382,7 +382,7 @@ trigger OpportunityTrigger on Opportunity(after insert, after update, before ins
             ErrorLogUtility.processErrorLogs(sr, UpdateOppList, 'OpportunityTrigger', '', 'Opportunity', 'Update');
         }
        
-       
+       */
     /********************************************************************************************************/
     /********************************************************************************************************/
     if (trigger.isAfter && Trigger.isUpdate){
