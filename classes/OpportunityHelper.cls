@@ -368,20 +368,21 @@ public class OpportunityHelper {
     public static void UpdateProjectStagesFromOppStages(Set < Id > projectIds) {
     System.debug('Entering the method');
         map < String, Integer > mapStageInt = new map < String, Integer > ();
-        Integer i = 1;
+        /*Integer i = 1;
         Schema.DescribeFieldResult f = Schema.sObjectType.Opportunity.fields.StageName;
         for (Schema.Picklistentry entry: f.getPicklistValues()) {
             mapStageInt.put(entry.getValue(), i);
             System.debug('---map of Opp Stages--' + entry.getValue() + '--label--' + entry.getLabel());
             i++;
-        }
+        }*/
        // System.debug('---map of Opp Stages--' + mapStageInt);
         List < Project__c > updateProjList = new List < Project__c > ();
         map < ID, Opportunity > projectStageMap = new map < ID, Opportunity > ();
         //Query over Project with Related Opportunities
         List < Project__c > projList = [Select Id, Amount__c, Stage__c, Award_date__c, Bid_date__c, (Select Id, Amount, AccountId, Bal_received_date_from_quotes__c, Order_Final_Date_from_quote__c, StageName from Opportunities__r) from Project__c WHERE ID IN: projectIds];
          System.debug('Number of Queries used in this apex code so far: ' + Limits.getQueries());
-
+         
+         /*
         //Loop over Project
         for (Project__c prj: projList) {
             Integer max = 0;
@@ -448,8 +449,23 @@ public class OpportunityHelper {
               updateProjList.add(proj);
            }
         }
-
-
+        */
+        
+        set<string> SortedStages = new set<String>();
+        for (Project__c proj: projList) {
+           for (Opportunity opp: proj.Opportunities__r) {
+                if (opp.stageName != NULL && opp.StageName!='Considered' && opp.stageName!= UtilityClass.getStringValue('LeadClosedLostStatus')&& opp.stageName!= UtilityClass.getStringValue('RelatedOppClosed-Lost' ) &&  opp.stageName!= 'Closed/Won - Order Paid' && opp.stageName!= 'Order Started' && opp.stageName!= 'On Hold' && opp.stageName!= 'Cancelled' && opp.stageName!= 'Closed/Inactivity' && opp.stageName!= 'Closed/Won - Influencer') {
+                         SortedStages.add(opp.StageName);      
+              }
+           }
+           if(SortedStages.contains('Quoted')){
+            proj.stage__c = 'Quoted';
+           }
+           else { 
+            proj.stage__c = 'Quoted';
+           }
+           updateProjList.add(proj);
+        }
 
         if (updateProjList.size() > 0) {
             //Updating Project
